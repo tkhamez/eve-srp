@@ -1,0 +1,33 @@
+{
+    "name": "bravecollective/core-connector",
+    "autoload": {
+        "psr-4": {
+            "Brave\\CoreConnector\\": "src"
+        }
+    },
+    "repositories": [
+    {
+        "type": "git",
+        "url": "https://github.com/bravecollective/neucore-api.git"
+    },
+    {
+        "type": "git",
+        "url": "https://github.com/bravecollective/sso-basics.git"
+    },
+    {
+        "type": "git",
+        "url": "https://github.com/bravecollective/web-ui.git"
+    }
+    ],
+    "require": {
+        "frontpack/composer-assets-plugin": "^0.9",
+        "bravecollective/neucore-api": "*@dev",
+        "bravecollective/sso-basics": "*@dev",
+        "bravecollective/web-ui": "*@dev",
+        "vlucas/phpdotenv": "^2.4",
+        "doctrine/dbal": "2.5"
+    },
+    "config": {
+        "assets-dir": "web/assets"
+    }
+}
