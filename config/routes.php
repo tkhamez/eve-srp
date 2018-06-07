@@ -9,7 +9,7 @@ return function (\Psr\Container\ContainerInterface $container)
 
     // SSO via sso-basics package
     $app->get('/login', AuthenticationController::class . ':index');
-    $app->post('/auth', AuthenticationController::class . ':auth');
+    $app->get('/auth', AuthenticationController::class . ':auth');
 
     return $app;
 };
