@@ -1,6 +1,10 @@
 <?php
 
 return [
+    // Slim
+    'displayErrorDetails' => false,
+    'determineRouteBeforeAppMiddleware' => true,
+
     // SSO CONFIGURATION
     'SSO_CLIENT_ID' => '',
     'SSO_CLIENT_SECRET' => '',

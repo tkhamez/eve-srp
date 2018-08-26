@@ -2,3 +2,5 @@
 vendor
 web/assets
 config/config.php
+
+/.idea
