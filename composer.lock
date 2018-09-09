@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "4cdcf6a7d3a5f33963319e4503b6b26f",
+    "content-hash": "d0370404be0f34c4891ad64b0d5ca003",
     "packages": [
         {
             "name": "bravecollective/neucore-api",
@@ -1247,11 +1247,11 @@
         },
         {
             "name": "tkhamez/slim-role-auth",
-            "version": "0.1.0",
+            "version": "0.3.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/tkhamez/slim-role-auth.git",
-                "reference": "2bcf0783162cc777e0d77cfc1df9ba450dbfb807"
+                "reference": "b1d6d26a6c6e65522339c125db80fd177bdfb14e"
             },
             "require": {
                 "php": ">=5.5.0",
@@ -1282,7 +1282,7 @@
                 "MIT"
             ],
             "description": "Role based authorization for the Slim framework",
-            "time": "2018-08-26T16:47:14+00:00"
+            "time": "2018-09-08T13:19:48+00:00"
         },
         {
             "name": "vlucas/phpdotenv",
