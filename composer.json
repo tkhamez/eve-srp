@@ -17,10 +17,6 @@
     {
         "type": "git",
         "url": "https://github.com/bravecollective/web-ui.git"
-    },
-    {
-        "type": "git",
-        "url": "https://github.com/tkhamez/slim-role-auth.git"
     }
     ],
     "require": {
