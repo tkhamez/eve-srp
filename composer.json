@@ -1,5 +1,7 @@
 {
     "name": "bravecollective/core-connector",
+    "type": "project",
+    "license": "MIT",
     "autoload": {
         "psr-4": {
             "Brave\\CoreConnector\\": "src"
