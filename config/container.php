@@ -28,7 +28,8 @@ return [
 
         return new \Brave\Sso\Basics\AuthenticationProvider(
             $container->get(\League\OAuth2\Client\Provider\GenericProvider::class),
-            explode(' ', $settings['SSO_SCOPES'])
+            explode(' ', $settings['SSO_SCOPES']),
+            $settings['SSO_URL_JWT_KEY_SET']
         );
     },
 

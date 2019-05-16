@@ -1,6 +1,10 @@
 # Neucore connector boilerplate example 
 
-Copy `config/config.dist.php` to `config/config.php` and adjust values.
+- Install dependencies with `composer install`.
 
-If you need groups from Brave Core to secure routes, see `Bootstrap::enableRoutes()`
-and enable the appropriate middlewares.
+- Copy `config/config.dist.php` to `config/config.php` and adjust values.
+
+- Add any URL you need in `config/routes.php`.
+
+- If you need groups from Brave Core to secure routes, see `Bootstrap::enableRoutes()`,
+enable the appropriate middlewares and configure your roles in `config/security.php`.
