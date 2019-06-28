@@ -15,8 +15,8 @@ class AuthenticationController extends \Brave\Sso\Basics\AuthenticationControlle
      */
     public function auth(ServerRequestInterface $request, ResponseInterface $response, $ssoV2 = false)
     {
-        parent::auth($request, $response); // SSO v1
-        #parent::auth($request, $response, true); // SSO v2
+        #parent::auth($request, $response); // SSO v1
+        parent::auth($request, $response, true); // SSO v2
 
         return $response->withHeader('Location', '/');
     }
