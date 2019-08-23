@@ -7,23 +7,9 @@
             "Brave\\CoreConnector\\": "src"
         }
     },
-    "repositories": [
-    {
-        "type": "git",
-        "url": "https://github.com/bravecollective/neucore-api.git"
-    },
-    {
-        "type": "git",
-        "url": "https://github.com/bravecollective/sso-basics.git"
-    },
-    {
-        "type": "git",
-        "url": "https://github.com/bravecollective/web-ui.git"
-    }
-    ],
     "require": {
-        "bravecollective/neucore-api": "^1.0.0",
-        "bravecollective/sso-basics": "^2.0.0",
+        "bravecollective/neucore-api": "^1.4",
+        "bravecollective/sso-basics": "^2.0",
         "bravecollective/web-ui": "*@dev",
         "bryanjhv/slim-session": "^3.5",
         "doctrine/dbal": "^2.5",
