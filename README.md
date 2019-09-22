@@ -9,7 +9,7 @@ enable the appropriate middlewares and configure your roles in `config/security.
 
 ## Changelog
 
-### 3.0.0 - not yet released
+### 3.0.0
 
 Preconfigured for
 - EVE SSO v2
