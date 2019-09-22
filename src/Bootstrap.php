@@ -2,6 +2,7 @@
 namespace Brave\CoreConnector;
 
 use DI\ContainerBuilder;
+use Dotenv\Dotenv;
 use Exception;
 use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\ContainerInterface;
@@ -24,6 +25,11 @@ class Bootstrap
      */
     public function __construct()
     {
+        if (is_readable(ROOT_DIR . '/.env')) {
+            $dotEnv = new Dotenv(ROOT_DIR);
+            $dotEnv->load();
+        }
+
         $builder = new ContainerBuilder();
         $builder->addDefinitions(require_once(ROOT_DIR . '/config/container.php'));
         $this->container = $builder->build();
