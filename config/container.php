@@ -1,18 +1,36 @@
 <?php
 
+use Brave\CoreConnector\RoleProvider;
+use Brave\CoreConnector\SessionHandler;
+use Brave\NeucoreApi\Api\ApplicationApi;
+use Brave\Sso\Basics\AuthenticationProvider;
+use Brave\Sso\Basics\SessionHandlerInterface;
+use League\OAuth2\Client\Provider\GenericProvider;
+use Psr\Container\ContainerInterface;
+use Psr\Http\Message\ResponseFactoryInterface;
+use Slim\App;
+use Slim\Factory\AppFactory;
+use Slim\Psr7\Factory\ResponseFactory;
+
 return [
     'settings' => require_once('config.php'),
 
-    \Slim\App::class => function (\Psr\Container\ContainerInterface $container)
+    App::class => function (ContainerInterface $container)
     {
-        return new Slim\App($container);
+        AppFactory::setContainer($container);
+        return AppFactory::create();
     },
 
-    \League\OAuth2\Client\Provider\GenericProvider::class => function (\Psr\Container\ContainerInterface $container)
+    ResponseFactoryInterface::class => function ()
+    {
+        return new ResponseFactory();
+    },
+
+    GenericProvider::class => function (ContainerInterface $container)
     {
         $settings = $container->get('settings');
 
-        return new \League\OAuth2\Client\Provider\GenericProvider([
+        return new GenericProvider([
             'clientId' => $settings['SSO_CLIENT_ID'],
             'clientSecret' => $settings['SSO_CLIENT_SECRET'],
             'redirectUri' => $settings['SSO_REDIRECTURI'],
@@ -22,26 +40,28 @@ return [
         ]);
     },
 
-    \Brave\Sso\Basics\AuthenticationProvider::class => function (\Psr\Container\ContainerInterface $container)
-    {
+    AuthenticationProvider::class => function (ContainerInterface $container) {
         $settings = $container->get('settings');
 
-        return new \Brave\Sso\Basics\AuthenticationProvider(
-            $container->get(\League\OAuth2\Client\Provider\GenericProvider::class),
+        return new AuthenticationProvider(
+            $container->get(GenericProvider::class),
             explode(' ', $settings['SSO_SCOPES']),
             $settings['SSO_URL_JWT_KEY_SET']
         );
     },
 
-    \Brave\CoreConnector\SessionHandler::class => function (\Psr\Container\ContainerInterface $container) {
-        return new \Brave\CoreConnector\SessionHandler($container);
+    SessionHandler::class => function (ContainerInterface $container)
+    {
+        return new SessionHandler($container);
     },
 
-    \Brave\Sso\Basics\SessionHandlerInterface::class => function (\Psr\Container\ContainerInterface $container) {
-        return $container->get(\Brave\CoreConnector\SessionHandler::class);
+    SessionHandlerInterface::class => function (ContainerInterface $container)
+    {
+        return $container->get(SessionHandler::class);
     },
 
-    \Brave\NeucoreApi\Api\ApplicationApi::class => function (\Psr\Container\ContainerInterface $container) {
+    ApplicationApi::class => function (ContainerInterface $container)
+    {
         $apiKey = base64_encode(
             $container->get('settings')['CORE_APP_ID'] .
             ':'.
@@ -49,16 +69,15 @@ return [
         );
         $config = Brave\NeucoreApi\Configuration::getDefaultConfiguration();
         $config->setHost($container->get('settings')['CORE_URL']);
-        $config->setApiKey('Authorization', $apiKey);
-        $config->setApiKeyPrefix('Authorization', 'Bearer');
-
-        return new Brave\NeucoreApi\Api\ApplicationApi(null, $config);
+        $config->setAccessToken($apiKey);
+        return new ApplicationApi(null, $config);
     },
 
-    \Brave\CoreConnector\RoleProvider::class => function (\Psr\Container\ContainerInterface $container) {
-        return new \Brave\CoreConnector\RoleProvider(
-            $container->get(\Brave\NeucoreApi\Api\ApplicationApi::class),
-            $container->get(\Brave\Sso\Basics\SessionHandlerInterface::class)
+    RoleProvider::class => function (ContainerInterface $container)
+    {
+        return new RoleProvider(
+            $container->get(ApplicationApi::class),
+            $container->get(SessionHandlerInterface::class)
         );
-    },
+    }
 ];

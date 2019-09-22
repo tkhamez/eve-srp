@@ -3,6 +3,7 @@ namespace Brave\CoreConnector;
 
 use Brave\NeucoreApi\Api\ApplicationApi;
 use Brave\NeucoreApi\ApiException;
+use Brave\Sso\Basics\EveAuthentication;
 use Brave\Sso\Basics\SessionHandlerInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Tkhamez\Slim\RoleAuth\RoleProviderInterface;
@@ -41,11 +42,11 @@ class RoleProvider implements RoleProviderInterface
      * @param ServerRequestInterface $request
      * @return string[]
      */
-    public function getRoles(ServerRequestInterface $request = null)
+    public function getRoles(ServerRequestInterface $request = null): array
     {
         $roles = [self::ROLE_ANY];
 
-        /* @var $eveAuth \Brave\Sso\Basics\EveAuthentication */
+        /* @var EveAuthentication $eveAuth */
         $eveAuth = $this->session->get('eveAuth', null);
         if ($eveAuth === null) {
             return $roles;
@@ -59,11 +60,10 @@ class RoleProvider implements RoleProviderInterface
 
         // get groups from Core
         try {
-            $groups = $this->api->groupsV1($eveAuth->getCharacterId());
+            $groups = $this->api->groupsV2($eveAuth->getCharacterId());
         } catch (ApiException $ae) {
-            // Don't log 404 character not found error from Core (response body is empty).
-            // If the URL was not found the response body contains HTML (from Core)
-            if ($ae->getCode() !== 404 || $ae->getResponseBody() !== '') {
+            // Don't log "404 Character not found." error from Core.
+            if ($ae->getCode() !== 404 || strpos($ae->getMessage(), 'Character not found.') === false) {
                 error_log((string)$ae);
             }
             return $roles;

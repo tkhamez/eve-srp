@@ -4,8 +4,8 @@ namespace Brave\CoreConnector;
 use Brave\Sso\Basics\EveAuthentication;
 use Brave\Sso\Basics\SessionHandlerInterface;
 use Psr\Container\ContainerInterface;
-use Slim\Http\Request;
-use Slim\Http\Response;
+use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\ServerRequestInterface;
 
 class HomeController
 {
@@ -20,17 +20,21 @@ class HomeController
     }
 
     /**
-     * @param Request $request
-     * @param Response $response
+     * @param ServerRequestInterface $request
+     * @param ResponseInterface $response
      * @param $args
-     * @return Response
+     * @return ResponseInterface
      */
-    public function __invoke(Request $request, Response $response, $args)
+    public function __invoke(ServerRequestInterface $request, ResponseInterface $response, $args)
     {
         $response->getBody()->write(str_replace(
             '{{name}}',
             $this->eveAuth ? $this->eveAuth->getCharacterName() : '',
-            '7o {{name}}<br><br><a href="/login">login</a>'
+            '7o {{name}}<br>
+                <br>
+                <a href="/login">login</a><br>
+                <a href="/secured">secured</a> (only works if middleware is enabled in Bootstrap class)<br>
+                <a href="/logout">logout</a>'
         ));
 
         return $response;

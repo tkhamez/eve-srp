@@ -11,6 +11,14 @@ enable the appropriate middlewares and configure your roles in `config/security.
 
 ## Changelog
 
+### 3.0.0 - not yet released
+
+Preconfigured for
+- EVE SSO v2
+- Slim 4 with slim/psr7, php-di
+
+Needs PHP >= 7.2
+
 ### 2.0.0
 
 Preconfigured for
