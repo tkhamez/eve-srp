@@ -1,5 +1,9 @@
+# app
 .env
-vendor
-web/assets
+/cache/*
+!/cache/.gitkeep
+/vendor
+/web/assets
 
+# IDEs
 /.idea

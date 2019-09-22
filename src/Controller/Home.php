@@ -1,41 +1,43 @@
 <?php
-namespace Brave\CoreConnector;
+namespace Brave\EveSrp\Controller;
 
 use Brave\Sso\Basics\EveAuthentication;
 use Brave\Sso\Basics\SessionHandlerInterface;
+use Exception;
 use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
+use Twig\Environment;
 
-class HomeController
+class Home
 {
     /**
-     * @var EveAuthentication|null
+     * @var EveAuthentication
      */
     private $eveAuth;
+
+    /**
+     * @var mixed|Environment 
+     */
+    private $twig;
 
     public function __construct(ContainerInterface $container) {
         $sessionHandler = $container->get(SessionHandlerInterface::class);
         $this->eveAuth = $sessionHandler->get('eveAuth');
+        $this->twig = $container->get(Environment::class);
     }
 
     /**
      * @param ServerRequestInterface $request
      * @param ResponseInterface $response
      * @param $args
+     * @throws Exception
      * @return ResponseInterface
      */
     public function __invoke(ServerRequestInterface $request, ResponseInterface $response, $args)
     {
-        $response->getBody()->write(str_replace(
-            '{{name}}',
-            $this->eveAuth ? $this->eveAuth->getCharacterName() : '',
-            '7o {{name}}<br>
-                <br>
-                <a href="/login">login</a><br>
-                <a href="/secured">secured</a> (only works if middleware is enabled in Bootstrap class)<br>
-                <a href="/logout">logout</a>'
-        ));
+        $content = $this->twig->render('home.twig', ['name' => $this->eveAuth->getCharacterName()]);
+        $response->getBody()->write($content);
 
         return $response;
     }

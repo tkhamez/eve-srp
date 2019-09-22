@@ -1,5 +1,5 @@
 <?php
-namespace Brave\CoreConnector;
+namespace Brave\EveSrp;
 
 use Brave\NeucoreApi\Api\ApplicationApi;
 use Brave\NeucoreApi\ApiException;
@@ -17,6 +17,8 @@ class RoleProvider implements RoleProviderInterface
      * This role is always added.
      */
     const ROLE_ANY = 'role:any';
+    
+    const ROLE_AUTHENTICATED = 'role:authenticated';
 
     /**
      * @var ApplicationApi
@@ -51,6 +53,8 @@ class RoleProvider implements RoleProviderInterface
         if ($eveAuth === null) {
             return $roles;
         }
+
+        $roles[] = self::ROLE_AUTHENTICATED;
 
         // try cache
         $coreGroups = $this->session->get('coreGroups', null);

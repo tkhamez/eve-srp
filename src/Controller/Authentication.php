@@ -1,26 +1,35 @@
 <?php
-namespace Brave\CoreConnector;
+namespace Brave\EveSrp\Controller;
 
+use Brave\EveSrp\RoleProvider;
+use Brave\Sso\Basics\AuthenticationController;
 use Brave\Sso\Basics\SessionHandlerInterface;
 use Exception;
 use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 
-class AuthenticationController extends \Brave\Sso\Basics\AuthenticationController
+class Authentication extends AuthenticationController
 {
     /**
-     * @var RoleProvider|null
+     * @var RoleProvider
      */
     private $roleProvider;
 
     /**
-     * @var SessionHandlerInterface|mixed 
+     * @var SessionHandlerInterface
      */
     private $sessionHandler;
 
-    public function __construct(ContainerInterface $container) {
+    /**
+     * @var string
+     */
+    protected $template = ROOT_DIR . '/templates/login.html';
+
+    public function __construct(ContainerInterface $container)
+    {
         parent::__construct($container);
+        
         $this->roleProvider = $container->get(RoleProvider::class);
         $this->sessionHandler = $this->container->get(SessionHandlerInterface::class);
     }
@@ -36,8 +45,7 @@ class AuthenticationController extends \Brave\Sso\Basics\AuthenticationControlle
      */
     public function auth(ServerRequestInterface $request, ResponseInterface $response, $ssoV2 = false)
     {
-        #parent::auth($request, $response); // SSO v1
-        parent::auth($request, $response, true); // SSO v2
+        parent::auth($request, $response, true);
         $this->roleProvider->clear();
 
         return $response->withHeader('Location', '/');

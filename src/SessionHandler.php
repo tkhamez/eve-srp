@@ -1,5 +1,5 @@
 <?php
-namespace Brave\CoreConnector;
+namespace Brave\EveSrp;
 
 use Brave\Sso\Basics\SessionHandlerInterface;
 use SlimSession\Helper;

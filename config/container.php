@@ -1,7 +1,8 @@
 <?php
 
-use Brave\CoreConnector\RoleProvider;
-use Brave\CoreConnector\SessionHandler;
+use Brave\EveSrp\RoleProvider;
+use Brave\EveSrp\SessionHandler;
+use Brave\EveSrp\TwigData;
 use Brave\NeucoreApi\Api\ApplicationApi;
 use Brave\Sso\Basics\AuthenticationProvider;
 use Brave\Sso\Basics\SessionHandlerInterface;
@@ -11,6 +12,8 @@ use Psr\Http\Message\ResponseFactoryInterface;
 use Slim\App;
 use Slim\Factory\AppFactory;
 use Slim\Psr7\Factory\ResponseFactory;
+use Twig\Environment;
+use Twig\Loader\FilesystemLoader;
 
 return [
     'settings' => require_once('config.php'),
@@ -79,5 +82,18 @@ return [
             $container->get(ApplicationApi::class),
             $container->get(SessionHandlerInterface::class)
         );
+    },
+
+    Environment::class => function (ContainerInterface $container)
+    {
+        $options = [];
+        if ($container->get('settings')['APP_ENV'] === 'prod') {
+            $options['cache'] = ROOT_DIR . '/cache/compilation_cache';
+        }
+        $loader = new FilesystemLoader(ROOT_DIR . '/templates');
+        $twig = new Environment($loader, $options);
+        $twig->addGlobal('data', new TwigData($container));
+
+        return $twig;
     }
 ];

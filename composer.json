@@ -1,10 +1,10 @@
 {
-    "name": "bravecollective/core-connector",
+    "name": "bravecollective/eve-srp",
     "type": "project",
     "license": "MIT",
     "autoload": {
         "psr-4": {
-            "Brave\\CoreConnector\\": "src"
+            "Brave\\EveSrp\\": "src"
         }
     },
     "require": {
@@ -19,6 +19,7 @@
         "slim/psr7": "^0.5.0",
         "slim/slim": "^4.2",
         "tkhamez/slim-role-auth": "^2.0",
+        "twig/twig": "^2.0",
         "vlucas/phpdotenv": "^2.4"
     },
     "config": {

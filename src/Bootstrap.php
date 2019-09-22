@@ -1,23 +1,23 @@
 <?php
-namespace Brave\CoreConnector;
+namespace Brave\EveSrp;
 
 use DI\ContainerBuilder;
 use Dotenv\Dotenv;
 use Exception;
 use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\ContainerInterface;
+use Psr\Http\Message\ResponseFactoryInterface;
 use Slim\App;
 use Slim\Middleware\Session;
+use Tkhamez\Slim\RoleAuth\RoleMiddleware;
+use Tkhamez\Slim\RoleAuth\SecureRouteMiddleware;
 
-/**
- *
- */
 class Bootstrap
 {
     /**
      * @var ContainerInterface
      */
-    protected $container;
+    private $container;
 
     /**
      * Bootstrap constructor
@@ -46,13 +46,12 @@ class Bootstrap
         $app = $routesConfigurator($this->container);
 
         // uncomment this if you need groups from Neucore to secure routes
-        /*
-         $app->add(new \Tkhamez\Slim\RoleAuth\SecureRouteMiddleware(
-            $this->container->get(\Psr\Http\Message\ResponseFactoryInterface::class), 
-            include ROOT_DIR . '/config/security.php')
-        );
-        $app->add(new \Tkhamez\Slim\RoleAuth\RoleMiddleware($this->container->get(RoleProvider::class)));
-        */
+        $app->add(new SecureRouteMiddleware(
+            $this->container->get(ResponseFactoryInterface::class), 
+            include ROOT_DIR . '/config/security.php',
+            ['redirect_url' => '/login']
+        ));
+        $app->add(new RoleMiddleware($this->container->get(RoleProvider::class)));
         
         $app->add(new Session([
             'name' => 'brave_service',
