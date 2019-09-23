@@ -41,6 +41,11 @@ class Bootstrap
         $this->container = $builder->build();
     }
 
+    public function getContainer(): ContainerInterface
+    {
+        return $this->container;
+    }
+    
     /**
      * @return App
      * @throws ContainerExceptionInterface

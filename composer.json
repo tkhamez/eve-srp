@@ -14,6 +14,7 @@
         "bravecollective/web-ui": "*@dev",
         "bryanjhv/slim-session": "^4.0",
         "doctrine/dbal": "^2.5",
+        "doctrine/orm": "^2.6",
         "frontpack/composer-assets-plugin": "^0.9",
         "php-di/php-di": "^6.0",
         "slim/psr7": "^0.5.0",

@@ -16,6 +16,8 @@ interface CharacterProviderInterface
      *
      * Example: [96061222, 94737235]
      *
+     * The result of this method should be cached, e. g. in the session.
+     * 
      * @param ServerRequestInterface $request
      * @return int[] Array of EVE character IDs
      */

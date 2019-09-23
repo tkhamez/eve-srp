@@ -4,10 +4,15 @@ declare(strict_types=1);
 
 namespace Brave\EveSrp\Controller;
 
+use Brave\EveSrp\Model\Character;
+use Brave\EveSrp\Model\User;
 use Brave\EveSrp\Provider\CharacterProviderInterface;
 use Brave\EveSrp\Provider\RoleProviderInterface;
+use Brave\EveSrp\Repository\CharacterRepository;
 use Brave\Sso\Basics\AuthenticationController;
+use Brave\Sso\Basics\EveAuthentication;
 use Brave\Sso\Basics\SessionHandlerInterface;
+use Doctrine\ORM\EntityManagerInterface;
 use Exception;
 use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ResponseInterface;
@@ -23,12 +28,22 @@ class Authentication extends AuthenticationController
     /**
      * @var CharacterProviderInterface
      */
-    private $charProvider;
+    private $characterProvider;
 
     /**
      * @var SessionHandlerInterface
      */
     private $sessionHandler;
+
+    /**
+     * @var EntityManagerInterface
+     */
+    private $entityManager;
+    
+    /**
+     * @var CharacterRepository
+     */
+    private $characterRepository;
 
     /**
      * @var string
@@ -40,8 +55,10 @@ class Authentication extends AuthenticationController
         parent::__construct($container);
         
         $this->roleProvider = $container->get(RoleProviderInterface::class);
-        $this->charProvider = $container->get(CharacterProviderInterface::class);
-        $this->sessionHandler = $this->container->get(SessionHandlerInterface::class);
+        $this->characterProvider = $container->get(CharacterProviderInterface::class);
+        $this->sessionHandler = $container->get(SessionHandlerInterface::class);
+        $this->characterRepository = $container->get(CharacterRepository::class);
+        $this->entityManager = $container->get(EntityManagerInterface::class);
     }
 
     /**
@@ -55,13 +72,15 @@ class Authentication extends AuthenticationController
     public function auth(ServerRequestInterface $request, ResponseInterface $response, $ssoV2 = false)
     {
         try {
-            parent::auth($request, $response, true);
+            $response = parent::auth($request, $response, true);
         } catch (Exception $e) {
             error_log('Authentication::auth: ' . $e->getMessage());
         }
         $this->roleProvider->clear();
-        $this->charProvider->clear();
+        $this->characterProvider->clear();
 
+        $this->initCharacter($this->sessionHandler->get('eveAuth'), $request);
+        
         return $response->withHeader('Location', '/');
     }
 
@@ -72,8 +91,43 @@ class Authentication extends AuthenticationController
     ) {
         $this->sessionHandler->set('eveAuth', null);
         $this->roleProvider->clear();
-        $this->charProvider->clear();
+        $this->characterProvider->clear();
         
         return $response->withHeader('Location', '/');
+    }
+    
+    private function initCharacter(EveAuthentication $eveAuth, ServerRequestInterface $request)
+    {
+        // get or add new character with user
+        $character = $this->characterRepository->find($eveAuth->getCharacterId());
+        if ($character === null) {
+            $user = new User();
+            $character = new Character();
+            $character->setId($eveAuth->getCharacterId());
+            $character->setUser($user);
+            $this->entityManager->persist($user);
+            $this->entityManager->persist($character);
+        } else {
+            $user = $character->getUser();
+        }
+        
+        // add alts
+        foreach ($this->characterProvider->getCharacters($request) as $altId) {
+            if ((int) $altId === $character->getId()) {
+                continue;
+            }
+            $alt = $this->characterRepository->find($altId);
+            if ($alt === null) {
+                $alt = new Character();
+                $alt->setId($altId);
+                $alt->setUser($user);
+                $this->entityManager->persist($alt);
+            } else {
+                $alt->setUser($user);
+            }
+        }
+        
+        // persist
+        $this->entityManager->flush();
     }
 }

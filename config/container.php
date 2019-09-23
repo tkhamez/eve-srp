@@ -2,13 +2,22 @@
 
 declare(strict_types=1);
 
+use Brave\EveSrp\Model\Character;
+use Brave\EveSrp\Model\Request;
+use Brave\EveSrp\Model\User;
 use Brave\EveSrp\Provider\CharacterProviderInterface;
 use Brave\EveSrp\Provider\RoleProviderInterface;
+use Brave\EveSrp\Repository\CharacterRepository;
+use Brave\EveSrp\Repository\RequestRepository;
+use Brave\EveSrp\Repository\UserRepository;
 use Brave\EveSrp\SessionHandler;
 use Brave\EveSrp\TwigData;
 use Brave\NeucoreApi\Api\ApplicationApi;
 use Brave\Sso\Basics\AuthenticationProvider;
 use Brave\Sso\Basics\SessionHandlerInterface;
+use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\Tools\Setup;
 use League\OAuth2\Client\Provider\GenericProvider;
 use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ResponseFactoryInterface;
@@ -108,5 +117,40 @@ return [
         $twig->addGlobal('data', new TwigData($container));
 
         return $twig;
-    }
+    },
+
+    EntityManagerInterface::class => function (ContainerInterface $container)
+    {
+        return EntityManager::create(
+            ['url' => $container->get('settings')['DB_URL']],
+            Setup::createAnnotationMetadataConfiguration(
+                [ROOT_DIR . '/src/Model'],
+                true,
+                null,
+                null,
+                false
+            )
+        );
+    },
+
+    CharacterRepository::class => function (ContainerInterface $container)
+    {
+        $em = $container->get(EntityManagerInterface::class);
+        $class = $em->getMetadataFactory()->getMetadataFor(Character::class);
+        return new CharacterRepository($em, $class);
+    },
+
+    RequestRepository::class => function (ContainerInterface $container)
+    {
+        $em = $container->get(EntityManagerInterface::class);
+        $class = $em->getMetadataFactory()->getMetadataFor(Request::class);
+        return new RequestRepository($em, $class);
+    },
+
+    UserRepository::class => function (ContainerInterface $container)
+    {
+        $em = $container->get(EntityManagerInterface::class);
+        $class = $em->getMetadataFactory()->getMetadataFor(User::class);
+        return new UserRepository($em, $class);
+    },
 ];
