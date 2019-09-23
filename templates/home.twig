@@ -1,7 +1,25 @@
 {% extends "_layout.twig" %}
 
 {% block content %}
-    <h1 class="text-light">
-        7o {{ name }}
-    </h1>
+    <div class="row text-light">
+        <div class="col">
+            <h1>Home</h1>
+            <div>
+                roles:
+                <ul>
+                    {% for role in roles %}
+                        <li>{{ role }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+            <div>
+                chars:
+                <ul>
+                    {% for char in chars %}
+                        <li>{{ char }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+    </div>
 {% endblock %}

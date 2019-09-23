@@ -1,6 +1,8 @@
 <?php
 
-use Brave\EveSrp\RoleProvider;
+declare(strict_types=1);
+
+use Brave\EveSrp\Security;
 
 /**
  * Required roles (one of them) for routes.
@@ -8,7 +10,7 @@ use Brave\EveSrp\RoleProvider;
  * First route match will be used, matched by "starts-with"
  */
 return [
-    '/login' => [RoleProvider::ROLE_ANY],
-    '/auth'  => [RoleProvider::ROLE_ANY],
-    '/'      => [RoleProvider::ROLE_AUTHENTICATED],
+    '/login' => [Security::ROLE_ANY],
+    '/auth'  => [Security::ROLE_ANY],
+    '/'      => [Security::ROLE_AUTHENTICATED],
 ];

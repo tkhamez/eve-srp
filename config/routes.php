@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 use Psr\Container\ContainerInterface;
 use Slim\App;
 
@@ -14,6 +16,9 @@ return function (ContainerInterface $container)
     $app->get('/logout', Brave\EveSrp\Controller\Authentication::class . ':logout');
 
     $app->get('/', Brave\EveSrp\Controller\Home::class);
+    $app->get('/request', Brave\EveSrp\Controller\Request::class);
+    $app->get('/approve', Brave\EveSrp\Controller\Approve::class);
+    $app->get('/pay', Brave\EveSrp\Controller\Pay::class);
 
     return $app;
 };

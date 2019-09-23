@@ -1,6 +1,9 @@
 <?php
 
-use Brave\EveSrp\RoleProvider;
+declare(strict_types=1);
+
+use Brave\EveSrp\Provider\CharacterProviderInterface;
+use Brave\EveSrp\Provider\RoleProviderInterface;
 use Brave\EveSrp\SessionHandler;
 use Brave\EveSrp\TwigData;
 use Brave\NeucoreApi\Api\ApplicationApi;
@@ -13,6 +16,7 @@ use Slim\App;
 use Slim\Factory\AppFactory;
 use Slim\Psr7\Factory\ResponseFactory;
 use Twig\Environment;
+use Twig\Extension\DebugExtension;
 use Twig\Loader\FilesystemLoader;
 
 return [
@@ -36,10 +40,10 @@ return [
         return new GenericProvider([
             'clientId' => $settings['SSO_CLIENT_ID'],
             'clientSecret' => $settings['SSO_CLIENT_SECRET'],
-            'redirectUri' => $settings['SSO_REDIRECTURI'],
+            'redirectUri' => $settings['SSO_REDIRECT_URI'],
             'urlAuthorize' => $settings['SSO_URL_AUTHORIZE'],
-            'urlAccessToken' => $settings['SSO_URL_ACCESSTOKEN'],
-            'urlResourceOwnerDetails' => $settings['SSO_URL_RESOURCEOWNERDETAILS'],
+            'urlAccessToken' => $settings['SSO_URL_ACCESS_TOKEN'],
+            'urlResourceOwnerDetails' => '',
         ]);
     },
 
@@ -48,7 +52,7 @@ return [
 
         return new AuthenticationProvider(
             $container->get(GenericProvider::class),
-            explode(' ', $settings['SSO_SCOPES']),
+            [],
             $settings['SSO_URL_JWT_KEY_SET']
         );
     },
@@ -76,22 +80,31 @@ return [
         return new ApplicationApi(null, $config);
     },
 
-    RoleProvider::class => function (ContainerInterface $container)
+    RoleProviderInterface::class => function (ContainerInterface $container)
     {
-        return new RoleProvider(
-            $container->get(ApplicationApi::class),
-            $container->get(SessionHandlerInterface::class)
-        );
+        $class = $container->get('settings')['ROLE_PROVIDER'];
+        return new $class($container);
     },
 
+    CharacterProviderInterface::class => function (ContainerInterface $container)
+    {
+        $class = $container->get('settings')['CHAR_PROVIDER'];
+        return new $class($container);
+    },
+    
     Environment::class => function (ContainerInterface $container)
     {
         $options = [];
-        if ($container->get('settings')['APP_ENV'] === 'prod') {
+        if ($container->get('settings')['APP_ENV'] === 'dev') {
+            $options['debug'] = true;
+        } else {
             $options['cache'] = ROOT_DIR . '/cache/compilation_cache';
         }
         $loader = new FilesystemLoader(ROOT_DIR . '/templates');
         $twig = new Environment($loader, $options);
+        if ($container->get('settings')['APP_ENV'] === 'dev') {
+            $twig->addExtension(new DebugExtension());
+        }
         $twig->addGlobal('data', new TwigData($container));
 
         return $twig;

@@ -1,7 +1,11 @@
 <?php
+
+declare(strict_types=1);
+
 namespace Brave\EveSrp\Controller;
 
-use Brave\EveSrp\RoleProvider;
+use Brave\EveSrp\Provider\CharacterProviderInterface;
+use Brave\EveSrp\Provider\RoleProviderInterface;
 use Brave\Sso\Basics\AuthenticationController;
 use Brave\Sso\Basics\SessionHandlerInterface;
 use Exception;
@@ -12,9 +16,14 @@ use Psr\Http\Message\ServerRequestInterface;
 class Authentication extends AuthenticationController
 {
     /**
-     * @var RoleProvider
+     * @var RoleProviderInterface
      */
     private $roleProvider;
+
+    /**
+     * @var CharacterProviderInterface
+     */
+    private $charProvider;
 
     /**
      * @var SessionHandlerInterface
@@ -30,7 +39,8 @@ class Authentication extends AuthenticationController
     {
         parent::__construct($container);
         
-        $this->roleProvider = $container->get(RoleProvider::class);
+        $this->roleProvider = $container->get(RoleProviderInterface::class);
+        $this->charProvider = $container->get(CharacterProviderInterface::class);
         $this->sessionHandler = $this->container->get(SessionHandlerInterface::class);
     }
 
@@ -41,20 +51,28 @@ class Authentication extends AuthenticationController
      * @param ResponseInterface $response
      * @param bool $ssoV2
      * @return ResponseInterface
-     * @throws Exception
      */
     public function auth(ServerRequestInterface $request, ResponseInterface $response, $ssoV2 = false)
     {
-        parent::auth($request, $response, true);
+        try {
+            parent::auth($request, $response, true);
+        } catch (Exception $e) {
+            error_log('Authentication::auth: ' . $e->getMessage());
+        }
         $this->roleProvider->clear();
+        $this->charProvider->clear();
 
         return $response->withHeader('Location', '/');
     }
-    
-    public function logout(ServerRequestInterface $request, ResponseInterface $response)
-    {
+
+    /** @noinspection PhpUnused */
+    public function logout(
+        /** @noinspection PhpUnusedParameterInspection */ ServerRequestInterface $request, 
+                                                          ResponseInterface $response
+    ) {
         $this->sessionHandler->set('eveAuth', null);
         $this->roleProvider->clear();
+        $this->charProvider->clear();
         
         return $response->withHeader('Location', '/');
     }

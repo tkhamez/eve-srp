@@ -10,7 +10,7 @@ use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Twig\Environment;
 
-class Home
+class Pay
 {
     /**
      * @var mixed|Environment 
@@ -24,12 +24,9 @@ class Home
     public function __invoke(ServerRequestInterface $request, ResponseInterface $response, $args): ResponseInterface
     {
         try {
-            $content = $this->twig->render('home.twig', [
-                'roles' => $request->getAttribute('roles'),
-                'chars' => $request->getAttribute('chars'),
-            ]);
+            $content = $this->twig->render('pay.twig');
         } catch (Exception $e) {
-            error_log('HomeController' . $e->getMessage());
+            error_log('ApproveController' . $e->getMessage());
             $content = '';
         }
         $response->getBody()->write($content);
