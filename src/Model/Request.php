@@ -21,9 +21,9 @@ class Request
     private $id;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Character", inversedBy="requests")
+     * @ORM\ManyToOne(targetEntity="User", inversedBy="requests")
      * @ORM\JoinColumn(nullable=false)
-     * @var Character
+     * @var User
      */
-    private $character;
+    private $submitter;
 }

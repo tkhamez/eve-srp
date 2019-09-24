@@ -15,6 +15,7 @@ use Psr\Http\Message\ServerRequestInterface;
 
 /**
  * Provides groups from Brave Core from an authenticated user.
+ * @noinspection PhpUnused
  */
 class NeucoreRoleProvider implements RoleProviderInterface
 {
@@ -68,7 +69,7 @@ class NeucoreRoleProvider implements RoleProviderInterface
         } catch (ApiException $ae) {
             // Don't log "404 Character not found." error from Core.
             if ($ae->getCode() !== 404 || strpos($ae->getMessage(), 'Character not found.') === false) {
-                error_log((string)$ae);
+                error_log('NeucoreRoleProvider::getRoles: ' . $ae->getMessage());
             }
             return $roles;
         }

@@ -9,25 +9,25 @@ class Security
     /**
      * This role is always added.
      */
-    public const ROLE_ANY = 'role:any';
+    public const ROLE_ANY = 'any';
 
     /**
      * Added to all authenticated clients
      */
-    public const ROLE_AUTHENTICATED = 'role:authenticated';
+    public const ROLE_AUTHENTICATED = 'authenticated';
 
     /**
      * May submit a request
      */
-    public const ROLE_REQUEST = 'role:request';
+    public const ROLE_REQUEST = 'request';
 
     /**
      * May approve a request
      */
-    public const ROLE_APPROVE = 'role:approve';
+    public const ROLE_APPROVE = 'approve';
 
     /**
      * May payout the ISK.
      */
-    public const ROLE_PAY = 'role:pay';
+    public const ROLE_PAY = 'pay';
 }

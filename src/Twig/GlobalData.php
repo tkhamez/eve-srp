@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace Brave\EveSrp;
+namespace Brave\EveSrp\Twig;
 
 use Brave\Sso\Basics\EveAuthentication;
 use Brave\Sso\Basics\SessionHandlerInterface;
 use Psr\Container\ContainerInterface;
 
-class TwigData
+class GlobalData
 {
     /**
      * @var ContainerInterface
@@ -20,17 +20,19 @@ class TwigData
         $this->container = $container;
     }
 
-    public function getAppTitle(): string
+    /** @noinspection PhpUnused */
+    public function appTitle(): string
     {
         return $this->container->get('settings')['brave.serviceName'];
     }
     
-    public function getUserName(): string
+    /** @noinspection PhpUnused */
+    public function userName(): string
     {
         return $this->getUser() ? $this->getUser()->getCharacterName() : '';
     }
 
-    public function getUser(): ?EveAuthentication
+    private function getUser(): ?EveAuthentication
     {
         $session =  $this->container->get(SessionHandlerInterface::class);
         return  $session ? $session->get('eveAuth') : null;

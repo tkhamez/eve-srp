@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Brave\EveSrp\Model;
 
-use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -24,21 +23,26 @@ class Character
     private $id;
 
     /**
+     * @var string
+     * @ORM\Column(type="string", length=255)
+     */
+    private $name = '';
+
+    /**
+     * @ORM\Column(type="boolean")
+     * @var bool
+     */
+    private $main = false;
+
+    /**
      * @ORM\ManyToOne(targetEntity="User", inversedBy="characters")
-     * @ORM\JoinColumn(nullable=false)
-     * @var User
+     * @var User|null
      */
     private $user;
 
-    /**
-     * @ORM\OneToMany(targetEntity="Request", mappedBy="character")
-     * @var Collection
-     */
-    private $requests;
-
-    public function setId(int $od): self
+    public function setId(int $id): self
     {
-        $this->id = $od;
+        $this->id = $id;
 
         return $this;
     }
@@ -48,14 +52,38 @@ class Character
         return (int) $this->id;
     }
     
-    public function setUser(User $user): self
+    public function setName(string $name): self
+    {
+        $this->name = $name;
+
+        return $this;
+    }
+
+    public function getName(): string
+    {
+        return (string) $this->name;
+    }
+
+    public function setMain(bool $main): self
+    {
+        $this->main = $main;
+
+        return $this;
+    }
+
+    public function getMain(): bool
+    {
+        return $this->main;
+    }
+
+    public function setUser(User $user = null): self
     {
         $this->user = $user;
         
         return $this;
     }
     
-    public function getUser(): User
+    public function getUser(): ?User
     {
         return $this->user;
     }

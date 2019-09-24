@@ -26,7 +26,6 @@ class Home
         try {
             $content = $this->twig->render('home.twig', [
                 'roles' => $request->getAttribute('roles'),
-                'chars' => $request->getAttribute('chars'),
             ]);
         } catch (Exception $e) {
             error_log('HomeController' . $e->getMessage());

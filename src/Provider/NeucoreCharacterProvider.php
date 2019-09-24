@@ -10,8 +10,8 @@ use Brave\NeucoreApi\Model\Character;
 use Brave\Sso\Basics\EveAuthentication;
 use Brave\Sso\Basics\SessionHandlerInterface;
 use Psr\Container\ContainerInterface;
-use Psr\Http\Message\ServerRequestInterface;
 
+/** @noinspection PhpUnused */
 class NeucoreCharacterProvider implements CharacterProviderInterface
 {
     /**
@@ -24,51 +24,70 @@ class NeucoreCharacterProvider implements CharacterProviderInterface
      */
     private $session;
 
+    /**
+     * @var Character[]|null
+     */
+    private $characters;
+
     public function __construct(ContainerInterface $container)
     {
         $this->api = $container->get(ApplicationApi::class);
         $this->session = $container->get(SessionHandlerInterface::class);
     }
 
-    public function getCharacters(ServerRequestInterface $request): array
+    public function getCharacters(): array
+    {
+        $this->fetchCharacters();
+
+        return array_map(function (Character $char) {
+            return $char->getId();
+        }, $this->characters);
+    }
+
+    public function getMain(): ?int
+    {
+        $this->fetchCharacters();
+
+        foreach ($this->characters as $character) {
+            if ($character->getMain()) {
+                return $character->getId();
+            }
+        }
+        return null;
+    }
+
+    public function getName(int $characterId): string 
+    {
+        foreach ($this->characters as $character) {
+            if ($character->getId() === $characterId) {
+                return $character->getName();
+            }
+        }
+        return '';
+    }
+    
+    private function fetchCharacters(): void
     {
         /* @var EveAuthentication $eveAuth */
         $eveAuth = $this->session->get('eveAuth', null);
-        if ($eveAuth === null) {
-            return [];
-        }
-
-        // try cache
-        $coreChars = $this->session->get('NeucoreCharacterProvider_chars', null);
-        if (is_array($coreChars) && $coreChars['time'] > (time() - 60*60)) {
-            return $coreChars['chars'];
-        }
-
-        $characters = [];
-        try {
-            $characters = $this->api->charactersV1($eveAuth->getCharacterId());
-        } catch (ApiException $e) {
-            error_log('NeucoreCharacterProvider::getCharacters:' . $e->getMessage());
-        }
-
-        $chars = array_map(function (Character $char) {
-            return $char->getId();
-        }, $characters);
-
-        // cache chars
-        $this->session->set('NeucoreCharacterProvider_chars', [
-            'time' => time(),
-            'chars' => $chars
-        ]);
         
-        return $chars;
-    }
+        if ($eveAuth === null) {
+            $this->characters = [];
+            return;
+        }
 
-    /**
-     * Remove character IDs from cache, if any.
-     */
-    public function clear(): void
-    {
-        $this->session->set('NeucoreCharacterProvider_chars', null);
+        if ($this->characters !== null) {
+            return;
+        }
+        
+        $this->characters = [];
+        try {
+            $this->characters = $this->api->charactersV1($eveAuth->getCharacterId());
+        } catch (ApiException $e) {
+            // Don't log "404 Character not found." error from Core.
+            if ($e->getCode() !== 404 || strpos($e->getMessage(), 'Character not found.') === false) {
+                error_log('NeucoreCharacterProvider::getCharacters:' . $e->getMessage());
+            }
+        }
     }
 }

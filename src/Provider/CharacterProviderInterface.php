@@ -5,26 +5,30 @@ declare(strict_types=1);
 namespace Brave\EveSrp\Provider;
 
 use Psr\Container\ContainerInterface;
-use Psr\Http\Message\ServerRequestInterface;
 
 interface CharacterProviderInterface
 {
     public function __construct(ContainerInterface $container);
-    
+
     /**
-     * Returns all characters from an authenticated user.
+     * Returns all characters from an authenticated user, may or may not including the authenticated user itself.
      *
      * Example: [96061222, 94737235]
      *
-     * The result of this method should be cached, e. g. in the session.
-     * 
-     * @param ServerRequestInterface $request
      * @return int[] Array of EVE character IDs
      */
-    public function getCharacters(ServerRequestInterface $request): array;
+    public function getCharacters(): array;
 
     /**
-     * Remove character IDs from cache, if any.
+     * Return the main character ID, if available.
      */
-    public function clear(): void;
+    public function getMain(): ?int;
+
+    /**
+     * Return the the name of the character, if available.
+     * 
+     * @param int $characterId
+     * @return string
+     */
+    public function getName(int $characterId): string;
 }

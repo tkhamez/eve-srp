@@ -77,11 +77,11 @@ class Authentication extends AuthenticationController
             error_log('Authentication::auth: ' . $e->getMessage());
         }
         $this->roleProvider->clear();
-        $this->characterProvider->clear();
 
-        $this->initCharacter($this->sessionHandler->get('eveAuth'), $request);
+        $this->syncCharacters($this->sessionHandler->get('eveAuth'));
         
         return $response->withHeader('Location', '/');
+        #return $response;
     }
 
     /** @noinspection PhpUnused */
@@ -91,39 +91,72 @@ class Authentication extends AuthenticationController
     ) {
         $this->sessionHandler->set('eveAuth', null);
         $this->roleProvider->clear();
-        $this->characterProvider->clear();
         
         return $response->withHeader('Location', '/');
     }
     
-    private function initCharacter(EveAuthentication $eveAuth, ServerRequestInterface $request)
+    private function syncCharacters(EveAuthentication $eveAuth)
     {
         // get or add new character with user
-        $character = $this->characterRepository->find($eveAuth->getCharacterId());
-        if ($character === null) {
+        $authCharacter = $this->characterRepository->find($eveAuth->getCharacterId());
+        if ($authCharacter === null) {
             $user = new User();
-            $character = new Character();
-            $character->setId($eveAuth->getCharacterId());
-            $character->setUser($user);
+            $authCharacter = new Character();
+            $authCharacter->setId($eveAuth->getCharacterId());
+            $authCharacter->setMain(true);
+            $authCharacter->setUser($user);
+            $authCharacter->setName($eveAuth->getCharacterName());
+            $user->addCharacter($authCharacter);
+            $user->setName($authCharacter->getName());
             $this->entityManager->persist($user);
-            $this->entityManager->persist($character);
+            $this->entityManager->persist($authCharacter);
         } else {
-            $user = $character->getUser();
-        }
-        
-        // add alts
-        foreach ($this->characterProvider->getCharacters($request) as $altId) {
-            if ((int) $altId === $character->getId()) {
-                continue;
+            $user = $authCharacter->getUser();
+            if ($user === null) {
+                $user = new User();
+                $authCharacter->setUser($user);
+                $user->addCharacter($authCharacter);
+                $this->entityManager->persist($user);
             }
+        }
+
+        // add alts
+        $allCharacterIds = $this->characterProvider->getCharacters();
+        foreach ($allCharacterIds as $altId) {
             $alt = $this->characterRepository->find($altId);
             if ($alt === null) {
                 $alt = new Character();
                 $alt->setId($altId);
                 $alt->setUser($user);
+                $user->addCharacter($alt);
                 $this->entityManager->persist($alt);
             } else {
+                $oldUser = $alt->getUser();
+                if ($oldUser && $oldUser->getId() !== $user->getId()) {
+                    $oldUser->removeCharacter($alt);
+                }
                 $alt->setUser($user);
+                $user->addCharacter($alt);
+            }
+            $alt->setName($this->characterProvider->getName($alt->getId()));
+        }
+
+        // remove alts, set name of player - but only if the character is known
+        if (count($allCharacterIds) > 0) {
+            $mainCharacterId = $this->characterProvider->getMain();
+            foreach ($user->getCharacters() as $existingCharacter) {
+                if (! in_array($existingCharacter->getId(), $allCharacterIds)) {
+                    $user->removeCharacter($existingCharacter);
+                    $existingCharacter->setUser(null); // TODO delete char instead and make user not null?
+                }
+                if ($existingCharacter->getId() === $mainCharacterId) {
+                    $existingCharacter->setMain(true);
+                } else {
+                    $existingCharacter->setMain(false);
+                }
+                if ($existingCharacter->getMain()) {
+                    $user->setName($existingCharacter->getName());
+                }
             }
         }
         

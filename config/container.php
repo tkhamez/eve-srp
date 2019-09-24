@@ -11,7 +11,8 @@ use Brave\EveSrp\Repository\CharacterRepository;
 use Brave\EveSrp\Repository\RequestRepository;
 use Brave\EveSrp\Repository\UserRepository;
 use Brave\EveSrp\SessionHandler;
-use Brave\EveSrp\TwigData;
+use Brave\EveSrp\Twig\Extension;
+use Brave\EveSrp\Twig\GlobalData;
 use Brave\NeucoreApi\Api\ApplicationApi;
 use Brave\Sso\Basics\AuthenticationProvider;
 use Brave\Sso\Basics\SessionHandlerInterface;
@@ -114,8 +115,9 @@ return [
         if ($container->get('settings')['APP_ENV'] === 'dev') {
             $twig->addExtension(new DebugExtension());
         }
-        $twig->addGlobal('data', new TwigData($container));
-
+        $twig->addGlobal('data', new GlobalData($container));
+        $twig->addExtension(new Extension($container));
+        
         return $twig;
     },
 
@@ -136,21 +138,21 @@ return [
     CharacterRepository::class => function (ContainerInterface $container)
     {
         $em = $container->get(EntityManagerInterface::class);
-        $class = $em->getMetadataFactory()->getMetadataFor(Character::class);
-        return new CharacterRepository($em, $class);
+        $metadata = $em->getClassMetadata(Character::class);
+        return new CharacterRepository($em, $metadata);
     },
 
     RequestRepository::class => function (ContainerInterface $container)
     {
         $em = $container->get(EntityManagerInterface::class);
-        $class = $em->getMetadataFactory()->getMetadataFor(Request::class);
-        return new RequestRepository($em, $class);
+        $metadata = $em->getClassMetadata(Request::class);
+        return new RequestRepository($em, $metadata);
     },
 
     UserRepository::class => function (ContainerInterface $container)
     {
         $em = $container->get(EntityManagerInterface::class);
-        $class = $em->getMetadataFactory()->getMetadataFor(User::class);
-        return new UserRepository($em, $class);
+        $metadata = $em->getClassMetadata(User::class);
+        return new UserRepository($em, $metadata);
     },
 ];
