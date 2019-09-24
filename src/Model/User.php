@@ -1,4 +1,5 @@
 <?php
+/** @noinspection PhpUnused */
 
 declare(strict_types=1);
 
@@ -81,5 +82,13 @@ class User
     public function getCharacters(): array
     {
         return $this->characters->toArray();
+    }
+
+    /**
+     * @return Request[]
+     */
+    public function getRequests(): array
+    {
+        return $this->requests->toArray();
     }
 }

@@ -7,10 +7,12 @@ use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\MiddlewareInterface;
 use Psr\Http\Server\RequestHandlerInterface;
-use Slim\Interfaces\RouteInterface;
+use Tkhamez\Slim\RoleAuth\RoleMiddleware;
 
 /**
- * Adds roles to Session
+ * Adds the user ID and roles to the session.
+ * 
+ * @see RoleMiddleware
  */
 class SessionRole implements MiddlewareInterface
 {

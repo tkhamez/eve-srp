@@ -2,12 +2,16 @@
 
 declare(strict_types=1);
 
+use Brave\EveSrp\Model\Action;
 use Brave\EveSrp\Model\Character;
+use Brave\EveSrp\Model\Division;
 use Brave\EveSrp\Model\Request;
 use Brave\EveSrp\Model\User;
 use Brave\EveSrp\Provider\CharacterProviderInterface;
 use Brave\EveSrp\Provider\RoleProviderInterface;
+use Brave\EveSrp\Repository\ActionRepository;
 use Brave\EveSrp\Repository\CharacterRepository;
+use Brave\EveSrp\Repository\DivisionRepository;
 use Brave\EveSrp\Repository\RequestRepository;
 use Brave\EveSrp\Repository\UserRepository;
 use Brave\EveSrp\SessionHandler;
@@ -135,11 +139,25 @@ return [
         );
     },
 
+    ActionRepository::class => function (ContainerInterface $container)
+    {
+        $em = $container->get(EntityManagerInterface::class);
+        $metadata = $em->getClassMetadata(Action::class);
+        return new ActionRepository($em, $metadata);
+    },
+
     CharacterRepository::class => function (ContainerInterface $container)
     {
         $em = $container->get(EntityManagerInterface::class);
         $metadata = $em->getClassMetadata(Character::class);
         return new CharacterRepository($em, $metadata);
+    },
+
+    DivisionRepository::class => function (ContainerInterface $container)
+    {
+        $em = $container->get(EntityManagerInterface::class);
+        $metadata = $em->getClassMetadata(Division::class);
+        return new DivisionRepository($em, $metadata);
     },
 
     RequestRepository::class => function (ContainerInterface $container)

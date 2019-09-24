@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Brave\EveSrp\Repository;
 
 use Brave\EveSrp\Model\User;

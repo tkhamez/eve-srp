@@ -78,10 +78,10 @@ class Authentication extends AuthenticationController
         }
         $this->roleProvider->clear();
 
-        $this->syncCharacters($this->sessionHandler->get('eveAuth'));
-        
+        $user = $this->syncCharacters($this->sessionHandler->get('eveAuth'));
+        $this->sessionHandler->set('userId', $user->getId());
+
         return $response->withHeader('Location', '/');
-        #return $response;
     }
 
     /** @noinspection PhpUnused */
@@ -95,7 +95,7 @@ class Authentication extends AuthenticationController
         return $response->withHeader('Location', '/');
     }
     
-    private function syncCharacters(EveAuthentication $eveAuth)
+    private function syncCharacters(EveAuthentication $eveAuth): User
     {
         // get or add new character with user
         $authCharacter = $this->characterRepository->find($eveAuth->getCharacterId());
@@ -147,7 +147,7 @@ class Authentication extends AuthenticationController
             foreach ($user->getCharacters() as $existingCharacter) {
                 if (! in_array($existingCharacter->getId(), $allCharacterIds)) {
                     $user->removeCharacter($existingCharacter);
-                    $existingCharacter->setUser(null); // TODO delete char instead and make user not null?
+                    $existingCharacter->setUser(null);
                 }
                 if ($existingCharacter->getId() === $mainCharacterId) {
                     $existingCharacter->setMain(true);
@@ -162,5 +162,7 @@ class Authentication extends AuthenticationController
         
         // persist
         $this->entityManager->flush();
+        
+        return $user;
     }
 }
