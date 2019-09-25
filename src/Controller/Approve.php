@@ -13,7 +13,7 @@ use Twig\Environment;
 class Approve
 {
     /**
-     * @var mixed|Environment 
+     * @var Environment 
      */
     private $twig;
 

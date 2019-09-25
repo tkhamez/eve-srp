@@ -2,10 +2,16 @@
 
 declare(strict_types=1);
 
+use GuzzleHttp\Client;
+
 return [
     // App
     'APP_ENV' => getenv('EVE_SRP_ENV'),
-    'brave.serviceName' => 'Brave Collective - SRP',
+    'brave.serviceName' => getenv('EVE_SRP_APP_TITLE'),
+    'FOOTER_TEXT' => getenv('EVE_SRP_FOOTER_TEXT'),
+    'HTTP' => [
+        'user_agent' => 'EVE-SRP/1.0 (https://github.com/bravecollective/eve-srp) GuzzleHttp/' . Client::VERSION,
+    ],
 
     // SSO configuration
     'SSO_CLIENT_ID' => getenv('EVE_SRP_SSO_CLIENT_ID'),
@@ -22,11 +28,11 @@ return [
 
     // provider
     'ROLE_PROVIDER' => getenv('EVE_SRP_ROLE_PROVIDER'),
-    'CHAR_PROVIDER' => getenv('EVE_SRP_CHAR_PROVIDER'),
+    'CHARACTER_PROVIDER' => getenv('EVE_SRP_CHARACTER_PROVIDER'),
     
     // role mapping
     'ROLE_MAPPING' => [
-        'request' => getenv('EVE_SRP_ROLE_REQUEST'),
+        'submit' => getenv('EVE_SRP_ROLE_SUBMIT'),
         'approve' => getenv('EVE_SRP_ROLE_APPROVE'),
         'pay' => getenv('EVE_SRP_ROLE_PAY'),
     ],

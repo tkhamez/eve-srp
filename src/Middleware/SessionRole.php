@@ -10,7 +10,7 @@ use Psr\Http\Server\RequestHandlerInterface;
 use Tkhamez\Slim\RoleAuth\RoleMiddleware;
 
 /**
- * Adds the user ID and roles to the session.
+ * Adds the user roles to the session.
  * 
  * @see RoleMiddleware
  */

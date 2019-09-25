@@ -10,7 +10,11 @@ use Brave\EveSrp\Security;
  * First route match will be used, matched by "starts-with"
  */
 return [
-    '/login' => [Security::ROLE_ANY],
-    '/auth'  => [Security::ROLE_ANY],
-    '/'      => [Security::ROLE_AUTHENTICATED],
+    '/login'   => [Security::ROLE_ANY],
+    '/auth'    => [Security::ROLE_ANY],
+    '/submit'  => [Security::ROLE_SUBMIT],
+    '/approve' => [Security::ROLE_APPROVE],
+    '/pay'     => [Security::ROLE_PAY],
+    '/request' => [Security::ROLE_SUBMIT, Security::ROLE_APPROVE, Security::ROLE_PAY],
+    '/'        => [Security::ROLE_AUTHENTICATED],
 ];

@@ -16,9 +16,10 @@ return function (ContainerInterface $container)
     $app->get('/logout', Brave\EveSrp\Controller\Authentication::class . ':logout');
 
     $app->get('/', Brave\EveSrp\Controller\Home::class);
-    $app->get('/request', Brave\EveSrp\Controller\Request::class);
+    $app->get('/submit', Brave\EveSrp\Controller\Submit::class);
     $app->get('/approve', Brave\EveSrp\Controller\Approve::class);
     $app->get('/pay', Brave\EveSrp\Controller\Pay::class);
+    $app->get('/request/{id}', Brave\EveSrp\Controller\Request::class . ':show');
 
     return $app;
 };

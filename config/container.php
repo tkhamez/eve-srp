@@ -23,6 +23,8 @@ use Brave\Sso\Basics\SessionHandlerInterface;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Tools\Setup;
+use GuzzleHttp\Client;
+use GuzzleHttp\ClientInterface;
 use League\OAuth2\Client\Provider\GenericProvider;
 use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ResponseFactoryInterface;
@@ -36,21 +38,45 @@ use Twig\Loader\FilesystemLoader;
 return [
     'settings' => require_once('config.php'),
 
+    // Slim
     App::class => function (ContainerInterface $container)
     {
         AppFactory::setContainer($container);
         return AppFactory::create();
     },
-
     ResponseFactoryInterface::class => function ()
     {
         return new ResponseFactory();
     },
+    SessionHandlerInterface::class => function (ContainerInterface $container)
+    {
+        return $container->get(SessionHandler::class);
+    },
 
+    // Pluggable adapter
+    RoleProviderInterface::class => function (ContainerInterface $container)
+    {
+        $class = $container->get('settings')['ROLE_PROVIDER'];
+        return new $class($container);
+    },
+    CharacterProviderInterface::class => function (ContainerInterface $container)
+    {
+        $class = $container->get('settings')['CHARACTER_PROVIDER'];
+        return new $class($container);
+    },
+
+    // Guzzle
+    ClientInterface::class => function (ContainerInterface $container)
+    {
+        return new Client([
+            'headers' => ['User-Agent' => $container->get('settings')['HTTP']['user_agent']]
+        ]);
+    },
+
+    // SSO
     GenericProvider::class => function (ContainerInterface $container)
     {
         $settings = $container->get('settings');
-
         return new GenericProvider([
             'clientId' => $settings['SSO_CLIENT_ID'],
             'clientSecret' => $settings['SSO_CLIENT_SECRET'],
@@ -58,12 +84,13 @@ return [
             'urlAuthorize' => $settings['SSO_URL_AUTHORIZE'],
             'urlAccessToken' => $settings['SSO_URL_ACCESS_TOKEN'],
             'urlResourceOwnerDetails' => '',
+        ], [
+            'httpClient' => $container->get(ClientInterface::class)
         ]);
     },
-
-    AuthenticationProvider::class => function (ContainerInterface $container) {
+    AuthenticationProvider::class => function (ContainerInterface $container)
+    {
         $settings = $container->get('settings');
-
         return new AuthenticationProvider(
             $container->get(GenericProvider::class),
             [],
@@ -71,16 +98,7 @@ return [
         );
     },
 
-    SessionHandler::class => function (ContainerInterface $container)
-    {
-        return new SessionHandler($container);
-    },
-
-    SessionHandlerInterface::class => function (ContainerInterface $container)
-    {
-        return $container->get(SessionHandler::class);
-    },
-
+    // Neucore
     ApplicationApi::class => function (ContainerInterface $container)
     {
         $apiKey = base64_encode(
@@ -91,21 +109,10 @@ return [
         $config = Brave\NeucoreApi\Configuration::getDefaultConfiguration();
         $config->setHost($container->get('settings')['CORE_URL']);
         $config->setAccessToken($apiKey);
-        return new ApplicationApi(null, $config);
+        return new ApplicationApi($container->get(ClientInterface::class), $config);
     },
 
-    RoleProviderInterface::class => function (ContainerInterface $container)
-    {
-        $class = $container->get('settings')['ROLE_PROVIDER'];
-        return new $class($container);
-    },
-
-    CharacterProviderInterface::class => function (ContainerInterface $container)
-    {
-        $class = $container->get('settings')['CHAR_PROVIDER'];
-        return new $class($container);
-    },
-    
+    // Twig
     Environment::class => function (ContainerInterface $container)
     {
         $options = [];
@@ -121,10 +128,10 @@ return [
         }
         $twig->addGlobal('data', new GlobalData($container));
         $twig->addExtension(new Extension($container));
-        
         return $twig;
     },
 
+    // Doctrine ORM
     EntityManagerInterface::class => function (ContainerInterface $container)
     {
         return EntityManager::create(
@@ -138,39 +145,30 @@ return [
             )
         );
     },
-
     ActionRepository::class => function (ContainerInterface $container)
     {
         $em = $container->get(EntityManagerInterface::class);
-        $metadata = $em->getClassMetadata(Action::class);
-        return new ActionRepository($em, $metadata);
+        return new ActionRepository($em, $em->getClassMetadata(Action::class));
     },
-
     CharacterRepository::class => function (ContainerInterface $container)
     {
         $em = $container->get(EntityManagerInterface::class);
-        $metadata = $em->getClassMetadata(Character::class);
-        return new CharacterRepository($em, $metadata);
+        return new CharacterRepository($em, $em->getClassMetadata(Character::class));
     },
-
     DivisionRepository::class => function (ContainerInterface $container)
     {
         $em = $container->get(EntityManagerInterface::class);
-        $metadata = $em->getClassMetadata(Division::class);
-        return new DivisionRepository($em, $metadata);
+        return new DivisionRepository($em, $em->getClassMetadata(Division::class));
     },
-
     RequestRepository::class => function (ContainerInterface $container)
     {
         $em = $container->get(EntityManagerInterface::class);
-        $metadata = $em->getClassMetadata(Request::class);
-        return new RequestRepository($em, $metadata);
+        return new RequestRepository($em, $em->getClassMetadata(Request::class));
     },
 
     UserRepository::class => function (ContainerInterface $container)
     {
         $em = $container->get(EntityManagerInterface::class);
-        $metadata = $em->getClassMetadata(User::class);
-        return new UserRepository($em, $metadata);
+        return new UserRepository($em, $em->getClassMetadata(User::class));
     },
 ];

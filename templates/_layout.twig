@@ -11,8 +11,8 @@
             <span class="navbar-brand">{{ data.appTitle }}</span>
             <ul class="navbar-nav mr-auto">
                 <li class="nav-item"><a class="nav-link" href="/">Home</a></li>
-                {% if hasRole('request') %}
-                    <li class="nav-item"><a class="nav-link" href="/request">Request</a></li>
+                {% if hasRole('submit') %}
+                    <li class="nav-item"><a class="nav-link" href="/submit">Submit</a></li>
                 {% endif %}
                 {% if hasRole('approve') %}
                     <li class="nav-item"> <a class="nav-link" href="/approve">Approve</a></li>
@@ -27,12 +27,16 @@
             </form>
         </header>
 
-        {% block content %}{% endblock %}
+        <main>{% block content %}{% endblock %}</main>
         
-        <footer class="navbar navbar-dark bg-brave shadow-1">
-            <div class="align-self-center">
-                Brave Collective Services. For support write to support@bravecollective.freshdesk.com
-                or ask in the ingame channel "Brave IT".
+        <footer class="navbar navbar-dark bg-brave text-light shadow-1 flex-column">
+            <div class="text-center ">
+                {{ data.footerText }}
+                <br>
+                <span class="text-center small">
+                    "EVE", "EVE Online", "CCP" and all related logos and images are 
+                    trademarks or registered trademarks of CCP hf.
+                </span>
             </div>
         </footer>
         

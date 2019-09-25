@@ -19,7 +19,7 @@ class Security
     /**
      * May submit a request
      */
-    public const ROLE_REQUEST = 'request';
+    public const ROLE_SUBMIT = 'submit';
 
     /**
      * May approve a request

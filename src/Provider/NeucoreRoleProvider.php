@@ -95,15 +95,15 @@ class NeucoreRoleProvider implements RoleProviderInterface
      */
     private function mapGroupsToRoles(array $groups)
     {
-        $requestGroups = explode(',', $this->settingsRoles['request']);
+        $requestGroups = explode(',', $this->settingsRoles['submit']);
         $approveGroups = explode(',', $this->settingsRoles['approve']);
         $payGroups = explode(',', $this->settingsRoles['pay']);
 
         $roles = [];
         foreach ($groups as $group) {
             $groupName = $group->getName();
-            if (in_array($groupName, $requestGroups) && ! in_array(Security::ROLE_REQUEST, $roles)) {
-                $roles[] = Security::ROLE_REQUEST;
+            if (in_array($groupName, $requestGroups) && ! in_array(Security::ROLE_SUBMIT, $roles)) {
+                $roles[] = Security::ROLE_SUBMIT;
             }
             if (in_array($groupName, $approveGroups) && ! in_array(Security::ROLE_APPROVE, $roles)) {
                 $roles[] = Security::ROLE_APPROVE;

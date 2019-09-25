@@ -13,7 +13,7 @@ use Twig\Environment;
 class Pay
 {
     /**
-     * @var mixed|Environment 
+     * @var Environment 
      */
     private $twig;
 

@@ -25,7 +25,13 @@ class GlobalData
     {
         return $this->container->get('settings')['brave.serviceName'];
     }
-    
+
+    /** @noinspection PhpUnused */
+    public function footerText(): string
+    {
+        return $this->container->get('settings')['FOOTER_TEXT'];
+    }
+
     /** @noinspection PhpUnused */
     public function userName(): string
     {

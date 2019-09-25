@@ -37,6 +37,7 @@ class User
 
     /**
      * @ORM\OneToMany(targetEntity="Request", mappedBy="submitter")
+     * @ORM\OrderBy({"created" = "ASC"})
      * @var Collection
      */
     private $requests;
