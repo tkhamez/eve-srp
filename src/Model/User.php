@@ -30,6 +30,13 @@ class User
     private $name = '';
 
     /**
+     * @ORM\ManyToMany(targetEntity="ExternalGroup", inversedBy="users")
+     * @ORM\OrderBy({"name" = "ASC"})
+     * @var Collection
+     */
+    private $externalGroups;
+
+    /**
      * @ORM\OneToMany(targetEntity="Character", mappedBy="user")
      * @var Collection
      */
@@ -44,6 +51,7 @@ class User
 
     public function __construct()
     {
+        $this->externalGroups = new ArrayCollection();
         $this->characters = new ArrayCollection();
         $this->requests = new ArrayCollection();
     }
@@ -65,6 +73,36 @@ class User
         return (string) $this->name;
     }
 
+    public function addExternalGroup(ExternalGroup $externalGroups): self
+    {
+        $this->externalGroups[] = $externalGroups;
+
+        return $this;
+    }
+
+    public function removeExternalGroup(ExternalGroup $externalGroups): bool
+    {
+        return $this->externalGroups->removeElement($externalGroups);
+    }
+
+    /**
+     * @return ExternalGroup[]
+     */
+    public function getExternalGroups(): array
+    {
+        return $this->externalGroups->toArray();
+    }
+
+    public function hasExternalGroup(string $name): bool
+    {
+        foreach ($this->getExternalGroups() as $group) {
+            if ($group->getName() === $name) {
+                return true;
+            }
+        }
+        return false;
+    }
+    
     public function addCharacter(Character $character): self
     {
         $this->characters[] = $character;

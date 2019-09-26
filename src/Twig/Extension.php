@@ -4,21 +4,22 @@ declare(strict_types=1);
 
 namespace Brave\EveSrp\Twig;
 
-use Brave\Sso\Basics\SessionHandlerInterface;
+use Brave\EveSrp\Provider\RoleProvider;
 use Psr\Container\ContainerInterface;
+use Tkhamez\Slim\RoleAuth\RoleProviderInterface;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFunction;
 
 class Extension extends AbstractExtension
 {
     /**
-     * @var SessionHandlerInterface
+     * @var RoleProviderInterface
      */
-    private $session;
+    private $roleProvider;
 
     public function __construct(ContainerInterface $container)
     {
-        $this->session = $container->get(SessionHandlerInterface::class);
+        $this->roleProvider = $container->get(RoleProvider::class);
     }
 
     public function getFunctions()
@@ -31,6 +32,6 @@ class Extension extends AbstractExtension
     /** @noinspection PhpUnused */
     public function hasRole($role)
     {
-        return in_array($role, $this->session->get('roles'));
+        return in_array($role, $this->roleProvider->getUserRoles());
     }
 }

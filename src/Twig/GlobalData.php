@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Brave\EveSrp\Twig;
 
-use Brave\Sso\Basics\EveAuthentication;
-use Brave\Sso\Basics\SessionHandlerInterface;
+use Brave\EveSrp\Model\User;
+use Brave\EveSrp\UserService;
 use Psr\Container\ContainerInterface;
 
 class GlobalData
@@ -35,12 +35,11 @@ class GlobalData
     /** @noinspection PhpUnused */
     public function userName(): string
     {
-        return $this->getUser() ? $this->getUser()->getCharacterName() : '';
+        return $this->getUser() ? $this->getUser()->getName() : '';
     }
 
-    private function getUser(): ?EveAuthentication
+    private function getUser(): ?User
     {
-        $session =  $this->container->get(SessionHandlerInterface::class);
-        return  $session ? $session->get('eveAuth') : null;
+        return $this->container->get(UserService::class)->getUser();
     }
 }

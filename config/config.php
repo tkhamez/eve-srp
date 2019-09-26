@@ -27,7 +27,7 @@ return [
     'CORE_APP_TOKEN' => getenv('EVE_SRP_CORE_APP_TOKEN'),
 
     // provider
-    'ROLE_PROVIDER' => getenv('EVE_SRP_ROLE_PROVIDER'),
+    'GROUP_PROVIDER' => getenv('EVE_SRP_GROUP_PROVIDER'),
     'CHARACTER_PROVIDER' => getenv('EVE_SRP_CHARACTER_PROVIDER'),
     
     // role mapping

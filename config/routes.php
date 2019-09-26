@@ -2,14 +2,10 @@
 
 declare(strict_types=1);
 
-use Psr\Container\ContainerInterface;
 use Slim\App;
 
-return function (ContainerInterface $container)
+return function (App $app): void
 {
-    /** @var App $app */
-    $app = $container->get(App::class);
-
     // auth
     $app->get('/login',  Brave\EveSrp\Controller\Authentication::class . ':index');
     $app->get('/auth',   Brave\EveSrp\Controller\Authentication::class . ':auth');
@@ -20,6 +16,4 @@ return function (ContainerInterface $container)
     $app->get('/approve', Brave\EveSrp\Controller\Approve::class);
     $app->get('/pay', Brave\EveSrp\Controller\Pay::class);
     $app->get('/request/{id}', Brave\EveSrp\Controller\Request::class . ':show');
-
-    return $app;
 };

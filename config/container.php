@@ -5,13 +5,16 @@ declare(strict_types=1);
 use Brave\EveSrp\Model\Action;
 use Brave\EveSrp\Model\Character;
 use Brave\EveSrp\Model\Division;
+use Brave\EveSrp\Model\ExternalGroup;
 use Brave\EveSrp\Model\Request;
 use Brave\EveSrp\Model\User;
 use Brave\EveSrp\Provider\CharacterProviderInterface;
-use Brave\EveSrp\Provider\RoleProviderInterface;
+use Brave\EveSrp\Provider\GroupProviderInterface;
+use Brave\EveSrp\Provider\RoleProvider;
 use Brave\EveSrp\Repository\ActionRepository;
 use Brave\EveSrp\Repository\CharacterRepository;
 use Brave\EveSrp\Repository\DivisionRepository;
+use Brave\EveSrp\Repository\ExternalGroupRepository;
 use Brave\EveSrp\Repository\RequestRepository;
 use Brave\EveSrp\Repository\UserRepository;
 use Brave\EveSrp\SessionHandler;
@@ -28,9 +31,8 @@ use GuzzleHttp\ClientInterface;
 use League\OAuth2\Client\Provider\GenericProvider;
 use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ResponseFactoryInterface;
-use Slim\App;
-use Slim\Factory\AppFactory;
 use Slim\Psr7\Factory\ResponseFactory;
+use Tkhamez\Slim\RoleAuth\RoleProviderInterface;
 use Twig\Environment;
 use Twig\Extension\DebugExtension;
 use Twig\Loader\FilesystemLoader;
@@ -39,11 +41,6 @@ return [
     'settings' => require_once('config.php'),
 
     // Slim
-    App::class => function (ContainerInterface $container)
-    {
-        AppFactory::setContainer($container);
-        return AppFactory::create();
-    },
     ResponseFactoryInterface::class => function ()
     {
         return new ResponseFactory();
@@ -53,10 +50,16 @@ return [
         return $container->get(SessionHandler::class);
     },
 
-    // Pluggable adapter
-    RoleProviderInterface::class => function (ContainerInterface $container)
+    // EVE-SRP
+    RoleProviderInterface::class => function (ContainerInterface $container) 
     {
-        $class = $container->get('settings')['ROLE_PROVIDER'];
+        return $container->get(RoleProvider::class);
+    },
+    
+    // Pluggable adapter
+    GroupProviderInterface::class => function (ContainerInterface $container)
+    {
+        $class = $container->get('settings')['GROUP_PROVIDER'];
         return new $class($container);
     },
     CharacterProviderInterface::class => function (ContainerInterface $container)
@@ -65,7 +68,7 @@ return [
         return new $class($container);
     },
 
-    // Guzzle
+    // Guzzle HTTP client
     ClientInterface::class => function (ContainerInterface $container)
     {
         return new Client([
@@ -98,7 +101,7 @@ return [
         );
     },
 
-    // Neucore
+    // Neucore API
     ApplicationApi::class => function (ContainerInterface $container)
     {
         $apiKey = base64_encode(
@@ -165,10 +168,14 @@ return [
         $em = $container->get(EntityManagerInterface::class);
         return new RequestRepository($em, $em->getClassMetadata(Request::class));
     },
-
     UserRepository::class => function (ContainerInterface $container)
     {
         $em = $container->get(EntityManagerInterface::class);
         return new UserRepository($em, $em->getClassMetadata(User::class));
+    },
+    ExternalGroupRepository::class => function (ContainerInterface $container)
+    {
+        $em = $container->get(EntityManagerInterface::class);
+        return new ExternalGroupRepository($em, $em->getClassMetadata(ExternalGroup::class));
     },
 ];

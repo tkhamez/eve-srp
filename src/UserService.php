@@ -3,9 +3,12 @@
 namespace Brave\EveSrp;
 
 use Brave\EveSrp\Model\Character;
+use Brave\EveSrp\Model\ExternalGroup;
 use Brave\EveSrp\Model\User;
 use Brave\EveSrp\Provider\CharacterProviderInterface;
+use Brave\EveSrp\Provider\GroupProviderInterface;
 use Brave\EveSrp\Repository\CharacterRepository;
+use Brave\EveSrp\Repository\ExternalGroupRepository;
 use Brave\EveSrp\Repository\UserRepository;
 use Brave\Sso\Basics\EveAuthentication;
 use Brave\Sso\Basics\SessionHandlerInterface;
@@ -30,6 +33,11 @@ class UserService
     private $userRepository;
 
     /**
+     * @var ExternalGroupRepository
+     */
+    private $externalGroupRepository;
+
+    /**
      * @var CharacterRepository
      */
     private $characterRepository;
@@ -39,12 +47,19 @@ class UserService
      */
     private $characterProvider;
 
+    /**
+     * @var GroupProviderInterface
+     */
+    private $groupProvider;
+
     public function __construct(ContainerInterface $container) {
         $this->session = $container->get(SessionHandlerInterface::class);
         $this->entityManager = $container->get(EntityManagerInterface::class);
         $this->userRepository = $container->get(UserRepository::class);
+        $this->externalGroupRepository = $container->get(ExternalGroupRepository::class);
         $this->characterRepository = $container->get(CharacterRepository::class);
         $this->characterProvider = $container->get(CharacterProviderInterface::class);
+        $this->groupProvider = $container->get(GroupProviderInterface::class);
     }
 
     /**
@@ -52,17 +67,29 @@ class UserService
      */
     public function getUser(): ?User
     {
+        $userId = $this->session->get('userId');
+        if ($userId === null) {
+            return null;
+        }
         return $this->userRepository->find($this->session->get('userId'));
     }
 
+    /**
+     * Syncs EVE alts of logged in EVE character and returns the corresponding user.
+     * 
+     * @param EveAuthentication $eveAuth
+     * @return User The logged in user.
+     */
     public function syncCharacters(EveAuthentication $eveAuth): User
     {
+        $characterId = $eveAuth->getCharacterId();
+        
         // get or add new character with user
-        $authCharacter = $this->characterRepository->find($eveAuth->getCharacterId());
+        $authCharacter = $this->characterRepository->find($characterId);
         if ($authCharacter === null) {
             $user = new User();
             $authCharacter = new Character();
-            $authCharacter->setId($eveAuth->getCharacterId());
+            $authCharacter->setId($characterId);
             $authCharacter->setMain(true);
             $authCharacter->setUser($user);
             $authCharacter->setName($eveAuth->getCharacterName());
@@ -81,8 +108,8 @@ class UserService
         }
 
         // add alts
-        $allCharacterIds = $this->characterProvider->getCharacters();
-        foreach ($allCharacterIds as $altId) {
+        $allKnownCharacterIds = $this->characterProvider->getCharacters($characterId);
+        foreach ($allKnownCharacterIds as $altId) {
             $alt = $this->characterRepository->find($altId);
             if ($alt === null) {
                 $alt = new Character();
@@ -101,22 +128,22 @@ class UserService
             $alt->setName($this->characterProvider->getName($alt->getId()));
         }
 
-        // remove alts, set name of player - but only if the character is known
-        if (count($allCharacterIds) > 0) {
-            $mainCharacterId = $this->characterProvider->getMain();
-            foreach ($user->getCharacters() as $existingCharacter) {
-                if (! in_array($existingCharacter->getId(), $allCharacterIds)) {
-                    $user->removeCharacter($existingCharacter);
-                    $existingCharacter->setUser(null);
-                }
-                if ($existingCharacter->getId() === $mainCharacterId) {
-                    $existingCharacter->setMain(true);
-                } else {
-                    $existingCharacter->setMain(false);
-                }
-                if ($existingCharacter->getMain()) {
-                    $user->setName($existingCharacter->getName());
-                }
+        // remove alts, set name of player
+        $mainCharacterId = $this->characterProvider->getMain($characterId);
+        foreach ($user->getCharacters() as $existingCharacter) {
+            if ($existingCharacter->getId() !== $characterId
+                && ! in_array($existingCharacter->getId(), $allKnownCharacterIds)
+            ) {
+                $user->removeCharacter($existingCharacter);
+                $existingCharacter->setUser(null);
+            }
+            if ($existingCharacter->getId() === $mainCharacterId) {
+                $existingCharacter->setMain(true);
+            } else {
+                $existingCharacter->setMain(false);
+            }
+            if ($existingCharacter->getMain()) {
+                $user->setName($existingCharacter->getName());
             }
         }
 
@@ -124,5 +151,38 @@ class UserService
         $this->entityManager->flush();
 
         return $user;
+    }
+
+    /**
+     * Syncs external groups of logged in EVE character
+     *
+     * @param int $characterId
+     * @param User $user
+     */
+    public function syncGroups(int $characterId, User $user): void
+    {
+        $groups = $this->groupProvider->getGroups($characterId);
+        
+        // add groups
+        foreach ($groups as $groupName) {
+            $group = $this->externalGroupRepository->findOneBy(['name' => $groupName]);
+            if ($group === null) {
+                $group = (new ExternalGroup())->setName($groupName);
+                $this->entityManager->persist($group);
+            }
+            if (! $user->hasExternalGroup($group->getName())) {
+                $user->addExternalGroup($group);
+            }
+        }
+
+        // remove groups
+        foreach ($user->getExternalGroups() as $externalGroup) {
+            if (! in_array($externalGroup->getName(), $groups)) {
+                $user->removeExternalGroup($externalGroup);
+            }
+        }
+        
+        // persist
+        $this->entityManager->flush();
     }
 }

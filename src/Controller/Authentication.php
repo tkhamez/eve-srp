@@ -4,9 +4,10 @@ declare(strict_types=1);
 
 namespace Brave\EveSrp\Controller;
 
-use Brave\EveSrp\Provider\RoleProviderInterface;
+use Brave\EveSrp\Provider\GroupProviderInterface;
 use Brave\EveSrp\UserService;
 use Brave\Sso\Basics\AuthenticationController;
+use Brave\Sso\Basics\EveAuthentication;
 use Brave\Sso\Basics\SessionHandlerInterface;
 use Exception;
 use Psr\Container\ContainerInterface;
@@ -16,9 +17,9 @@ use Psr\Http\Message\ServerRequestInterface;
 class Authentication extends AuthenticationController
 {
     /**
-     * @var RoleProviderInterface
+     * @var GroupProviderInterface
      */
-    private $roleProvider;
+    private $groupProvider;
 
     /**
      * @var SessionHandlerInterface
@@ -39,7 +40,7 @@ class Authentication extends AuthenticationController
     {
         parent::__construct($container);
         
-        $this->roleProvider = $container->get(RoleProviderInterface::class);
+        $this->groupProvider = $container->get(GroupProviderInterface::class);
         $this->sessionHandler = $container->get(SessionHandlerInterface::class);
         $this->userService = $container->get(UserService::class);
     }
@@ -59,9 +60,13 @@ class Authentication extends AuthenticationController
         } catch (Exception $e) {
             error_log('Authentication::auth: ' . $e->getMessage());
         }
-        $this->roleProvider->clear();
-
-        $user = $this->userService->syncCharacters($this->sessionHandler->get('eveAuth'));
+        
+        /* @var EveAuthentication $eveAuth */
+        $eveAuth = $this->sessionHandler->get('eveAuth');
+        $this->sessionHandler->set('eveAuth', null);
+        
+        $user = $this->userService->syncCharacters($eveAuth);
+        $this->userService->syncGroups($eveAuth->getCharacterId(), $user);
         $this->sessionHandler->set('userId', $user->getId());
 
         return $response->withHeader('Location', '/');
@@ -72,8 +77,7 @@ class Authentication extends AuthenticationController
         /** @noinspection PhpUnusedParameterInspection */ ServerRequestInterface $request, 
                                                           ResponseInterface $response
     ) {
-        $this->sessionHandler->set('eveAuth', null);
-        $this->roleProvider->clear();
+        $this->sessionHandler->set('userId', null);
         
         return $response->withHeader('Location', '/');
     }

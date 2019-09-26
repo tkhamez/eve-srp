@@ -7,7 +7,6 @@ namespace Brave\EveSrp\Provider;
 use Brave\NeucoreApi\Api\ApplicationApi;
 use Brave\NeucoreApi\ApiException;
 use Brave\NeucoreApi\Model\Character;
-use Brave\Sso\Basics\EveAuthentication;
 use Brave\Sso\Basics\SessionHandlerInterface;
 use Psr\Container\ContainerInterface;
 
@@ -35,18 +34,18 @@ class NeucoreCharacterProvider implements CharacterProviderInterface
         $this->session = $container->get(SessionHandlerInterface::class);
     }
 
-    public function getCharacters(): array
+    public function getCharacters(int $characterId): array
     {
-        $this->fetchCharacters();
+        $this->fetchCharacters($characterId);
 
         return array_map(function (Character $char) {
             return $char->getId();
         }, $this->characters);
     }
 
-    public function getMain(): ?int
+    public function getMain(int $characterId): ?int
     {
-        $this->fetchCharacters();
+        $this->fetchCharacters($characterId);
 
         foreach ($this->characters as $character) {
             if ($character->getMain()) {
@@ -66,23 +65,15 @@ class NeucoreCharacterProvider implements CharacterProviderInterface
         return '';
     }
     
-    private function fetchCharacters(): void
+    private function fetchCharacters(int $characterId): void
     {
-        /* @var EveAuthentication $eveAuth */
-        $eveAuth = $this->session->get('eveAuth', null);
-        
-        if ($eveAuth === null) {
-            $this->characters = [];
-            return;
-        }
-
         if ($this->characters !== null) {
             return;
         }
         
         $this->characters = [];
         try {
-            $this->characters = $this->api->charactersV1($eveAuth->getCharacterId());
+            $this->characters = $this->api->charactersV1($characterId);
         } catch (ApiException $e) {
             // Don't log "404 Character not found." error from Core.
             if ($e->getCode() !== 404 || strpos($e->getMessage(), 'Character not found.') === false) {

@@ -4,18 +4,19 @@ declare(strict_types=1);
 
 namespace Brave\EveSrp;
 
-use Brave\EveSrp\Middleware\SessionRole;
-use Brave\EveSrp\Provider\RoleProviderInterface;
-use Brave\Sso\Basics\SessionHandlerInterface;
 use DI\ContainerBuilder;
+use DI\DependencyException;
+use DI\NotFoundException;
 use Dotenv\Dotenv;
 use Exception;
-use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ResponseFactoryInterface;
 use Slim\App;
+use Slim\Factory\AppFactory;
 use Slim\Middleware\Session;
+use Throwable;
 use Tkhamez\Slim\RoleAuth\RoleMiddleware;
+use Tkhamez\Slim\RoleAuth\RoleProviderInterface;
 use Tkhamez\Slim\RoleAuth\SecureRouteMiddleware;
 
 class Bootstrap
@@ -45,33 +46,57 @@ class Bootstrap
     {
         return $this->container;
     }
-    
-    /**
-     * @return App
-     * @throws ContainerExceptionInterface
-     */
-    public function enableRoutes()
-    {
-        /** @var App $app */
-        $routesConfigurator = require_once(ROOT_DIR . '/config/routes.php');
-        $app = $routesConfigurator($this->container);
 
-        $app->add(new SessionRole($this->container->get(SessionHandlerInterface::class)));
+    public function run(): void
+    {
+        $app = $this->enableRoutes();
+        
+        try {
+            $this->addMiddleware($app);
+        } catch (Exception $e) {
+            error_log('Bootstrap::run(): ' . $e->getMessage());
+        }
+
+        try {
+            $app->run();
+        } catch (Throwable $e) {
+            error_log((string) $e);
+        }
+    }
+
+    private function enableRoutes(): App
+    {
+        AppFactory::setContainer($this->container);
+        $app = AppFactory::create();
+        
+        $routesConfigurator = require_once(ROOT_DIR . '/config/routes.php');
+        $routesConfigurator($app);
+
+        return $app;
+    }
+
+    /**
+     * @param App $app
+     * @throws DependencyException
+     * @throws NotFoundException
+     */
+    private function addMiddleware(App $app): void
+    {
         $app->add(new SecureRouteMiddleware(
-            $this->container->get(ResponseFactoryInterface::class), 
+            $this->container->get(ResponseFactoryInterface::class),
             include ROOT_DIR . '/config/security.php',
             ['redirect_url' => '/login']
         ));
+
+        // Add routing middleware after SecureRouteMiddleware,
+        // so the `route` attribute from `$request` is available
+        $app->addRoutingMiddleware();
+        
         $app->add(new RoleMiddleware($this->container->get(RoleProviderInterface::class)));
         $app->add(new Session([
             'name' => 'brave_service',
             'autorefresh' => true,
             'lifetime' => '1 hour'
         ]));
-
-        // Add routing middleware last, so the `route` attribute from `$request` is available
-        $app->addRoutingMiddleware();
-        
-        return $app;
     }
 }

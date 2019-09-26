@@ -32,6 +32,10 @@ class Home
     {
         $user = $this->userService->getUser();
 
+        #var_Dump(array_map(function ($i) { return $i->getName(); }, $user->getExternalGroups()));
+        #var_Dump(array_map(function ($i) { return $i->getName(); }, $user->getCharacters()));
+        #var_Dump($request->getAttribute('roles'));
+        
         try {
             $content = $this->twig->render('home.twig', ['requests' => $user->getRequests()]);
         } catch (Exception $e) {
