@@ -15,19 +15,4 @@ class Security
      * Added to all authenticated clients
      */
     public const ROLE_AUTHENTICATED = 'authenticated';
-
-    /**
-     * May submit a request
-     */
-    public const ROLE_SUBMIT = 'submit';
-
-    /**
-     * May approve a request
-     */
-    public const ROLE_APPROVE = 'approve';
-
-    /**
-     * May payout the ISK.
-     */
-    public const ROLE_PAY = 'pay';
 }

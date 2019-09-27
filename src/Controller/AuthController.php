@@ -14,7 +14,7 @@ use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 
-class Authentication extends AuthenticationController
+class AuthController extends AuthenticationController
 {
     /**
      * @var GroupProviderInterface
@@ -58,7 +58,7 @@ class Authentication extends AuthenticationController
         try {
             $response = parent::auth($request, $response, true);
         } catch (Exception $e) {
-            error_log('Authentication::auth: ' . $e->getMessage());
+            error_log('AuthController::auth: ' . $e->getMessage());
         }
         
         /* @var EveAuthentication $eveAuth */

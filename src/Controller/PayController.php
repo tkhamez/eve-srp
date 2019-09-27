@@ -10,7 +10,7 @@ use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Twig\Environment;
 
-class Approve
+class PayController
 {
     /**
      * @var Environment 
@@ -24,9 +24,9 @@ class Approve
     public function __invoke(ServerRequestInterface $request, ResponseInterface $response, $args): ResponseInterface
     {
         try {
-            $content = $this->twig->render('approve.twig');
+            $content = $this->twig->render('pay.twig');
         } catch (Exception $e) {
-            error_log('RequestController' . $e->getMessage());
+            error_log('PayController' . $e->getMessage());
             $content = '';
         }
         $response->getBody()->write($content);

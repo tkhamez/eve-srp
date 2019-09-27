@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Brave\EveSrp\Provider;
 
+use Brave\EveSrp\Model\Permission;
 use Brave\EveSrp\Security;
 use Brave\EveSrp\UserService;
 use Brave\NeucoreApi\Model\Group;
@@ -34,7 +35,10 @@ class RoleProvider implements RoleProviderInterface
         $this->settingsRoles = $container->get('settings')['ROLE_MAPPING'];
     }
 
-    public function getUserRoles(): array
+    /**
+     * Returns roles of user (authenticated or not)
+     */
+    public function getClientRoles(): array
     {
         return $this->getRoles();
     }
@@ -47,8 +51,9 @@ class RoleProvider implements RoleProviderInterface
 
         $this->roles = [Security::ROLE_ANY];
 
-        $user = $this->userService->getUser();
+        $user = $this->userService->getAuthenticatedUser();
         if ($user === null) {
+            $this->userService->setClientRoles($this->roles);
             return $this->roles;
         }
 
@@ -57,6 +62,8 @@ class RoleProvider implements RoleProviderInterface
         $groups = $user->getExternalGroups();
         $this->roles = array_merge($this->roles, $this->mapGroupsToRoles($groups));
 
+        $this->userService->setClientRoles($this->roles);
+        
         return $this->roles;
     }
 
@@ -67,20 +74,24 @@ class RoleProvider implements RoleProviderInterface
     private function mapGroupsToRoles(array $groups)
     {
         $requestGroups = explode(',', $this->settingsRoles['submit']);
-        $approveGroups = explode(',', $this->settingsRoles['approve']);
+        $reviewGroups = explode(',', $this->settingsRoles['review']);
         $payGroups = explode(',', $this->settingsRoles['pay']);
+        $adminGroups = explode(',', $this->settingsRoles['admin']);
 
         $roles = [];
         foreach ($groups as $group) {
             $groupName = $group->getName();
-            if (in_array($groupName, $requestGroups) && ! in_array(Security::ROLE_SUBMIT, $roles)) {
-                $roles[] = Security::ROLE_SUBMIT;
+            if (in_array($groupName, $requestGroups) && ! in_array(Permission::SUBMIT, $roles)) {
+                $roles[] = Permission::SUBMIT;
             }
-            if (in_array($groupName, $approveGroups) && ! in_array(Security::ROLE_APPROVE, $roles)) {
-                $roles[] = Security::ROLE_APPROVE;
+            if (in_array($groupName, $reviewGroups) && ! in_array(Permission::REVIEW, $roles)) {
+                $roles[] = Permission::REVIEW;
             }
-            if (in_array($groupName, $payGroups) && ! in_array(Security::ROLE_PAY, $roles)) {
-                $roles[] = Security::ROLE_PAY;
+            if (in_array($groupName, $payGroups) && ! in_array(Permission::PAY, $roles)) {
+                $roles[] = Permission::PAY;
+            }
+            if (in_array($groupName, $adminGroups) && ! in_array(Permission::ADMIN, $roles)) {
+                $roles[] = Permission::ADMIN;
             }
         }
         

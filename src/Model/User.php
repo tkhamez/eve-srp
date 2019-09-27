@@ -31,6 +31,10 @@ class User
 
     /**
      * @ORM\ManyToMany(targetEntity="ExternalGroup", inversedBy="users")
+     * @ORM\JoinTable(name="user_external_group",
+     *     joinColumns={@ORM\JoinColumn(name="user_id", referencedColumnName="id")},
+     *     inverseJoinColumns={@ORM\JoinColumn(name="external_group_id ", referencedColumnName="id")}
+     * )
      * @ORM\OrderBy({"name" = "ASC"})
      * @var Collection
      */

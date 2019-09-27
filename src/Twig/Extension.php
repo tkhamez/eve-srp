@@ -4,22 +4,21 @@ declare(strict_types=1);
 
 namespace Brave\EveSrp\Twig;
 
-use Brave\EveSrp\Provider\RoleProvider;
+use Brave\EveSrp\UserService;
 use Psr\Container\ContainerInterface;
-use Tkhamez\Slim\RoleAuth\RoleProviderInterface;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFunction;
 
 class Extension extends AbstractExtension
 {
     /**
-     * @var RoleProviderInterface
+     * @var UserService
      */
-    private $roleProvider;
+    private $userService;
 
     public function __construct(ContainerInterface $container)
     {
-        $this->roleProvider = $container->get(RoleProvider::class);
+        $this->userService = $container->get(UserService::class);
     }
 
     public function getFunctions()
@@ -32,6 +31,6 @@ class Extension extends AbstractExtension
     /** @noinspection PhpUnused */
     public function hasRole($role)
     {
-        return in_array($role, $this->roleProvider->getUserRoles());
+        return $this->userService->hasRole($role);
     }
 }

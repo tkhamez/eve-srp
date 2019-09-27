@@ -10,10 +10,10 @@ use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Twig\Environment;
 
-class Submit
+class AdminController
 {
     /**
-     * @var Environment 
+     * @var Environment
      */
     private $twig;
 
@@ -24,9 +24,9 @@ class Submit
     public function __invoke(ServerRequestInterface $request, ResponseInterface $response, $args): ResponseInterface
     {
         try {
-            $content = $this->twig->render('submit.twig');
+            $content = $this->twig->render('admin.twig');
         } catch (Exception $e) {
-            error_log('ApproveController' . $e->getMessage());
+            error_log('AdminController' . $e->getMessage());
             $content = '';
         }
         $response->getBody()->write($content);

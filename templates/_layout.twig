@@ -4,6 +4,7 @@
         <meta charset="UTF-8">
         <meta content="initial-scale=1, shrink-to-fit=no, width=device-width" name="viewport">
         <title>{{ data.appTitle }}</title>
+        <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
         <link rel="stylesheet" href="/assets/bravecollective/web-ui/css/brave.css">
     </head>
     <body class="container-fluid">
@@ -14,17 +15,33 @@
                 {% if hasRole('submit') %}
                     <li class="nav-item"><a class="nav-link" href="/submit">Submit</a></li>
                 {% endif %}
-                {% if hasRole('approve') %}
-                    <li class="nav-item"> <a class="nav-link" href="/approve">Approve</a></li>
+                {% if hasRole('review') %}
+                    <li class="nav-item"> <a class="nav-link" href="/review">Review</a></li>
                 {% endif %}
                 {% if hasRole('pay') %}
                     <li class="nav-item"><a class="nav-link" href="/pay">Pay</a></li>
                 {% endif %}
+                {% if hasRole('admin') %}
+                    <li class="nav-item"><a class="nav-link" href="/admin">Admin</a></li>
+                {% endif %}
             </ul>
-            <form class="form-inline my-2 my-lg-0">
-                {{ data.userName }}
-                <a class="btn btn-outline-success my-2 my-sm-0" href="/logout">Logout</a>
-            </form>
+            <ul class="navbar-nav">
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        {{ data.userName }}
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        <span class="dropdown-item-text">
+                            Characters<br>
+                            {% for charName in data.characters %}
+                                <span class="small">{{ charName }}</span><br>
+                            {% endfor %}
+                        </span>
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item" href="/logout">Logout</a>
+                    </div>
+                </li>
+            </ul>
         </header>
 
         <main>{% block content %}{% endblock %}</main>
@@ -44,5 +61,6 @@
         <script src="/assets/bravecollective/web-ui/js/popper.min.js"></script>
         <script src="/assets/bravecollective/web-ui/js/bootstrap.min.js"></script>
         <script src="/assets/bravecollective/web-ui/js/material.min.js"></script>
+        <script src="/EveSrp.js"></script>
     </body>
 </html>

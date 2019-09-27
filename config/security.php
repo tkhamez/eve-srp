@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use Brave\EveSrp\Model\Permission;
 use Brave\EveSrp\Security;
 
 /**
@@ -12,9 +13,10 @@ use Brave\EveSrp\Security;
 return [
     '/login'   => [Security::ROLE_ANY],
     '/auth'    => [Security::ROLE_ANY],
-    '/submit'  => [Security::ROLE_SUBMIT],
-    '/approve' => [Security::ROLE_APPROVE],
-    '/pay'     => [Security::ROLE_PAY],
-    '/request' => [Security::ROLE_SUBMIT, Security::ROLE_APPROVE, Security::ROLE_PAY],
+    '/request' => [Permission::SUBMIT, Permission::REVIEW, Permission::PAY],
+    '/submit'  => [Permission::SUBMIT],
+    '/review'  => [Permission::REVIEW],
+    '/pay'     => [Permission::PAY],
+    '/admin'   => [Permission::ADMIN],
     '/'        => [Security::ROLE_AUTHENTICATED],
 ];

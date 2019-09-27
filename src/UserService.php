@@ -4,11 +4,13 @@ namespace Brave\EveSrp;
 
 use Brave\EveSrp\Model\Character;
 use Brave\EveSrp\Model\ExternalGroup;
+use Brave\EveSrp\Model\Request;
 use Brave\EveSrp\Model\User;
 use Brave\EveSrp\Provider\CharacterProviderInterface;
 use Brave\EveSrp\Provider\GroupProviderInterface;
 use Brave\EveSrp\Repository\CharacterRepository;
 use Brave\EveSrp\Repository\ExternalGroupRepository;
+use Brave\EveSrp\Repository\PermissionRepository;
 use Brave\EveSrp\Repository\UserRepository;
 use Brave\Sso\Basics\EveAuthentication;
 use Brave\Sso\Basics\SessionHandlerInterface;
@@ -43,6 +45,11 @@ class UserService
     private $characterRepository;
 
     /**
+     * @var PermissionRepository
+     */
+    private $permissionRepository;
+
+    /**
      * @var CharacterProviderInterface
      */
     private $characterProvider;
@@ -52,26 +59,82 @@ class UserService
      */
     private $groupProvider;
 
+    /**
+     * @var User|null
+     */
+    private $user;
+
+    /**
+     * @var string[]
+     */
+    private $clientRoles = [];
+
     public function __construct(ContainerInterface $container) {
         $this->session = $container->get(SessionHandlerInterface::class);
         $this->entityManager = $container->get(EntityManagerInterface::class);
         $this->userRepository = $container->get(UserRepository::class);
         $this->externalGroupRepository = $container->get(ExternalGroupRepository::class);
         $this->characterRepository = $container->get(CharacterRepository::class);
+        $this->permissionRepository = $container->get(PermissionRepository::class);
         $this->characterProvider = $container->get(CharacterProviderInterface::class);
         $this->groupProvider = $container->get(GroupProviderInterface::class);
     }
 
     /**
+     * @param string[] $roles
+     */
+    public function setClientRoles(array $roles): void
+    {
+        $this->clientRoles = $roles;
+    }
+
+    /**
+     * Return roles of the current user (authenticated or not).
+     *
+     * Roles are set by the RoleProvider.
+     *
+     * @return string[]
+     */
+    public function getClientRoles(): array
+    {
+        return $this->clientRoles;
+    }
+
+    public function hasRole(string $role)
+    {
+        return in_array($role, $this->clientRoles);
+    }
+
+    /**
      * Returns the logged in user, if available.
      */
-    public function getUser(): ?User
+    public function getAuthenticatedUser(): ?User
     {
+        if ($this->user !== null) {
+            return $this->user;
+        }
+        
         $userId = $this->session->get('userId');
         if ($userId === null) {
             return null;
         }
-        return $this->userRepository->find($this->session->get('userId'));
+        $this->user = $this->userRepository->find($this->session->get('userId'));
+        
+        return $this->user;
+    }
+
+    public function getUserPermissions(): array
+    {
+        $user = $this->getAuthenticatedUser();
+        if ($user === null) {
+            return [];
+        }
+        
+        $groupIds = array_map(function(ExternalGroup $group) {
+            return $group->getId();
+        }, $user->getExternalGroups());
+
+        return $this->permissionRepository->findBy(['externalGroup' => $groupIds]);
     }
 
     /**
@@ -184,5 +247,18 @@ class UserService
         
         // persist
         $this->entityManager->flush();
+    }
+    
+    public function maySee(Request $request): bool
+    {
+        # TODO implement divisions
+        
+        if ($this->hasRole(Model\Permission::REVIEW) || $this->hasRole(Model\Permission::PAY)) {
+            return true;
+        }
+        if ($request->getSubmitter()->getId() === $this->getAuthenticatedUser()->getId()) {
+            return true;
+        }
+        return false;
     }
 }
