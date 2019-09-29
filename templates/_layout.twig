@@ -4,9 +4,7 @@
         <meta charset="UTF-8">
         <meta content="initial-scale=1, shrink-to-fit=no, width=device-width" name="viewport">
         <title>{{ data.appTitle }}</title>
-        <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-        <link rel="stylesheet" href="/assets/bravecollective/web-ui/css/brave.css">
-        <link rel="stylesheet" href="/eve-srp.css">
+        {{ include('css.html') }}
     </head>
     <body class="container-fluid">
         <header class="navbar navbar-dark bg-brave shadow-1 mb-3">
@@ -72,11 +70,7 @@
                 </span>
             </div>
         </footer>
-        
-        <script src="/assets/bravecollective/web-ui/js/jquery.slim.min.js"></script>
-        <script src="/assets/bravecollective/web-ui/js/popper.min.js"></script>
-        <script src="/assets/bravecollective/web-ui/js/bootstrap.min.js"></script>
-        <script src="/assets/bravecollective/web-ui/js/material.min.js"></script>
-        <script src="/EveSrp.js"></script>
+
+        {{ include('js.html') }}
     </body>
 </html>

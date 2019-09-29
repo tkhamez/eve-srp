@@ -1,0 +1,3 @@
+<% for (let i = 0; i < htmlWebpackPlugin.files.css.length; i++) {
+    %><link href="/dist/<%= htmlWebpackPlugin.files.css[i] %>" rel="stylesheet"><%
+} %>

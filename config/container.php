@@ -125,6 +125,7 @@ return [
             $options['cache'] = ROOT_DIR . '/cache/compilation_cache';
         }
         $loader = new FilesystemLoader(ROOT_DIR . '/templates');
+        $loader->addPath(ROOT_DIR . '/web/dist');
         $twig = new Environment($loader, $options);
         if ($container->get('settings')['APP_ENV'] === 'dev') {
             $twig->addExtension(new DebugExtension());

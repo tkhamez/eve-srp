@@ -7,7 +7,7 @@ use Slim\App;
 return function (App $app): void
 {
     // auth
-    $app->get('/login',  Brave\EveSrp\Controller\AuthController::class . ':index');
+    $app->get('/login',  Brave\EveSrp\Controller\AuthController::class . ':login');
     $app->get('/auth',   Brave\EveSrp\Controller\AuthController::class . ':auth');
     $app->get('/logout', Brave\EveSrp\Controller\AuthController::class . ':logout');
 

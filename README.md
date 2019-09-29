@@ -13,6 +13,13 @@
 
 This application uses the PHP internal `error_log` function for error logging.
 
+### Rebuild Frontend
+
+```
+npm i
+npm run build
+```
+
 ## Migration from paxswill/evesrp
 
 Tables: evesrp => eve_srp (replace values for entity.type_ and entity.authmethod)

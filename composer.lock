@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "8cf56350b9d29af3811523072e41c97e",
+    "content-hash": "4ec701e786031769b36ab8d92fe6eea4",
     "packages": [
         {
             "name": "bravecollective/neucore-api",
@@ -101,35 +101,6 @@
                 "MIT"
             ],
             "time": "2019-09-22T16:54:56+00:00"
-        },
-        {
-            "name": "bravecollective/web-ui",
-            "version": "dev-master",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/bravecollective/web-ui.git",
-                "reference": "92d8877358286550a630beac0257042f3c7df82b"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/bravecollective/web-ui/zipball/92d8877358286550a630beac0257042f3c7df82b",
-                "reference": "92d8877358286550a630beac0257042f3c7df82b",
-                "shasum": ""
-            },
-            "type": "library",
-            "extra": {
-                "assets-files": [
-                    "dist/images",
-                    "dist/css",
-                    "dist/js",
-                    "dist/pickadate"
-                ]
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "time": "2019-09-29T12:58:02+00:00"
         },
         {
             "name": "bryanjhv/slim-session",
@@ -1172,46 +1143,6 @@
                 "response"
             ],
             "time": "2018-11-19T16:19:58+00:00"
-        },
-        {
-            "name": "frontpack/composer-assets-plugin",
-            "version": "v0.9.4",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/frontpack/composer-assets-plugin.git",
-                "reference": "4090c33006f9d623e6a05d17871d1d6e7bc87666"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/frontpack/composer-assets-plugin/zipball/4090c33006f9d623e6a05d17871d1d6e7bc87666",
-                "reference": "4090c33006f9d623e6a05d17871d1d6e7bc87666",
-                "shasum": ""
-            },
-            "require": {
-                "composer-plugin-api": "^1.0",
-                "php": ">=5.4.0"
-            },
-            "type": "composer-plugin",
-            "extra": {
-                "class": "Frontpack\\ComposerAssetsPlugin\\ComposerAssetsPlugin"
-            },
-            "autoload": {
-                "classmap": [
-                    "src/"
-                ]
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "BSD-3-Clause"
-            ],
-            "authors": [
-                {
-                    "name": "Jan Pecha",
-                    "homepage": "http://www.janpecha.cz/"
-                }
-            ],
-            "description": "Composer plugin for installing of assets.",
-            "time": "2018-04-04T07:30:22+00:00"
         },
         {
             "name": "guzzlehttp/guzzle",
@@ -3633,9 +3564,7 @@
     "packages-dev": [],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": {
-        "bravecollective/web-ui": 20
-    },
+    "stability-flags": [],
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {

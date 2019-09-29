@@ -2,6 +2,7 @@
 .env
 /cache/*
 !/cache/.gitkeep
+/node_modules
 /vendor
 /web/assets
 
