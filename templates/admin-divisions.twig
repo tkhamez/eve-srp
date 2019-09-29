@@ -1,0 +1,57 @@
+{% extends "_layout.twig" %}
+
+{% block content %}
+    <div class="row">
+        <div class="col">
+            <h1>Admin</h1>
+            <h2>Divisions</h2>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col">
+            <table class="table table-sm table-dark table-striped table-bordered">
+                <thead class="bg-dark-2">
+                    <tr>
+                        <th>ID</th>
+                        <th>Name</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for division in divisions %}
+                        <tr>
+                            <td>{{ division.id }}</td>
+                            <td>{{ division.name }}</td>
+                            <td class="text-right">
+                                <form action="/admin/divisions/delete" method="post" 
+                                      name="delete-division-{{ division.id }}">
+                                    <input type="hidden" name="id" value="{{ division.id }}">
+                                </form>
+                                <button type="submit" class="btn btn-warning" data-trigger="focus"
+                                        data-toggle="popover" data-html="true" title="Are you sure?"
+                                        data-content='
+                                            <span class="btn btn-xs btn-danger delete-division id-{{ division.id }}">
+                                                Yes
+                                            </span>
+                                            <span class="btn btn-xs btn-success">no</span>
+                                        '>
+                                    delete
+                                </button>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        <div class="col">
+            <form class="mb-3 bg-dark text-light p-3" action="/admin/divisions/new" method="post">
+                <h3>Add Division</h3>
+                <div class="form-group">
+                    <label class="text-light" for="nameInput">Name</label>
+                    <input type="text" name="name" class="form-control bg-light-1" id="nameInput">
+                </div>
+                <button type="submit" class="btn btn-primary">Submit</button>
+            </form>
+        </div>
+    </div>
+{% endblock %}

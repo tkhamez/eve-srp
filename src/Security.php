@@ -15,4 +15,9 @@ class Security
      * Added to all authenticated clients
      */
     public const ROLE_AUTHENTICATED = 'authenticated';
+
+    /**
+     * Can add/delete divisions, sync groups, edit all permissions.
+     */
+    public const GLOBAL_ADMIN = 'global-admin';
 }

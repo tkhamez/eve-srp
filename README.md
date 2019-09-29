@@ -18,18 +18,18 @@ This application uses the PHP internal `error_log` function for error logging.
 Tables: evesrp => eve_srp (replace values for entity.type_ and entity.authmethod)
 
 ```
-INSERT INTO eve_srp.users (id, name) SELECT id, '' FROM evesrp.user;
+INSERT INTO eve_srp.users (id) SELECT id FROM evesrp.user;
 INSERT INTO eve_srp.characters (id, user_id, name, main) SELECT id, user_id, name, 0 FROM evesrp.pilot;
 INSERT INTO eve_srp.divisions (id, name) SELECT id, name FROM evesrp.division;
 INSERT INTO eve_srp.requests 
-    (id, submitter_id, division_id, created, pilot_id, corporation, alliance, ship, kill_time, solar_system, kill_mail, details, status, base_payout, payout)
+    (id, submitter_id, division_id, created, pilot_id, corporation, alliance, ship, kill_time, solar_system, killboard_link, details, status, base_payout, payout)
     SELECT id, submitter_id, division_id, timestamp, pilot_id, corporation, alliance, ship_type, kill_timestamp, `system`, killmail_url, details, status, base_payout, payout
     FROM evesrp.request;
 INSERT INTO eve_srp.actions (id, user_id, request_id, created, category, note) 
     SELECT id, user_id, request_id, timestamp, type_, note FROM evesrp.action;
 INSERT INTO eve_srp.external_groups (id, name) 
     SELECT id, name FROM evesrp.entity WHERE type_ = 'BraveOauthGroup' AND authmethod = 'EVESSONeucore';
-INSERT INTO eve_srp.permissions (id, division_id, external_group_id, permission) 
+INSERT INTO eve_srp.permissions (id, division_id, external_group_id, role) 
     SELECT evesrp.permission.id, division_id, entity_id, permission 
     FROM evesrp.permission
     INNER JOIN evesrp.entity ON evesrp.permission.entity_id = evesrp.entity.id

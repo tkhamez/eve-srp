@@ -25,15 +25,15 @@ class User
 
     /**
      * @var string
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="string", length=255, nullable=true)
      */
-    private $name = '';
+    private $name;
 
     /**
      * @ORM\ManyToMany(targetEntity="ExternalGroup", inversedBy="users")
-     * @ORM\JoinTable(name="user_external_group",
-     *     joinColumns={@ORM\JoinColumn(name="user_id", referencedColumnName="id")},
-     *     inverseJoinColumns={@ORM\JoinColumn(name="external_group_id ", referencedColumnName="id")}
+     * @ORM\JoinTable(
+     *     name="user_external_group",
+     *     inverseJoinColumns={@ORM\JoinColumn(name="external_group_id")}
      * )
      * @ORM\OrderBy({"name" = "ASC"})
      * @var Collection

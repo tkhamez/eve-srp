@@ -33,6 +33,7 @@ class Request
 
     /**
      * @ORM\ManyToOne(targetEntity="Division")
+     * @ORM\JoinColumn(nullable=true, onDelete="SET NULL")
      * @var Division
      */
     private $division;
@@ -59,13 +60,13 @@ class Request
 
     /**
      * @var string
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $corporation;
 
     /**
      * @var string
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $alliance;
 
@@ -89,10 +90,18 @@ class Request
 
     /**
      * @var string
-     * @ORM\Column(type="string", name="kill_mail", length=512)
+     * @ORM\Column(type="string", name="killboard_link", length=512, nullable=true)
      */
-    private $killMail;
+    private $killboardLink;
 
+    /**
+     * The "External Kill Link" from the in-game menu.
+     * 
+     * @var string
+     * @ORM\Column(type="string", name="esi_link", length=512, nullable=true)
+     */
+    private $esiLink;
+    
     /**
      * @ORM\Column(type="text", length=16777215, nullable=true)
      * @var string
@@ -100,13 +109,13 @@ class Request
     private $details;
 
     /**
-     * @ORM\Column(type="integer", name="base_payout")
+     * @ORM\Column(type="integer", name="base_payout", nullable=true)
      * @var integer
      */
     private $basePayout;
 
     /**
-     * @ORM\Column(type="integer")
+     * @ORM\Column(type="integer", nullable=true)
      * @var integer
      */
     private $payout;
@@ -135,7 +144,7 @@ class Request
         return $this->created;
     }
 
-    public function getDivision(): Division
+    public function getDivision(): ?Division
     {
         return $this->division;
     }
@@ -183,9 +192,14 @@ class Request
         return $this->solarSystem;
     }
 
-    public function getKillMail(): string
+    public function getKillboardLink(): string
     {
-        return $this->killMail;
+        return (string) $this->killboardLink;
+    }
+
+    public function getEsiLink(): string
+    {
+        return (string) $this->esiLink;
     }
 
     public function getDetails(): string

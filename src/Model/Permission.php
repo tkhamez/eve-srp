@@ -28,7 +28,7 @@ class Permission
     public const PAY = 'pay';
 
     /**
-     * Can change permission etc.
+     * Can change division permission.
      */
     public const ADMIN = 'admin';
     
@@ -41,14 +41,15 @@ class Permission
     private $id;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Division")
+     * @ORM\ManyToOne(targetEntity="Division", inversedBy="permissions")
+     * @ORM\JoinColumn(nullable=false)
      * @var Division
      */
     private $division;
 
     /**
-     * @ORM\ManyToOne(targetEntity="ExternalGroup")
-     * @ORM\JoinColumn(name="external_group_id")
+     * @ORM\ManyToOne(targetEntity="ExternalGroup", inversedBy="permissions")
+     * @ORM\JoinColumn(name="external_group_id", nullable=false)
      * @var ExternalGroup
      */
     private $externalGroup;
@@ -57,11 +58,18 @@ class Permission
      * @var string
      * @ORM\Column(type="string", length=8)
      */
-    private $permission = '';
+    private $role;
 
     public function getId(): int
     {
         return $this->id;
+    }
+
+    public function setDivision(Division $division): self
+    {
+        $this->division = $division;
+
+        return $this;
     }
 
     public function getDivision(): Division
@@ -69,13 +77,31 @@ class Permission
         return $this->division;
     }
 
+    public function setExternalGroup(ExternalGroup $externalGroup): self
+    {
+        $this->externalGroup = $externalGroup;
+
+        return $this;
+    }
+
     public function getExternalGroup(): ExternalGroup
     {
         return $this->externalGroup;
     }
 
-    public function getPermission(): string
+    /**
+     * @param string $role One of the self::* constants.
+     * @return $this
+     */
+    public function setRole(string $role): self
     {
-        return $this->permission;
+        $this->role = $role;
+        
+        return $this;
+    }
+
+    public function getRole(): string
+    {
+        return $this->role;
     }
 }

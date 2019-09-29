@@ -108,12 +108,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/bravecollective/web-ui.git",
-                "reference": "9c3dd9cbf4be53c6dc8f0373b014b89f5d296727"
+                "reference": "92d8877358286550a630beac0257042f3c7df82b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/bravecollective/web-ui/zipball/9c3dd9cbf4be53c6dc8f0373b014b89f5d296727",
-                "reference": "9c3dd9cbf4be53c6dc8f0373b014b89f5d296727",
+                "url": "https://api.github.com/repos/bravecollective/web-ui/zipball/92d8877358286550a630beac0257042f3c7df82b",
+                "reference": "92d8877358286550a630beac0257042f3c7df82b",
                 "shasum": ""
             },
             "type": "library",
@@ -129,7 +129,7 @@
             "license": [
                 "MIT"
             ],
-            "time": "2019-08-23T20:23:33+00:00"
+            "time": "2019-09-29T12:58:02+00:00"
         },
         {
             "name": "bryanjhv/slim-session",
@@ -1857,16 +1857,16 @@
         },
         {
             "name": "php-di/phpdoc-reader",
-            "version": "2.1.0",
+            "version": "2.1.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/PHP-DI/PhpDocReader.git",
-                "reference": "7d0de60b9341933c8afd172a6255cd7557601e0e"
+                "reference": "15678f7451c020226807f520efb867ad26fbbfcf"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/PHP-DI/PhpDocReader/zipball/7d0de60b9341933c8afd172a6255cd7557601e0e",
-                "reference": "7d0de60b9341933c8afd172a6255cd7557601e0e",
+                "url": "https://api.github.com/repos/PHP-DI/PhpDocReader/zipball/15678f7451c020226807f520efb867ad26fbbfcf",
+                "reference": "15678f7451c020226807f520efb867ad26fbbfcf",
                 "shasum": ""
             },
             "require": {
@@ -1890,7 +1890,7 @@
                 "phpdoc",
                 "reflection"
             ],
-            "time": "2018-02-18T17:39:01+00:00"
+            "time": "2019-09-26T11:24:58+00:00"
         },
         {
             "name": "psr/container",

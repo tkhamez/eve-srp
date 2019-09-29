@@ -1,0 +1,58 @@
+{% extends "_layout.twig" %}
+
+{% block content %}
+    <div class="row">
+        <div class="col">
+            <h1>Admin</h1>
+            <h2>Permissions</h2>
+        </div>
+    </div>
+
+    {% for division in divisions %}
+        <form class="card bg-dark mb-3" 
+              action="/admin/permissions/save#division{{ division.id }}" 
+              method="post" id="division{{ division.id }}">
+            <input type="hidden" name="id" value="{{ division.id }}">
+            <div class="card-body">
+                <h4 class="card-title">Division: {{ division.name }}</h4>
+                <ul class="list-group">
+                    <li class="list-group-item bg-dark-2 text-light">
+                        <div class="row">
+                            <div class="col-2">Role</div>
+                            <div class="col-10">Groups</div>
+                        </div>
+                    </li>
+                    {% for role in roles %}
+                        <li class="list-group-item bg-dark-3 text-light">
+                            <div class="row">
+                                <div class="col-2"><h5>{{ role }}</h5></div>
+                                <div class="col-4">
+                                    {% for permission in division.permissions(role) %}
+                                        <div>{{ permission.externalGroup.name }}</div>
+                                    {% endfor %}
+                                </div>
+                                <div class="col-6">
+                                    <input type="hidden" name="groups[{{ role }}]" value="">
+                                    <select multiple name="groups[{{ role }}][]" class="select-picker">
+                                        {% for group in groups %}
+                                            {% set selected = '' %}
+                                            {% if division.hasPermission(role, group.id) %}
+                                                {% set selected = 'selected' %}
+                                            {% endif %}
+                                            <option value="{{ group.id }}" {{ selected }}>
+                                                {{ group.name }}
+                                            </option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                            </div>
+                        </li>
+                    {% endfor %}
+                </ul>
+            </div>
+            <div class="card-actions col-6 align-self-end">
+                <button type="submit" class="btn btn-primary">Save</button>
+            </div>
+        </form>
+    {% endfor %}
+{% endblock %}

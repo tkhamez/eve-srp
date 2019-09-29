@@ -26,10 +26,10 @@ class Character
      * @var string
      * @ORM\Column(type="string", length=255)
      */
-    private $name = '';
+    private $name;
 
     /**
-     * @ORM\Column(type="boolean")
+     * @ORM\Column(type="boolean", options={"default" = 0})
      * @var bool
      */
     private $main = false;

@@ -1,7 +1,7 @@
 {% extends "_layout.twig" %}
 
 {% block content %}
-    <div class="row text-light">
+    <div class="row">
         <div class="col">
             <h1>Request</h1>
             
@@ -25,7 +25,8 @@
             <div>ship: {{ request.ship }}</div>
             <div>killTime: {{ request.killTime|date('Y-m-d H:i') }}</div>
             <div>solarSystem: {{ request.solarSystem }}</div>
-            <div>killMail: {{ request.killMail }}</div>
+            <div>killboardLink: {{ request.killboardLink }}</div>
+            <div>esiLink: {{ request.esiLink }}</div>
             <div>details: {{ request.details }}</div>
             <div>basePayout: {{ request.basePayout }}</div>
             <div>payout: {{ request.payout }}</div>

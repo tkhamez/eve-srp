@@ -4,6 +4,7 @@ namespace Brave\EveSrp;
 
 use Brave\EveSrp\Model\Character;
 use Brave\EveSrp\Model\ExternalGroup;
+use Brave\EveSrp\Model\Permission;
 use Brave\EveSrp\Model\Request;
 use Brave\EveSrp\Model\User;
 use Brave\EveSrp\Provider\CharacterProviderInterface;
@@ -81,6 +82,9 @@ class UserService
     }
 
     /**
+     * Set roles of the current user (authenticated or not).
+     *
+     * Roles are set by the RoleProvider.
      * @param string[] $roles
      */
     public function setClientRoles(array $roles): void
@@ -123,6 +127,9 @@ class UserService
         return $this->user;
     }
 
+    /**
+     * @return Permission[]
+     */
     public function getUserPermissions(): array
     {
         $user = $this->getAuthenticatedUser();
@@ -135,6 +142,24 @@ class UserService
         }, $user->getExternalGroups());
 
         return $this->permissionRepository->findBy(['externalGroup' => $groupIds]);
+    }
+
+    public function getDivisionRoles(): array
+    {
+        $result = [];
+        foreach ($this->getUserPermissions() as $permission) {
+            $key = $permission->getDivision()->getId() . '/' . $permission->getRole();
+            if (! isset($result[$key])) {
+                $result[$key] = [
+                    $permission->getDivision()->getId(), 
+                    $permission->getDivision()->getName(), 
+                    $permission->getRole()
+                ];
+            }
+        }
+        ksort($result);
+        
+        return array_values($result);
     }
 
     /**
@@ -252,8 +277,8 @@ class UserService
     public function maySee(Request $request): bool
     {
         # TODO implement divisions
-        
-        if ($this->hasRole(Model\Permission::REVIEW) || $this->hasRole(Model\Permission::PAY)) {
+
+        if ($this->hasRole(Permission::REVIEW) || $this->hasRole(Permission::PAY)) {
             return true;
         }
         if ($request->getSubmitter()->getId() === $this->getAuthenticatedUser()->getId()) {

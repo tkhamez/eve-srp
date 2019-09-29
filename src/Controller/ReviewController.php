@@ -29,6 +29,8 @@ class ReviewController
             error_log('ReviewController' . $e->getMessage());
             $content = '';
         }
+
+        /** @noinspection PhpUnhandledExceptionInspection */
         $response->getBody()->write($content);
 
         return $response;

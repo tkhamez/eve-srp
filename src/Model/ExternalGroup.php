@@ -23,10 +23,16 @@ class ExternalGroup
     private $id;
 
     /**
-     * @var string
      * @ORM\Column(type="string", unique=true, length=255)
+     * @var string
      */
-    private $name = '';
+    private $name;
+
+    /**
+     * @ORM\OneToMany(targetEntity="Permission", mappedBy="externalGroup", cascade={"remove"})
+     * @var Collection
+     */
+    private $permissions;
 
     /**
      * @ORM\ManyToMany(targetEntity="User", mappedBy="externalGroups")
@@ -38,6 +44,7 @@ class ExternalGroup
     public function __construct()
     {
         $this->users = new ArrayCollection();
+        $this->permissions = new ArrayCollection();
     }
 
     public function getId(): ?int

@@ -10,11 +10,20 @@ interface GroupProviderInterface
      * Returns groups from external service for the authenticated user.
      * 
      * Those groups are mapped to internal roles and divisions via configuration.
+     *
+     * This is called after each character login.
      * 
-     * @param int $eveCharacterId
-     * @return string[]
+     * @param int $eveCharacterId EVE character ID
+     * @return string[] Array of unique group names, e. g. ['submitter', 'admin']
      */
     public function getGroups(int $eveCharacterId): array;
-    
-    // TODO add getAvailableGroups() (= all groups that a user could have)? 
+
+    /**
+     * Returns all groups that a character can have.
+     *
+     * This can be called manually by an admin.
+     *
+     * @return string[]
+     */
+    public function getAvailableGroups(): array;
 }

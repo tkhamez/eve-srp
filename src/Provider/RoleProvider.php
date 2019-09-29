@@ -4,10 +4,9 @@ declare(strict_types=1);
 
 namespace Brave\EveSrp\Provider;
 
-use Brave\EveSrp\Model\Permission;
+use Brave\EveSrp\Model\User;
 use Brave\EveSrp\Security;
 use Brave\EveSrp\UserService;
-use Brave\NeucoreApi\Model\Group;
 use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Tkhamez\Slim\RoleAuth\RoleProviderInterface;
@@ -25,22 +24,16 @@ class RoleProvider implements RoleProviderInterface
     /**
      * @var string[] 
      */
-    private $settingsRoles;
+    private $adminGroups = [];
 
     private $roles = [];
     
     public function __construct(ContainerInterface $container)
     {
         $this->userService = $container->get(UserService::class);
-        $this->settingsRoles = $container->get('settings')['ROLE_MAPPING'];
-    }
-
-    /**
-     * Returns roles of user (authenticated or not)
-     */
-    public function getClientRoles(): array
-    {
-        return $this->getRoles();
+        if ($container->get('settings')['ROLE_GLOBAL_ADMIN'] !== '') {
+            $this->adminGroups = explode(',', $container->get('settings')['ROLE_GLOBAL_ADMIN']);
+        }
     }
 
     public function getRoles(ServerRequestInterface $request = null): array
@@ -59,39 +52,28 @@ class RoleProvider implements RoleProviderInterface
 
         $this->roles[] = Security::ROLE_AUTHENTICATED;
         
-        $groups = $user->getExternalGroups();
-        $this->roles = array_merge($this->roles, $this->mapGroupsToRoles($groups));
+        $this->roles = array_merge($this->roles, $this->mapGroupsToRoles($user));
 
         $this->userService->setClientRoles($this->roles);
-        
+
         return $this->roles;
     }
 
-    /**
-     * @param Group[] $groups
-     * @return array
-     */
-    private function mapGroupsToRoles(array $groups)
+    private function mapGroupsToRoles(User $user)
     {
-        $requestGroups = explode(',', $this->settingsRoles['submit']);
-        $reviewGroups = explode(',', $this->settingsRoles['review']);
-        $payGroups = explode(',', $this->settingsRoles['pay']);
-        $adminGroups = explode(',', $this->settingsRoles['admin']);
-
         $roles = [];
-        foreach ($groups as $group) {
-            $groupName = $group->getName();
-            if (in_array($groupName, $requestGroups) && ! in_array(Permission::SUBMIT, $roles)) {
-                $roles[] = Permission::SUBMIT;
+        
+        // division roles
+        foreach ($this->userService->getUserPermissions() as $permission) {
+            if (! in_array($permission->getRole(), $roles)) {
+                $roles[] = $permission->getRole();
             }
-            if (in_array($groupName, $reviewGroups) && ! in_array(Permission::REVIEW, $roles)) {
-                $roles[] = Permission::REVIEW;
-            }
-            if (in_array($groupName, $payGroups) && ! in_array(Permission::PAY, $roles)) {
-                $roles[] = Permission::PAY;
-            }
-            if (in_array($groupName, $adminGroups) && ! in_array(Permission::ADMIN, $roles)) {
-                $roles[] = Permission::ADMIN;
+        }
+        
+        // global admin role
+        foreach ($user->getExternalGroups() as $group) {
+            if (in_array($group->getName(), $this->adminGroups) && ! in_array(Security::GLOBAL_ADMIN, $roles)) {
+                $roles[] = Security::GLOBAL_ADMIN;
             }
         }
         

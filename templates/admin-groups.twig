@@ -1,0 +1,39 @@
+{% extends "_layout.twig" %}
+
+{% block content %}
+    <div class="row">
+        <div class="col">
+            <h1>Admin</h1>
+            <h2>Groups</h2>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col">
+            <table class="table table-sm table-dark table-striped table-bordered">
+                <thead class="bg-dark-2">
+                    <tr>
+                        <th>ID</th>
+                        <th>Name</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for group in groups %}
+                        <tr>
+                            <td>{{ group.id }}</td>
+                            <td>{{ group.name }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        <div class="col">
+            <form class="mb-3 bg-dark text-light p-3" action="/admin/groups/sync" method="post">
+                <h3>Update Groups</h3>
+                <p>
+                    Synchronize (add, remove) external groups.
+                </p>
+                <button type="submit" class="btn btn-primary">Go</button>
+            </form>
+        </div>
+    </div>
+{% endblock %}

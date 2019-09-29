@@ -8,6 +8,7 @@ use Brave\NeucoreApi\Api\ApplicationApi;
 use Brave\NeucoreApi\ApiException;
 use Brave\NeucoreApi\Model\Character;
 use Brave\Sso\Basics\SessionHandlerInterface;
+use InvalidArgumentException;
 use Psr\Container\ContainerInterface;
 
 /** @noinspection PhpUnused */
@@ -74,11 +75,13 @@ class NeucoreCharacterProvider implements CharacterProviderInterface
         $this->characters = [];
         try {
             $this->characters = $this->api->charactersV1($characterId);
-        } catch (ApiException $e) {
+        } catch (ApiException $ae) {
             // Don't log "404 Character not found." error from Core.
-            if ($e->getCode() !== 404 || strpos($e->getMessage(), 'Character not found.') === false) {
-                error_log('NeucoreCharacterProvider::getCharacters:' . $e->getMessage());
+            if ($ae->getCode() !== 404 || strpos($ae->getMessage(), 'Character not found.') === false) {
+                error_log('NeucoreCharacterProvider::getCharacters:' . $ae->getMessage());
             }
+        } catch (InvalidArgumentException $e) {
+            error_log('NeucoreCharacterProvider::getCharacters:' . $e->getMessage());
         }
     }
 }

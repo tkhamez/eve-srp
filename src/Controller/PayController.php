@@ -29,6 +29,8 @@ class PayController
             error_log('PayController' . $e->getMessage());
             $content = '';
         }
+
+        /** @noinspection PhpUnhandledExceptionInspection */
         $response->getBody()->write($content);
 
         return $response;

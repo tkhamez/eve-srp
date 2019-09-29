@@ -43,10 +43,12 @@ class RequestController
         $srpRequest = $this->requestRepository->find($args['id']);
         
         if (! $srpRequest) {
+            /** @noinspection PhpUnhandledExceptionInspection */
             return $response->withHeader('Location', '/');
         }
         
         if (! $this->userService->maySee($srpRequest)) {
+            /** @noinspection PhpUnhandledExceptionInspection */
             return $response->withHeader('Location', '/');
         }
         
@@ -56,6 +58,8 @@ class RequestController
             error_log('RequestController' . $e->getMessage());
             $content = '';
         }
+
+        /** @noinspection PhpUnhandledExceptionInspection */
         $response->getBody()->write($content);
 
         return $response;

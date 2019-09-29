@@ -30,13 +30,8 @@ return [
     'GROUP_PROVIDER'     => getenv('EVE_SRP_GROUP_PROVIDER'),
     'CHARACTER_PROVIDER' => getenv('EVE_SRP_CHARACTER_PROVIDER'),
     
-    // role mapping
-    'ROLE_MAPPING' => [
-        'submit' => getenv('EVE_SRP_ROLE_SUBMIT'),
-        'review' => getenv('EVE_SRP_ROLE_REVIEW'),
-        'pay'    => getenv('EVE_SRP_ROLE_PAY'),
-        'admin'  => getenv('EVE_SRP_ROLE_ADMIN'),
-    ],
+    // global admin role mapping
+    'ROLE_GLOBAL_ADMIN' => getenv('EVE_SRP_ROLE_GLOBAL_ADMIN'),
     
     // Database
     'DB_URL' => getenv('EVE_SRP_DB_URL'),

@@ -25,12 +25,24 @@ class Extension extends AbstractExtension
     {
         return [
             new TwigFunction('hasRole', [$this, 'hasRole']),
+            new TwigFunction('hasAnyRole', [$this, 'hasAnyRole']),
         ];
     }
 
     /** @noinspection PhpUnused */
     public function hasRole($role)
     {
-        return $this->userService->hasRole($role);
+        return $this->hasAnyRole([$role]);
+    }
+
+    /** @noinspection PhpUnused */
+    public function hasAnyRole(array $roles)
+    {
+        foreach ($roles as $role) {
+            if ($this->userService->hasRole($role)) {
+                return true;
+            }
+        }
+        return false;
     }
 }

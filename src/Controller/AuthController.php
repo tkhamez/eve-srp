@@ -10,6 +10,7 @@ use Brave\Sso\Basics\AuthenticationController;
 use Brave\Sso\Basics\EveAuthentication;
 use Brave\Sso\Basics\SessionHandlerInterface;
 use Exception;
+use InvalidArgumentException;
 use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
@@ -47,11 +48,12 @@ class AuthController extends AuthenticationController
 
     /**
      * EVE SSO callback.
-     * 
+     *
      * @param ServerRequestInterface $request
      * @param ResponseInterface $response
      * @param bool $ssoV2
      * @return ResponseInterface
+     * @throws InvalidArgumentException
      */
     public function auth(ServerRequestInterface $request, ResponseInterface $response, $ssoV2 = false)
     {
@@ -78,7 +80,8 @@ class AuthController extends AuthenticationController
                                                           ResponseInterface $response
     ) {
         $this->sessionHandler->set('userId', null);
-        
+
+        /** @noinspection PhpUnhandledExceptionInspection */
         return $response->withHeader('Location', '/');
     }
 }

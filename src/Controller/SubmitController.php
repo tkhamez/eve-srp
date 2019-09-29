@@ -29,6 +29,8 @@ class SubmitController
             error_log('SubmitController' . $e->getMessage());
             $content = '';
         }
+        
+        /** @noinspection PhpUnhandledExceptionInspection */
         $response->getBody()->write($content);
 
         return $response;

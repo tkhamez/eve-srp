@@ -14,9 +14,9 @@ interface CharacterProviderInterface
      * Return all (other) characters of the user to which the character ID belongs.
      * 
      * The result may or may not include the character IDs from the parameter.
-     * THe result may be an empty array if the character is unknown.
+     * THhe result may be an empty array if the character is unknown.
      *
-     * Example: [96061222, 94737235]
+     * This is called after each character login.
      *
      * @param int $characterId EVE character ID
      * @return int[] Array of EVE character IDs
@@ -24,7 +24,7 @@ interface CharacterProviderInterface
     public function getCharacters(int $characterId): array;
 
     /**
-     * Return the main character ID, if available.
+     * Return the main character ID of the user to which the character ID belongs, if available.
      * 
      * @param int $characterId EVE character ID
      * @return int|null

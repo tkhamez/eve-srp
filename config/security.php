@@ -17,6 +17,10 @@ return [
     '/submit'  => [Permission::SUBMIT],
     '/review'  => [Permission::REVIEW],
     '/pay'     => [Permission::PAY],
-    '/admin'   => [Permission::ADMIN],
+    
+    '/admin/divisions' => [Security::GLOBAL_ADMIN],
+    '/admin/groups'    => [Security::GLOBAL_ADMIN],
+    '/admin'           => [Permission::ADMIN],
+    
     '/'        => [Security::ROLE_AUTHENTICATED],
 ];
