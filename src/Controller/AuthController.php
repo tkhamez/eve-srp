@@ -20,7 +20,7 @@ use Twig\Environment;
 class AuthController extends AuthenticationController
 {
     /**
-     * @var mixed
+     * @var array
      */
     private $settings;
     
