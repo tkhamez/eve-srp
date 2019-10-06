@@ -22,7 +22,9 @@ npm run build
 
 ## Migration from paxswill/evesrp
 
-Tables: evesrp => eve_srp (replace values for entity.type_ and entity.authmethod)
+Databases: evesrp => eve_srp
+
+Replace values for evesrp.entity.type_ (BraveOauthGroup) and evesrp.entity.authmethod (EVESSONeucore) if needed.
 
 ```
 INSERT INTO eve_srp.users (id) SELECT id FROM evesrp.user;

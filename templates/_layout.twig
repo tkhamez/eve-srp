@@ -7,68 +7,82 @@
         {{ include('css.html') }}
     </head>
     <body class="container-fluid">
-        <header class="navbar navbar-dark bg-brave shadow-1 mb-3">
+        <header class="navbar navbar-dark bg-brave shadow-1 mb-3 navbar-expand-lg">
             <span class="navbar-brand">{{ data.appTitle }}</span>
-            <ul class="navbar-nav mr-auto">
-                <li class="nav-item"><a class="nav-link" href="/">Home</a></li>
-                {% if hasRole('submit') %}
-                    <li class="nav-item"><a class="nav-link" href="/submit">Submit</a></li>
-                {% endif %}
-                {% if hasRole('review') %}
-                    <li class="nav-item"> <a class="nav-link" href="/review">Review</a></li>
-                {% endif %}
-                {% if hasRole('pay') %}
-                    <li class="nav-item"><a class="nav-link" href="/pay">Pay</a></li>
-                {% endif %}
-                {% if hasAnyRole(['admin', 'global-admin']) %}
+            <button class="navbar-toggler" type="button" data-toggle="collapse" 
+                    data-target="#navBarToggle" aria-controls="navBarToggle" 
+                    aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navBarToggle">
+                <ul class="navbar-nav mr-auto">
+                    <li class="nav-item {% if active_page == 'home' %}active{% endif%}">
+                        <a class="nav-link" href="/">Home</a>
+                    </li>
+                    {% if hasRole('submit') %}
+                        <li class="nav-item {% if active_page == 'submit' %}active{% endif%}">
+                            <a class="nav-link" href="/submit">Submit</a>
+                        </li>
+                    {% endif %}
+                    {% if hasRole('review') %}
+                        <li class="nav-item {% if active_page == 'review' %}active{% endif%}">
+                            <a class="nav-link" href="/review">Review</a>
+                        </li>
+                    {% endif %}
+                    {% if hasRole('pay') %}
+                        <li class="nav-item {% if active_page == 'pay' %}active{% endif%}">
+                            <a class="nav-link" href="/pay">Pay</a>
+                        </li>
+                    {% endif %}
+                    {% if hasAnyRole(['admin', 'global-admin']) %}
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle {% if active_page matches '/admin-*/' %}active{% endif%}" 
+                               href="#" id="adminDropdown" role="button" 
+                               data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                Admin
+                            </a>
+                            <div class="dropdown-menu" aria-labelledby="adminDropdown">
+                                {% if hasRole('global-admin') %}
+                                    <a class="dropdown-item {% if active_page == 'admin-divisions' %}active{% endif%}" 
+                                       href="/admin/divisions">Divisions</a>
+                                {% endif %}
+                                {% if hasRole('global-admin') %}
+                                    <a class="dropdown-item {% if active_page == 'admin-groups' %}active{% endif%}" 
+                                       href="/admin/groups">Groups</a>
+                                {% endif %}
+                                <a class="dropdown-item {% if active_page == 'admin-permissions' %}active{% endif%}" 
+                                   href="/admin/permissions">Permissions</a>
+                            </div>
+                        </li>
+                    {% endif %}
+                </ul>
+                <ul class="navbar-nav">
                     <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" id="adminDropdown" role="button" 
+                        <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" 
                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            Admin
+                            {{ data.userName }}
                         </a>
-                        <div class="dropdown-menu" aria-labelledby="adminDropdown">
-                            {% if hasRole('global-admin') %}
-                                <a class="dropdown-item" href="/admin/divisions">Divisions</a>
-                            {% endif %}
-                            {% if hasRole('global-admin') %}
-                                <a class="dropdown-item" href="/admin/groups">Groups</a>
-                            {% endif %}
-                            <a class="dropdown-item" href="/admin/permissions">Permissions</a>
+                        <div class="dropdown-menu" aria-labelledby="userDropdown">
+                            <a class="dropdown-item" href="/logout">Logout</a>
+                            <div class="dropdown-divider"></div>
+                            <span class="dropdown-item-text">
+                                Characters<br>
+                                {% for charName in data.characters %}
+                                    <span class="small">{{ charName }}</span><br>
+                                {% endfor %}
+                            </span>
                         </div>
                     </li>
-                {% endif %}
-            </ul>
-            <ul class="navbar-nav">
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" 
-                       data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        {{ data.userName }}
-                    </a>
-                    <div class="dropdown-menu" aria-labelledby="userDropdown">
-                        <a class="dropdown-item" href="/logout">Logout</a>
-                        <div class="dropdown-divider"></div>
-                        <span class="dropdown-item-text">
-                            Characters<br>
-                            {% for charName in data.characters %}
-                                <span class="small">{{ charName }}</span><br>
-                            {% endfor %}
-                        </span>
-                    </div>
-                </li>
-            </ul>
+                </ul>
+            </div>
         </header>
 
         <main>{% block content %}{% endblock %}</main>
         
-        <footer class="navbar navbar-dark bg-brave shadow-1 flex-column">
-            <div class="text-center ">
-                {{ data.footerText }}
-                <br>
-                <span class="text-center small">
-                    "EVE", "EVE Online", "CCP" and all related logos and images are 
-                    trademarks or registered trademarks of CCP hf.
-                </span>
-            </div>
+        <footer class="text-center small text-white-50">
+            {{ data.footerText }}<br>
+            "EVE", "EVE Online", "CCP" and all related logos and images are 
+            trademarks or registered trademarks of CCP hf.
         </footer>
 
         {{ include('js.html') }}

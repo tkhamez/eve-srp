@@ -38,7 +38,7 @@ class Bootstrap
         }
 
         $builder = new ContainerBuilder();
-        $builder->addDefinitions(require_once(ROOT_DIR . '/config/container.php'));
+        $builder->addDefinitions(include ROOT_DIR . '/config/container.php');
         $this->container = $builder->build();
     }
 

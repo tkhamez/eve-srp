@@ -65,7 +65,7 @@ class AdminController
         ServerRequestInterface $request, 
         ResponseInterface $response
     ): ResponseInterface {
-        $divisions = $this->divisionRepository->findBy([]);
+        $divisions = $this->divisionRepository->findBy([], ['name' => 'ASC']);
 
         try {
             $content = $this->twig->render('admin-divisions.twig', ['divisions' => $divisions]);

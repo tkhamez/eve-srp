@@ -1,6 +1,7 @@
 
 @import "./colors.scss";
 @import "~daemonite-material/assets/scss/material";
+@import "~bootstrap-select/dist/css/bootstrap-select.css";
 
 .popover { 
     background-color: $material-color-grey-800; /* color of .bg-dark */

@@ -1,4 +1,5 @@
 {% extends "_layout.twig" %}
+{% set active_page = "admin-permissions" %}
 
 {% block content %}
     <div class="row">
@@ -15,25 +16,34 @@
             <input type="hidden" name="id" value="{{ division.id }}">
             <div class="card-body">
                 <h4 class="card-title">Division: {{ division.name }}</h4>
-                <ul class="list-group">
-                    <li class="list-group-item bg-dark-2 text-light">
-                        <div class="row">
-                            <div class="col-2">Role</div>
-                            <div class="col-10">Groups</div>
-                        </div>
-                    </li>
-                    {% for role in roles %}
-                        <li class="list-group-item bg-dark-3 text-light">
-                            <div class="row">
-                                <div class="col-2"><h5>{{ role }}</h5></div>
-                                <div class="col-4">
-                                    {% for permission in division.permissions(role) %}
-                                        <div>{{ permission.externalGroup.name }}</div>
-                                    {% endfor %}
-                                </div>
-                                <div class="col-6">
+                <table class="table table-dark">
+                    <thead>
+                        <tr class="">
+                            <th>Role</th>
+                            <th colspan="2">Groups</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for role in roles %}
+                            <tr class="">
+                                <td>{{ role }}</td>
+                                <td>
+                                    <ul>
+                                        {% for permission in division.permissions(role) %}
+                                            <li>{{ permission.externalGroup.name }}</li>
+                                        {% endfor %}
+                                    </ul>
+                                </td>
+                                <td class="form-group">
                                     <input type="hidden" name="groups[{{ role }}]" value="">
-                                    <select multiple name="groups[{{ role }}][]" class="select-picker">
+                                    <label for="{{ role }}D{{ division.id }}Groups" class="text-white-50">
+                                        Select groups
+                                    </label>
+                                    <br>
+                                    <select multiple name="groups[{{ role }}][]"
+                                            id="{{ role }}D{{ division.id }}Groups"
+                                            class="form-control form-control-sm selectpicker"
+                                            data-width="300px" data-live-search="true">
                                         {% for group in groups %}
                                             {% set selected = '' %}
                                             {% if division.hasPermission(role, group.id) %}
@@ -44,14 +54,15 @@
                                             </option>
                                         {% endfor %}
                                     </select>
-                                </div>
-                            </div>
-                        </li>
-                    {% endfor %}
-                </ul>
-            </div>
-            <div class="card-actions col-6 align-self-end">
-                <button type="submit" class="btn btn-primary">Save</button>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                        <tr class="">
+                            <th colspan="2"></th>
+                            <th><button type="submit" class="btn btn-primary">Save</button></th>
+                        </tr>
+                    </tbody>
+                </table>
             </div>
         </form>
     {% endfor %}

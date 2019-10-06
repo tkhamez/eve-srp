@@ -1,4 +1,5 @@
 {% extends "_layout.twig" %}
+{% set active_page = "admin-divisions" %}
 
 {% block content %}
     <div class="row">
@@ -9,6 +10,31 @@
     </div>
     <div class="row">
         <div class="col">
+
+            <div class="modal fade confirm-delete-division" id="deleteModal" tabindex="-1" role="dialog" 
+                 aria-labelledby="deleteModalLabel" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content bg-dark">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel">Delete Division</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            Are you sure?
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-danger" data-dismiss="modal">No</button>
+                            <form action="/admin/divisions/delete" method="post">
+                                <input type="hidden" name="id" value="">
+                                <button type="submit" class="btn btn-success">Yes</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
             <table class="table table-sm table-dark table-striped table-bordered">
                 <thead class="bg-dark-2">
                     <tr>
@@ -23,18 +49,8 @@
                             <td>{{ division.id }}</td>
                             <td>{{ division.name }}</td>
                             <td class="text-right">
-                                <form action="/admin/divisions/delete" method="post" 
-                                      name="delete-division-{{ division.id }}">
-                                    <input type="hidden" name="id" value="{{ division.id }}">
-                                </form>
-                                <button type="submit" class="btn btn-warning" data-trigger="focus"
-                                        data-toggle="popover" data-html="true" title="Are you sure?"
-                                        data-content='
-                                            <span class="btn btn-xs btn-primary delete-division id-{{ division.id }}">
-                                                Yes
-                                            </span>
-                                            <span class="btn btn-xs btn-light">no</span>
-                                        '>
+                                <button type="button" class="btn btn-warning delete-division" data-toggle="modal" 
+                                        data-target="#deleteModal" data-id="{{ division.id }}">
                                     delete
                                 </button>
                             </td>
