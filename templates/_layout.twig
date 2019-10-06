@@ -6,71 +6,83 @@
         <title>{{ data.appTitle }}</title>
         {{ include('css.html') }}
     </head>
-    <body class="container-fluid">
-        <header class="navbar navbar-dark bg-brave shadow-1 mb-3">
-            <span class="navbar-brand">{{ data.appTitle }}</span>
-            <ul class="navbar-nav mr-auto">
-                <li class="nav-item"><a class="nav-link" href="/">Home</a></li>
-                {% if hasRole('submit') %}
-                    <li class="nav-item"><a class="nav-link" href="/submit">Submit</a></li>
-                {% endif %}
-                {% if hasRole('review') %}
-                    <li class="nav-item"> <a class="nav-link" href="/review">Review</a></li>
-                {% endif %}
-                {% if hasRole('pay') %}
-                    <li class="nav-item"><a class="nav-link" href="/pay">Pay</a></li>
-                {% endif %}
-                {% if hasAnyRole(['admin', 'global-admin']) %}
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" id="adminDropdown" role="button" 
-                           data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            Admin
-                        </a>
-                        <div class="dropdown-menu" aria-labelledby="adminDropdown">
-                            {% if hasRole('global-admin') %}
-                                <a class="dropdown-item" href="/admin/divisions">Divisions</a>
-                            {% endif %}
-                            {% if hasRole('global-admin') %}
-                                <a class="dropdown-item" href="/admin/groups">Groups</a>
-                            {% endif %}
-                            <a class="dropdown-item" href="/admin/permissions">Permissions</a>
-                        </div>
-                    </li>
-                {% endif %}
-            </ul>
-            <ul class="navbar-nav">
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" 
-                       data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        {{ data.userName }}
+    <body>
+        <header>
+            <nav class="ui attached stackable inverted blue menu">
+                <div class="ui container">
+                    <a href="#" class="toggle-button item">
+                        <i class="bars icon"></i>
+                        <div class="title">{{ data.appTitle }}</div>
                     </a>
-                    <div class="dropdown-menu" aria-labelledby="userDropdown">
-                        <a class="dropdown-item" href="/logout">Logout</a>
-                        <div class="dropdown-divider"></div>
-                        <span class="dropdown-item-text">
-                            Characters<br>
-                            {% for charName in data.characters %}
-                                <span class="small">{{ charName }}</span><br>
-                            {% endfor %}
-                        </span>
+                    <div class="header item">{{ data.appTitle }}</div>
+                    <a class="toggle mobile-hide item {% if active_page == 'home' %}active{% endif%}" href="/">Home</a>
+                    {% if hasRole('submit') %}
+                        <a class="toggle mobile-hide item {% if active_page == 'submit' %}active{% endif%}" 
+                           href="/submit">
+                            Submit
+                        </a>
+                    {% endif %}
+                    {% if hasRole('review') %}
+                        <a class="toggle mobile-hide item {% if active_page == 'review' %}active{% endif%}" 
+                           href="/review">
+                            Review
+                        </a>
+                    {% endif %}
+                    {% if hasRole('pay') %}
+                        <a class="toggle mobile-hide item {% if active_page == 'pay' %}active{% endif%}" href="/pay">
+                            Pay
+                        </a>
+                    {% endif %}
+                    {% if hasAnyRole(['admin', 'global-admin']) %}
+                        <div class="toggle mobile-hide ui dropdown item 
+                             {% if active_page matches '/admin-*/' %}active-trail{% endif%}">
+                            Admin
+                            <i class="dropdown icon"></i>
+                            <div class="menu">
+                                {% if hasRole('global-admin') %}
+                                    <a class="item {% if active_page == 'admin-divisions' %}active selected{% endif%}" 
+                                       href="/admin/divisions">Divisions</a>
+                                {% endif %}
+                                {% if hasRole('global-admin') %}
+                                    <a class="item {% if active_page == 'admin-groups' %}active selected{% endif%}" 
+                                       href="/admin/groups">Groups</a>
+                                {% endif %}
+                                <a class="item {% if active_page == 'admin-permissions' %}active selected{% endif%}" 
+                                   href="/admin/permissions">Permissions</a>
+                            </div>
+                        </div>
+                    {% endif %}
+                    <div class="toggle mobile-hide right menu">
+                        <div class="ui dropdown item">
+                            {{ data.userName }}
+                            <i class="dropdown icon"></i>
+                            <div class="menu">
+                                <a class="item" href="/logout">Logout</a>
+                                <div class="divider"></div>
+                                <div class="item">
+                                    <span class="ui black text">
+                                        Characters<br>
+                                        {% for charName in data.characters %}
+                                            <span class="ui small text">{{ charName }}</span><br>
+                                        {% endfor %}
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                </li>
-            </ul>
+                </div>
+            </nav>
         </header>
-
+        
         <main>{% block content %}{% endblock %}</main>
         
-        <footer class="navbar navbar-dark bg-brave shadow-1 flex-column">
-            <div class="text-center ">
-                {{ data.footerText }}
-                <br>
-                <span class="text-center small">
-                    "EVE", "EVE Online", "CCP" and all related logos and images are 
-                    trademarks or registered trademarks of CCP hf.
-                </span>
-            </div>
+        <footer class="ui container center aligned">
+            <span class="ui small grey text">
+                {{ data.footerText }}<br>
+                "EVE", "EVE Online", "CCP" and all related logos and images are 
+                trademarks or registered trademarks of CCP hf.
+            </span>
         </footer>
-
         {{ include('js.html') }}
     </body>
 </html>

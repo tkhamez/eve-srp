@@ -23,7 +23,7 @@ module.exports = (env, argv) => {
                     'sass-loader',
                 ]
             }, {
-                test: /\.(woff|woff2|eot|ttf|otf|svg)$/,
+                test: /\.(woff|woff2|eot|ttf|otf|svg|png)$/,
                 use: [{
                     loader: 'file-loader',
                     options: { name: '[name].[ext]' }

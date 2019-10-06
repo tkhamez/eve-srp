@@ -1,4 +1,5 @@
 {% extends "_layout.twig" %}
+{% set active_page = "admin-divisions" %}
 
 {% block content %}
     <div class="row">
@@ -9,6 +10,23 @@
     </div>
     <div class="row">
         <div class="col">
+
+            <div class="confirm-delete-division ui mini inverted modal">
+                <div class="header">Delete Division</div>
+                <div class="content">
+                    <p>Are you sure?</p>
+                </div>
+                <div class="actions">
+                    <form action="/admin/divisions/delete" method="post">
+                        <input type="hidden" name="id" value="">
+                        <div class="ui negative button">No</div>
+                        <button type="submit" class="ui positive right labeled icon button">
+                            Yes <i class="checkmark icon"></i>
+                        </button>
+                    </form>
+                </div>
+            </div>
+
             <table class="table table-sm table-dark table-striped table-bordered">
                 <thead class="bg-dark-2">
                     <tr>
@@ -23,18 +41,7 @@
                             <td>{{ division.id }}</td>
                             <td>{{ division.name }}</td>
                             <td class="text-right">
-                                <form action="/admin/divisions/delete" method="post" 
-                                      name="delete-division-{{ division.id }}">
-                                    <input type="hidden" name="id" value="{{ division.id }}">
-                                </form>
-                                <button type="submit" class="btn btn-warning" data-trigger="focus"
-                                        data-toggle="popover" data-html="true" title="Are you sure?"
-                                        data-content='
-                                            <span class="btn btn-xs btn-primary delete-division id-{{ division.id }}">
-                                                Yes
-                                            </span>
-                                            <span class="btn btn-xs btn-light">no</span>
-                                        '>
+                                <button type="button" class="delete-division" data-id="{{ division.id }}">
                                     delete
                                 </button>
                             </td>

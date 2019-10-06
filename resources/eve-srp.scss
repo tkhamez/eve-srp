@@ -1,7 +1,50 @@
 
-@import "./colors.scss";
-@import "~daemonite-material/assets/scss/material";
+@import '../node_modules/fomantic-ui-css/semantic.css';
 
+@import "./colors.scss";
+
+/*
 .popover { 
-    background-color: $material-color-grey-800; /* color of .bg-dark */
+    background-color: #424242; // color of .bg-dark
+}
+*/
+
+body {
+    background-color: $body-bg;
+    color: $body-color;
+}
+
+body>header {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 2;
+}
+
+body>main {
+    padding: 55px 0 15px;
+}
+
+// menu
+.ui.inverted.menu .item.active-trail {
+    background: #3D3E3F;
+}
+.ui.inverted.blue.menu .item.active-trail {
+    background-color: rgba(0, 0, 0, 0.1);
+}
+.ui.stackable.menu .toggle-button {
+    display: none !important;
+}
+@media only screen and (max-width: 767.98px) {
+    .ui.stackable.menu .toggle-button .title {
+        font-weight: bold;
+        margin-left: 10px;
+    }
+    .ui.stackable.menu .toggle-button {
+        display: flex !important;
+    }
+    .ui.stackable.menu .header.item,
+    .ui.stackable.menu .toggle.mobile-hide {
+        display: none !important;
+    }
 }

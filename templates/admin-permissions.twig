@@ -1,4 +1,5 @@
 {% extends "_layout.twig" %}
+{% set active_page = "admin-permissions" %}
 
 {% block content %}
     <div class="row">
@@ -33,7 +34,7 @@
                                 </div>
                                 <div class="col-6">
                                     <input type="hidden" name="groups[{{ role }}]" value="">
-                                    <select multiple name="groups[{{ role }}][]" class="select-picker">
+                                    <select multiple name="groups[{{ role }}][]" class="ui fluid search selection dropdown">
                                         {% for group in groups %}
                                             {% set selected = '' %}
                                             {% if division.hasPermission(role, group.id) %}
