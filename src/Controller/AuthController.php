@@ -125,7 +125,7 @@ class AuthController
 
         $user = $this->userService->getUser($eveAuth);
         try {
-            $this->userService->syncCharacters($user);
+            $this->userService->syncCharacters($user, $eveAuth->getCharacterId());
         } catch (SrpException $e) {
             $this->flashMessage->addMessage($e->getMessage(), FlashMessage::TYPE_DANGER);
         }

@@ -3,31 +3,34 @@
   "private": true,
   "license": "MIT",
   "dependencies": {
-    "bootstrap": "^4.3.1",
-    "bootstrap-select": "^1.13.11",
+    "bootstrap": "^4.4.1",
+    "bootstrap-select": "^1.13.16",
     "daemonite-material": "^4.1.1",
-    "jquery": "^3.4.1",
+    "jquery": "^3.5.0",
     "material-design-icons": "^3.0.1",
-    "popper.js": "^1.15.0"
+    "popper.js": "^1.16.1"
   },
   "devDependencies": {
     "clean-webpack-plugin": "^3.0.0",
-    "css-loader": "^3.2.0",
-    "fibers": "^4.0.1",
-    "file-loader": "^4.2.0",
-    "html-webpack-plugin": "^3.2.0",
-    "license-webpack-plugin": "^2.1.2",
-    "mini-css-extract-plugin": "^0.8.0",
+    "css-loader": "^3.5.3",
+    "fibers": "^4.0.3",
+    "file-loader": "^6.0.0",
+    "html-webpack-plugin": "^4.3.0",
+    "license-webpack-plugin": "^2.1.4",
+    "mini-css-extract-plugin": "^0.9.0",
     "optimize-css-assets-webpack-plugin": "^5.0.3",
-    "sass": "^1.22.12",
-    "sass-loader": "^8.0.0",
-    "terser-webpack-plugin": "^2.1.2",
-    "webpack": "^4.41.0",
-    "webpack-cli": "^3.3.9"
+    "sass": "^1.26.5",
+    "sass-loader": "^8.0.2",
+    "terser-webpack-plugin": "^3.0.0",
+    "webpack": "^4.43.0",
+    "webpack-cli": "^3.3.11"
   },
   "scripts": {
     "build": "webpack --mode production",
     "build-dev": "webpack --mode development",
     "watch": "webpack --mode development --watch"
+  },
+  "engines": {
+    "node": ">= 10.13.0"
   }
 }

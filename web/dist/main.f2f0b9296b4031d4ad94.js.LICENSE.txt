@@ -1,5 +1,47 @@
 /*!
- * jQuery JavaScript Library v3.4.1
+   * Date picker for pickadate.js v3.5.6
+   * http://amsul.github.io/pickadate.js/date.htm
+   */
+
+/*!
+   * pickadate.js v3.5.6, 2015/04/20
+   * By Amsul, http://amsul.ca
+   * Hosted on http://amsul.github.io/pickadate.js
+   * Licensed under MIT
+   */
+
+/*!
+  * Bootstrap v4.4.1 (https://getbootstrap.com/)
+  * Copyright 2011-2019 The Bootstrap Authors (https://github.com/twbs/bootstrap/graphs/contributors)
+  * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
+  */
+
+/*!
+ * Bootstrap-select v1.13.16 (https://developer.snapappointments.com/bootstrap-select)
+ *
+ * Copyright 2012-2020 SnapAppointments, LLC
+ * Licensed under MIT (https://github.com/snapappointments/bootstrap-select/blob/master/LICENSE)
+ */
+
+/*!
+ * Daemonite Material v4.1.1 (http://daemonite.github.io/material/)
+ * Copyright 2011-2018 Daemon Pty Ltd
+ * Licensed under MIT (https://github.com/Daemonite/material/blob/master/LICENSE)
+ */
+
+/*!
+ * Sizzle CSS Selector Engine v2.3.5
+ * https://sizzlejs.com/
+ *
+ * Copyright JS Foundation and other contributors
+ * Released under the MIT license
+ * https://js.foundation/
+ *
+ * Date: 2020-03-14
+ */
+
+/*!
+ * jQuery JavaScript Library v3.5.0
  * https://jquery.com/
  *
  * Includes Sizzle.js
@@ -9,29 +51,12 @@
  * Released under the MIT license
  * https://jquery.org/license
  *
- * Date: 2019-05-01T21:04Z
+ * Date: 2020-04-10T15:07Z
  */
-
-/*!
- * Sizzle CSS Selector Engine v2.3.4
- * https://sizzlejs.com/
- *
- * Copyright JS Foundation and other contributors
- * Released under the MIT license
- * https://js.foundation/
- *
- * Date: 2019-04-08
- */
-
-/*!
-  * Bootstrap v4.3.1 (https://getbootstrap.com/)
-  * Copyright 2011-2019 The Bootstrap Authors (https://github.com/twbs/bootstrap/graphs/contributors)
-  * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
-  */
 
 /**!
  * @fileOverview Kickass library to create and place poppers near their reference elements.
- * @version 1.15.0
+ * @version 1.16.1
  * @license
  * Copyright (c) 2016 Federico Zivolo and contributors
  *
@@ -52,29 +77,4 @@
  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
- */
-
-/*!
- * Daemonite Material v4.1.1 (http://daemonite.github.io/material/)
- * Copyright 2011-2018 Daemon Pty Ltd
- * Licensed under MIT (https://github.com/Daemonite/material/blob/master/LICENSE)
- */
-
-/*!
-   * pickadate.js v3.5.6, 2015/04/20
-   * By Amsul, http://amsul.ca
-   * Hosted on http://amsul.github.io/pickadate.js
-   * Licensed under MIT
-   */
-
-/*!
-   * Date picker for pickadate.js v3.5.6
-   * http://amsul.github.io/pickadate.js/date.htm
-   */
-
-/*!
- * Bootstrap-select v1.13.11 (https://developer.snapappointments.com/bootstrap-select)
- *
- * Copyright 2012-2019 SnapAppointments, LLC
- * Licensed under MIT (https://github.com/snapappointments/bootstrap-select/blob/master/LICENSE)
  */

@@ -10,16 +10,16 @@
     "require": {
         "php": "^7.2.0",
         "bravecollective/neucore-api": "^1.4",
-        "bravecollective/sso-basics": "^2.0",
+        "bravecollective/sso-basics": "^3.0",
         "bryanjhv/slim-session": "^4.0",
         "doctrine/dbal": "^2.5",
         "doctrine/orm": "^2.6",
         "php-di/php-di": "^6.0",
-        "slim/psr7": "^0.5.0",
+        "slim/psr7": "^1.0",
         "slim/slim": "^4.2",
-        "tkhamez/slim-role-auth": "^2.0",
+        "tkhamez/slim-role-auth": "^3.0",
         "twig/twig": "^2.0",
-        "vlucas/phpdotenv": "^2.4"
+        "vlucas/phpdotenv": "^4.1"
     },
     "config": {
         "platform": {

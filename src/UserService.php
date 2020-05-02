@@ -186,12 +186,11 @@ class UserService
      *
      * @throws SrpException
      */
-    public function syncCharacters(User $user)
+    public function syncCharacters(User $user, int $characterId)
     {
         if (count($user->getCharacters()) === 0) {
             return;
         }
-        $characterId = $user->getCharacters()[0]->getId();
 
         // add alts
         $allKnownCharacterIds = $this->characterProvider->getCharacters($characterId);

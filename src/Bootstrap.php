@@ -33,7 +33,7 @@ class Bootstrap
     public function __construct()
     {
         if (is_readable(ROOT_DIR . '/.env')) {
-            $dotEnv = new Dotenv(ROOT_DIR);
+            $dotEnv = Dotenv::createImmutable(ROOT_DIR);
             $dotEnv->load();
         }
 
@@ -87,14 +87,13 @@ class Bootstrap
             include ROOT_DIR . '/config/security.php',
             ['redirect_url' => '/login']
         ));
-
-        // Add routing middleware after SecureRouteMiddleware,
-        // so the `route` attribute from `$request` is available
-        $app->addRoutingMiddleware();
-        
         $app->add(new RoleMiddleware($this->container->get(RoleProviderInterface::class)));
+
+        // Add routing middleware after SecureRouteMiddleware and RoleMiddleware because they depend on the route.
+        $app->addRoutingMiddleware();
+
         $app->add(new Session([
-            'name' => 'brave_service',
+            'name' => 'brave_srp',
             'autorefresh' => true,
             'lifetime' => '1 hour'
         ]));
