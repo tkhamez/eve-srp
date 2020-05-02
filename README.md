@@ -6,7 +6,7 @@
 - Install dependencies with `composer install`.
 - Clear the template cache: `rm -R cache/compilation_cache`
 - sync db schema:
-  - **backup the database**
+  - **Backup the database first!**
   - `vendor/bin/doctrine orm:schema-tool:update --force`
 
 ### Error logging

@@ -30,7 +30,6 @@ class PayController
             $content = '';
         }
 
-        /** @noinspection PhpUnhandledExceptionInspection */
         $response->getBody()->write($content);
 
         return $response;

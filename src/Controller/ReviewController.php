@@ -30,7 +30,6 @@ class ReviewController
             $content = '';
         }
 
-        /** @noinspection PhpUnhandledExceptionInspection */
         $response->getBody()->write($content);
 
         return $response;

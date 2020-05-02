@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace Brave\EveSrp\Controller;
 
+use Brave\EveSrp\FlashMessage;
 use Brave\EveSrp\Provider\GroupProviderInterface;
+use Brave\EveSrp\SrpException;
 use Brave\EveSrp\UserService;
-use Brave\Sso\Basics\AuthenticationController;
 use Brave\Sso\Basics\AuthenticationProvider;
-use Brave\Sso\Basics\EveAuthentication;
 use Brave\Sso\Basics\SessionHandlerInterface;
 use Exception;
 use InvalidArgumentException;
@@ -16,8 +16,9 @@ use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Twig\Environment;
+use UnexpectedValueException;
 
-class AuthController extends AuthenticationController
+class AuthController
 {
     /**
      * @var array
@@ -48,24 +49,26 @@ class AuthController extends AuthenticationController
      * @var AuthenticationProvider
      */
     private $authenticationProvider;
-    
+
+    /**
+     * @var FlashMessage
+     */
+    private $flashMessage;
+
     public function __construct(ContainerInterface $container)
     {
-        parent::__construct($container);
-
         $this->settings = $container->get('settings');
         $this->twig = $container->get(Environment::class);
         $this->sessionHandler = $container->get(SessionHandlerInterface::class);
         $this->groupProvider = $container->get(GroupProviderInterface::class);
         $this->userService = $container->get(UserService::class);
         $this->authenticationProvider = $container->get(AuthenticationProvider::class);
+        $this->flashMessage = $container->get(FlashMessage::class);
     }
 
-    public function login(
-        /** @noinspection PhpUnusedParameterInspection */ 
-        ServerRequestInterface $request, 
-        ResponseInterface $response
-    ): ResponseInterface {
+    /** @noinspection PhpUnusedParameterInspection */
+    public function login(ServerRequestInterface $request, ResponseInterface $response): ResponseInterface
+    {
         try {
             $state = $this->authenticationProvider->generateState();
         } catch (Exception $e) {
@@ -75,15 +78,18 @@ class AuthController extends AuthenticationController
 
         try {
             $content = $this->twig->render('login.twig', [
-                'serviceName' => $this->settings['brave.serviceName'],
-                'loginUrl' => $this->authenticationProvider->buildLoginUrl($state),
+                'serviceName' => $this->settings['APP_TITLE'],
+                'logo'        => $this->settings['APP_LOGO'],
+                'logoAltText' => $this->settings['APP_LOGO_ALT'],
+                'loginUrl'    => $this->authenticationProvider->buildLoginUrl($state),
+                'coreUrl'     => $this->settings['CORE_DOMAIN'],
+                'coreName'    => $this->settings['CORE_NAME'],
             ]);
         } catch (Exception $e) {
             error_log('AuthController' . $e->getMessage());
             $content = '';
         }
 
-        /** @noinspection PhpUnhandledExceptionInspection */
         $response->getBody()->write($content);
 
         return $response;
@@ -94,37 +100,51 @@ class AuthController extends AuthenticationController
      *
      * @param ServerRequestInterface $request
      * @param ResponseInterface $response
-     * @param bool $ssoV2
      * @return ResponseInterface
      * @throws InvalidArgumentException
      */
-    public function auth(ServerRequestInterface $request, ResponseInterface $response, $ssoV2 = false)
+    public function auth(ServerRequestInterface $request, ResponseInterface $response)
     {
-        try {
-            $response = parent::auth($request, $response, true);
-        } catch (Exception $e) {
-            error_log('AuthController::auth: ' . $e->getMessage());
+        $code = $request->getQueryParams()['code'] ?? null;
+        $state = $request->getQueryParams()['state'] ?? null;
+        if (!$code || !$state) {
+            $this->flashMessage->addMessage('Invalid SSO state.', FlashMessage::TYPE_DANGER);
+            return $response->withHeader('Location', '/login');
         }
-        
-        /* @var EveAuthentication $eveAuth */
-        $eveAuth = $this->sessionHandler->get('eveAuth');
-        $this->sessionHandler->set('eveAuth', null);
-        
-        $user = $this->userService->syncCharacters($eveAuth);
-        $this->userService->syncGroups($eveAuth->getCharacterId(), $user);
+
+        try {
+            $eveAuth = $this->authenticationProvider->validateAuthenticationV2(
+                $state,
+                $this->sessionHandler->get('ssoState'),
+                $code
+            );
+        } catch (UnexpectedValueException $e) {
+            $this->flashMessage->addMessage($e->getMessage(), FlashMessage::TYPE_DANGER);
+            return $response->withHeader('Location', '/login');
+        }
+
+        $user = $this->userService->getUser($eveAuth);
+        try {
+            $this->userService->syncCharacters($user);
+        } catch (SrpException $e) {
+            $this->flashMessage->addMessage($e->getMessage(), FlashMessage::TYPE_DANGER);
+        }
+        try {
+            $this->userService->syncGroups($eveAuth->getCharacterId(), $user);
+        } catch (SrpException $e) {
+            $this->flashMessage->addMessage($e->getMessage(), FlashMessage::TYPE_DANGER);
+        }
         $this->sessionHandler->set('userId', $user->getId());
 
         return $response->withHeader('Location', '/');
     }
 
     /** @noinspection PhpUnused */
-    public function logout(
-        /** @noinspection PhpUnusedParameterInspection */ ServerRequestInterface $request, 
-                                                          ResponseInterface $response
-    ): ResponseInterface {
+    /** @noinspection PhpUnusedParameterInspection */
+    public function logout(ServerRequestInterface $request, ResponseInterface $response): ResponseInterface
+    {
         $this->sessionHandler->set('userId', null);
 
-        /** @noinspection PhpUnhandledExceptionInspection */
         return $response->withHeader('Location', '/');
     }
 }

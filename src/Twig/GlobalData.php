@@ -20,7 +20,7 @@ class GlobalData
      * @var UserService 
      */
     private $userService;
-    
+
     public function __construct(ContainerInterface $container)
     {
         $this->settings = $container->get('settings');
@@ -30,7 +30,7 @@ class GlobalData
     /** @noinspection PhpUnused */
     public function appTitle(): string
     {
-        return $this->settings['brave.serviceName'];
+        return $this->settings['APP_TITLE'];
     }
 
     /** @noinspection PhpUnused */

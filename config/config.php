@@ -6,9 +6,11 @@ use GuzzleHttp\Client;
 
 return [
     // App
-    'APP_ENV'           => getenv('EVE_SRP_ENV'),
-    'brave.serviceName' => getenv('EVE_SRP_APP_TITLE'),
-    'FOOTER_TEXT'       => getenv('EVE_SRP_FOOTER_TEXT'),
+    'APP_ENV'      => getenv('EVE_SRP_ENV'),
+    'APP_TITLE'    => getenv('EVE_SRP_APP_TITLE'),
+    'APP_LOGO'     => getenv('EVE_SRP_APP_LOGO'),
+    'APP_LOGO_ALT' => getenv('EVE_SRP_APP_LOGO_ALT'),
+    'FOOTER_TEXT'  => getenv('EVE_SRP_FOOTER_TEXT'),
     'HTTP' => [
         'user_agent' => 'EVE-SRP/1.0 (https://github.com/bravecollective/eve-srp) GuzzleHttp/' . Client::VERSION,
     ],
@@ -22,7 +24,8 @@ return [
     'SSO_URL_JWT_KEY_SET'  => 'https://login.eveonline.com/oauth/jwks',
 
     // Neucore
-    'CORE_URL'       => getenv('EVE_SRP_CORE_URL'),
+    'CORE_NAME'      => getenv('EVE_SRP_CORE_NAME'),
+    'CORE_DOMAIN'    => getenv('EVE_SRP_CORE_DOMAIN'),
     'CORE_APP_ID'    => getenv('EVE_SRP_CORE_APP_ID'),
     'CORE_APP_TOKEN' => getenv('EVE_SRP_CORE_APP_TOKEN'),
 

@@ -35,20 +35,16 @@ class RequestController
         $this->requestRepository = $container->get(RequestRepository::class);
     }
 
-    public function show(
-        /** @noinspection PhpUnusedParameterInspection */ ServerRequestInterface $request, 
-                                                          ResponseInterface $response, 
-                                                          $args
-    ): ResponseInterface {
+    /** @noinspection PhpUnusedParameterInspection */
+    public function show(ServerRequestInterface $request, ResponseInterface $response, $args): ResponseInterface
+    {
         $srpRequest = $this->requestRepository->find($args['id']);
         
         if (! $srpRequest) {
-            /** @noinspection PhpUnhandledExceptionInspection */
             return $response->withHeader('Location', '/');
         }
         
         if (! $this->userService->maySee($srpRequest)) {
-            /** @noinspection PhpUnhandledExceptionInspection */
             return $response->withHeader('Location', '/');
         }
         
@@ -59,7 +55,6 @@ class RequestController
             $content = '';
         }
 
-        /** @noinspection PhpUnhandledExceptionInspection */
         $response->getBody()->write($content);
 
         return $response;

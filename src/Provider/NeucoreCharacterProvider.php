@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Brave\EveSrp\Provider;
 
+use Brave\EveSrp\SrpException;
 use Brave\NeucoreApi\Api\ApplicationApi;
 use Brave\NeucoreApi\ApiException;
 use Brave\NeucoreApi\Model\Character;
@@ -46,7 +47,11 @@ class NeucoreCharacterProvider implements CharacterProviderInterface
 
     public function getMain(int $characterId): ?int
     {
-        $this->fetchCharacters($characterId);
+        try {
+            $this->fetchCharacters($characterId);
+        } catch (SrpException $e) {
+            return null;
+        }
 
         foreach ($this->characters as $character) {
             if ($character->getMain()) {
@@ -56,16 +61,19 @@ class NeucoreCharacterProvider implements CharacterProviderInterface
         return null;
     }
 
-    public function getName(int $characterId): string 
+    public function getName(int $characterId): ?string
     {
         foreach ($this->characters as $character) {
             if ($character->getId() === $characterId) {
                 return $character->getName();
             }
         }
-        return '';
+        return null;
     }
-    
+
+    /**
+     * @throws SrpException
+     */
     private function fetchCharacters(int $characterId): void
     {
         if ($this->characters !== null) {
@@ -75,13 +83,8 @@ class NeucoreCharacterProvider implements CharacterProviderInterface
         $this->characters = [];
         try {
             $this->characters = $this->api->charactersV1($characterId);
-        } catch (ApiException $ae) {
-            // Don't log "404 Character not found." error from Core.
-            if ($ae->getCode() !== 404 || strpos($ae->getMessage(), 'Character not found.') === false) {
-                error_log('NeucoreCharacterProvider::getCharacters:' . $ae->getMessage());
-            }
-        } catch (InvalidArgumentException $e) {
-            error_log('NeucoreCharacterProvider::getCharacters:' . $e->getMessage());
+        } catch (ApiException | InvalidArgumentException $e) {
+            throw new SrpException('NeucoreCharacterProvider::fetchCharacters: ' . $e->getMessage());
         }
     }
 }

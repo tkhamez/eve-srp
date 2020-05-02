@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Brave\EveSrp\Provider;
 
+use Brave\EveSrp\SrpException;
 use Brave\NeucoreApi\Api\ApplicationApi;
 use Brave\NeucoreApi\ApiException;
 use Brave\NeucoreApi\Model\Group;
@@ -25,18 +26,11 @@ class NeucoreGroupProvider implements GroupProviderInterface
 
     public function getGroups(int $eveCharacterId): array
     {
-        $groups = [];
-        
         // get groups from Core
         try {
             $groups = $this->api->groupsV2($eveCharacterId);
-        } catch (ApiException $ae) {
-            // Don't log "404 Character not found." error from Core.
-            if ($ae->getCode() !== 404 || strpos($ae->getMessage(), 'Character not found.') === false) {
-                error_log('NeucoreGroupProvider::getGroups: ' . $ae->getMessage());
-            }
-        } catch (InvalidArgumentException $e) {
-            error_log('NeucoreRoleProvider::getAvailableGroups: ' . $e->getMessage());
+        } catch (ApiException | InvalidArgumentException $e) {
+            throw new SrpException('NeucoreGroupProvider::getGroups: ' . $e->getMessage());
         }
 
         return array_map(function (Group $group) {
@@ -47,20 +41,18 @@ class NeucoreGroupProvider implements GroupProviderInterface
     /**
      * Returns all groups that a character can have.
      *
-     * @return string[]
+     * @throws SrpException
      */
     public function getAvailableGroups(): array
     {
-        $groups = [];
-
         try {
-            $groups = $this->api->showV1();
+            $app = $this->api->showV1();
         } catch (ApiException | InvalidArgumentException $e) {
-            error_log('NeucoreRoleProvider::getAvailableGroups: ' . $e->getMessage());
+            throw new SrpException('NeucoreGroupProvider::getAvailableGroups: ' . $e->getMessage());
         }
 
         return array_map(function (Group $group) {
             return $group->getName();
-        }, $groups->getGroups());
+        }, $app->getGroups());
     }
 }

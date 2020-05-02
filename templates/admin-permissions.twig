@@ -6,12 +6,13 @@
         <div class="col">
             <h1>Admin</h1>
             <h2>Permissions</h2>
+            {{ flashMessages()|raw }}
         </div>
     </div>
 
     {% for division in divisions %}
         <form class="card bg-dark mb-3" 
-              action="/admin/permissions/save#division{{ division.id }}" 
+              action="/admin/permissions/save"
               method="post" id="division{{ division.id }}">
             <input type="hidden" name="id" value="{{ division.id }}">
             <div class="card-body">

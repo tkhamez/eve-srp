@@ -111,7 +111,7 @@ return [
             $container->get('settings')['CORE_APP_TOKEN']
         );
         $config = Configuration::getDefaultConfiguration();
-        $config->setHost($container->get('settings')['CORE_URL']);
+        $config->setHost($container->get('settings')['CORE_DOMAIN'].'/api');
         $config->setAccessToken($apiKey);
         return new ApplicationApi($container->get(ClientInterface::class), $config);
     },

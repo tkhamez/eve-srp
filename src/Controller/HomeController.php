@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Brave\EveSrp\Controller;
 
-use Brave\EveSrp\Model\ExternalGroup;
 use Brave\EveSrp\UserService;
 use Exception;
 use Psr\Container\ContainerInterface;
@@ -33,11 +32,6 @@ class HomeController
     {
         $user = $this->userService->getAuthenticatedUser();
 
-        $groups = array_map(function(ExternalGroup $i) { return $i->getName(); }, $user->getExternalGroups());
-        $roles = $this->userService->getClientRoles();
-        $permissions = array_map(function ($i) { return implode(', ', $i); }, $this->userService->getDivisionRoles());
-        #var_Dump($groups, $roles, $permissions);
-        
         try {
             $content = $this->twig->render('home.twig', ['requests' => $user->getRequests()]);
         } catch (Exception $e) {
@@ -45,7 +39,6 @@ class HomeController
             $content = '';
         }
         
-        /** @noinspection PhpUnhandledExceptionInspection */
         $response->getBody()->write($content);
 
         return $response;

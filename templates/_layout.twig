@@ -16,7 +16,7 @@
             </button>
             <div class="collapse navbar-collapse" id="navBarToggle">
                 <ul class="navbar-nav mr-auto">
-                    <li class="nav-item {% if active_page == 'home' %}active{% endif%}">
+                    <li class="nav-item {% if active_page == 'home' %}active{% endif %}">
                         <a class="nav-link" href="/">Home</a>
                     </li>
                     {% if hasRole('submit') %}
@@ -63,7 +63,10 @@
                             {{ data.userName }}
                         </a>
                         <div class="dropdown-menu" aria-labelledby="userDropdown">
-                            <a class="dropdown-item" href="/logout">Logout</a>
+                            <a class="dropdown-item" href="/logout">
+                                <span role="img" class="material-icons md-24">power_settings_new</span>
+                                Logout
+                            </a>
                             <div class="dropdown-divider"></div>
                             <span class="dropdown-item-text">
                                 Characters<br>
@@ -79,10 +82,12 @@
 
         <main>{% block content %}{% endblock %}</main>
         
-        <footer class="text-center small text-white-50">
+        <footer class="page-footer text-center text-white-50">
             {{ data.footerText }}<br>
-            "EVE", "EVE Online", "CCP" and all related logos and images are 
-            trademarks or registered trademarks of CCP hf.
+            <span class="text-center small">
+                "EVE", "EVE Online", "CCP" and all related logos and images are
+                trademarks or registered trademarks of <a href="https://www.ccpgames.com" target="_blank">CCP hf</a>.
+            </span>
         </footer>
 
         {{ include('js.html') }}

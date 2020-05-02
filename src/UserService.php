@@ -85,6 +85,7 @@ class UserService
      * Set roles of the current user (authenticated or not).
      *
      * Roles are set by the RoleProvider.
+     *
      * @param string[] $roles
      */
     public function setClientRoles(array $roles): void
@@ -92,21 +93,24 @@ class UserService
         $this->clientRoles = $roles;
     }
 
-    /**
-     * Return roles of the current user (authenticated or not).
-     *
-     * Roles are set by the RoleProvider.
-     *
-     * @return string[]
-     */
-    public function getClientRoles(): array
-    {
-        return $this->clientRoles;
-    }
-
-    public function hasRole(string $role)
+    public function hasRole(string $role): bool
     {
         return in_array($role, $this->clientRoles);
+    }
+
+    public function hasDivisionRole(int $divisionId, string $role): bool
+    {
+        if ($this->hasRole(Security::GLOBAL_ADMIN)) {
+            return true;
+        }
+
+        foreach ($this->getUserPermissions() as $permission) {
+            if ($permission->getDivision()->getId() === $divisionId && $permission->getRole() === $role) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     /**
@@ -144,34 +148,13 @@ class UserService
         return $this->permissionRepository->findBy(['externalGroup' => $groupIds]);
     }
 
-    public function getDivisionRoles(): array
-    {
-        $result = [];
-        foreach ($this->getUserPermissions() as $permission) {
-            $key = $permission->getDivision()->getId() . '/' . $permission->getRole();
-            if (! isset($result[$key])) {
-                $result[$key] = [
-                    $permission->getDivision()->getId(), 
-                    $permission->getDivision()->getName(), 
-                    $permission->getRole()
-                ];
-            }
-        }
-        ksort($result);
-        
-        return array_values($result);
-    }
-
     /**
-     * Syncs EVE alts of logged in EVE character and returns the corresponding user.
-     * 
-     * @param EveAuthentication $eveAuth
-     * @return User The logged in user.
+     * @return User The authenticated user
      */
-    public function syncCharacters(EveAuthentication $eveAuth): User
+    public function getUser(EveAuthentication $eveAuth): User
     {
         $characterId = $eveAuth->getCharacterId();
-        
+
         // get or add new character with user
         $authCharacter = $this->characterRepository->find($characterId);
         if ($authCharacter === null) {
@@ -195,6 +178,21 @@ class UserService
             }
         }
 
+        return $user;
+    }
+
+    /**
+     * Syncs EVE alts of logged in user.
+     *
+     * @throws SrpException
+     */
+    public function syncCharacters(User $user)
+    {
+        if (count($user->getCharacters()) === 0) {
+            return;
+        }
+        $characterId = $user->getCharacters()[0]->getId();
+
         // add alts
         $allKnownCharacterIds = $this->characterProvider->getCharacters($characterId);
         foreach ($allKnownCharacterIds as $altId) {
@@ -213,14 +211,15 @@ class UserService
                 $alt->setUser($user);
                 $user->addCharacter($alt);
             }
-            $alt->setName($this->characterProvider->getName($alt->getId()));
+            $alt->setName((string) $this->characterProvider->getName($alt->getId()));
         }
 
         // remove alts, set name of player
         $mainCharacterId = $this->characterProvider->getMain($characterId);
         foreach ($user->getCharacters() as $existingCharacter) {
-            if ($existingCharacter->getId() !== $characterId
-                && ! in_array($existingCharacter->getId(), $allKnownCharacterIds)
+            if (
+                $existingCharacter->getId() !== $characterId &&
+                ! in_array($existingCharacter->getId(), $allKnownCharacterIds)
             ) {
                 $user->removeCharacter($existingCharacter);
                 $existingCharacter->setUser(null);
@@ -237,8 +236,6 @@ class UserService
 
         // persist
         $this->entityManager->flush();
-
-        return $user;
     }
 
     /**
@@ -246,11 +243,12 @@ class UserService
      *
      * @param int $characterId
      * @param User $user
+     * @throws SrpException
      */
     public function syncGroups(int $characterId, User $user): void
     {
         $groups = $this->groupProvider->getGroups($characterId);
-        
+
         // add groups
         foreach ($groups as $groupName) {
             $group = $this->externalGroupRepository->findOneBy(['name' => $groupName]);
@@ -276,14 +274,18 @@ class UserService
     
     public function maySee(Request $request): bool
     {
-        # TODO implement divisions
-
-        if ($this->hasRole(Permission::REVIEW) || $this->hasRole(Permission::PAY)) {
+        $divisionId = $request->getDivision()->getId();
+        if (
+            $this->hasDivisionRole($divisionId, Permission::REVIEW) ||
+            $this->hasDivisionRole($divisionId, Permission::PAY)
+        ) {
             return true;
         }
+
         if ($request->getSubmitter()->getId() === $this->getAuthenticatedUser()->getId()) {
             return true;
         }
+
         return false;
     }
 }

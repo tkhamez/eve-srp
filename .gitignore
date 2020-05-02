@@ -4,7 +4,9 @@
 !/cache/.gitkeep
 /node_modules
 /vendor
-#/web/dist
+/web/dist/main.css
+/web/dist/main.js
+/web/dist/runtime.js
 
 # IDEs
 /.idea

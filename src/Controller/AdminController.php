@@ -4,12 +4,15 @@ declare(strict_types=1);
 
 namespace Brave\EveSrp\Controller;
 
+use Brave\EveSrp\SrpException;
+use Brave\EveSrp\FlashMessage;
 use Brave\EveSrp\Model\Division;
 use Brave\EveSrp\Model\ExternalGroup;
 use Brave\EveSrp\Model\Permission;
 use Brave\EveSrp\Provider\GroupProviderInterface;
 use Brave\EveSrp\Repository\DivisionRepository;
 use Brave\EveSrp\Repository\ExternalGroupRepository;
+use Brave\EveSrp\UserService;
 use Doctrine\ORM\EntityManagerInterface;
 use Exception;
 use Psr\Container\ContainerInterface;
@@ -47,6 +50,16 @@ class AdminController
     private $groupRepository;
 
     /**
+     * @var FlashMessage
+     */
+    private $flashMessage;
+
+    /**
+     * @var UserService
+     */
+    private $userService;
+
+    /**
      * @var array
      */
     private $validRoles = [Permission::SUBMIT, Permission::REVIEW, Permission::PAY, Permission::ADMIN];
@@ -57,14 +70,14 @@ class AdminController
         $this->entityManager = $container->get(EntityManagerInterface::class);
         $this->divisionRepository = $container->get(DivisionRepository::class);
         $this->groupRepository = $container->get(ExternalGroupRepository::class);
+        $this->flashMessage = $container->get(FlashMessage::class);
+        $this->userService = $container->get(UserService::class);
     }
 
     /** @noinspection PhpUnused */
-    public function divisions(
-        /** @noinspection PhpUnusedParameterInspection */
-        ServerRequestInterface $request, 
-        ResponseInterface $response
-    ): ResponseInterface {
+    /** @noinspection PhpUnusedParameterInspection */
+    public function divisions(ServerRequestInterface $request, ResponseInterface $response): ResponseInterface
+    {
         $divisions = $this->divisionRepository->findBy([], ['name' => 'ASC']);
 
         try {
@@ -74,7 +87,6 @@ class AdminController
             $content = '';
         }
         
-        /** @noinspection PhpUnhandledExceptionInspection */
         $response->getBody()->write($content);
 
         return $response;
@@ -91,10 +103,14 @@ class AdminController
                 $division->setName($name);
                 $this->entityManager->persist($division);
                 $this->entityManager->flush();
+                $this->flashMessage->addMessage('Division added.', FlashMessage::TYPE_SUCCESS);
+            } else {
+                $this->flashMessage->addMessage('A division with that name already exists.', FlashMessage::TYPE_INFO);
             }
+        } else {
+            $this->flashMessage->addMessage('Please enter a name.', FlashMessage::TYPE_WARNING);
         }
 
-        /** @noinspection PhpUnhandledExceptionInspection */
         return $response->withHeader('Location', '/admin/divisions');
     }
 
@@ -107,21 +123,19 @@ class AdminController
             if ($division) {
                 $this->entityManager->remove($division);
                 $this->entityManager->flush();
+                $this->flashMessage->addMessage('Division deleted.', FlashMessage::TYPE_SUCCESS);
             }
         }
 
-        /** @noinspection PhpUnhandledExceptionInspection */
         return $response->withHeader('Location', '/admin/divisions');
     }
 
     /** @noinspection PhpUnused */
-    public function groups(
-        /** @noinspection PhpUnusedParameterInspection */
-        ServerRequestInterface $request, 
-        ResponseInterface $response
-    ): ResponseInterface {
+    /** @noinspection PhpUnusedParameterInspection */
+    public function groups(ServerRequestInterface $request, ResponseInterface $response): ResponseInterface
+    {
         $groups = $this->groupRepository->findBy([], ['name' => 'ASC']);
-            
+
         try {
             $content = $this->twig->render('admin-groups.twig', ['groups' => $groups]);
         } catch (Exception $e) {
@@ -129,20 +143,22 @@ class AdminController
             $content = '';
         }
 
-        /** @noinspection PhpUnhandledExceptionInspection */
         $response->getBody()->write($content);
 
         return $response;
     }
 
     /** @noinspection PhpUnused */
-    public function syncGroups(
-        /** @noinspection PhpUnusedParameterInspection */
-        ServerRequestInterface $request,
-        ResponseInterface $response
-    ): ResponseInterface {
-        $externalGroupNames = $this->groupProvider->getAvailableGroups();
-        
+    /** @noinspection PhpUnusedParameterInspection */
+    public function syncGroups(ServerRequestInterface $request, ResponseInterface $response): ResponseInterface
+    {
+        try {
+            $externalGroupNames = $this->groupProvider->getAvailableGroups();
+        } catch (SrpException $e) {
+            $this->flashMessage->addMessage($e->getMessage(), FlashMessage::TYPE_DANGER);
+            return $response->withHeader('Location', '/admin/groups');
+        }
+
         if (count($externalGroupNames) > 0) { // don't do anything if result is empty
 
             // add groups
@@ -164,22 +180,24 @@ class AdminController
 
             $this->entityManager->flush();
         }
-        
-        /** @noinspection PhpUnhandledExceptionInspection */
+
+        $this->flashMessage->addMessage('Update done.', FlashMessage::TYPE_SUCCESS);
         return $response->withHeader('Location', '/admin/groups');
     }
 
     /** @noinspection PhpUnused */
-    public function permissions(
-        /** @noinspection PhpUnusedParameterInspection */
-        ServerRequestInterface $request, 
-        ResponseInterface $response
-    ): ResponseInterface {
-        # TODO filter by division admin role
-        $divisions = $this->divisionRepository->findBy([], ['name' => 'ASC']);
-        
+    /** @noinspection PhpUnusedParameterInspection */
+    public function permissions(ServerRequestInterface $request, ResponseInterface $response): ResponseInterface
+    {
+        $divisions = [];
+        foreach ($this->divisionRepository->findBy([], ['name' => 'ASC']) as $division) {
+            if ($this->userService->hasDivisionRole($division->getId(), Permission::ADMIN)) {
+                $divisions[] = $division;
+            }
+        }
+
         $groups = $this->groupRepository->findBy([]);
-        
+
         try {
             $content = $this->twig->render('admin-permissions.twig', [
                 'divisions' => $divisions,
@@ -187,11 +205,10 @@ class AdminController
                 'groups' => $groups,
             ]);
         } catch (Exception $e) {
-            error_log('AdminController' . $e->getMessage());
+            error_log('AdminController: ' . $e->getMessage());
             $content = '';
         }
 
-        /** @noinspection PhpUnhandledExceptionInspection */
         $response->getBody()->write($content);
 
         return $response;
@@ -200,34 +217,41 @@ class AdminController
     /** @noinspection PhpUnused */
     public function savePermissions(ServerRequestInterface $request, ResponseInterface $response): ResponseInterface
     {
-        # TODO check division admin role
-        
         $id = $this->paramPost($request, 'id');
         $groups = $this->paramPost($request, 'groups');
 
+        $success = null;
+        $division = null;
         if ($id && $groups && is_array($groups)) {
             $division = $this->divisionRepository->find($id);
-            if ($division) {
+            if ($division && $this->userService->hasDivisionRole($division->getId(), Permission::ADMIN)) {
                 foreach ($groups as $role => $groupIds) {
                     if (! is_array($groupIds)) {
                         // nothing was selected
                         $groupIds = [];
                     }
-                    $this->updateDivision($division, (string) $role, $groupIds);
+                    $success = $success === false ? false : $this->updateDivision($division, (string) $role, $groupIds);
                 }
             }
         }
+        if ($success && $division) {
+            $this->flashMessage->addMessage(
+                'Permissions for division "'.$division->getName().'" save.',
+                FlashMessage::TYPE_SUCCESS
+            );
+        } else {
+            $this->flashMessage->addMessage('Failed to save permissions.', FlashMessage::TYPE_WARNING);
+        }
 
-        /** @noinspection PhpUnhandledExceptionInspection */
         return $response->withHeader('Location', '/admin/permissions');
     }
 
-    private function updateDivision(Division $division, string $role, array $groupIds)
+    private function updateDivision(Division $division, string $role, array $groupIds): bool
     {
         if (! in_array($role, $this->validRoles)) {
-            return;
+            return false;
         }
-        
+
         // collect valid group IDs and add permissions
         $validGroupIds = [];
         foreach ($groupIds as $groupId) {
@@ -254,5 +278,7 @@ class AdminController
         }
 
         $this->entityManager->flush();
+
+        return true;
     }
 }

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Brave\EveSrp\Twig;
 
+use Brave\EveSrp\FlashMessage;
 use Brave\EveSrp\UserService;
 use Psr\Container\ContainerInterface;
 use Twig\Extension\AbstractExtension;
@@ -16,9 +17,15 @@ class Extension extends AbstractExtension
      */
     private $userService;
 
+    /**
+     * @var FlashMessage
+     */
+    private $flashMessage;
+
     public function __construct(ContainerInterface $container)
     {
         $this->userService = $container->get(UserService::class);
+        $this->flashMessage = $container->get(FlashMessage::class);
     }
 
     public function getFunctions()
@@ -26,6 +33,7 @@ class Extension extends AbstractExtension
         return [
             new TwigFunction('hasRole', [$this, 'hasRole']),
             new TwigFunction('hasAnyRole', [$this, 'hasAnyRole']),
+            new TwigFunction('flashMessages', [$this, 'flashMessages']),
         ];
     }
 
@@ -44,5 +52,15 @@ class Extension extends AbstractExtension
             }
         }
         return false;
+    }
+
+    /** @noinspection PhpUnused */
+    public function flashMessages()
+    {
+        $html = [];
+        foreach ($this->flashMessage->getMessages() as $message) {
+            $html[] = '<div class="alert alert-'.$message[1].'">'.htmlspecialchars($message[0]).'</div>';
+        }
+        return implode("\n", $html);
     }
 }

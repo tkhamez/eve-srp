@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Brave\EveSrp\Provider;
 
+use Brave\EveSrp\SrpException;
+
 interface GroupProviderInterface
 {
     /**
@@ -14,6 +16,7 @@ interface GroupProviderInterface
      * This is called after each character login.
      * 
      * @param int $eveCharacterId EVE character ID
+     * @throws SrpException
      * @return string[] Array of unique group names, e. g. ['submitter', 'admin']
      */
     public function getGroups(int $eveCharacterId): array;
@@ -23,6 +26,7 @@ interface GroupProviderInterface
      *
      * This can be called manually by an admin.
      *
+     * @throws SrpException
      * @return string[]
      */
     public function getAvailableGroups(): array;

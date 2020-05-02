@@ -7,9 +7,7 @@ $(function () {
 });
 
 function initPopover() {
-    $(function() {
-        $('[data-toggle="popover"]').popover();
-    });
+    $('[data-toggle="popover"]').popover();
 }
 
 function initDeleteDivision() {
