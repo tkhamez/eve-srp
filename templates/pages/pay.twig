@@ -1,4 +1,4 @@
-{% extends "_layout.twig" %}
+{% extends "layout.twig" %}
 {% set active_page = "pay" %}
 
 {% block content %}
@@ -7,4 +7,5 @@
             <h1>Pay</h1>
         </div>
     </div>
+    {% include 'components/requests.twig' with {'requests': requests} only %}
 {% endblock %}

@@ -1,0 +1,12 @@
+{% extends "layout.twig" %}
+{% set active_page = "my-requests" %}
+
+{% block content %}
+    <div class="row">
+        <div class="col">
+            <h1>My Requests</h1>
+            {{ flashMessages()|raw }}
+        </div>
+    </div>
+    {% include 'components/requests.twig' with {'requests': requests} only %}
+{% endblock %}

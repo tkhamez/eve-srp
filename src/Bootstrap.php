@@ -12,6 +12,7 @@ use Exception;
 use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ResponseFactoryInterface;
 use Slim\App;
+use Slim\Exception\HttpNotFoundException;
 use Slim\Factory\AppFactory;
 use Slim\Middleware\Session;
 use Throwable;
@@ -61,6 +62,15 @@ class Bootstrap
             $app->run();
         } catch (Throwable $e) {
             error_log((string) $e);
+            if ($e instanceof HttpNotFoundException) {
+                $msg = 'Not found';
+            } else {
+                $msg = 'Error 500';
+            }
+            echo "<body style='background-color: black; color: white;'>
+                    <h1>$msg</h1>
+                    <a style='color: white;' href='/'>Home</a>
+                </body>";
         }
     }
 
@@ -94,7 +104,7 @@ class Bootstrap
 
         $app->add(new Session([
             'name' => 'brave_srp',
-            'autorefresh' => true,
+            'secure' => $this->container->get('settings')['APP_ENV'] !== 'dev',
             'lifetime' => '1 hour'
         ]));
     }

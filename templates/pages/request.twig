@@ -1,0 +1,43 @@
+{% extends "layout.twig" %}
+{% set active_page = "request" %}
+
+{% block content %}
+    <div class="row">
+        <div class="col">
+            <h1>Request</h1>
+
+            {% if error %}
+                <div class="alert alert-warning">{{ error }}</div>
+            {% endif %}
+
+            {% if request %}
+                <div>request id: {{ request.id }}</div>
+                <div>created: {{ request.created|date('Y-m-d H:i') }}</div>
+                <div>division: {{ request.division.id }} {{ request.division.name }}</div>
+                <br>
+                <div>submitter: {{ request.submitter.id }} {{ request.submitter.name }}</div>
+                <br>
+                {% for action in request.actions %}
+                    <div>- action id: {{ action.id }}</div>
+                    <div>created: {{ action.created|date('Y-m-d H:i') }}</div>
+                    <div>category: {{ action.category }}</div>
+                    <div>user: {{ action.user.id }} {{ action.user.name }}</div>
+                    <div>note: {{ action.note }}</div>
+                {%  endfor %}
+                <br>
+                <div>pilot: {{ request.pilot.id }} {{ request.pilot.name }}</div>
+                <div>corporation: {{ request.corporation }}</div>
+                <div>alliance: {{ request.alliance }}</div>
+                <div>ship: {{ request.ship }}</div>
+                <div>killTime: {{ request.killTime|date('Y-m-d H:i') }}</div>
+                <div>solarSystem: {{ request.solarSystem }}</div>
+                <div>killboardLink: {{ request.killboardLink }}</div>
+                <div>esiLink: {{ request.esiLink }}</div>
+                <div>details: {{ request.details }}</div>
+                <div>basePayout: {{ request.basePayout }}</div>
+                <div>payout: {{ request.payout }}</div>
+                <div>status: {{ request.status }}</div>
+            {% endif %}
+        </div>
+    </div>
+{% endblock %}

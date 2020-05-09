@@ -5,13 +5,12 @@ declare(strict_types=1);
 namespace Brave\EveSrp\Controller;
 
 use Brave\EveSrp\UserService;
-use Exception;
 use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Twig\Environment;
 
-class HomeController
+class MyRequestsController
 {
     /**
      * @var Environment 
@@ -28,17 +27,14 @@ class HomeController
         $this->userService = $container->get(UserService::class);
     }
 
-    public function __invoke(ServerRequestInterface $request, ResponseInterface $response, $args): ResponseInterface
+    /**
+     * @throws \Exception
+     */
+    public function __invoke(ServerRequestInterface $request, ResponseInterface $response): ResponseInterface
     {
         $user = $this->userService->getAuthenticatedUser();
 
-        try {
-            $content = $this->twig->render('home.twig', ['requests' => $user->getRequests()]);
-        } catch (Exception $e) {
-            error_log('HomeController' . $e->getMessage());
-            $content = '';
-        }
-        
+        $content = $this->twig->render('pages/my-requests.twig', ['requests' => $user->getRequests()]);
         $response->getBody()->write($content);
 
         return $response;

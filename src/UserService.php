@@ -3,6 +3,7 @@
 namespace Brave\EveSrp;
 
 use Brave\EveSrp\Model\Character;
+use Brave\EveSrp\Model\Division;
 use Brave\EveSrp\Model\ExternalGroup;
 use Brave\EveSrp\Model\Permission;
 use Brave\EveSrp\Model\Request;
@@ -10,6 +11,7 @@ use Brave\EveSrp\Model\User;
 use Brave\EveSrp\Provider\CharacterProviderInterface;
 use Brave\EveSrp\Provider\GroupProviderInterface;
 use Brave\EveSrp\Repository\CharacterRepository;
+use Brave\EveSrp\Repository\DivisionRepository;
 use Brave\EveSrp\Repository\ExternalGroupRepository;
 use Brave\EveSrp\Repository\PermissionRepository;
 use Brave\EveSrp\Repository\UserRepository;
@@ -51,6 +53,11 @@ class UserService
     private $permissionRepository;
 
     /**
+     * @var DivisionRepository
+     */
+    private $divisionRepository;
+
+    /**
      * @var CharacterProviderInterface
      */
     private $characterProvider;
@@ -77,6 +84,7 @@ class UserService
         $this->externalGroupRepository = $container->get(ExternalGroupRepository::class);
         $this->characterRepository = $container->get(CharacterRepository::class);
         $this->permissionRepository = $container->get(PermissionRepository::class);
+        $this->divisionRepository = $container->get(DivisionRepository::class);
         $this->characterProvider = $container->get(CharacterProviderInterface::class);
         $this->groupProvider = $container->get(GroupProviderInterface::class);
     }
@@ -111,6 +119,29 @@ class UserService
         }
 
         return false;
+    }
+
+    /**
+     * @param array $roles
+     * @return Division[]
+     */
+    public function getDivisionsWithRoles(array $roles): array
+    {
+        $divisions = [];
+        foreach ($this->divisionRepository->findBy([]) as $division) {
+            if ($this->hasRole(Security::GLOBAL_ADMIN)) {
+                $divisions[] = $division;
+                continue;
+            }
+            foreach ($roles as $role) {
+                if ($this->hasDivisionRole($division->getId(), $role)) {
+                    $divisions[] = $division;
+                    continue 2;
+                }
+            }
+        }
+
+        return $divisions;
     }
 
     /**
@@ -188,6 +219,9 @@ class UserService
      */
     public function syncCharacters(User $user, int $characterId)
     {
+        # TODO if character was moved to another Core account this does not work as expected
+        # use character owner hash? or add an account ID to interface? only allow login for main?
+
         if (count($user->getCharacters()) === 0) {
             return;
         }
@@ -273,15 +307,22 @@ class UserService
     
     public function maySee(Request $request): bool
     {
-        $divisionId = $request->getDivision()->getId();
-        if (
-            $this->hasDivisionRole($divisionId, Permission::REVIEW) ||
-            $this->hasDivisionRole($divisionId, Permission::PAY)
-        ) {
+        if ($this->hasRole(Security::GLOBAL_ADMIN)) {
             return true;
         }
 
         if ($request->getSubmitter()->getId() === $this->getAuthenticatedUser()->getId()) {
+            return true;
+        }
+
+        $divisionId = $request->getDivision() ? $request->getDivision()->getId() : null;
+        if (
+            $divisionId &&
+            (
+                $this->hasDivisionRole($divisionId, Permission::REVIEW) ||
+                $this->hasDivisionRole($divisionId, Permission::PAY)
+            )
+        ) {
             return true;
         }
 

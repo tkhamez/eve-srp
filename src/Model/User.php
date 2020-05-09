@@ -48,7 +48,7 @@ class User
 
     /**
      * @ORM\OneToMany(targetEntity="Request", mappedBy="submitter")
-     * @ORM\OrderBy({"created" = "ASC"})
+     * @ORM\OrderBy({"created" = "DESC"})
      * @var Collection
      */
     private $requests;

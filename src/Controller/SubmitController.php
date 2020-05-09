@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Brave\EveSrp\Controller;
 
-use Exception;
 use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
@@ -21,15 +20,12 @@ class SubmitController
         $this->twig = $container->get(Environment::class);
     }
 
-    public function __invoke(ServerRequestInterface $request, ResponseInterface $response, $args): ResponseInterface
+    /**
+     * @throws \Exception
+     */
+    public function __invoke(ServerRequestInterface $request, ResponseInterface $response): ResponseInterface
     {
-        try {
-            $content = $this->twig->render('submit.twig');
-        } catch (Exception $e) {
-            error_log('SubmitController' . $e->getMessage());
-            $content = '';
-        }
-        
+        $content = $this->twig->render('pages/submit.twig');
         $response->getBody()->write($content);
 
         return $response;

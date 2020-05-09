@@ -1,0 +1,41 @@
+{% extends "layout.twig" %}
+{% set active_page = "all-requests" %}
+
+{% block content %}
+    <div class="row mb-3">
+        <div class="col">
+            <h1>All Requests</h1>
+            <form class="bg-dark p-3" method="get">
+                <div class="form-group">
+                    <label class="text-light" for="division">Division</label>
+                    <select class="text-light form-control" id="division" name="division">
+                        <option value=""></option>
+                        {% for division in divisions %}
+                            <option {% if selectedDivision == division.id %}selected{% endif %}
+                                    value="{{ division.id }}">
+                                {{ division.name }}
+                            </option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="text-light" for="status">Status</label>
+                    <select class="text-light form-control" id="status" name="status">
+                        <option></option>
+                        {% for status in [
+                            constant('Brave\\EveSrp\\Type::INCOMPLETE'),
+                            constant('Brave\\EveSrp\\Type::EVALUATING'),
+                            constant('Brave\\EveSrp\\Type::APPROVED'),
+                            constant('Brave\\EveSrp\\Type::REJECTED'),
+                            constant('Brave\\EveSrp\\Type::PAID'),
+                        ] %}
+                            <option {% if selectedStatus == status %}selected{% endif %}>{{ status }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <button type="submit" class="btn btn-primary">Show</button>
+            </form>
+        </div>
+    </div>
+    {% include 'components/requests.twig' with {'requests': requests} only %}
+{% endblock %}

@@ -66,7 +66,10 @@ class AuthController
         $this->flashMessage = $container->get(FlashMessage::class);
     }
 
-    /** @noinspection PhpUnusedParameterInspection */
+    /**
+     * @throws \Exception
+     * @noinspection PhpUnusedParameterInspection
+     */
     public function login(ServerRequestInterface $request, ResponseInterface $response): ResponseInterface
     {
         try {
@@ -76,20 +79,14 @@ class AuthController
         }
         $this->sessionHandler->set('ssoState', $state);
 
-        try {
-            $content = $this->twig->render('login.twig', [
-                'serviceName' => $this->settings['APP_TITLE'],
-                'logo'        => $this->settings['APP_LOGO'],
-                'logoAltText' => $this->settings['APP_LOGO_ALT'],
-                'loginUrl'    => $this->authenticationProvider->buildLoginUrl($state),
-                'coreUrl'     => $this->settings['CORE_DOMAIN'],
-                'coreName'    => $this->settings['CORE_NAME'],
-            ]);
-        } catch (Exception $e) {
-            error_log('AuthController' . $e->getMessage());
-            $content = '';
-        }
-
+        $content = $this->twig->render('pages/login.twig', [
+            'serviceName' => $this->settings['APP_TITLE'],
+            'logo'        => $this->settings['APP_LOGO'],
+            'logoAltText' => $this->settings['APP_LOGO_ALT'],
+            'loginUrl'    => $this->authenticationProvider->buildLoginUrl($state),
+            'coreUrl'     => $this->settings['CORE_DOMAIN'],
+            'coreName'    => $this->settings['CORE_NAME'],
+        ]);
         $response->getBody()->write($content);
 
         return $response;
@@ -101,7 +98,7 @@ class AuthController
      * @param ServerRequestInterface $request
      * @param ResponseInterface $response
      * @return ResponseInterface
-     * @throws InvalidArgumentException
+     * @throws InvalidArgumentException|\LogicException
      */
     public function auth(ServerRequestInterface $request, ResponseInterface $response)
     {

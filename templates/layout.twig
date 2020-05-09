@@ -16,12 +16,12 @@
             </button>
             <div class="collapse navbar-collapse" id="navBarToggle">
                 <ul class="navbar-nav mr-auto">
-                    <li class="nav-item {% if active_page == 'home' %}active{% endif %}">
-                        <a class="nav-link" href="/">Home</a>
+                    <li class="nav-item {% if active_page == 'my-requests' %}active{% endif %}">
+                        <a class="nav-link" href="/my-requests">My Requests</a>
                     </li>
                     {% if hasRole('submit') %}
                         <li class="nav-item {% if active_page == 'submit' %}active{% endif%}">
-                            <a class="nav-link" href="/submit">Submit</a>
+                            <a class="nav-link" href="/submit">Submit Request</a>
                         </li>
                     {% endif %}
                     {% if hasRole('review') %}
@@ -32,6 +32,11 @@
                     {% if hasRole('pay') %}
                         <li class="nav-item {% if active_page == 'pay' %}active{% endif%}">
                             <a class="nav-link" href="/pay">Pay</a>
+                        </li>
+                    {% endif %}
+                    {% if hasAnyRole(['review', 'pay', 'admin', 'global-admin']) %}
+                        <li class="nav-item {% if active_page == 'all-requests' %}active{% endif%}">
+                            <a class="nav-link" href="/all-requests">All Requests</a>
                         </li>
                     {% endif %}
                     {% if hasAnyRole(['admin', 'global-admin']) %}
@@ -83,7 +88,7 @@
         <main>{% block content %}{% endblock %}</main>
         
         <footer class="page-footer text-center text-white-50">
-            {{ data.footerText }}<br>
+            {{ data.footerText|raw }}<br>
             <span class="text-center small">
                 "EVE", "EVE Online", "CCP" and all related logos and images are
                 trademarks or registered trademarks of <a href="https://www.ccpgames.com" target="_blank">CCP hf</a>.

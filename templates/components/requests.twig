@@ -1,0 +1,35 @@
+<div class="table-responsive">
+    <table class="table table-sm table-dark table-striped table-bordered table-hover">
+        <thead>
+            <tr>
+                <th>Ship</th>
+                <th>Pilot</th>
+                <th>System</th>
+                <th>Kill Time</th>
+                <th>Kill mail</th>
+                <th>Created</th>
+                <th>Division</th>
+                <th>Status</th>
+                <th>Payout</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for request in requests %}
+                <tr>
+                    <td><a href="/request/{{ request.id }}">{{ request.ship }}</a></td>
+                    <td>{{ request.pilot.name }}</td>
+                    <td>{{ request.solarSystem }}</td>
+                    <td>{{ request.killTime|date('Y-m-d H:i') }}</td>
+                    <td>
+                        <a href="{{ request.killboardLink }}" target="_blank"
+                           rel="noopener">{{ request.killboardLink }}</a>
+                    </td>
+                    <td>{{ request.created|date('Y-m-d H:i') }}</td>
+                    <td>{{ request.division.name }}</td>
+                    <td>{{ request.status }}</td>
+                    <td>{{ request.payout|number_format }}</td>
+                </tr>
+            {%  endfor %}
+        </tbody>
+    </table>
+</div>

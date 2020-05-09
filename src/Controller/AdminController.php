@@ -14,7 +14,6 @@ use Brave\EveSrp\Repository\DivisionRepository;
 use Brave\EveSrp\Repository\ExternalGroupRepository;
 use Brave\EveSrp\UserService;
 use Doctrine\ORM\EntityManagerInterface;
-use Exception;
 use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
@@ -74,19 +73,16 @@ class AdminController
         $this->userService = $container->get(UserService::class);
     }
 
-    /** @noinspection PhpUnused */
-    /** @noinspection PhpUnusedParameterInspection */
+    /**
+     * @throws \Exception
+     * @noinspection PhpUnused
+     * @noinspection PhpUnusedParameterInspection
+     */
     public function divisions(ServerRequestInterface $request, ResponseInterface $response): ResponseInterface
     {
         $divisions = $this->divisionRepository->findBy([], ['name' => 'ASC']);
 
-        try {
-            $content = $this->twig->render('admin-divisions.twig', ['divisions' => $divisions]);
-        } catch (Exception $e) {
-            error_log('AdminController' . $e->getMessage());
-            $content = '';
-        }
-        
+        $content = $this->twig->render('pages/admin-divisions.twig', ['divisions' => $divisions]);
         $response->getBody()->write($content);
 
         return $response;
@@ -130,19 +126,15 @@ class AdminController
         return $response->withHeader('Location', '/admin/divisions');
     }
 
-    /** @noinspection PhpUnused */
-    /** @noinspection PhpUnusedParameterInspection */
+    /**
+     * @throws \Exception
+     * @noinspection PhpUnusedParameterInspection
+     */
     public function groups(ServerRequestInterface $request, ResponseInterface $response): ResponseInterface
     {
         $groups = $this->groupRepository->findBy([], ['name' => 'ASC']);
 
-        try {
-            $content = $this->twig->render('admin-groups.twig', ['groups' => $groups]);
-        } catch (Exception $e) {
-            error_log('AdminController' . $e->getMessage());
-            $content = '';
-        }
-
+        $content = $this->twig->render('pages/admin-groups.twig', ['groups' => $groups]);
         $response->getBody()->write($content);
 
         return $response;
@@ -185,8 +177,10 @@ class AdminController
         return $response->withHeader('Location', '/admin/groups');
     }
 
-    /** @noinspection PhpUnused */
-    /** @noinspection PhpUnusedParameterInspection */
+    /**
+     * @throws \Exception
+     * @noinspection PhpUnusedParameterInspection
+     */
     public function permissions(ServerRequestInterface $request, ResponseInterface $response): ResponseInterface
     {
         $divisions = [];
@@ -196,19 +190,11 @@ class AdminController
             }
         }
 
-        $groups = $this->groupRepository->findBy([]);
-
-        try {
-            $content = $this->twig->render('admin-permissions.twig', [
-                'divisions' => $divisions,
-                'roles' => $this->validRoles,
-                'groups' => $groups,
-            ]);
-        } catch (Exception $e) {
-            error_log('AdminController: ' . $e->getMessage());
-            $content = '';
-        }
-
+        $content = $this->twig->render('pages/admin-permissions.twig', [
+            'divisions' => $divisions,
+            'roles' => $this->validRoles,
+            'groups' => $this->groupRepository->findBy([]),
+        ]);
         $response->getBody()->write($content);
 
         return $response;

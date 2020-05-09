@@ -36,7 +36,11 @@ class GlobalData
     /** @noinspection PhpUnused */
     public function footerText(): string
     {
-        return $this->settings['FOOTER_TEXT'];
+        return preg_replace(
+            '#(http[s]?://\S+)\s*#ims',
+            '<a href="$1" target="_blank">$1</a> ',
+            htmlspecialchars($this->settings['FOOTER_TEXT'])
+        );
     }
 
     /** @noinspection PhpUnused */
