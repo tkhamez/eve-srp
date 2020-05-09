@@ -17,7 +17,7 @@
   */
 
 /*!
- * Bootstrap-select v1.13.16 (https://developer.snapappointments.com/bootstrap-select)
+ * Bootstrap-select v1.13.17 (https://developer.snapappointments.com/bootstrap-select)
  *
  * Copyright 2012-2020 SnapAppointments, LLC
  * Licensed under MIT (https://github.com/snapappointments/bootstrap-select/blob/master/LICENSE)
@@ -41,7 +41,7 @@
  */
 
 /*!
- * jQuery JavaScript Library v3.5.0
+ * jQuery JavaScript Library v3.5.1
  * https://jquery.com/
  *
  * Includes Sizzle.js
@@ -51,7 +51,7 @@
  * Released under the MIT license
  * https://jquery.org/license
  *
- * Date: 2020-04-10T15:07Z
+ * Date: 2020-05-04T22:49Z
  */
 
 /**!
