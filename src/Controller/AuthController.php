@@ -1,9 +1,11 @@
 <?php
+/** @noinspection PhpUnused */
 
 declare(strict_types=1);
 
 namespace Brave\EveSrp\Controller;
 
+use Brave\EveSrp\Controller\Traits\TwigResponse;
 use Brave\EveSrp\FlashMessage;
 use Brave\EveSrp\Provider\GroupProviderInterface;
 use Brave\EveSrp\SrpException;
@@ -11,7 +13,6 @@ use Brave\EveSrp\UserService;
 use Brave\Sso\Basics\AuthenticationProvider;
 use Brave\Sso\Basics\SessionHandlerInterface;
 use Exception;
-use InvalidArgumentException;
 use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
@@ -20,15 +21,12 @@ use UnexpectedValueException;
 
 class AuthController
 {
+    use TwigResponse;
+
     /**
      * @var array
      */
     private $settings;
-    
-    /**
-     * @var Environment
-     */
-    private $twig;
 
     /**
      * @var SessionHandlerInterface
@@ -58,16 +56,16 @@ class AuthController
     public function __construct(ContainerInterface $container)
     {
         $this->settings = $container->get('settings');
-        $this->twig = $container->get(Environment::class);
         $this->sessionHandler = $container->get(SessionHandlerInterface::class);
         $this->groupProvider = $container->get(GroupProviderInterface::class);
         $this->userService = $container->get(UserService::class);
         $this->authenticationProvider = $container->get(AuthenticationProvider::class);
         $this->flashMessage = $container->get(FlashMessage::class);
+
+        $this->twigResponse($container->get(Environment::class));
     }
 
     /**
-     * @throws \Exception
      * @noinspection PhpUnusedParameterInspection
      */
     public function login(ServerRequestInterface $request, ResponseInterface $response): ResponseInterface
@@ -79,7 +77,7 @@ class AuthController
         }
         $this->sessionHandler->set('ssoState', $state);
 
-        $content = $this->twig->render('pages/login.twig', [
+        return $this->render($response, 'pages/login.twig', [
             'serviceName' => $this->settings['APP_TITLE'],
             'logo'        => $this->settings['APP_LOGO'],
             'logoAltText' => $this->settings['APP_LOGO_ALT'],
@@ -87,20 +85,14 @@ class AuthController
             'coreUrl'     => $this->settings['CORE_DOMAIN'],
             'coreName'    => $this->settings['CORE_NAME'],
         ]);
-        $response->getBody()->write($content);
-
-        return $response;
     }
 
     /**
      * EVE SSO callback.
      *
-     * @param ServerRequestInterface $request
-     * @param ResponseInterface $response
-     * @return ResponseInterface
-     * @throws InvalidArgumentException|\LogicException
+     * @throws \LogicException
      */
-    public function auth(ServerRequestInterface $request, ResponseInterface $response)
+    public function auth(ServerRequestInterface $request, ResponseInterface $response): ResponseInterface
     {
         $code = $request->getQueryParams()['code'] ?? null;
         $state = $request->getQueryParams()['state'] ?? null;
@@ -136,8 +128,9 @@ class AuthController
         return $response->withHeader('Location', '/');
     }
 
-    /** @noinspection PhpUnused */
-    /** @noinspection PhpUnusedParameterInspection */
+    /**
+     * @noinspection PhpUnusedParameterInspection
+     */
     public function logout(ServerRequestInterface $request, ResponseInterface $response): ResponseInterface
     {
         $this->sessionHandler->set('userId', null);

@@ -1,10 +1,12 @@
 <?php
 
-namespace Brave\EveSrp\Controller;
+declare(strict_types=1);
+
+namespace Brave\EveSrp\Controller\Traits;
 
 use Psr\Http\Message\ServerRequestInterface;
 
-trait RequestParamsTrait
+trait RequestParameter
 {
     /**
      * @param ServerRequestInterface $request

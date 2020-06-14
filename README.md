@@ -1,6 +1,6 @@
 # Brave Collective - SRP
 
-## Install
+## Install/Update
 
 - Copy `.env.dist` to `.env` and adjust values or set the corresponding environment variables in another way.
 - Install dependencies with `composer install`.
@@ -11,14 +11,7 @@
 
 ### Error logging
 
-This application uses the PHP internal `error_log` function for error logging.
-
-### Rebuild Frontend
-
-```
-npm i
-npm run build
-```
+Log messages are send to the file specified in the `error_log` configuration.
 
 ## Migration from paxswill/evesrp
 
@@ -48,3 +41,12 @@ INSERT INTO eve_srp.user_external_group (user_id, external_group_id)
 ```
 
 permission "audit" is not copied.
+
+## Development
+
+### Rebuild Frontend
+
+```
+npm i
+npm run build
+```

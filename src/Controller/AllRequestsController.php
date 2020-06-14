@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Brave\EveSrp\Controller;
 
+use Brave\EveSrp\Controller\Traits\TwigResponse;
 use Brave\EveSrp\Model\Permission;
 use Brave\EveSrp\Repository\DivisionRepository;
 use Brave\EveSrp\Repository\RequestRepository;
@@ -15,10 +16,7 @@ use Twig\Environment;
 
 class AllRequestsController
 {
-    /**
-     * @var Environment
-     */
-    private $twig;
+    use TwigResponse;
 
     /**
      * @var RequestRepository
@@ -35,16 +33,15 @@ class AllRequestsController
      */
     private $userService;
 
-    public function __construct(ContainerInterface $container) {
-        $this->twig = $container->get(Environment::class);
+    public function __construct(ContainerInterface $container)
+    {
         $this->requestRepository = $container->get(RequestRepository::class);
         $this->divisionRepository = $container->get(DivisionRepository::class);
         $this->userService = $container->get(UserService::class);
+
+        $this->twigResponse($container->get(Environment::class));
     }
 
-    /**
-     * @throws \Exception
-     */
     public function __invoke(ServerRequestInterface $request, ResponseInterface $response): ResponseInterface
     {
         # TODO pager
@@ -71,14 +68,11 @@ class AllRequestsController
             'division' => $selectedDivision
         ], ['created' => 'ASC']);
 
-        $content = $this->twig->render('pages/all-requests.twig', [
+        return $this->render($response, 'pages/all-requests.twig', [
             'requests' => $requests,
             'divisions' => $divisions,
             'selectedStatus' => $selectedStatus,
             'selectedDivision' => $selectedDivision
         ]);
-        $response->getBody()->write($content);
-
-        return $response;
     }
 }

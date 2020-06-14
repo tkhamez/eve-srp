@@ -33,6 +33,9 @@ class Bootstrap
      */
     public function __construct()
     {
+        ini_set('display_errors', '0');
+        ini_set('log_errors', '1');
+
         if (is_readable(ROOT_DIR . '/.env')) {
             $dotEnv = Dotenv::createImmutable(ROOT_DIR);
             $dotEnv->load();

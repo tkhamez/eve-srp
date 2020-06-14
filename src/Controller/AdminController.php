@@ -1,9 +1,12 @@
 <?php
+/** @noinspection PhpUnused */
 
 declare(strict_types=1);
 
 namespace Brave\EveSrp\Controller;
 
+use Brave\EveSrp\Controller\Traits\RequestParameter;
+use Brave\EveSrp\Controller\Traits\TwigResponse;
 use Brave\EveSrp\SrpException;
 use Brave\EveSrp\FlashMessage;
 use Brave\EveSrp\Model\Division;
@@ -21,12 +24,8 @@ use Twig\Environment;
 
 class AdminController
 {
-    use RequestParamsTrait;
-    
-    /**
-     * @var Environment
-     */
-    private $twig;
+    use RequestParameter;
+    use TwigResponse;
 
     /**
      * @var GroupProviderInterface
@@ -63,32 +62,28 @@ class AdminController
      */
     private $validRoles = [Permission::SUBMIT, Permission::REVIEW, Permission::PAY, Permission::ADMIN];
     
-    public function __construct(ContainerInterface $container) {
-        $this->twig = $container->get(Environment::class);
+    public function __construct(ContainerInterface $container)
+    {
         $this->groupProvider = $container->get(GroupProviderInterface::class);
         $this->entityManager = $container->get(EntityManagerInterface::class);
         $this->divisionRepository = $container->get(DivisionRepository::class);
         $this->groupRepository = $container->get(ExternalGroupRepository::class);
         $this->flashMessage = $container->get(FlashMessage::class);
         $this->userService = $container->get(UserService::class);
+
+        $this->twigResponse($container->get(Environment::class));
     }
 
     /**
-     * @throws \Exception
-     * @noinspection PhpUnused
      * @noinspection PhpUnusedParameterInspection
      */
     public function divisions(ServerRequestInterface $request, ResponseInterface $response): ResponseInterface
     {
         $divisions = $this->divisionRepository->findBy([], ['name' => 'ASC']);
 
-        $content = $this->twig->render('pages/admin-divisions.twig', ['divisions' => $divisions]);
-        $response->getBody()->write($content);
-
-        return $response;
+        return $this->render($response, 'pages/admin-divisions.twig', ['divisions' => $divisions]);
     }
 
-    /** @noinspection PhpUnused */
     public function newDivision(ServerRequestInterface $request, ResponseInterface $response): ResponseInterface
     {
         $name = (string) $this->paramPost($request, 'name');
@@ -110,7 +105,6 @@ class AdminController
         return $response->withHeader('Location', '/admin/divisions');
     }
 
-    /** @noinspection PhpUnused */
     public function deleteDivision(ServerRequestInterface $request, ResponseInterface $response): ResponseInterface
     {
         $id = $this->paramPost($request, 'id');
@@ -127,21 +121,18 @@ class AdminController
     }
 
     /**
-     * @throws \Exception
      * @noinspection PhpUnusedParameterInspection
      */
     public function groups(ServerRequestInterface $request, ResponseInterface $response): ResponseInterface
     {
         $groups = $this->groupRepository->findBy([], ['name' => 'ASC']);
 
-        $content = $this->twig->render('pages/admin-groups.twig', ['groups' => $groups]);
-        $response->getBody()->write($content);
-
-        return $response;
+        return $this->render($response, 'pages/admin-groups.twig', ['groups' => $groups]);
     }
 
-    /** @noinspection PhpUnused */
-    /** @noinspection PhpUnusedParameterInspection */
+    /**
+     * @noinspection PhpUnusedParameterInspection
+     */
     public function syncGroups(ServerRequestInterface $request, ResponseInterface $response): ResponseInterface
     {
         try {
@@ -178,7 +169,6 @@ class AdminController
     }
 
     /**
-     * @throws \Exception
      * @noinspection PhpUnusedParameterInspection
      */
     public function permissions(ServerRequestInterface $request, ResponseInterface $response): ResponseInterface
@@ -190,17 +180,13 @@ class AdminController
             }
         }
 
-        $content = $this->twig->render('pages/admin-permissions.twig', [
+        return $this->render($response, 'pages/admin-permissions.twig', [
             'divisions' => $divisions,
             'roles' => $this->validRoles,
             'groups' => $this->groupRepository->findBy([]),
         ]);
-        $response->getBody()->write($content);
-
-        return $response;
     }
 
-    /** @noinspection PhpUnused */
     public function savePermissions(ServerRequestInterface $request, ResponseInterface $response): ResponseInterface
     {
         $id = $this->paramPost($request, 'id');

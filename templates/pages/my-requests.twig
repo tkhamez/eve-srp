@@ -8,5 +8,5 @@
             {{ flashMessages()|raw }}
         </div>
     </div>
-    {% include 'components/requests.twig' with {'requests': requests} only %}
+    {% include 'components/requests.twig' with {requests: requests, page: 'show'} only %}
 {% endblock %}
