@@ -5,6 +5,38 @@
     <div class="row">
         <div class="col">
             <h1>Submit Request</h1>
+            {{ flashMessages()|raw }}
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col">
+            <form class="mb-3 bg-dark-3 p-3" action="/submit" method="post"
+                  onsubmit="document.getElementById('formSubmit').disabled = true">
+                <div class="form-group">
+                    <label class="text-light" for="division">Division</label>
+                    <select class="form-control bg-dark-4 text-light" name="division" id="division" required>
+                        <option></option>
+                        {% for division in divisions %}
+                            <option {% if selectedDivision == division.id %}selected{% endif %}
+                                    value="{{ division.id }}">
+                                {{ division.name }}
+                            </option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="text-light" for="url">zKillboard URL or ESI Kill Link</label>
+                    <input type="text" class="form-control bg-dark-4 text-light" name="url" id="url"
+                           value="{{ url }}" required>
+                </div>
+                <div class="form-group">
+                    <label class="text-light" for="details">Details</label>
+                    <textarea class="form-control bg-dark-4 text-light" name="details" id="details"
+                              rows="3" required>{{ details }}</textarea>
+                </div>
+                <button type="submit" class="btn btn-primary" id="formSubmit">Submit</button>
+            </form>
         </div>
     </div>
 {% endblock %}

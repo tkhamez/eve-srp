@@ -76,7 +76,7 @@ return [
     // Guzzle HTTP client
     ClientInterface::class => function (ContainerInterface $container) {
         return new Client([
-            'headers' => ['User-Agent' => $container->get('settings')['HTTP']['user_agent']]
+            'headers' => ['User-Agent' => $container->get('settings')['HTTP_USER_AGENT']]
         ]);
     },
 

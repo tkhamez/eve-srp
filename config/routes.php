@@ -15,7 +15,8 @@ return function (App $app): void
     $app->get('/my-requests',          Brave\EveSrp\Controller\MyRequestsController::class);
     $app->get('/request/{id}/show',    Brave\EveSrp\Controller\RequestController::class . ':show');
     $app->get('/request/{id}/process', Brave\EveSrp\Controller\RequestController::class . ':process');
-    $app->get('/submit',               Brave\EveSrp\Controller\SubmitController::class);
+    $app->get('/submit',               Brave\EveSrp\Controller\SubmitController::class . ':showForm');
+    $app->post('/submit',              Brave\EveSrp\Controller\SubmitController::class . ':submitForm');
     $app->get('/review',               Brave\EveSrp\Controller\ProcessController::class . ':review');
     $app->get('/pay',                  Brave\EveSrp\Controller\ProcessController::class . ':pay');
     $app->get('/all-requests',         Brave\EveSrp\Controller\AllRequestsController::class);

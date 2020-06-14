@@ -31,9 +31,9 @@
                 <div>ship: {{ request.ship }}</div>
                 <div>killTime: {{ request.killTime|date('Y-m-d H:i') }}</div>
                 <div>solarSystem: {{ request.solarSystem }}</div>
-                <div>killboardLink: {{ request.killboardLink }}</div>
+                <div>killboardUrl: {{ request.killboardUrl }}</div>
                 <div>esiLink: {{ request.esiLink }}</div>
-                <div>details: {{ request.details }}</div>
+                <div>details: {{ request.details|nl2br }}</div>
                 <div>basePayout: {{ request.basePayout }}</div>
                 <div>payout: {{ request.payout }}</div>
                 <div>status: {{ request.status }}</div>

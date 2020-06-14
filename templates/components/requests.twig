@@ -6,7 +6,7 @@
                 <th>Pilot</th>
                 <th>System</th>
                 <th>Kill Time</th>
-                <th>Kill mail</th>
+                <th>External URLs</th>
                 <th>Created</th>
                 <th>Division</th>
                 <th>Status</th>
@@ -21,13 +21,21 @@
                     <td>{{ request.solarSystem }}</td>
                     <td>{{ request.killTime|date('Y-m-d H:i') }}</td>
                     <td>
-                        <a href="{{ request.killboardLink }}" target="_blank"
-                           rel="noopener">{{ request.killboardLink }}</a>
+                        {% if request.killboardUrl %}
+                            <a href="{{ request.killboardUrl }}" target="_blank" rel="noopener">Killboard</a>
+                        {% endif %}
+                        {% if request.esiLink %}
+                            <a href="{{ request.esiLink }}" target="_blank" rel="noopener">ESI</a>
+                        {% endif %}
                     </td>
                     <td>{{ request.created|date('Y-m-d H:i') }}</td>
                     <td>{{ request.division.name }}</td>
                     <td>{{ request.status }}</td>
-                    <td>{{ request.payout|number_format }}</td>
+                    <td>
+                        {% if request.payout is not null %}
+                            {{ request.payout|number_format }}
+                        {% endif %}
+                    </td>
                 </tr>
             {%  endfor %}
         </tbody>

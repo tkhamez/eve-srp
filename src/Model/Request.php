@@ -90,9 +90,9 @@ class Request
 
     /**
      * @var string
-     * @ORM\Column(type="string", name="killboard_link", length=512, nullable=true)
+     * @ORM\Column(type="string", name="killboard_url", length=512, nullable=true)
      */
-    private $killboardLink;
+    private $killboardUrl;
 
     /**
      * The "External Kill Link" from the in-game menu.
@@ -144,14 +144,35 @@ class Request
         return $this->created;
     }
 
+    public function setCreated(DateTime $date): self
+    {
+        $this->created = clone $date;
+
+        return $this;
+    }
+
     public function getDivision(): ?Division
     {
         return $this->division;
     }
 
+    public function setDivision(?Division $division): self
+    {
+        $this->division = $division;
+
+        return $this;
+    }
+
     public function getSubmitter(): User
     {
         return $this->submitter;
+    }
+
+    public function setSubmitter(User $submitter): self
+    {
+        $this->submitter = $submitter;
+
+        return $this;
     }
 
     /**
@@ -167,19 +188,47 @@ class Request
         return $this->pilot;
     }
 
-    public function getCorporation(): string
+    public function setPilot(Character $pilot): self
+    {
+        $this->pilot = $pilot;
+
+        return $this;
+    }
+
+    public function getCorporation(): ?string
     {
         return $this->corporation;
     }
 
-    public function getAlliance(): string
+    public function setCorporation(?string $corporation): self
+    {
+        $this->corporation = $corporation;
+
+        return $this;
+    }
+
+    public function getAlliance(): ?string
     {
         return $this->alliance;
     }
 
+    public function setAlliance(?string $alliance): self
+    {
+        $this->alliance = $alliance;
+
+        return $this;
+    }
+
     public function getShip(): string
     {
-        return $this->ship;
+        return (string) $this->ship;
+    }
+
+    public function setShip(string $ship): self
+    {
+        $this->ship = $ship;
+
+        return $this;
     }
 
     public function getKillTime(): DateTime
@@ -187,38 +236,94 @@ class Request
         return $this->killTime;
     }
 
+    public function setKillTime(DateTime $dateTime): self
+    {
+        $this->killTime = $dateTime;
+
+        return $this;
+    }
+
     public function getSolarSystem(): string
     {
-        return $this->solarSystem;
+        return (string) $this->solarSystem;
     }
 
-    public function getKillboardLink(): string
+    public function setSolarSystem(string $solarSystem): self
     {
-        return (string) $this->killboardLink;
+        $this->solarSystem = $solarSystem;
+
+        return $this;
     }
 
-    public function getEsiLink(): string
+    public function getKillboardUrl(): ?string
     {
-        return (string) $this->esiLink;
+        return $this->killboardUrl;
     }
 
-    public function getDetails(): string
+    public function setKillboardUrl(?string $url): self
+    {
+        $this->killboardUrl = $url;
+
+        return $this;
+    }
+
+    public function getEsiLink(): ?string
+    {
+        return $this->esiLink;
+    }
+
+    public function setEsiLink(?string $url): self
+    {
+        $this->esiLink = $url;
+
+        return $this;
+    }
+
+    public function getDetails(): ?string
     {
         return $this->details;
     }
 
-    public function getBasePayout(): int
+    public function setDetails(?string $details): self
+    {
+        $this->details = $details;
+
+        return $this;
+    }
+
+    public function getBasePayout(): ?int
     {
         return $this->basePayout;
     }
 
-    public function getPayout(): int
+    public function setBasePayout(?int $basePayout): self
+    {
+        $this->basePayout = $basePayout;
+
+        return $this;
+    }
+
+    public function getPayout(): ?int
     {
         return $this->payout;
     }
 
+    public function setPayout(?int $payout): self
+    {
+        $this->payout = $payout;
+
+        return $this;
+    }
+
     public function getStatus(): string
     {
-        return $this->status;
+        return (string) $this->status;
+    }
+
+    public function setStatus(string $status): self
+    {
+        $this->status = $status;
+
+        return $this;
     }
 }

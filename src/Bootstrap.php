@@ -105,10 +105,6 @@ class Bootstrap
         // Add routing middleware after SecureRouteMiddleware and RoleMiddleware because they depend on the route.
         $app->addRoutingMiddleware();
 
-        $app->add(new Session([
-            'name' => 'brave_srp',
-            'secure' => $this->container->get('settings')['APP_ENV'] !== 'dev',
-            'lifetime' => '1 hour'
-        ]));
+        $app->add(new Session(['name' => 'evesrp_session']));
     }
 }
