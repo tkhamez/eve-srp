@@ -11,11 +11,11 @@ interface GroupProviderInterface
     /**
      * Returns groups from external service for the authenticated user.
      * 
-     * Those groups are mapped to internal roles and divisions via configuration.
+     * Those groups can be mapped to internal roles and divisions via configuration.
      *
      * This is called after each character login.
      * 
-     * @param int $eveCharacterId EVE character ID
+     * @param int $eveCharacterId EVE character ID of logged in user
      * @throws SrpException
      * @return string[] Array of unique group names, e. g. ['submitter', 'admin']
      */
