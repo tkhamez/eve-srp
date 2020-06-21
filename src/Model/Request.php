@@ -121,7 +121,7 @@ class Request
     private $payout;
 
     /**
-     * Request status: one of the Brave\EveSrp\Type constants.
+     * Request status: one of the EveSrp\Type constants.
      *
      * @ORM\Column(type="string", length=16)
      * @var string

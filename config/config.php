@@ -2,8 +2,6 @@
 
 declare(strict_types=1);
 
-use GuzzleHttp\Client;
-
 return [
     'APP_ENV'         => getenv('EVE_SRP_ENV'),
     'DB_URL'          => getenv('EVE_SRP_DB_URL'),
@@ -12,6 +10,7 @@ return [
     'APP_TITLE'          => getenv('EVE_SRP_APP_TITLE'),
     'APP_LOGO'           => getenv('EVE_SRP_APP_LOGO'),
     'APP_LOGO_ALT'       => getenv('EVE_SRP_APP_LOGO_ALT'),
+    'LOGIN_HINT'         => getenv('EVE_SRP_LOGIN_HINT'),
     'FOOTER_TEXT'        => getenv('EVE_SRP_FOOTER_TEXT'),
 
     // Admin role, group and character providers
@@ -28,10 +27,9 @@ return [
     'SSO_URL_JWT_KEY_SET'  => 'https://login.eveonline.com/oauth/jwks',
 
     // Neucore
-    'CORE_NAME'      => getenv('EVE_SRP_CORE_NAME'),
-    'CORE_DOMAIN'    => getenv('EVE_SRP_CORE_DOMAIN'),
-    'CORE_APP_ID'    => getenv('EVE_SRP_CORE_APP_ID'),
-    'CORE_APP_TOKEN' => getenv('EVE_SRP_CORE_APP_TOKEN'),
+    'NEUCORE_DOMAIN'    => getenv('EVE_SRP_NEUCORE_DOMAIN'),
+    'NEUCORE_APP_ID'    => getenv('EVE_SRP_NEUCORE_APP_ID'),
+    'NEUCORE_APP_TOKEN' => getenv('EVE_SRP_NEUCORE_APP_TOKEN'),
 
     // other stuff
     'HTTP_USER_AGENT'    => getenv('EVE_SRP_HTTP_USER_AGENT'),

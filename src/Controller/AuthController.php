@@ -82,8 +82,6 @@ class AuthController
             'logo'        => $this->settings['APP_LOGO'],
             'logoAltText' => $this->settings['APP_LOGO_ALT'],
             'loginUrl'    => $this->authenticationProvider->buildLoginUrl($state),
-            'coreUrl'     => $this->settings['CORE_DOMAIN'],
-            'coreName'    => $this->settings['CORE_NAME'],
         ]);
     }
 

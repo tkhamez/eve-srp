@@ -34,13 +34,15 @@ class GlobalData
     }
 
     /** @noinspection PhpUnused */
+    public function loginHint(): string
+    {
+        return $this->replaceMarkdownLink(htmlspecialchars($this->settings['LOGIN_HINT']));
+    }
+
+    /** @noinspection PhpUnused */
     public function footerText(): string
     {
-        return preg_replace(
-            '#(http[s]?://\S+)\s*#ims',
-            '<a href="$1" target="_blank">$1</a> ',
-            htmlspecialchars($this->settings['FOOTER_TEXT'])
-        );
+        return $this->replaceMarkdownLink(htmlspecialchars($this->settings['FOOTER_TEXT']));
     }
 
     /** @noinspection PhpUnused */
@@ -60,5 +62,14 @@ class GlobalData
     private function getUser(): ?User
     {
         return $this->userService->getAuthenticatedUser();
+    }
+
+    private function replaceMarkdownLink($text)
+    {
+        return preg_replace(
+            '/\[(.*?)\]\((.*?)\)/',
+            '<a href="$2" target="_blank">$1</a> ',
+            $text
+        );
     }
 }

@@ -1,5 +1,5 @@
 {
-  "name": "@bravecollective/eve-srp",
+  "name": "@tkhamez/eve-srp",
   "private": true,
   "license": "MIT",
   "dependencies": {

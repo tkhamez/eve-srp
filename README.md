@@ -1,4 +1,4 @@
-# Brave Collective - SRP
+# EVE-SRP
 
 ## Install/Update
 
@@ -59,4 +59,4 @@ INSERT INTO eve_srp.user_external_group (user_id, external_group_id)
     SELECT users_groups.user_id, group_id FROM evesrp.users_groups
 ```
 
-permission "audit" is not copied.
+The permission "audit" is not copied.

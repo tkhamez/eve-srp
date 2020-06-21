@@ -108,12 +108,12 @@ return [
     // Neucore API
     ApplicationApi::class => function (ContainerInterface $container) {
         $apiKey = base64_encode(
-            $container->get('settings')['CORE_APP_ID'] .
+            $container->get('settings')['NEUCORE_APP_ID'] .
             ':' .
-            $container->get('settings')['CORE_APP_TOKEN']
+            $container->get('settings')['NEUCORE_APP_TOKEN']
         );
         $config = Configuration::getDefaultConfiguration();
-        $config->setHost($container->get('settings')['CORE_DOMAIN'].'/api');
+        $config->setHost($container->get('settings')['NEUCORE_DOMAIN'].'/api');
         $config->setAccessToken($apiKey);
         return new ApplicationApi($container->get(ClientInterface::class), $config);
     },

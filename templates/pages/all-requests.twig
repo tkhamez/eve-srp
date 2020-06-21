@@ -23,11 +23,11 @@
                     <select class="form-control bg-dark-4 text-light" id="status" name="status">
                         <option></option>
                         {% for status in [
-                            constant('Brave\\EveSrp\\Type::INCOMPLETE'),
-                            constant('Brave\\EveSrp\\Type::EVALUATING'),
-                            constant('Brave\\EveSrp\\Type::APPROVED'),
-                            constant('Brave\\EveSrp\\Type::REJECTED'),
-                            constant('Brave\\EveSrp\\Type::PAID'),
+                            constant('EveSrp\\Type::INCOMPLETE'),
+                            constant('EveSrp\\Type::EVALUATING'),
+                            constant('EveSrp\\Type::APPROVED'),
+                            constant('EveSrp\\Type::REJECTED'),
+                            constant('EveSrp\\Type::PAID'),
                         ] %}
                             <option {% if selectedStatus == status %}selected{% endif %}>{{ status }}</option>
                         {% endfor %}

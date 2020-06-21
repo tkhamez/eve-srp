@@ -30,7 +30,7 @@ class Action
     private $created;
 
     /**
-     * Action category/type: one of the Brave\EveSrp\Type constants.
+     * Action category/type: one of the EveSrp\Type constants.
      * 
      * @ORM\Column(type="string", length=16)
      * @var string
