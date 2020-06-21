@@ -8,11 +8,10 @@ namespace EveSrp\Controller;
 use EveSrp\Controller\Traits\TwigResponse;
 use EveSrp\FlashMessage;
 use EveSrp\Provider\GroupProviderInterface;
-use EveSrp\SrpException;
+use EveSrp\Exception;
 use EveSrp\Service\UserService;
 use Brave\Sso\Basics\AuthenticationProvider;
 use Brave\Sso\Basics\SessionHandlerInterface;
-use Exception;
 use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
@@ -72,7 +71,7 @@ class AuthController
     {
         try {
             $state = $this->authenticationProvider->generateState();
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             $state = uniqid('srp', true);
         }
         $this->session->set('ssoState', $state);
@@ -113,13 +112,13 @@ class AuthController
         $user = $this->userService->getUser($eveAuth);
         try {
             $this->userService->syncCharacters($user, $eveAuth->getCharacterId());
-        } catch (SrpException $e) {
+        } catch (Exception $e) {
             error_log('AuthController::auth(): ' . $e->getMessage());
             $this->flashMessage->addMessage('Failed to sync characters.', FlashMessage::TYPE_DANGER);
         }
         try {
             $this->userService->syncGroups($eveAuth->getCharacterId(), $user);
-        } catch (SrpException $e) {
+        } catch (Exception $e) {
             error_log('AuthController::auth(): ' . $e->getMessage());
             $this->flashMessage->addMessage('Failed to sync groups.', FlashMessage::TYPE_DANGER);
         }

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace EveSrp\Provider;
 
-use EveSrp\SrpException;
+use EveSrp\Exception;
 use Brave\NeucoreApi\Api\ApplicationApi;
 use Brave\NeucoreApi\ApiException;
 use Brave\NeucoreApi\Model\Group;
@@ -30,7 +30,7 @@ class NeucoreGroupProvider implements GroupProviderInterface
         try {
             $groups = $this->api->groupsV2($eveCharacterId);
         } catch (ApiException | InvalidArgumentException $e) {
-            throw new SrpException('NeucoreGroupProvider::getGroups: ' . $e->getMessage());
+            throw new Exception('NeucoreGroupProvider::getGroups: ' . $e->getMessage());
         }
 
         return array_map(function (Group $group) {
@@ -41,14 +41,14 @@ class NeucoreGroupProvider implements GroupProviderInterface
     /**
      * Returns all groups that a character can have.
      *
-     * @throws SrpException
+     * @throws Exception
      */
     public function getAvailableGroups(): array
     {
         try {
             $app = $this->api->showV1();
         } catch (ApiException | InvalidArgumentException $e) {
-            throw new SrpException('NeucoreGroupProvider::getAvailableGroups: ' . $e->getMessage());
+            throw new Exception('NeucoreGroupProvider::getAvailableGroups: ' . $e->getMessage());
         }
 
         return array_map(function (Group $group) {

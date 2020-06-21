@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace EveSrp\Provider;
 
-use EveSrp\SrpException;
+use EveSrp\Exception;
 
 interface GroupProviderInterface
 {
@@ -16,8 +16,8 @@ interface GroupProviderInterface
      * This is called after each character login.
      * 
      * @param int $eveCharacterId EVE character ID of logged in user
-     * @throws SrpException
      * @return string[] Array of unique group names, e. g. ['submitter', 'admin']
+     * @throws Exception
      */
     public function getGroups(int $eveCharacterId): array;
 
@@ -26,8 +26,8 @@ interface GroupProviderInterface
      *
      * This can be called manually by an admin.
      *
-     * @throws SrpException
      * @return string[]
+     * @throws Exception
      */
     public function getAvailableGroups(): array;
 }

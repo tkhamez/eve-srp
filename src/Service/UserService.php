@@ -16,7 +16,7 @@ use EveSrp\Repository\ExternalGroupRepository;
 use EveSrp\Repository\PermissionRepository;
 use EveSrp\Repository\UserRepository;
 use EveSrp\Security;
-use EveSrp\SrpException;
+use EveSrp\Exception;
 use Brave\Sso\Basics\EveAuthentication;
 use Brave\Sso\Basics\SessionHandlerInterface;
 use Doctrine\ORM\EntityManagerInterface;
@@ -217,7 +217,7 @@ class UserService
     /**
      * Syncs EVE alts of logged in user.
      *
-     * @throws SrpException
+     * @throws Exception
      */
     public function syncCharacters(User $user, int $characterId)
     {
@@ -278,7 +278,7 @@ class UserService
      *
      * @param int $characterId
      * @param User $user
-     * @throws SrpException
+     * @throws Exception
      */
     public function syncGroups(int $characterId, User $user): void
     {

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace EveSrp\Provider;
 
-use EveSrp\SrpException;
+use EveSrp\Exception;
 use Brave\NeucoreApi\Api\ApplicationApi;
 use Brave\NeucoreApi\ApiException;
 use Brave\NeucoreApi\Model\Character;
@@ -49,7 +49,7 @@ class NeucoreCharacterProvider implements CharacterProviderInterface
     {
         try {
             $this->fetchCharacters($characterId);
-        } catch (SrpException $e) {
+        } catch (Exception $e) {
             return null;
         }
 
@@ -72,7 +72,7 @@ class NeucoreCharacterProvider implements CharacterProviderInterface
     }
 
     /**
-     * @throws SrpException
+     * @throws Exception
      */
     private function fetchCharacters(int $characterId): void
     {
@@ -84,7 +84,7 @@ class NeucoreCharacterProvider implements CharacterProviderInterface
         try {
             $this->characters = $this->api->charactersV1($characterId);
         } catch (ApiException | InvalidArgumentException $e) {
-            throw new SrpException('NeucoreCharacterProvider::fetchCharacters: ' . $e->getMessage());
+            throw new Exception('NeucoreCharacterProvider::fetchCharacters: ' . $e->getMessage());
         }
     }
 }

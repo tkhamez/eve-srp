@@ -8,7 +8,6 @@ use DI\ContainerBuilder;
 use DI\DependencyException;
 use DI\NotFoundException;
 use Dotenv\Dotenv;
-use Exception;
 use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ResponseFactoryInterface;
 use Slim\App;
@@ -29,7 +28,7 @@ class Bootstrap
 
     /**
      * Bootstrap constructor
-     * @throws Exception
+     * @throws \Exception
      */
     public function __construct()
     {
@@ -57,7 +56,7 @@ class Bootstrap
         
         try {
             $this->addMiddleware($app);
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             error_log('Bootstrap::run(): ' . $e->getMessage());
         }
 

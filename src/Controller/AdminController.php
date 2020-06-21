@@ -7,7 +7,7 @@ namespace EveSrp\Controller;
 
 use EveSrp\Controller\Traits\RequestParameter;
 use EveSrp\Controller\Traits\TwigResponse;
-use EveSrp\SrpException;
+use EveSrp\Exception;
 use EveSrp\FlashMessage;
 use EveSrp\Model\Division;
 use EveSrp\Model\ExternalGroup;
@@ -137,7 +137,7 @@ class AdminController
     {
         try {
             $externalGroupNames = $this->groupProvider->getAvailableGroups();
-        } catch (SrpException $e) {
+        } catch (Exception $e) {
             error_log('AdminController::syncGroups(): ' . $e->getMessage());
             $this->flashMessage->addMessage('Failed to sync groups.', FlashMessage::TYPE_DANGER);
             return $response->withHeader('Location', '/admin/groups');

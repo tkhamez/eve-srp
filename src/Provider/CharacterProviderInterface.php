@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace EveSrp\Provider;
 
-use EveSrp\SrpException;
+use EveSrp\Exception;
 use Psr\Container\ContainerInterface;
 
 interface CharacterProviderInterface
@@ -20,8 +20,8 @@ interface CharacterProviderInterface
      * This is called after each character login.
      *
      * @param int $characterId EVE character ID
-     * @throws SrpException
      * @return int[] Array of EVE character IDs
+     *@throws Exception
      */
     public function getCharacters(int $characterId): array;
 
