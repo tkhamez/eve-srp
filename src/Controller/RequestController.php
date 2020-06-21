@@ -34,6 +34,7 @@ class RequestController
     private const STRUCTURE_SERVICE_SLOT = 'Structure service slot';
     private const SUB_SYSTEM_SLOT = 'Sub system slot';
     private const IMPLANT = 'Implant';
+    private const SHIP_HANGAR = 'Ship Hangar';
     private const FLEET_HANGAR = 'Fleet Hangar';
     private const SPECIALIZED_FUEL_BAY = 'Specialized Fuel Bay';
     private const SPECIALIZED_ORE_HOLD = 'Specialized Ore Hold';
@@ -90,6 +91,7 @@ class RequestController
         87 => self::DRONE_BAY, # DroneBay
         158 => self::FIGHTER_BAY, # FighterBay
         89 => self::IMPLANT, # Implant
+        90 => self::SHIP_HANGAR, # ShipHangar
         155 => self::FLEET_HANGAR, # FleetHangar
 
         27 => self::HIGH_POWER_SLOT, # HiSlot0
@@ -155,6 +157,7 @@ class RequestController
         self::CARGO,
         self::DRONE_BAY,
         self::FIGHTER_BAY,
+        self::SHIP_HANGAR,
         self::FLEET_HANGAR,
         self::SPECIALIZED_FUEL_BAY,
         self::SPECIALIZED_ORE_HOLD,
@@ -304,8 +307,8 @@ class RequestController
                     'item_type_name' => $this->getEsiTypeName($item->item_type_id),
                 ];
             } elseif ($groupName) {
-                // only one item per slot
-                $itemGroups[$groupName][$item->flag][0] = [
+                // only one item per slot or hangars etc.
+                $itemGroups[$groupName][][0] = [
                     'item_type_id' => $item->item_type_id,
                     'item_type_name' => $this->getEsiTypeName($item->item_type_id),
                 ];

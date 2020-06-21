@@ -10,7 +10,7 @@
                 <th>Created</th>
                 <th>Division</th>
                 <th>Status</th>
-                <th>Payout</th>
+                <th class="text-right">Payout</th>
             </tr>
         </thead>
         <tbody>
@@ -31,7 +31,7 @@
                     <td>{{ request.created|date('Y-m-d H:i') }}</td>
                     <td>{{ request.division.name }}</td>
                     <td>{{ request.status }}</td>
-                    <td>
+                    <td class="text-right">
                         {% if request.payout is not null %}
                             {{ request.payout|number_format }}
                         {% endif %}
