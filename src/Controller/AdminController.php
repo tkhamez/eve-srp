@@ -138,7 +138,8 @@ class AdminController
         try {
             $externalGroupNames = $this->groupProvider->getAvailableGroups();
         } catch (SrpException $e) {
-            $this->flashMessage->addMessage($e->getMessage(), FlashMessage::TYPE_DANGER);
+            error_log('AdminController::syncGroups(): ' . $e->getMessage());
+            $this->flashMessage->addMessage('Failed to sync groups.', FlashMessage::TYPE_DANGER);
             return $response->withHeader('Location', '/admin/groups');
         }
 

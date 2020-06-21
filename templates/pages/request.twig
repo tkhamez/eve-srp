@@ -28,7 +28,6 @@
                 <div>pilot: {{ request.pilot.id }} {{ request.pilot.name }}</div>
                 <div>corporation: {{ request.corporation }}</div>
                 <div>alliance: {{ request.alliance }}</div>
-                <div>ship: {{ request.ship }}</div>
                 <div>killTime: {{ request.killTime|date('Y-m-d H:i') }}</div>
                 <div>solarSystem: {{ request.solarSystem }}</div>
                 <div>killboardUrl: {{ request.killboardUrl }}</div>
@@ -38,6 +37,23 @@
                 <div>payout: {{ request.payout }}</div>
                 <div>status: {{ request.status }}</div>
             {% endif %}
+        </div>
+        <div class="col">
+            <div>ship: {{ request.ship }}</div>
+            {% for slot, itemsInSlot in items %}
+                <div>
+                    <strong>{{ slot }}</strong>
+                    {% for itemSlot in itemsInSlot %}
+                        <div>
+                            {% for item in itemSlot %}
+                                <img src="https://images.evetech.net/types/{{ item.item_type_id }}/icon?size=32"
+                                     alt="{{ item.item_type_id }}">
+                                {{ item.item_type_name }}
+                            {% endfor %}
+                        </div>
+                    {% endfor %}
+                </div>
+            {% endfor %}
         </div>
     </div>
 {% endblock %}

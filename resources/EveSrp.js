@@ -4,6 +4,7 @@ import $ from 'jquery';
 $(function () {
     initPopover();
     initDeleteDivision();
+    window.setInterval(ping, 300000); // 5 minutes
 });
 
 function initPopover() {
@@ -15,4 +16,8 @@ function initDeleteDivision() {
         const id = $(evt.target).data('id');
         $('.confirm-delete-division input[name="id"]').val(id);
     });
+}
+
+function ping() {
+    $.get('/ping');
 }

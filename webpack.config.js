@@ -31,7 +31,6 @@ module.exports = (env, argv) => {
             }]
         },
         plugins: [
-            new CleanWebpackPlugin(),
             new HtmlWebpackPlugin({
                 template: './resources/css.html',
                 filename: 'css.html',
@@ -59,6 +58,7 @@ module.exports = (env, argv) => {
     };
     if (! devMode) {
         config.plugins.push(new LicenseWebpackPlugin());
+        config.plugins.push(new CleanWebpackPlugin());
     }
     return config;
 };

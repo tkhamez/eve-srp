@@ -6,10 +6,10 @@ use Slim\App;
 
 return function (App $app): void
 {
-    // auth
     $app->get('/login',  Brave\EveSrp\Controller\AuthController::class . ':login');
     $app->get('/auth',   Brave\EveSrp\Controller\AuthController::class . ':auth');
     $app->get('/logout', Brave\EveSrp\Controller\AuthController::class . ':logout');
+    $app->get('/ping',   Brave\EveSrp\Controller\PingController::class);
 
     $app->get('/',                     Brave\EveSrp\Controller\MyRequestsController::class);
     $app->get('/my-requests',          Brave\EveSrp\Controller\MyRequestsController::class);
@@ -17,8 +17,8 @@ return function (App $app): void
     $app->get('/request/{id}/process', Brave\EveSrp\Controller\RequestController::class . ':process');
     $app->get('/submit',               Brave\EveSrp\Controller\SubmitController::class . ':showForm');
     $app->post('/submit',              Brave\EveSrp\Controller\SubmitController::class . ':submitForm');
-    $app->get('/review',               Brave\EveSrp\Controller\ProcessController::class . ':review');
-    $app->get('/pay',                  Brave\EveSrp\Controller\ProcessController::class . ':pay');
+    $app->get('/review',               Brave\EveSrp\Controller\ProcessListsController::class . ':review');
+    $app->get('/pay',                  Brave\EveSrp\Controller\ProcessListsController::class . ':pay');
     $app->get('/all-requests',         Brave\EveSrp\Controller\AllRequestsController::class);
 
     $app->get ('/admin/divisions',        Brave\EveSrp\Controller\AdminController::class . ':divisions');

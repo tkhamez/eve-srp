@@ -34,7 +34,7 @@ return [
     'CORE_APP_TOKEN' => getenv('EVE_SRP_CORE_APP_TOKEN'),
 
     // other stuff
-    'HTTP_USER_AGENT'    => 'EVE-SRP/1.0 (https://github.com/bravecollective/eve-srp) GuzzleHttp/' . Client::VERSION,
+    'HTTP_USER_AGENT'    => getenv('EVE_SRP_HTTP_USER_AGENT'),
     'ESI_BASE_URL'       => 'https://esi.evetech.net/',
-    'KILLBOARD_BASE_URL' => 'https://zkillboard.com/',
+    'ZKILLBOARD_BASE_URL' => getenv('EVE_SRP_ZKILLBOARD_URL'),
 ];

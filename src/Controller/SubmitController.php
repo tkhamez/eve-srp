@@ -92,7 +92,7 @@ class SubmitController
         $this->flashMessage = $container->get(FlashMessage::class);
         $this->httpClient = $container->get(ClientInterface::class);
         $this->esiBaseUrl = $container->get('settings')['ESI_BASE_URL'];
-        $this->killboardBaseUrl = $container->get('settings')['KILLBOARD_BASE_URL'];
+        $this->killboardBaseUrl = $container->get('settings')['ZKILLBOARD_BASE_URL'];
 
         $this->twigResponse($container->get(Environment::class));
     }
@@ -107,6 +107,7 @@ class SubmitController
             'selectedDivision' => $this->inputDivision,
             'url' => $this->inputUrl,
             'details' => $this->inputDetails,
+            'killboardUrl' => $this->killboardBaseUrl,
         ]);
     }
 
@@ -172,15 +173,15 @@ class SubmitController
         return $request;
     }
 
+    /**
+     * @param string $url e.g. https://zkillboard.com/kill/82474608/
+     * @return string|null
+     */
     private function getEsiUrlFromKillboard(string $url): ?string
     {
-        # e.g. from https://zkillboard.com/kill/82474608/
-        # to https://zkillboard.com/api/killID/82474608/
-        # to https://esi.evetech.net/latest/killmails/82474608/1db01ff6c95dc8b750e63a51796f18f5cce5b774/
-
         $killId = end(explode('/', rtrim($url, '/')));
 
-        $killboardData = $this->getApiData("https://zkillboard.com/api/killID/$killId/", 'zKillboard');
+        $killboardData = $this->getApiData("{$this->killboardBaseUrl}api/killID/$killId/", 'zKillboard');
         if ($killboardData === null || ! isset($killboardData[0])) {
             return null;
         }

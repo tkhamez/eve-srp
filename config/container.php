@@ -5,6 +5,7 @@ declare(strict_types=1);
 use Brave\EveSrp\Model\Action;
 use Brave\EveSrp\Model\Character;
 use Brave\EveSrp\Model\Division;
+use Brave\EveSrp\Model\EsiType;
 use Brave\EveSrp\Model\ExternalGroup;
 use Brave\EveSrp\Model\Permission;
 use Brave\EveSrp\Model\Request;
@@ -15,6 +16,7 @@ use Brave\EveSrp\Provider\RoleProvider;
 use Brave\EveSrp\Repository\ActionRepository;
 use Brave\EveSrp\Repository\CharacterRepository;
 use Brave\EveSrp\Repository\DivisionRepository;
+use Brave\EveSrp\Repository\EsiTypeRepository;
 use Brave\EveSrp\Repository\ExternalGroupRepository;
 use Brave\EveSrp\Repository\PermissionRepository;
 use Brave\EveSrp\Repository\RequestRepository;
@@ -153,6 +155,10 @@ return [
     DivisionRepository::class => function (ContainerInterface $container) {
         $em = $container->get(EntityManagerInterface::class);
         return new DivisionRepository($em, $em->getClassMetadata(Division::class));
+    },
+    EsiTypeRepository::class => function (ContainerInterface $container) {
+        $em = $container->get(EntityManagerInterface::class);
+        return new EsiTypeRepository($em, $em->getClassMetadata(EsiType::class));
     },
     ExternalGroupRepository::class => function (ContainerInterface $container) {
         $em = $container->get(EntityManagerInterface::class);

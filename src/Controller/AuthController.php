@@ -116,12 +116,14 @@ class AuthController
         try {
             $this->userService->syncCharacters($user, $eveAuth->getCharacterId());
         } catch (SrpException $e) {
-            $this->flashMessage->addMessage($e->getMessage(), FlashMessage::TYPE_DANGER);
+            error_log('AuthController::auth(): ' . $e->getMessage());
+            $this->flashMessage->addMessage('Failed to sync characters.', FlashMessage::TYPE_DANGER);
         }
         try {
             $this->userService->syncGroups($eveAuth->getCharacterId(), $user);
         } catch (SrpException $e) {
-            $this->flashMessage->addMessage($e->getMessage(), FlashMessage::TYPE_DANGER);
+            error_log('AuthController::auth(): ' . $e->getMessage());
+            $this->flashMessage->addMessage('Failed to sync groups.', FlashMessage::TYPE_DANGER);
         }
         $this->sessionHandler->set('userId', $user->getId());
 

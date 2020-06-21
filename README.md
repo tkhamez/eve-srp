@@ -13,6 +13,25 @@
 
 Log messages are send to the file specified in the `error_log` configuration.
 
+## Development
+
+### Build Frontend
+
+Install dependencies:
+```
+npm i
+```
+
+Production build:
+```
+npm run build
+```
+
+During development:
+```
+npm run watch
+```
+
 ## Migration from paxswill/evesrp
 
 Databases: evesrp => eve_srp
@@ -41,12 +60,3 @@ INSERT INTO eve_srp.user_external_group (user_id, external_group_id)
 ```
 
 permission "audit" is not copied.
-
-## Development
-
-### Rebuild Frontend
-
-```
-npm i
-npm run build
-```
