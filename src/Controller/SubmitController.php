@@ -3,19 +3,19 @@
 
 declare(strict_types=1);
 
-namespace Brave\EveSrp\Controller;
+namespace EveSrp\Controller;
 
-use Brave\EveSrp\Controller\Traits\RequestParameter;
-use Brave\EveSrp\Controller\Traits\TwigResponse;
-use Brave\EveSrp\FlashMessage;
-use Brave\EveSrp\Model\Character;
-use Brave\EveSrp\Model\Permission;
-use Brave\EveSrp\Model\Request;
-use Brave\EveSrp\Repository\CharacterRepository;
-use Brave\EveSrp\Repository\DivisionRepository;
-use Brave\EveSrp\Service\ApiService;
-use Brave\EveSrp\Type;
-use Brave\EveSrp\Service\UserService;
+use EveSrp\Controller\Traits\RequestParameter;
+use EveSrp\Controller\Traits\TwigResponse;
+use EveSrp\FlashMessage;
+use EveSrp\Model\Character;
+use EveSrp\Model\Permission;
+use EveSrp\Model\Request;
+use EveSrp\Repository\CharacterRepository;
+use EveSrp\Repository\DivisionRepository;
+use EveSrp\Service\ApiService;
+use EveSrp\Type;
+use EveSrp\Service\UserService;
 use Doctrine\ORM\EntityManagerInterface;
 use GuzzleHttp\ClientInterface;
 use Psr\Container\ContainerInterface;

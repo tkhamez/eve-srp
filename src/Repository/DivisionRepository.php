@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Brave\EveSrp\Repository;
+namespace EveSrp\Repository;
 
-use Brave\EveSrp\Model\Division;
+use EveSrp\Model\Division;
 use Doctrine\ORM\EntityRepository;
 
 /**

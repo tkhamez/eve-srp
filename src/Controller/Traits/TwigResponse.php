@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Brave\EveSrp\Controller\Traits;
+namespace EveSrp\Controller\Traits;
 
 use Psr\Http\Message\ResponseInterface;
 use Twig\Environment;

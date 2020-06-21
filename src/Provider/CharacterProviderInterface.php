@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Brave\EveSrp\Provider;
+namespace EveSrp\Provider;
 
-use Brave\EveSrp\SrpException;
+use EveSrp\SrpException;
 use Psr\Container\ContainerInterface;
 
 interface CharacterProviderInterface

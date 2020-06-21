@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Brave\EveSrp\Provider;
+namespace EveSrp\Provider;
 
-use Brave\EveSrp\SrpException;
+use EveSrp\SrpException;
 use Brave\NeucoreApi\Api\ApplicationApi;
 use Brave\NeucoreApi\ApiException;
 use Brave\NeucoreApi\Model\Character;

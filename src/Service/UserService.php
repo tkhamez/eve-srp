@@ -1,22 +1,22 @@
 <?php
 
-namespace Brave\EveSrp\Service;
+namespace EveSrp\Service;
 
-use Brave\EveSrp\Model\Character;
-use Brave\EveSrp\Model\Division;
-use Brave\EveSrp\Model\ExternalGroup;
-use Brave\EveSrp\Model\Permission;
-use Brave\EveSrp\Model\Request;
-use Brave\EveSrp\Model\User;
-use Brave\EveSrp\Provider\CharacterProviderInterface;
-use Brave\EveSrp\Provider\GroupProviderInterface;
-use Brave\EveSrp\Repository\CharacterRepository;
-use Brave\EveSrp\Repository\DivisionRepository;
-use Brave\EveSrp\Repository\ExternalGroupRepository;
-use Brave\EveSrp\Repository\PermissionRepository;
-use Brave\EveSrp\Repository\UserRepository;
-use Brave\EveSrp\Security;
-use Brave\EveSrp\SrpException;
+use EveSrp\Model\Character;
+use EveSrp\Model\Division;
+use EveSrp\Model\ExternalGroup;
+use EveSrp\Model\Permission;
+use EveSrp\Model\Request;
+use EveSrp\Model\User;
+use EveSrp\Provider\CharacterProviderInterface;
+use EveSrp\Provider\GroupProviderInterface;
+use EveSrp\Repository\CharacterRepository;
+use EveSrp\Repository\DivisionRepository;
+use EveSrp\Repository\ExternalGroupRepository;
+use EveSrp\Repository\PermissionRepository;
+use EveSrp\Repository\UserRepository;
+use EveSrp\Security;
+use EveSrp\SrpException;
 use Brave\Sso\Basics\EveAuthentication;
 use Brave\Sso\Basics\SessionHandlerInterface;
 use Doctrine\ORM\EntityManagerInterface;

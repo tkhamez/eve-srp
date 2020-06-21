@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Brave\EveSrp;
+namespace EveSrp;
 
 use DI\ContainerBuilder;
 use DI\DependencyException;

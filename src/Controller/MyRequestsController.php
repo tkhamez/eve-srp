@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Brave\EveSrp\Controller;
+namespace EveSrp\Controller;
 
-use Brave\EveSrp\Controller\Traits\TwigResponse;
-use Brave\EveSrp\Service\UserService;
+use EveSrp\Controller\Traits\TwigResponse;
+use EveSrp\Service\UserService;
 use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;

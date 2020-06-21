@@ -5,7 +5,7 @@
 
 declare(strict_types=1);
 
-use Brave\EveSrp\Bootstrap;
+use EveSrp\Bootstrap;
 use Doctrine\DBAL\Tools\Console\Helper\ConnectionHelper;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Tools\Console\Helper\EntityManagerHelper;

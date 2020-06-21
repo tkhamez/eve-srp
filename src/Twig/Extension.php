@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Brave\EveSrp\Twig;
+namespace EveSrp\Twig;
 
-use Brave\EveSrp\FlashMessage;
-use Brave\EveSrp\Service\UserService;
+use EveSrp\FlashMessage;
+use EveSrp\Service\UserService;
 use Psr\Container\ContainerInterface;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFunction;

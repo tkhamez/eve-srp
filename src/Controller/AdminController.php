@@ -3,19 +3,19 @@
 
 declare(strict_types=1);
 
-namespace Brave\EveSrp\Controller;
+namespace EveSrp\Controller;
 
-use Brave\EveSrp\Controller\Traits\RequestParameter;
-use Brave\EveSrp\Controller\Traits\TwigResponse;
-use Brave\EveSrp\SrpException;
-use Brave\EveSrp\FlashMessage;
-use Brave\EveSrp\Model\Division;
-use Brave\EveSrp\Model\ExternalGroup;
-use Brave\EveSrp\Model\Permission;
-use Brave\EveSrp\Provider\GroupProviderInterface;
-use Brave\EveSrp\Repository\DivisionRepository;
-use Brave\EveSrp\Repository\ExternalGroupRepository;
-use Brave\EveSrp\Service\UserService;
+use EveSrp\Controller\Traits\RequestParameter;
+use EveSrp\Controller\Traits\TwigResponse;
+use EveSrp\SrpException;
+use EveSrp\FlashMessage;
+use EveSrp\Model\Division;
+use EveSrp\Model\ExternalGroup;
+use EveSrp\Model\Permission;
+use EveSrp\Provider\GroupProviderInterface;
+use EveSrp\Repository\DivisionRepository;
+use EveSrp\Repository\ExternalGroupRepository;
+use EveSrp\Service\UserService;
 use Doctrine\ORM\EntityManagerInterface;
 use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ResponseInterface;
@@ -53,7 +53,7 @@ class AdminController
     private $flashMessage;
 
     /**
-     * @var \Brave\EveSrp\Service\UserService
+     * @var \EveSrp\Service\UserService
      */
     private $userService;
 

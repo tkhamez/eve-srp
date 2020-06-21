@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-use Brave\EveSrp\Bootstrap;
+use EveSrp\Bootstrap;
 
 require_once(__DIR__ . '/../vendor/autoload.php');
 

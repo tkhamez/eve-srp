@@ -1,6 +1,6 @@
 <?php
 
-namespace Brave\EveSrp\Service;
+namespace EveSrp\Service;
 
 use GuzzleHttp\ClientInterface;
 use GuzzleHttp\Exception\GuzzleException;

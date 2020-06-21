@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Brave\EveSrp\Repository;
+namespace EveSrp\Repository;
 
-use Brave\EveSrp\Model\Permission;
+use EveSrp\Model\Permission;
 use Doctrine\ORM\EntityRepository;
 
 /**

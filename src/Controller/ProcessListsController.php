@@ -3,14 +3,14 @@
 
 declare(strict_types=1);
 
-namespace Brave\EveSrp\Controller;
+namespace EveSrp\Controller;
 
-use Brave\EveSrp\Controller\Traits\TwigResponse;
-use Brave\EveSrp\Model\Division;
-use Brave\EveSrp\Model\Permission;
-use Brave\EveSrp\Repository\RequestRepository;
-use Brave\EveSrp\Type;
-use Brave\EveSrp\Service\UserService;
+use EveSrp\Controller\Traits\TwigResponse;
+use EveSrp\Model\Division;
+use EveSrp\Model\Permission;
+use EveSrp\Repository\RequestRepository;
+use EveSrp\Type;
+use EveSrp\Service\UserService;
 use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;

@@ -1,6 +1,6 @@
 <?php
 
-namespace Brave\EveSrp;
+namespace EveSrp;
 
 class SrpException extends \Exception
 {

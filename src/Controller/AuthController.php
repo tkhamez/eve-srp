@@ -3,13 +3,13 @@
 
 declare(strict_types=1);
 
-namespace Brave\EveSrp\Controller;
+namespace EveSrp\Controller;
 
-use Brave\EveSrp\Controller\Traits\TwigResponse;
-use Brave\EveSrp\FlashMessage;
-use Brave\EveSrp\Provider\GroupProviderInterface;
-use Brave\EveSrp\SrpException;
-use Brave\EveSrp\Service\UserService;
+use EveSrp\Controller\Traits\TwigResponse;
+use EveSrp\FlashMessage;
+use EveSrp\Provider\GroupProviderInterface;
+use EveSrp\SrpException;
+use EveSrp\Service\UserService;
 use Brave\Sso\Basics\AuthenticationProvider;
 use Brave\Sso\Basics\SessionHandlerInterface;
 use Exception;

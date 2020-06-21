@@ -3,9 +3,9 @@
 
 declare(strict_types=1);
 
-namespace Brave\EveSrp\Model;
+namespace EveSrp\Model;
 
-use Brave\EveSrp\Type;
+use EveSrp\Type;
 use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;

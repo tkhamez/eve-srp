@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Brave\EveSrp\Controller;
+namespace EveSrp\Controller;
 
 use Brave\Sso\Basics\SessionHandlerInterface;
 use Psr\Container\ContainerInterface;

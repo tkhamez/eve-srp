@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Brave\EveSrp\Provider;
+namespace EveSrp\Provider;
 
-use Brave\EveSrp\Model\User;
-use Brave\EveSrp\Security;
-use Brave\EveSrp\Service\UserService;
+use EveSrp\Model\User;
+use EveSrp\Security;
+use EveSrp\Service\UserService;
 use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Tkhamez\Slim\RoleAuth\RoleProviderInterface;
@@ -17,7 +17,7 @@ use Tkhamez\Slim\RoleAuth\RoleProviderInterface;
 class RoleProvider implements RoleProviderInterface
 {
     /**
-     * @var \Brave\EveSrp\Service\UserService
+     * @var \EveSrp\Service\UserService
      */
     private $userService;
 

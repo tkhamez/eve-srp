@@ -3,15 +3,15 @@
 
 declare(strict_types=1);
 
-namespace Brave\EveSrp\Controller;
+namespace EveSrp\Controller;
 
-use Brave\EveSrp\Controller\Traits\TwigResponse;
-use Brave\EveSrp\Model\EsiType;
-use Brave\EveSrp\Model\Request;
-use Brave\EveSrp\Repository\EsiTypeRepository;
-use Brave\EveSrp\Repository\RequestRepository;
-use Brave\EveSrp\Service\ApiService;
-use Brave\EveSrp\Service\UserService;
+use EveSrp\Controller\Traits\TwigResponse;
+use EveSrp\Model\EsiType;
+use EveSrp\Model\Request;
+use EveSrp\Repository\EsiTypeRepository;
+use EveSrp\Repository\RequestRepository;
+use EveSrp\Service\ApiService;
+use EveSrp\Service\UserService;
 use Doctrine\ORM\EntityManagerInterface;
 use GuzzleHttp\ClientInterface;
 use GuzzleHttp\Exception\GuzzleException;

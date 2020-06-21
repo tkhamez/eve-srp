@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Brave\EveSrp\Twig;
+namespace EveSrp\Twig;
 
-use Brave\EveSrp\Model\Character;
-use Brave\EveSrp\Model\User;
-use Brave\EveSrp\Service\UserService;
+use EveSrp\Model\Character;
+use EveSrp\Model\User;
+use EveSrp\Service\UserService;
 use Psr\Container\ContainerInterface;
 
 class GlobalData

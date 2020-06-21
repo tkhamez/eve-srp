@@ -2,8 +2,8 @@
 
 declare(strict_types=1);
 
-use Brave\EveSrp\Model\Permission;
-use Brave\EveSrp\Security;
+use EveSrp\Model\Permission;
+use EveSrp\Security;
 
 /**
  * Required roles (one of them) for routes.
