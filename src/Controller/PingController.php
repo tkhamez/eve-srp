@@ -14,19 +14,17 @@ class PingController
     /**
      * @var SessionHandlerInterface
      */
-    private $sessionHandler;
+    private $session;
 
     public function __construct(ContainerInterface $container)
     {
-        $this->sessionHandler = $container->get(SessionHandlerInterface::class);
+        $this->session = $container->get(SessionHandlerInterface::class);
     }
 
     public function __invoke(ServerRequestInterface $request, ResponseInterface $response): ResponseInterface
     {
         // prevent session timeout
-        $this->sessionHandler->set('__refresh', time());
-
-        $response->getBody()->write('pong');
+        $this->session->set('__refresh', time());
 
         return $response;
     }

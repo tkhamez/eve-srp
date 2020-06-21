@@ -8,7 +8,7 @@ use Brave\EveSrp\Controller\Traits\TwigResponse;
 use Brave\EveSrp\Model\Permission;
 use Brave\EveSrp\Repository\DivisionRepository;
 use Brave\EveSrp\Repository\RequestRepository;
-use Brave\EveSrp\UserService;
+use Brave\EveSrp\Service\UserService;
 use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;

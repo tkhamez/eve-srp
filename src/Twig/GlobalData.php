@@ -6,7 +6,7 @@ namespace Brave\EveSrp\Twig;
 
 use Brave\EveSrp\Model\Character;
 use Brave\EveSrp\Model\User;
-use Brave\EveSrp\UserService;
+use Brave\EveSrp\Service\UserService;
 use Psr\Container\ContainerInterface;
 
 class GlobalData
@@ -17,7 +17,7 @@ class GlobalData
     private $settings;
 
     /**
-     * @var UserService 
+     * @var UserService
      */
     private $userService;
 

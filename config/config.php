@@ -36,5 +36,5 @@ return [
     // other stuff
     'HTTP_USER_AGENT'    => getenv('EVE_SRP_HTTP_USER_AGENT'),
     'ESI_BASE_URL'       => 'https://esi.evetech.net/',
-    'ZKILLBOARD_BASE_URL' => getenv('EVE_SRP_ZKILLBOARD_URL'),
+    'ZKILLBOARD_BASE_URL' => rtrim(getenv('EVE_SRP_ZKILLBOARD_URL'), '/') . '/',
 ];

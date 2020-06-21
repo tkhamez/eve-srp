@@ -21,10 +21,10 @@ use Brave\EveSrp\Repository\ExternalGroupRepository;
 use Brave\EveSrp\Repository\PermissionRepository;
 use Brave\EveSrp\Repository\RequestRepository;
 use Brave\EveSrp\Repository\UserRepository;
-use Brave\EveSrp\SessionHandler;
+use Brave\EveSrp\Session;
 use Brave\EveSrp\Twig\Extension;
 use Brave\EveSrp\Twig\GlobalData;
-use Brave\EveSrp\UserService;
+use Brave\EveSrp\Service\UserService;
 use Brave\NeucoreApi\Api\ApplicationApi;
 use Brave\NeucoreApi\Configuration;
 use Brave\Sso\Basics\AuthenticationProvider;
@@ -51,7 +51,7 @@ return [
         return new ResponseFactory();
     },
     SessionHandlerInterface::class => function (ContainerInterface $container) {
-        return $container->get(SessionHandler::class);
+        return $container->get(Session::class);
     },
 
     // EVE-SRP

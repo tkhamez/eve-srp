@@ -15,7 +15,7 @@ use Brave\EveSrp\Model\Permission;
 use Brave\EveSrp\Provider\GroupProviderInterface;
 use Brave\EveSrp\Repository\DivisionRepository;
 use Brave\EveSrp\Repository\ExternalGroupRepository;
-use Brave\EveSrp\UserService;
+use Brave\EveSrp\Service\UserService;
 use Doctrine\ORM\EntityManagerInterface;
 use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ResponseInterface;
@@ -53,7 +53,7 @@ class AdminController
     private $flashMessage;
 
     /**
-     * @var UserService
+     * @var \Brave\EveSrp\Service\UserService
      */
     private $userService;
 

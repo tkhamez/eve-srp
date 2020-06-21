@@ -9,7 +9,7 @@ use Brave\EveSrp\Controller\Traits\TwigResponse;
 use Brave\EveSrp\FlashMessage;
 use Brave\EveSrp\Provider\GroupProviderInterface;
 use Brave\EveSrp\SrpException;
-use Brave\EveSrp\UserService;
+use Brave\EveSrp\Service\UserService;
 use Brave\Sso\Basics\AuthenticationProvider;
 use Brave\Sso\Basics\SessionHandlerInterface;
 use Exception;
@@ -31,7 +31,7 @@ class AuthController
     /**
      * @var SessionHandlerInterface
      */
-    private $sessionHandler;
+    private $session;
 
     /**
      * @var GroupProviderInterface
@@ -56,7 +56,7 @@ class AuthController
     public function __construct(ContainerInterface $container)
     {
         $this->settings = $container->get('settings');
-        $this->sessionHandler = $container->get(SessionHandlerInterface::class);
+        $this->session = $container->get(SessionHandlerInterface::class);
         $this->groupProvider = $container->get(GroupProviderInterface::class);
         $this->userService = $container->get(UserService::class);
         $this->authenticationProvider = $container->get(AuthenticationProvider::class);
@@ -75,7 +75,7 @@ class AuthController
         } catch (Exception $e) {
             $state = uniqid('srp', true);
         }
-        $this->sessionHandler->set('ssoState', $state);
+        $this->session->set('ssoState', $state);
 
         return $this->render($response, 'pages/login.twig', [
             'serviceName' => $this->settings['APP_TITLE'],
@@ -104,7 +104,7 @@ class AuthController
         try {
             $eveAuth = $this->authenticationProvider->validateAuthenticationV2(
                 $state,
-                $this->sessionHandler->get('ssoState'),
+                $this->session->get('ssoState'),
                 $code
             );
         } catch (UnexpectedValueException $e) {
@@ -125,7 +125,7 @@ class AuthController
             error_log('AuthController::auth(): ' . $e->getMessage());
             $this->flashMessage->addMessage('Failed to sync groups.', FlashMessage::TYPE_DANGER);
         }
-        $this->sessionHandler->set('userId', $user->getId());
+        $this->session->set('userId', $user->getId());
 
         return $response->withHeader('Location', '/');
     }
@@ -135,7 +135,7 @@ class AuthController
      */
     public function logout(ServerRequestInterface $request, ResponseInterface $response): ResponseInterface
     {
-        $this->sessionHandler->set('userId', null);
+        $this->session->set('userId', null);
 
         return $response->withHeader('Location', '/');
     }

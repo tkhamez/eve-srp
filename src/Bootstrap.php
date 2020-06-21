@@ -105,6 +105,10 @@ class Bootstrap
         // Add routing middleware after SecureRouteMiddleware and RoleMiddleware because they depend on the route.
         $app->addRoutingMiddleware();
 
-        $app->add(new Session(['name' => 'evesrp_session']));
+        $app->add(new Session([
+            'name' => 'evesrp_session',
+            'httponly' => true,
+            'autorefresh' => true,
+        ]));
     }
 }

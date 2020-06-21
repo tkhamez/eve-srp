@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Brave\EveSrp\Controller;
 
 use Brave\EveSrp\Controller\Traits\TwigResponse;
-use Brave\EveSrp\UserService;
+use Brave\EveSrp\Service\UserService;
 use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;

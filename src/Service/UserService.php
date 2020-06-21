@@ -1,6 +1,6 @@
 <?php
 
-namespace Brave\EveSrp;
+namespace Brave\EveSrp\Service;
 
 use Brave\EveSrp\Model\Character;
 use Brave\EveSrp\Model\Division;
@@ -15,6 +15,8 @@ use Brave\EveSrp\Repository\DivisionRepository;
 use Brave\EveSrp\Repository\ExternalGroupRepository;
 use Brave\EveSrp\Repository\PermissionRepository;
 use Brave\EveSrp\Repository\UserRepository;
+use Brave\EveSrp\Security;
+use Brave\EveSrp\SrpException;
 use Brave\Sso\Basics\EveAuthentication;
 use Brave\Sso\Basics\SessionHandlerInterface;
 use Doctrine\ORM\EntityManagerInterface;

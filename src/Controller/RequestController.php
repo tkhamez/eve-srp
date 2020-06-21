@@ -7,9 +7,11 @@ namespace Brave\EveSrp\Controller;
 
 use Brave\EveSrp\Controller\Traits\TwigResponse;
 use Brave\EveSrp\Model\EsiType;
+use Brave\EveSrp\Model\Request;
 use Brave\EveSrp\Repository\EsiTypeRepository;
 use Brave\EveSrp\Repository\RequestRepository;
-use Brave\EveSrp\UserService;
+use Brave\EveSrp\Service\ApiService;
+use Brave\EveSrp\Service\UserService;
 use Doctrine\ORM\EntityManagerInterface;
 use GuzzleHttp\ClientInterface;
 use GuzzleHttp\Exception\GuzzleException;
@@ -22,10 +24,32 @@ class RequestController
 {
     use TwigResponse;
 
+    private const CARGO = 'Cargo';
+    private const DRONE_BAY = 'Drone Bay';
+    private const FIGHTER_BAY = 'Fighter Bay';
+    private const HIGH_POWER_SLOT = 'High power slot';
+    private const MEDIUM_POWER_SLOT = 'Medium power slot';
+    private const LOW_POWER_SLOT = 'Low power slot';
+    private const RIG_POWER_SLOT = 'Rig power slot';
+    private const STRUCTURE_SERVICE_SLOT = 'Structure service slot';
+    private const SUB_SYSTEM_SLOT = 'Sub system slot';
+    private const IMPLANT = 'Implant';
+    private const FLEET_HANGAR = 'Fleet Hangar';
+    private const SPECIALIZED_FUEL_BAY = 'Specialized Fuel Bay';
+    private const SPECIALIZED_ORE_HOLD = 'Specialized Ore Hold';
+    private const SPECIALIZED_MINERAL_HOLD = 'Specialized Mineral Hold';
+    private const SPECIALIZED_AMMO_HOLD = 'Specialized Ammo Hold';
+    private const SPECIALIZED_PLANETARY_COMMODITIES_HOLD = 'Specialized Planetary Commodities Hold';
+
     /**
      * @var UserService
      */
     private $userService;
+
+    /**
+     * @var ApiService
+     */
+    private $apiService;
 
     /**
      * @var EntityManagerInterface
@@ -53,104 +77,136 @@ class RequestController
     private $esiBaseUrl;
 
     /**
-     * @var int[]
+     * @var string
      */
-    private $primarySlots = [
+    private $killboardBaseUrl;
+
+    /**
+     * @var array
+     */
+    private $slotGroups = [
         // see invFlags.yaml from SDE https://developers.eveonline.com/resource/resources
-        5 => 'Cargo',
-        87 => 'Drone Bay', # DroneBay
-        158 => 'Fighter Bay', # FighterBay
+        5 => self::CARGO, # Cargo
+        87 => self::DRONE_BAY, # DroneBay
+        158 => self::FIGHTER_BAY, # FighterBay
+        89 => self::IMPLANT, # Implant
+        155 => self::FLEET_HANGAR, # FleetHangar
 
-        27 => 'High power slot', # HiSlot0
-        28 => 'High power slot', # HiSlot1
-        29 => 'High power slot', # HiSlot2
-        30 => 'High power slot', # HiSlot3
-        31 => 'High power slot', # HiSlot4
-        32 => 'High power slot', # HiSlot5
-        33 => 'High power slot', # HiSlot6
-        34 => 'High power slot', # HiSlot7
+        27 => self::HIGH_POWER_SLOT, # HiSlot0
+        28 => self::HIGH_POWER_SLOT, # HiSlot1
+        29 => self::HIGH_POWER_SLOT, # HiSlot2
+        30 => self::HIGH_POWER_SLOT, # HiSlot3
+        31 => self::HIGH_POWER_SLOT, # HiSlot4
+        32 => self::HIGH_POWER_SLOT, # HiSlot5
+        33 => self::HIGH_POWER_SLOT, # HiSlot6
+        34 => self::HIGH_POWER_SLOT, # HiSlot7
 
-        19 => 'Medium power slot', # MedSlot0
-        20 => 'Medium power slot', # MedSlot1
-        21 => 'Medium power slot', # MedSlot2
-        22 => 'Medium power slot', # MedSlot3
-        23 => 'Medium power slot', # MedSlot4
-        24 => 'Medium power slot', # MedSlot5
-        25 => 'Medium power slot', # MedSlot6
-        26 => 'Medium power slot', # MedSlot7
+        19 => self::MEDIUM_POWER_SLOT, # MedSlot0
+        20 => self::MEDIUM_POWER_SLOT, # MedSlot1
+        21 => self::MEDIUM_POWER_SLOT, # MedSlot2
+        22 => self::MEDIUM_POWER_SLOT, # MedSlot3
+        23 => self::MEDIUM_POWER_SLOT, # MedSlot4
+        24 => self::MEDIUM_POWER_SLOT, # MedSlot5
+        25 => self::MEDIUM_POWER_SLOT, # MedSlot6
+        26 => self::MEDIUM_POWER_SLOT, # MedSlot7
 
-        11 => 'Low power slot', # LoSlot0
-        12 => 'Low power slot', # LoSlot1
-        13 => 'Low power slot', # LoSlot2
-        14 => 'Low power slot', # LoSlot3
-        15 => 'Low power slot', # LoSlot4
-        16 => 'Low power slot', # LoSlot5
-        17 => 'Low power slot', # LoSlot6
-        18 => 'Low power slot', # LoSlot7
+        11 => self::LOW_POWER_SLOT, # LoSlot0
+        12 => self::LOW_POWER_SLOT, # LoSlot1
+        13 => self::LOW_POWER_SLOT, # LoSlot2
+        14 => self::LOW_POWER_SLOT, # LoSlot3
+        15 => self::LOW_POWER_SLOT, # LoSlot4
+        16 => self::LOW_POWER_SLOT, # LoSlot5
+        17 => self::LOW_POWER_SLOT, # LoSlot6
+        18 => self::LOW_POWER_SLOT, # LoSlot7
 
-        92 => 'Rig power slot', # RigSlot0
-        93 => 'Rig power slot', # RigSlot1
-        94 => 'Rig power slot', # RigSlot2
+        92 => self::RIG_POWER_SLOT, # RigSlot0
+        93 => self::RIG_POWER_SLOT, # RigSlot1
+        94 => self::RIG_POWER_SLOT, # RigSlot2
 
-        164 => 'Structure service slot', # StructureServiceSlot0
-        165 => 'Structure service slot', # StructureServiceSlot1
-        166 => 'Structure service slot', # StructureServiceSlot2
-        167 => 'Structure service slot', # StructureServiceSlot3
-        168 => 'Structure service slot', # StructureServiceSlot4
-        169 => 'Structure service slot', # StructureServiceSlot5
-        170 => 'Structure service slot', # StructureServiceSlot6
-        171 => 'Structure service slot', # StructureServiceSlot7
+        164 => self::STRUCTURE_SERVICE_SLOT, # StructureServiceSlot0
+        165 => self::STRUCTURE_SERVICE_SLOT, # StructureServiceSlot1
+        166 => self::STRUCTURE_SERVICE_SLOT, # StructureServiceSlot2
+        167 => self::STRUCTURE_SERVICE_SLOT, # StructureServiceSlot3
+        168 => self::STRUCTURE_SERVICE_SLOT, # StructureServiceSlot4
+        169 => self::STRUCTURE_SERVICE_SLOT, # StructureServiceSlot5
+        170 => self::STRUCTURE_SERVICE_SLOT, # StructureServiceSlot6
+        171 => self::STRUCTURE_SERVICE_SLOT, # StructureServiceSlot7
 
-        125 => 'Sub system slot', # SubSystem0
-        126 => 'Sub system slot', # SubSystem1
-        127 => 'Sub system slot', # SubSystem2
-        128 => 'Sub system slot', # SubSystem3
+        125 => self::SUB_SYSTEM_SLOT, # SubSystem0
+        126 => self::SUB_SYSTEM_SLOT, # SubSystem1
+        127 => self::SUB_SYSTEM_SLOT, # SubSystem2
+        128 => self::SUB_SYSTEM_SLOT, # SubSystem3
+
+        133 => self::SPECIALIZED_FUEL_BAY, # SpecializedFuelBay
+        134 => self::SPECIALIZED_ORE_HOLD, # SpecializedOreHold
+        136 => self::SPECIALIZED_MINERAL_HOLD, # SpecializedMineralHold
+        #138 => self::SPECIALIZED_SHIP_HOLD, # SpecializedShipHold
+        #142 => self::SPECIALIZED_INDUSTRIAL_SHIP_HOLD, # SpecializedIndustrialShipHold
+        143 => self::SPECIALIZED_AMMO_HOLD, # SpecializedAmmoHold
+        149 => self::SPECIALIZED_PLANETARY_COMMODITIES_HOLD, # SpecializedPlanetaryCommoditiesHold
+    ];
+
+    private $slotSort = [
+        self::HIGH_POWER_SLOT,
+        self::MEDIUM_POWER_SLOT,
+        self::LOW_POWER_SLOT,
+        self::RIG_POWER_SLOT,
+        self::SUB_SYSTEM_SLOT,
+        self::CARGO,
+        self::DRONE_BAY,
+        self::FIGHTER_BAY,
+        self::FLEET_HANGAR,
+        self::SPECIALIZED_FUEL_BAY,
+        self::SPECIALIZED_ORE_HOLD,
+        self::SPECIALIZED_MINERAL_HOLD,
+        self::SPECIALIZED_AMMO_HOLD,
+        self::SPECIALIZED_PLANETARY_COMMODITIES_HOLD,
+        self::STRUCTURE_SERVICE_SLOT,
+        self::IMPLANT,
     ];
 
     /**
-     * @var string[][]
+     * @var array
      */
-    private $secondarySlots = [
-        'High power slot' => [
-            27 => 'HiSlot0',
-            28 => 'HiSlot1',
-            29 => 'HiSlot2',
-            30 => 'HiSlot3',
-            31 => 'HiSlot4',
-            32 => 'HiSlot5',
-            33 => 'HiSlot6',
-            34 => 'HiSlot7',
-        ],
-        'Medium power slot' => [
-            19 => 'MedSlot0',
-            20 => 'MedSlot1',
-            21 => 'MedSlot2',
-            22 => 'MedSlot3',
-            23 => 'MedSlot4',
-            24 => 'MedSlot5',
-            25 => 'MedSlot6',
-            26 => 'MedSlot7',
-        ],
-        'Low power slot' => [
-            11 => 'LoSlot0',
-            12 => 'LoSlot1',
-            13 => 'LoSlot2',
-            14 => 'LoSlot3',
-            15 => 'LoSlot4',
-            16 => 'LoSlot5',
-            17 => 'LoSlot6',
-            18 => 'LoSlot7',
-        ],
+    private $multiSlots = [
+        27 => 'HiSlot0',
+        28 => 'HiSlot1',
+        29 => 'HiSlot2',
+        30 => 'HiSlot3',
+        31 => 'HiSlot4',
+        32 => 'HiSlot5',
+        33 => 'HiSlot6',
+        34 => 'HiSlot7',
+
+        19 => 'MedSlot0',
+        20 => 'MedSlot1',
+        21 => 'MedSlot2',
+        22 => 'MedSlot3',
+        23 => 'MedSlot4',
+        24 => 'MedSlot5',
+        25 => 'MedSlot6',
+        26 => 'MedSlot7',
+
+        11 => 'LoSlot0',
+        12 => 'LoSlot1',
+        13 => 'LoSlot2',
+        14 => 'LoSlot3',
+        15 => 'LoSlot4',
+        16 => 'LoSlot5',
+        17 => 'LoSlot6',
+        18 => 'LoSlot7',
     ];
 
     public function __construct(ContainerInterface $container)
     {
         $this->userService = $container->get(UserService::class);
+        $this->apiService = $container->get(ApiService::class);
         $this->entityManager = $container->get(EntityManagerInterface::class);
         $this->requestRepository = $container->get(RequestRepository::class);
         $this->esiTypeRepository = $container->get(EsiTypeRepository::class);
         $this->httpClient = $container->get(ClientInterface::class);
         $this->esiBaseUrl = $container->get('settings')['ESI_BASE_URL'];
+        $this->killboardBaseUrl = $container->get('settings')['ZKILLBOARD_BASE_URL'];
 
         $this->twigResponse($container->get(Environment::class));
     }
@@ -185,6 +241,7 @@ class RequestController
             $error = 'Not authorized to view this request.';
         }
 
+        $this->addMissingURLs($srpRequest);
         $killMail = $this->getKillMail($srpRequest->getEsiLink());
 
         return $this->render($response, 'pages/request.twig', [
@@ -192,6 +249,29 @@ class RequestController
             'error' => $error,
             'items' => $killMail ? $this->sortItems($killMail->victim->items) : null,
         ]);
+    }
+
+    /**
+     * Add missing URLs to zKillboard or ESI
+     */
+    private function addMissingURLs(Request $srpRequest)
+    {
+        if (! $srpRequest->getEsiLink() && $srpRequest->getKillboardUrl()) {
+            $esiLink = $this->apiService->getEsiUrlFromKillboard($srpRequest->getKillboardUrl());
+            if ($esiLink) {
+                $srpRequest->setEsiLink($esiLink);
+                $this->entityManager->flush();
+            }
+        } elseif (! $srpRequest->getKillboardUrl() && $srpRequest->getEsiLink()) {
+            $urlParts = explode('/', rtrim($srpRequest->getEsiLink(), '/'));
+            array_pop($urlParts);
+            $killId = end($urlParts);
+            if (is_numeric($killId)) {
+                var_Dump("{$this->killboardBaseUrl}kill/$killId/");
+                $srpRequest->setKillboardUrl("{$this->killboardBaseUrl}kill/$killId/");
+                $this->entityManager->flush();
+            }
+        }
     }
 
     private function getKillMail(?string $esiLink)
@@ -212,33 +292,45 @@ class RequestController
 
     private function sortItems($items)
     {
-        $result = [];
+        $itemGroups = [];
+        $unknown = [];
         foreach ($items as $item) {
-            if (
-                isset($this->primarySlots[$item->flag]) &&
-                isset($this->secondarySlots[$this->primarySlots[$item->flag]][$item->flag])
-            ) {
-                $result
-                    [$this->primarySlots[$item->flag]]
-                    [$this->secondarySlots[$this->primarySlots[$item->flag]][$item->flag]]
-                    [] = [
-                        'item_type_id' => $item->item_type_id,
-                        'item_type_name' => $this->getEsiTypeName($item->item_type_id),
-                    ];
-            } elseif (isset($this->primarySlots[$item->flag])) {
-                $result[$this->primarySlots[$item->flag]][][] = [
+            $groupName = $this->slotGroups[$item->flag] ?? null;
+            $multiSlotName = $this->multiSlots[$item->flag] ?? null;
+            if ($groupName && $multiSlotName) {
+                // several items in the same slot, e.g. turret with ammo
+                $itemGroups[$groupName][$multiSlotName][] = [
+                    'item_type_id' => $item->item_type_id,
+                    'item_type_name' => $this->getEsiTypeName($item->item_type_id),
+                ];
+            } elseif ($groupName) {
+                // only one item per slot
+                $itemGroups[$groupName][$item->flag][0] = [
                     'item_type_id' => $item->item_type_id,
                     'item_type_name' => $this->getEsiTypeName($item->item_type_id),
                 ];
             } else {
-                $result[$item->flag][][] = [
+                error_log('sortItems: Unknown flag ' . $item->flag);
+                $unknown[$item->flag][][0] = [
                     'item_type_id' => $item->item_type_id,
                     'item_type_name' => $this->getEsiTypeName($item->item_type_id),
                 ];
             }
         }
-        ksort($result);
-        return $result;
+
+        $result = [];
+        foreach ($this->slotSort as $sortValue) {
+            foreach ($itemGroups as $groupName => $groupContent) {
+                if ($sortValue === $groupName) {
+                    $result[$groupName] = $groupContent;
+                }
+            }
+        }
+        if (count($result) !== count($itemGroups)) {
+            error_log('sortItems: Missing an item group.');
+        }
+
+        return $result + $unknown;
     }
 
     private function getEsiTypeName(int $id): string
@@ -246,13 +338,7 @@ class RequestController
         $type = $this->esiTypeRepository->find($id);
 
         if ($type === null) {
-            try {
-                $result = $this->httpClient->request('GET', "{$this->esiBaseUrl}latest/universe/types/{$id}");
-            } catch (GuzzleException $e) {
-                error_log('getEsiTypeName(): ' . $e->getMessage());
-                return (string) $id;
-            }
-            $data = json_decode($result->getBody()->__toString());
+            $data = $this->apiService->getJsonData("{$this->esiBaseUrl}latest/universe/types/{$id}");
             if ($data) {
                 $type = new EsiType();
                 $type->setId($id)->setName($data->name);

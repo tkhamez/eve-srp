@@ -13,11 +13,11 @@ use Brave\EveSrp\Model\Permission;
 use Brave\EveSrp\Model\Request;
 use Brave\EveSrp\Repository\CharacterRepository;
 use Brave\EveSrp\Repository\DivisionRepository;
+use Brave\EveSrp\Service\ApiService;
 use Brave\EveSrp\Type;
-use Brave\EveSrp\UserService;
+use Brave\EveSrp\Service\UserService;
 use Doctrine\ORM\EntityManagerInterface;
 use GuzzleHttp\ClientInterface;
-use GuzzleHttp\Exception\GuzzleException;
 use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
@@ -32,6 +32,11 @@ class SubmitController
      * @var UserService
      */
     private $userService;
+
+    /**
+     * @var ApiService
+     */
+    private $apiService;
 
     /**
      * @var EntityManagerInterface
@@ -86,6 +91,7 @@ class SubmitController
     public function __construct(ContainerInterface $container)
     {
         $this->userService = $container->get(UserService::class);
+        $this->apiService = $container->get(ApiService::class);
         $this->entityManager = $container->get(EntityManagerInterface::class);
         $this->divisionRepository = $container->get(DivisionRepository::class);
         $this->characterRepository = $container->get(CharacterRepository::class);
@@ -155,10 +161,15 @@ class SubmitController
             $esiUrl = $this->inputUrl;
         } else {
             $request->setKillboardUrl($this->inputUrl);
-            $esiUrl = $this->getEsiUrlFromKillboard($this->inputUrl);
+            $esiUrl = $this->apiService->getEsiUrlFromKillboard($this->inputUrl);
+            if (! $esiUrl) {
+                $this->flashMessage->addMessage(
+                    'Could not get ESI URL from zKillboard URL.',
+                    FlashMessage::TYPE_WARNING
+                );
+            }
         }
         if (! $esiUrl) {
-            $this->flashMessage->addMessage('Could not get ESI URL.', FlashMessage::TYPE_WARNING);
             return null;
         }
 
@@ -173,26 +184,11 @@ class SubmitController
         return $request;
     }
 
-    /**
-     * @param string $url e.g. https://zkillboard.com/kill/82474608/
-     * @return string|null
-     */
-    private function getEsiUrlFromKillboard(string $url): ?string
-    {
-        $killId = end(explode('/', rtrim($url, '/')));
-
-        $killboardData = $this->getApiData("{$this->killboardBaseUrl}api/killID/$killId/", 'zKillboard');
-        if ($killboardData === null || ! isset($killboardData[0])) {
-            return null;
-        }
-
-        return "{$this->esiBaseUrl}latest/killmails/$killId/{$killboardData[0]->zkb->hash}/";
-    }
-
     private function setDataFromEsi(Request $request, string $url): bool
     {
-        $killMailData = $this->getApiData($url, 'ESI kill mail');
+        $killMailData = $this->apiService->getJsonData($url);
         if ($killMailData === null) {
+            $this->flashMessage->addMessage("API error (ESI kill mail).", FlashMessage::TYPE_WARNING);
             return false;
         }
 
@@ -206,40 +202,41 @@ class SubmitController
         $pilot = $this->getPilot($killMailData->victim->character_id);
         if (! $pilot) {
             $this->flashMessage->addMessage(
-                'Invalid victim. You can only submit requests for your own characters',
+                'Invalid victim. You can only submit requests for your own characters.',
                 FlashMessage::TYPE_WARNING
             );
             return false;
         }
 
-        $shipData = $this->getApiData(
-            "latest/universe/types/{$killMailData->victim->ship_type_id}/?language=en-us",
-            'ESI ship type'
+        $shipData = $this->apiService->getJsonData(
+            "latest/universe/types/{$killMailData->victim->ship_type_id}/?language=en-us"
         );
         if ($shipData === null) {
+            $this->flashMessage->addMessage("API error (ESI ship type).", FlashMessage::TYPE_WARNING);
             return false;
         }
 
-        $systemData = $this->getApiData(
-            "latest/universe/systems/{$killMailData->solar_system_id}/?language=en-us",
-            'ESI solar system'
+        $systemData = $this->apiService->getJsonData(
+            "latest/universe/systems/{$killMailData->solar_system_id}/?language=en-us"
         );
         if ($systemData === null) {
+            $this->flashMessage->addMessage("API error (ESI solar system).", FlashMessage::TYPE_WARNING);
             return false;
         }
 
-        $corporationData = $this->getApiData(
-            "latest/corporations/{$killMailData->victim->corporation_id}/",
-            'ESI corporation'
+        $corporationData = $this->apiService->getJsonData(
+            "latest/corporations/{$killMailData->victim->corporation_id}/"
         );
         if ($corporationData === null) {
+            $this->flashMessage->addMessage("API error (ESI corporation).", FlashMessage::TYPE_WARNING);
             return false;
         }
 
         $allianceData = null;
         if ($corporationData->alliance_id) {
-            $allianceData = $this->getApiData("latest/alliances/{$corporationData->alliance_id}/", 'ESI alliances');
+            $allianceData = $this->apiService->getJsonData("latest/alliances/{$corporationData->alliance_id}/");
             if ($allianceData === null) {
+                $this->flashMessage->addMessage("API error (ESI alliances).", FlashMessage::TYPE_WARNING);
                 return false;
             }
         }
@@ -272,27 +269,5 @@ class SubmitController
         }
 
         return null;
-    }
-
-    /**
-     * @return \stdClass|array|null
-     */
-    private function getApiData(string $url, string $ident)
-    {
-        $url = strpos($url, 'http') === 0 ? $url : $this->esiBaseUrl . $url;
-        try {
-            $apiResponse = $this->httpClient->request('GET', $url);
-        } catch (GuzzleException $e) {
-            error_log('getEsiData: ' . $e->getMessage());
-            $this->flashMessage->addMessage("API error ($ident).", FlashMessage::TYPE_WARNING);
-            return null;
-        }
-        $apiData = \json_decode($apiResponse->getBody()->__toString());
-        if ($apiData === null) {
-            $this->flashMessage->addMessage("Could not parse API data ($ident).", FlashMessage::TYPE_WARNING);
-            return null;
-        }
-
-        return $apiData;
     }
 }

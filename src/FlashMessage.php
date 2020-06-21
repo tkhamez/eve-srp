@@ -12,20 +12,20 @@ class FlashMessage
     const TYPE_DANGER = 'danger';
 
     /**
-     * @var SessionHandler
+     * @var Session
      */
-    private $sessionHandler;
+    private $session;
 
-    public function __construct(SessionHandler $sessionHandler)
+    public function __construct(Session $session)
     {
-        $this->sessionHandler = $sessionHandler;
+        $this->session = $session;
     }
 
     public function addMessage(string $message, string $type = self::TYPE_INFO)
     {
-        $messages = $this->sessionHandler->get('flash-messages', []);
+        $messages = $this->session->get('flash-messages', []);
         $messages[] = [$message, $type];
-        $this->sessionHandler->set('flash-messages', $messages);
+        $this->session->set('flash-messages', $messages);
     }
 
     /**
@@ -33,8 +33,8 @@ class FlashMessage
      */
     public function getMessages(): array
     {
-        $messages = $this->sessionHandler->get('flash-messages', []);
-        $this->sessionHandler->set('flash-messages', []);
+        $messages = $this->session->get('flash-messages', []);
+        $this->session->set('flash-messages', []);
         return $messages;
     }
 }
