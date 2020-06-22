@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "77d716addd059de12ab9cbad21882d75",
+    "content-hash": "14d06c22da8058c5a266ad942d9a61de",
     "packages": [
         {
             "name": "bravecollective/neucore-api",
@@ -60,50 +60,6 @@
                 "sdk"
             ],
             "time": "2020-03-07T19:41:17+00:00"
-        },
-        {
-            "name": "bravecollective/sso-basics",
-            "version": "3.0.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/bravecollective/sso-basics.git",
-                "reference": "81627c49516d1b6b1e3e5664e5263403545b2a90"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/bravecollective/sso-basics/zipball/81627c49516d1b6b1e3e5664e5263403545b2a90",
-                "reference": "81627c49516d1b6b1e3e5664e5263403545b2a90",
-                "shasum": ""
-            },
-            "require": {
-                "ext-json": "*",
-                "guzzlehttp/guzzle": "^6.3",
-                "league/oauth2-client": "^2.2",
-                "paragonie/random_compat": "^2|^9.99",
-                "php": "^7.2",
-                "psr/container": "^1.0",
-                "psr/http-message": "^1.0",
-                "web-token/jwt-key-mgmt": "^2.0",
-                "web-token/jwt-signature": "^2.0",
-                "web-token/jwt-signature-algorithm-ecdsa": "^2.0",
-                "web-token/jwt-signature-algorithm-hmac": "^2.0",
-                "web-token/jwt-signature-algorithm-rsa": "^2.0"
-            },
-            "require-dev": {
-                "phpunit/phpunit": "^8.4"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "Brave\\Sso\\Basics\\": "src",
-                    "Test\\": "tests"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "time": "2019-10-13T23:08:07+00:00"
         },
         {
             "name": "bryanjhv/slim-session",
@@ -3228,6 +3184,48 @@
                 "standards"
             ],
             "time": "2019-10-14T12:27:06+00:00"
+        },
+        {
+            "name": "tkhamez/eve-sso",
+            "version": "1.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/tkhamez/eve-sso.git",
+                "reference": "5a5c084fe949355da1e5b7297bac06593b829095"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/tkhamez/eve-sso/zipball/5a5c084fe949355da1e5b7297bac06593b829095",
+                "reference": "5a5c084fe949355da1e5b7297bac06593b829095",
+                "shasum": ""
+            },
+            "require": {
+                "ext-json": "*",
+                "guzzlehttp/guzzle": "^6.3",
+                "league/oauth2-client": "^2.2",
+                "paragonie/random_compat": "^2|^9.99",
+                "php": "^7.2",
+                "web-token/jwt-key-mgmt": "^2.0",
+                "web-token/jwt-signature": "^2.0",
+                "web-token/jwt-signature-algorithm-ecdsa": "^2.0",
+                "web-token/jwt-signature-algorithm-hmac": "^2.0",
+                "web-token/jwt-signature-algorithm-rsa": "^2.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^8.4"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Eve\\Sso\\": "src",
+                    "Test\\": "tests"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "time": "2020-06-22T16:59:16+00:00"
         },
         {
             "name": "tkhamez/slim-role-auth",

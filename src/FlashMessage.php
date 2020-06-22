@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace EveSrp;
 
+use SlimSession\Helper;
+
 class FlashMessage
 {
     const TYPE_SUCCESS = 'success';
@@ -12,11 +14,11 @@ class FlashMessage
     const TYPE_DANGER = 'danger';
 
     /**
-     * @var Session
+     * @var Helper
      */
     private $session;
 
-    public function __construct(Session $session)
+    public function __construct(Helper $session)
     {
         $this->session = $session;
     }

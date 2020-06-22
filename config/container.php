@@ -2,6 +2,12 @@
 
 declare(strict_types=1);
 
+use Brave\NeucoreApi\Api\ApplicationApi;
+use Brave\NeucoreApi\Configuration;
+use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\Tools\Setup;
+use Eve\Sso\AuthenticationProvider;
 use EveSrp\Model\Action;
 use EveSrp\Model\Character;
 use EveSrp\Model\Division;
@@ -21,17 +27,9 @@ use EveSrp\Repository\ExternalGroupRepository;
 use EveSrp\Repository\PermissionRepository;
 use EveSrp\Repository\RequestRepository;
 use EveSrp\Repository\UserRepository;
-use EveSrp\Session;
+use EveSrp\Service\UserService;
 use EveSrp\Twig\Extension;
 use EveSrp\Twig\GlobalData;
-use EveSrp\Service\UserService;
-use Brave\NeucoreApi\Api\ApplicationApi;
-use Brave\NeucoreApi\Configuration;
-use Brave\Sso\Basics\AuthenticationProvider;
-use Brave\Sso\Basics\SessionHandlerInterface;
-use Doctrine\ORM\EntityManager;
-use Doctrine\ORM\EntityManagerInterface;
-use Doctrine\ORM\Tools\Setup;
 use GuzzleHttp\Client;
 use GuzzleHttp\ClientInterface;
 use League\OAuth2\Client\Provider\GenericProvider;
@@ -49,9 +47,6 @@ return [
     // Slim
     ResponseFactoryInterface::class => function () {
         return new ResponseFactory();
-    },
-    SessionHandlerInterface::class => function (ContainerInterface $container) {
-        return $container->get(Session::class);
     },
 
     // EVE-SRP

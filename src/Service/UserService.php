@@ -2,6 +2,9 @@
 
 namespace EveSrp\Service;
 
+use Doctrine\ORM\EntityManagerInterface;
+use Eve\Sso\EveAuthentication;
+use EveSrp\Exception;
 use EveSrp\Model\Character;
 use EveSrp\Model\Division;
 use EveSrp\Model\ExternalGroup;
@@ -16,16 +19,13 @@ use EveSrp\Repository\ExternalGroupRepository;
 use EveSrp\Repository\PermissionRepository;
 use EveSrp\Repository\UserRepository;
 use EveSrp\Security;
-use EveSrp\Exception;
-use Brave\Sso\Basics\EveAuthentication;
-use Brave\Sso\Basics\SessionHandlerInterface;
-use Doctrine\ORM\EntityManagerInterface;
 use Psr\Container\ContainerInterface;
+use SlimSession\Helper;
 
 class UserService
 {
     /**
-     * @var SessionHandlerInterface
+     * @var Helper
      */
     private $session;
 
@@ -80,7 +80,7 @@ class UserService
     private $clientRoles = [];
 
     public function __construct(ContainerInterface $container) {
-        $this->session = $container->get(SessionHandlerInterface::class);
+        $this->session = $container->get(Helper::class);
         $this->entityManager = $container->get(EntityManagerInterface::class);
         $this->userRepository = $container->get(UserRepository::class);
         $this->externalGroupRepository = $container->get(ExternalGroupRepository::class);

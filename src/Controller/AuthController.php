@@ -5,16 +5,16 @@ declare(strict_types=1);
 
 namespace EveSrp\Controller;
 
+use Eve\Sso\AuthenticationProvider;
 use EveSrp\Controller\Traits\TwigResponse;
+use EveSrp\Exception;
 use EveSrp\FlashMessage;
 use EveSrp\Provider\GroupProviderInterface;
-use EveSrp\Exception;
 use EveSrp\Service\UserService;
-use Brave\Sso\Basics\AuthenticationProvider;
-use Brave\Sso\Basics\SessionHandlerInterface;
 use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
+use SlimSession\Helper;
 use Twig\Environment;
 use UnexpectedValueException;
 
@@ -28,7 +28,7 @@ class AuthController
     private $settings;
 
     /**
-     * @var SessionHandlerInterface
+     * @var Helper
      */
     private $session;
 
@@ -55,7 +55,7 @@ class AuthController
     public function __construct(ContainerInterface $container)
     {
         $this->settings = $container->get('settings');
-        $this->session = $container->get(SessionHandlerInterface::class);
+        $this->session = $container->get(Helper::class);
         $this->groupProvider = $container->get(GroupProviderInterface::class);
         $this->userService = $container->get(UserService::class);
         $this->authenticationProvider = $container->get(AuthenticationProvider::class);
