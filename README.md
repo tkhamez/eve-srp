@@ -15,6 +15,13 @@ Log messages are send to the file specified in the `error_log` configuration.
 
 ## Development
 
+### Run Backend
+
+You can use the PHP dev server like this:
+```
+php -S localhost:8000 -t web
+```
+
 ### Build Frontend
 
 Install dependencies:
