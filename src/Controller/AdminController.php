@@ -12,7 +12,7 @@ use EveSrp\FlashMessage;
 use EveSrp\Model\Division;
 use EveSrp\Model\ExternalGroup;
 use EveSrp\Model\Permission;
-use EveSrp\Provider\GroupProviderInterface;
+use EveSrp\Provider\InterfaceGroupProvider;
 use EveSrp\Repository\DivisionRepository;
 use EveSrp\Repository\ExternalGroupRepository;
 use EveSrp\Service\UserService;
@@ -28,7 +28,7 @@ class AdminController
     use TwigResponse;
 
     /**
-     * @var GroupProviderInterface
+     * @var InterfaceGroupProvider
      */
     private $groupProvider;
 
@@ -64,7 +64,7 @@ class AdminController
     
     public function __construct(ContainerInterface $container)
     {
-        $this->groupProvider = $container->get(GroupProviderInterface::class);
+        $this->groupProvider = $container->get(InterfaceGroupProvider::class);
         $this->entityManager = $container->get(EntityManagerInterface::class);
         $this->divisionRepository = $container->get(DivisionRepository::class);
         $this->groupRepository = $container->get(ExternalGroupRepository::class);

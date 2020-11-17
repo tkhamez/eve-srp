@@ -4,12 +4,22 @@
 
 To run the application you need PHP >=7.3 <8.0.
 
+- Create an EVE application at https://developers.eveonline.com
 - Copy `.env.dist` to `.env` and adjust values or set the corresponding environment variables in another way.
+  At the very least set EVE_SRP_SSO_CLIENT_ID and EVE_SRP_SSO_CLIENT_SECRET, the rest works as is when using Docker.
 - Install dependencies with `composer install`.
 - Clear the template cache: `rm -R cache/compilation_cache`
 - sync db schema:
   - **Backup the database first!**
   - `vendor/bin/doctrine orm:schema-tool:update --force`
+
+### Permissions
+
+Permissions are based on groups which are provided by the group provider which is configured by the
+`EVE_SRP_GROUP_PROVIDER` environment variable.
+
+Depending on which provider is used, the corresponding environment variables must be adapted, currently 
+`EVE_SRP_NEUCORE_*` or `EVE_SRP_ESI_*` for the included providers.
 
 ### Error logging
 

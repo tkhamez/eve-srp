@@ -11,8 +11,8 @@ use EveSrp\Model\ExternalGroup;
 use EveSrp\Model\Permission;
 use EveSrp\Model\Request;
 use EveSrp\Model\User;
-use EveSrp\Provider\CharacterProviderInterface;
-use EveSrp\Provider\GroupProviderInterface;
+use EveSrp\Provider\InterfaceCharacterProvider;
+use EveSrp\Provider\InterfaceGroupProvider;
 use EveSrp\Repository\CharacterRepository;
 use EveSrp\Repository\DivisionRepository;
 use EveSrp\Repository\ExternalGroupRepository;
@@ -60,12 +60,12 @@ class UserService
     private $divisionRepository;
 
     /**
-     * @var CharacterProviderInterface
+     * @var InterfaceCharacterProvider
      */
     private $characterProvider;
 
     /**
-     * @var GroupProviderInterface
+     * @var InterfaceGroupProvider
      */
     private $groupProvider;
 
@@ -87,8 +87,8 @@ class UserService
         $this->characterRepository = $container->get(CharacterRepository::class);
         $this->permissionRepository = $container->get(PermissionRepository::class);
         $this->divisionRepository = $container->get(DivisionRepository::class);
-        $this->characterProvider = $container->get(CharacterProviderInterface::class);
-        $this->groupProvider = $container->get(GroupProviderInterface::class);
+        $this->characterProvider = $container->get(InterfaceCharacterProvider::class);
+        $this->groupProvider = $container->get(InterfaceGroupProvider::class);
     }
 
     /**

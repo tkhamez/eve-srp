@@ -1,12 +1,11 @@
 <?php
-
 declare(strict_types=1);
 
 namespace EveSrp\Provider;
 
 use EveSrp\Exception;
 
-interface GroupProviderInterface
+interface InterfaceGroupProvider
 {
     /**
      * Returns groups from external service for the authenticated user.
@@ -24,7 +23,7 @@ interface GroupProviderInterface
     /**
      * Returns all groups that a character can have.
      *
-     * This can be called manually by an admin.
+     * This is called when a global admin syncs the groups.
      *
      * @return string[]
      * @throws Exception

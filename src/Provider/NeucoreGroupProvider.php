@@ -13,7 +13,7 @@ use InvalidArgumentException;
 use Psr\Container\ContainerInterface;
 
 /** @noinspection PhpUnused */
-class NeucoreGroupProvider implements GroupProviderInterface
+class NeucoreGroupProvider implements InterfaceGroupProvider
 {
     /**
      * @var ApplicationApi

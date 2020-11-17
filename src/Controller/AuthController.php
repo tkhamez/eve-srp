@@ -9,7 +9,7 @@ use Eve\Sso\AuthenticationProvider;
 use EveSrp\Controller\Traits\TwigResponse;
 use EveSrp\Exception;
 use EveSrp\FlashMessage;
-use EveSrp\Provider\GroupProviderInterface;
+use EveSrp\Provider\InterfaceGroupProvider;
 use EveSrp\Service\UserService;
 use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ResponseInterface;
@@ -33,7 +33,7 @@ class AuthController
     private $session;
 
     /**
-     * @var GroupProviderInterface
+     * @var InterfaceGroupProvider
      */
     private $groupProvider;
 
@@ -56,7 +56,7 @@ class AuthController
     {
         $this->settings = $container->get('settings');
         $this->session = $container->get(Helper::class);
-        $this->groupProvider = $container->get(GroupProviderInterface::class);
+        $this->groupProvider = $container->get(InterfaceGroupProvider::class);
         $this->userService = $container->get(UserService::class);
         $this->authenticationProvider = $container->get(AuthenticationProvider::class);
         $this->flashMessage = $container->get(FlashMessage::class);

@@ -9,6 +9,7 @@
     },
     "require": {
         "php": "^7.3.0",
+        "ext-json": "*",
         "bravecollective/neucore-api": "^1.4",
         "bryanjhv/slim-session": "^4.0",
         "doctrine/dbal": "^2.5",

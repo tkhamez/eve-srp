@@ -13,7 +13,7 @@ use Psr\Container\ContainerInterface;
 use SlimSession\Helper;
 
 /** @noinspection PhpUnused */
-class NeucoreCharacterProvider implements CharacterProviderInterface
+class NeucoreCharacterProvider implements InterfaceCharacterProvider
 {
     /**
      * @var ApplicationCharactersApi

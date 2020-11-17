@@ -18,8 +18,8 @@ use EveSrp\Model\ExternalGroup;
 use EveSrp\Model\Permission;
 use EveSrp\Model\Request;
 use EveSrp\Model\User;
-use EveSrp\Provider\CharacterProviderInterface;
-use EveSrp\Provider\GroupProviderInterface;
+use EveSrp\Provider\InterfaceCharacterProvider;
+use EveSrp\Provider\InterfaceGroupProvider;
 use EveSrp\Provider\RoleProvider;
 use EveSrp\Repository\ActionRepository;
 use EveSrp\Repository\CharacterRepository;
@@ -63,11 +63,11 @@ return [
     },
     
     // Pluggable adapter
-    GroupProviderInterface::class => function (ContainerInterface $container) {
+    InterfaceGroupProvider::class => function (ContainerInterface $container) {
         $class = $container->get('settings')['GROUP_PROVIDER'];
         return new $class($container);
     },
-    CharacterProviderInterface::class => function (ContainerInterface $container) {
+    InterfaceCharacterProvider::class => function (ContainerInterface $container) {
         $class = $container->get('settings')['CHARACTER_PROVIDER'];
         return new $class($container);
     },
