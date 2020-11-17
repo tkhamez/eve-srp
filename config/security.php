@@ -20,7 +20,7 @@ return [
     
     '/admin/divisions' => [Security::GLOBAL_ADMIN],
     '/admin/groups'    => [Security::GLOBAL_ADMIN],
-    '/admin'           => [Permission::ADMIN],
+    '/admin'           => [Security::GLOBAL_ADMIN, Permission::ADMIN],
     
     '/'        => [Security::ROLE_AUTHENTICATED],
 ];
