@@ -3,6 +3,8 @@
 declare(strict_types=1);
 
 use Brave\NeucoreApi\Api\ApplicationApi;
+use Brave\NeucoreApi\Api\ApplicationCharactersApi;
+use Brave\NeucoreApi\Api\ApplicationGroupsApi;
 use Brave\NeucoreApi\Configuration;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityManagerInterface;
@@ -101,7 +103,7 @@ return [
     },
 
     // Neucore API
-    ApplicationApi::class => function (ContainerInterface $container) {
+    Configuration::class => function (ContainerInterface $container) {
         $apiKey = base64_encode(
             $container->get('settings')['NEUCORE_APP_ID'] .
             ':' .
@@ -110,7 +112,25 @@ return [
         $config = Configuration::getDefaultConfiguration();
         $config->setHost($container->get('settings')['NEUCORE_DOMAIN'].'/api');
         $config->setAccessToken($apiKey);
-        return new ApplicationApi($container->get(ClientInterface::class), $config);
+        return $config;
+    },
+    ApplicationApi::class => function (ContainerInterface $container) {
+        return new ApplicationApi(
+            $container->get(ClientInterface::class),
+            $container->get(Configuration::class)
+        );
+    },
+    ApplicationCharactersApi::class => function (ContainerInterface $container) {
+        return new ApplicationCharactersApi(
+            $container->get(ClientInterface::class),
+            $container->get(Configuration::class)
+        );
+    },
+    ApplicationGroupsApi::class => function (ContainerInterface $container) {
+        return new ApplicationGroupsApi(
+            $container->get(ClientInterface::class),
+            $container->get(Configuration::class)
+        );
     },
 
     // Twig

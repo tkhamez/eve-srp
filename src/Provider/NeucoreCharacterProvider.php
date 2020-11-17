@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace EveSrp\Provider;
 
-use Brave\NeucoreApi\Api\ApplicationApi;
+use Brave\NeucoreApi\Api\ApplicationCharactersApi;
 use Brave\NeucoreApi\ApiException;
 use Brave\NeucoreApi\Model\Character;
 use EveSrp\Exception;
@@ -16,7 +16,7 @@ use SlimSession\Helper;
 class NeucoreCharacterProvider implements CharacterProviderInterface
 {
     /**
-     * @var ApplicationApi
+     * @var ApplicationCharactersApi
      */
     private $api;
 
@@ -32,7 +32,7 @@ class NeucoreCharacterProvider implements CharacterProviderInterface
 
     public function __construct(ContainerInterface $container)
     {
-        $this->api = $container->get(ApplicationApi::class);
+        $this->api = $container->get(ApplicationCharactersApi::class);
         $this->session = $container->get(Helper::class);
     }
 

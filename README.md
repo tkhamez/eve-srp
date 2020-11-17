@@ -2,6 +2,8 @@
 
 ## Install/Update
 
+To run the application you need PHP >=7.3 <8.0.
+
 - Copy `.env.dist` to `.env` and adjust values or set the corresponding environment variables in another way.
 - Install dependencies with `composer install`.
 - Clear the template cache: `rm -R cache/compilation_cache`
@@ -23,6 +25,8 @@ php -S localhost:8000 -t web
 ```
 
 ### Build Frontend
+
+Tested with Node.js 12 LTS.
 
 Install dependencies:
 ```

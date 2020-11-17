@@ -6,6 +6,7 @@ namespace EveSrp\Provider;
 
 use EveSrp\Exception;
 use Brave\NeucoreApi\Api\ApplicationApi;
+use Brave\NeucoreApi\Api\ApplicationGroupsApi;
 use Brave\NeucoreApi\ApiException;
 use Brave\NeucoreApi\Model\Group;
 use InvalidArgumentException;
@@ -19,16 +20,22 @@ class NeucoreGroupProvider implements GroupProviderInterface
      */
     private $api;
 
+    /**
+     * @var ApplicationGroupsApi
+     */
+    private $groupApi;
+
     public function __construct(ContainerInterface $container)
     {
         $this->api = $container->get(ApplicationApi::class);
+        $this->groupApi = $container->get(ApplicationGroupsApi::class);
     }
 
     public function getGroups(int $eveCharacterId): array
     {
         // get groups from Core
         try {
-            $groups = $this->api->groupsV2($eveCharacterId);
+            $groups = $this->groupApi->groupsV2($eveCharacterId);
         } catch (ApiException | InvalidArgumentException $e) {
             throw new Exception('NeucoreGroupProvider::getGroups: ' . $e->getMessage());
         }

@@ -8,22 +8,22 @@
         }
     },
     "require": {
-        "php": "^7.2.0",
+        "php": "^7.3.0",
         "bravecollective/neucore-api": "^1.4",
         "bryanjhv/slim-session": "^4.0",
         "doctrine/dbal": "^2.5",
-        "doctrine/orm": "^2.6",
+        "doctrine/orm": "^2.7",
         "php-di/php-di": "^6.0",
         "slim/psr7": "^1.0",
         "slim/slim": "^4.2",
-        "tkhamez/eve-sso": "^1.0",
+        "tkhamez/eve-sso": "^2.0",
         "tkhamez/slim-role-auth": "^3.0",
-        "twig/twig": "^2.0",
-        "vlucas/phpdotenv": "^4.1"
+        "twig/twig": "^3.1",
+        "vlucas/phpdotenv": "^5.2"
     },
     "config": {
         "platform": {
-            "php": "7.2.0"
+            "php": "7.3.0"
         },
         "sort-packages": true
     }
