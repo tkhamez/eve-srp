@@ -39,6 +39,22 @@ During development:
 npm run watch
 ```
 
+### Docker
+
+```
+docker-compose build
+docker-compose up
+```
+
+The database connection string is: `mysql://eve_srp:eve_srp@db/eve_srp`.  
+The application is available at: http://localhost:8000.
+
+Create shells for PHP and Node.js:
+```
+docker-compose exec php-fpm /bin/sh
+docker-compose run node /bin/sh
+```
+
 ## Migration from paxswill/evesrp
 
 Databases: evesrp => eve_srp
