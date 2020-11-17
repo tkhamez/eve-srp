@@ -17,7 +17,9 @@ return [
     '/submit'  => [Permission::SUBMIT],
     '/review'  => [Permission::REVIEW],
     '/pay'     => [Permission::PAY],
-    
+
+    '/all-requests' => [Permission::REVIEW, Permission::PAY, Permission::ADMIN, Security::GLOBAL_ADMIN],
+
     '/admin/divisions' => [Security::GLOBAL_ADMIN],
     '/admin/groups'    => [Security::GLOBAL_ADMIN],
     '/admin'           => [Security::GLOBAL_ADMIN, Permission::ADMIN],
