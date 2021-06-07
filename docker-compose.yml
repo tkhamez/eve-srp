@@ -23,6 +23,7 @@ services:
     build:
       context: config
       dockerfile: dockerfile-php74-fpm
+      #dockerfile: dockerfile-php80-fpm
     depends_on: [eve_srp_db]
     volumes: [".:/app"]
     working_dir: /app

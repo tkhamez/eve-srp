@@ -2,7 +2,7 @@
 
 ## Install/Update
 
-To run the application you need PHP >=7.3 <8.0, and a database supported by 
+To run the application you need PHP >=7.3 and a database supported by 
 [Doctrine ORM](https://www.doctrine-project.org/projects/doctrine-orm/en/latest/index.html) 
 (tested with MariaDB 10.4).
 
