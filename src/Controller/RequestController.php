@@ -232,7 +232,7 @@ class RequestController
         return $this->showPage($response, $args['id']);
     }
 
-    private function showPage($response, $id)
+    private function showPage($response, $id): ResponseInterface
     {
         $srpRequest = $this->requestRepository->find($id);
         $error = null;
@@ -270,7 +270,6 @@ class RequestController
             array_pop($urlParts);
             $killId = end($urlParts);
             if (is_numeric($killId)) {
-                var_Dump("{$this->killboardBaseUrl}kill/$killId/");
                 $srpRequest->setKillboardUrl("{$this->killboardBaseUrl}kill/$killId/");
                 $this->entityManager->flush();
             }
@@ -293,7 +292,7 @@ class RequestController
         return json_decode($result->getBody()->__toString());
     }
 
-    private function sortItems($items)
+    private function sortItems($items): array
     {
         $itemGroups = [];
         $unknown = [];
@@ -341,7 +340,7 @@ class RequestController
         $type = $this->esiTypeRepository->find($id);
 
         if ($type === null) {
-            $data = $this->apiService->getJsonData("{$this->esiBaseUrl}latest/universe/types/{$id}");
+            $data = $this->apiService->getJsonData("{$this->esiBaseUrl}latest/universe/types/$id");
             if ($data) {
                 $type = new EsiType();
                 $type->setId($id)->setName($data->name);

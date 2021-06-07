@@ -4,7 +4,6 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const LicenseWebpackPlugin = require('license-webpack-plugin').LicenseWebpackPlugin;
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const OptimizeCSSAssetsPlugin = require("optimize-css-assets-webpack-plugin");
-const TerserPlugin = require('terser-webpack-plugin');
 
 module.exports = (env, argv) => {
     const devMode = argv.mode !== 'production';
@@ -45,11 +44,10 @@ module.exports = (env, argv) => {
                 filename: devMode ? '[name].css' : '[name].[hash].css',
             }),
         ],
-        devtool: devMode ? 'cheap-eval-source-map' : 'source-map',
+        devtool: devMode ? 'eval-cheap-source-map' : 'source-map',
         optimization: {
             runtimeChunk: 'single',
             minimizer: [
-                new TerserPlugin(),
                 new OptimizeCSSAssetsPlugin({
                     cssProcessorOptions: { safe: true },
                 })
@@ -57,7 +55,9 @@ module.exports = (env, argv) => {
         },
     };
     if (! devMode) {
-        config.plugins.push(new LicenseWebpackPlugin());
+        config.plugins.push(new LicenseWebpackPlugin({
+            perChunkOutput: false,
+        }));
         config.plugins.push(new CleanWebpackPlugin());
     }
     return config;

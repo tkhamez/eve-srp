@@ -10,7 +10,6 @@ use Brave\NeucoreApi\Model\Character;
 use EveSrp\Exception;
 use InvalidArgumentException;
 use Psr\Container\ContainerInterface;
-use SlimSession\Helper;
 
 /** @noinspection PhpUnused */
 class NeucoreCharacterProvider implements InterfaceCharacterProvider
@@ -21,11 +20,6 @@ class NeucoreCharacterProvider implements InterfaceCharacterProvider
     private $api;
 
     /**
-     * @var Helper
-     */
-    private $session;
-
-    /**
      * @var Character[]|null
      */
     private $characters;
@@ -33,22 +27,21 @@ class NeucoreCharacterProvider implements InterfaceCharacterProvider
     public function __construct(ContainerInterface $container)
     {
         $this->api = $container->get(ApplicationCharactersApi::class);
-        $this->session = $container->get(Helper::class);
     }
 
-    public function getCharacters(int $characterId): array
+    public function getCharacters(int $eveCharacterId): array
     {
-        $this->fetchCharacters($characterId);
+        $this->fetchCharacters($eveCharacterId);
 
         return array_map(function (Character $char) {
             return $char->getId();
         }, $this->characters);
     }
 
-    public function getMain(int $characterId): ?int
+    public function getMain(int $eveCharacterId): ?int
     {
         try {
-            $this->fetchCharacters($characterId);
+            $this->fetchCharacters($eveCharacterId);
         } catch (Exception $e) {
             return null;
         }
@@ -61,10 +54,10 @@ class NeucoreCharacterProvider implements InterfaceCharacterProvider
         return null;
     }
 
-    public function getName(int $characterId): ?string
+    public function getName(int $eveCharacterId): ?string
     {
         foreach ($this->characters as $character) {
-            if ($character->getId() === $characterId) {
+            if ($character->getId() === $eveCharacterId) {
                 return $character->getName();
             }
         }

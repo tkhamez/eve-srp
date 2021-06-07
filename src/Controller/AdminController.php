@@ -53,7 +53,7 @@ class AdminController
     private $flashMessage;
 
     /**
-     * @var \EveSrp\Service\UserService
+     * @var UserService
      */
     private $userService;
 
@@ -203,7 +203,9 @@ class AdminController
                         // nothing was selected
                         $groupIds = [];
                     }
-                    $success = $success === false ? false : $this->updateDivision($division, (string) $role, $groupIds);
+                    if ($success) {
+                        $success = $this->updateDivision($division, (string) $role, $groupIds);
+                    }
                 }
             }
         }

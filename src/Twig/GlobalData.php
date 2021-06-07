@@ -1,4 +1,5 @@
 <?php
+/** @noinspection PhpUnused */
 
 declare(strict_types=1);
 
@@ -27,31 +28,31 @@ class GlobalData
         $this->userService = $container->get(UserService::class);
     }
 
-    /** @noinspection PhpUnused */
     public function appTitle(): string
     {
         return $this->settings['APP_TITLE'];
     }
 
-    /** @noinspection PhpUnused */
+    public function faviconUrl(): string
+    {
+        return $this->settings['APP_FAVICON'];
+    }
+
     public function loginHint(): string
     {
         return $this->replaceMarkdownLink(htmlspecialchars($this->settings['LOGIN_HINT']));
     }
 
-    /** @noinspection PhpUnused */
     public function footerText(): string
     {
         return $this->replaceMarkdownLink(htmlspecialchars($this->settings['FOOTER_TEXT']));
     }
 
-    /** @noinspection PhpUnused */
     public function userName(): string
     {
         return $this->getUser() ? $this->getUser()->getName() : '';
     }
 
-    /** @noinspection PhpUnused */
     public function characters(): array
     {
         return $this->getUser() ? array_map(function(Character $char) {
@@ -67,7 +68,7 @@ class GlobalData
     private function replaceMarkdownLink($text)
     {
         return preg_replace(
-            '/\[(.*?)\]\((.*?)\)/',
+            '/\[(.*?)]\((.*?)\)/',
             '<a href="$2" target="_blank">$1</a> ',
             $text
         );

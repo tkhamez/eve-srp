@@ -28,7 +28,7 @@ class Extension extends AbstractExtension
         $this->flashMessage = $container->get(FlashMessage::class);
     }
 
-    public function getFunctions()
+    public function getFunctions(): array
     {
         return [
             new TwigFunction('hasRole', [$this, 'hasRole']),
@@ -37,14 +37,12 @@ class Extension extends AbstractExtension
         ];
     }
 
-    /** @noinspection PhpUnused */
-    public function hasRole($role)
+    public function hasRole($role): bool
     {
         return $this->hasAnyRole([$role]);
     }
 
-    /** @noinspection PhpUnused */
-    public function hasAnyRole(array $roles)
+    public function hasAnyRole(array $roles): bool
     {
         foreach ($roles as $role) {
             if ($this->userService->hasRole($role)) {
@@ -54,8 +52,7 @@ class Extension extends AbstractExtension
         return false;
     }
 
-    /** @noinspection PhpUnused */
-    public function flashMessages()
+    public function flashMessages(): string
     {
         $html = [];
         foreach ($this->flashMessage->getMessages() as $message) {

@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace EveSrp\Provider;
@@ -36,17 +37,17 @@ class EsiProvider implements InterfaceCharacterProvider, InterfaceGroupProvider
         $this->esiBaseUrl = $container->get('settings')['ESI_BASE_URL'];
     }
 
-    public function getCharacters(int $characterId): array
+    public function getCharacters(int $eveCharacterId): array
     {
         return [];
     }
 
-    public function getMain(int $characterId): ?int
+    public function getMain(int $eveCharacterId): ?int
     {
         return null;
     }
 
-    public function getName(int $characterId): ?string
+    public function getName(int $eveCharacterId): ?string
     {
         return null;
     }

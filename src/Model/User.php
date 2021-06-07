@@ -27,7 +27,7 @@ class User
      * @var string
      * @ORM\Column(type="string", length=255, nullable=true)
      */
-    private $name;
+    private $name = '';
 
     /**
      * @ORM\ManyToMany(targetEntity="ExternalGroup", inversedBy="users")
@@ -74,7 +74,7 @@ class User
 
     public function getName(): string
     {
-        return (string) $this->name;
+        return $this->name;
     }
 
     public function addExternalGroup(ExternalGroup $externalGroups): self

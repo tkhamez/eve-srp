@@ -54,7 +54,7 @@ class ProcessListsController
         return $this->showPage($response, Type::APPROVED, Permission::PAY, 'pay.twig');
     }
 
-    private function showPage($response, $status, $role, $page)
+    private function showPage($response, $status, $role, $page): ResponseInterface
     {
         $divisions = array_map(function (Division $division) {
             return $division->getId();

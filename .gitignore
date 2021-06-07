@@ -2,6 +2,7 @@
 /.env
 /cache/*
 !/cache/.gitkeep
+/logs/*
 /node_modules
 /vendor
 /web/dist/main.css
@@ -10,6 +11,7 @@
 
 # docker
 /.mariadb
+/.composer
 
 # IDEs
 /.idea

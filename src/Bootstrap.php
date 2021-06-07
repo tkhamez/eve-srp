@@ -8,6 +8,7 @@ use DI\ContainerBuilder;
 use DI\DependencyException;
 use DI\NotFoundException;
 use Dotenv\Dotenv;
+use EveSrp\Slim\ErrorHandler;
 use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ResponseFactoryInterface;
 use Slim\App;
@@ -105,9 +106,15 @@ class Bootstrap
         $app->addRoutingMiddleware();
 
         $app->add(new Session([
-            'name' => 'evesrp_session',
+            'name' => 'eve_srp_session',
             'httponly' => true,
             'autorefresh' => true,
         ]));
+
+        $errorMiddleware = $app->addErrorMiddleware(false, true, true);
+        $errorMiddleware->setDefaultErrorHandler(new ErrorHandler(
+            $app->getCallableResolver(),
+            $app->getResponseFactory()
+        ));
     }
 }

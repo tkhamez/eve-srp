@@ -24,7 +24,7 @@ class EsiType
      * @ORM\Column(type="string", length=255, nullable=true)
      * @var string
      */
-    private $name;
+    private $name = '';
 
     public function setId(int $id): self
     {
@@ -35,6 +35,7 @@ class EsiType
 
     public function getId(): ?int
     {
+        /** @noinspection PhpCastIsUnnecessaryInspection */ // needs cast!
         return $this->id !== null ? (int) $this->id : null;
     }
 
@@ -47,6 +48,6 @@ class EsiType
 
     public function getName(): string
     {
-        return (string) $this->name;
+        return $this->name;
     }
 }

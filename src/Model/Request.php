@@ -74,7 +74,7 @@ class Request
      * @var string
      * @ORM\Column(type="string", length=128)
      */
-    private $ship;
+    private $ship = '';
 
     /**
      * @ORM\Column(type="datetime", name="kill_time")
@@ -86,7 +86,7 @@ class Request
      * @var string
      * @ORM\Column(type="string", name="solar_system", length=32)
      */
-    private $solarSystem;
+    private $solarSystem = '';
 
     /**
      * @var string
@@ -127,7 +127,7 @@ class Request
      * @var string
      * @see Type
      */
-    private $status;
+    private $status = '';
     
     public function __construct()
     {
@@ -221,7 +221,7 @@ class Request
 
     public function getShip(): string
     {
-        return (string) $this->ship;
+        return $this->ship;
     }
 
     public function setShip(string $ship): self
@@ -245,7 +245,7 @@ class Request
 
     public function getSolarSystem(): string
     {
-        return (string) $this->solarSystem;
+        return $this->solarSystem;
     }
 
     public function setSolarSystem(string $solarSystem): self
@@ -317,7 +317,7 @@ class Request
 
     public function getStatus(): string
     {
-        return (string) $this->status;
+        return $this->status;
     }
 
     public function setStatus(string $status): self

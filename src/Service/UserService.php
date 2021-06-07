@@ -257,7 +257,7 @@ class UserService
                 ! in_array($existingCharacter->getId(), $allKnownCharacterIds)
             ) {
                 $user->removeCharacter($existingCharacter);
-                $existingCharacter->setUser(null);
+                $existingCharacter->setUser();
             }
             if ($existingCharacter->getId() === $mainCharacterId) {
                 $existingCharacter->setMain(true);

@@ -18,7 +18,7 @@ class Character
      * @ORM\Id
      * @ORM\Column(type="bigint")
      * @ORM\GeneratedValue(strategy="NONE")
-     * @var integer
+     * @var integer|null
      */
     private $id;
 
@@ -26,7 +26,7 @@ class Character
      * @var string
      * @ORM\Column(type="string", length=255)
      */
-    private $name;
+    private $name = '';
 
     /**
      * @ORM\Column(type="boolean", options={"default" = 0})
@@ -61,7 +61,7 @@ class Character
 
     public function getName(): string
     {
-        return (string) $this->name;
+        return $this->name;
     }
 
     public function setMain(bool $main): self

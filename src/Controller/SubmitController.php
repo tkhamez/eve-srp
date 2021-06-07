@@ -217,7 +217,7 @@ class SubmitController
         }
 
         $systemData = $this->apiService->getJsonData(
-            "latest/universe/systems/{$killMailData->solar_system_id}/?language=en-us"
+            "latest/universe/systems/$killMailData->solar_system_id/?language=en-us"
         );
         if ($systemData === null) {
             $this->flashMessage->addMessage("API error (ESI solar system).", FlashMessage::TYPE_WARNING);
@@ -234,7 +234,7 @@ class SubmitController
 
         $allianceData = null;
         if ($corporationData->alliance_id) {
-            $allianceData = $this->apiService->getJsonData("latest/alliances/{$corporationData->alliance_id}/");
+            $allianceData = $this->apiService->getJsonData("latest/alliances/$corporationData->alliance_id/");
             if ($allianceData === null) {
                 $this->flashMessage->addMessage("API error (ESI alliances).", FlashMessage::TYPE_WARNING);
                 return false;
@@ -249,7 +249,7 @@ class SubmitController
             ->setCorporation($corporationData->name)
             ->setAlliance($allianceData ? $allianceData->name : null);
         if (! $request->getKillboardUrl()) {
-            $request->setKillboardUrl("{$this->killboardBaseUrl}kill/{$killMailData->killmail_id}/");
+            $request->setKillboardUrl("{$this->killboardBaseUrl}kill/$killMailData->killmail_id/");
         }
 
         return true;

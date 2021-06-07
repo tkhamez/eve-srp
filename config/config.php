@@ -8,6 +8,7 @@ return [
 
     // Customizing
     'APP_TITLE'          => $_ENV['EVE_SRP_APP_TITLE'],
+    'APP_FAVICON'        => $_ENV['EVE_SRP_APP_FAVICON'],
     'APP_LOGO'           => $_ENV['EVE_SRP_APP_LOGO'],
     'APP_LOGO_ALT'       => $_ENV['EVE_SRP_APP_LOGO_ALT'],
     'LOGIN_HINT'         => $_ENV['EVE_SRP_LOGIN_HINT'],

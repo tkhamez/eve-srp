@@ -1,7 +1,7 @@
 version: '3'
 
 services:
-  db:
+  eve_srp_db:
     container_name: eve_srp_db
     image: mariadb:10.4
     volumes: ["./.mariadb:/var/lib/mysql"]
@@ -10,25 +10,33 @@ services:
       MYSQL_USER: eve_srp
       MYSQL_PASSWORD: eve_srp
       MYSQL_DATABASE: eve_srp
+    networks: [eve-srp]
 
-  node:
+  eve_srp_node:
     container_name: eve_srp_node
-    image: node:12.19.0-alpine
+    image: node:14.17-alpine
     volumes: [".:/app"]
     working_dir: /app
 
-  php-fpm:
-    container_name: eve_srp_php-fpm
+  eve_srp_php:
+    container_name: eve_srp_php
     build:
       context: config
       dockerfile: dockerfile-php74-fpm
-    depends_on: [db]
+    depends_on: [eve_srp_db]
     volumes: [".:/app"]
     working_dir: /app
+    networks: [eve-srp]
 
-  http:
+  eve_srp_http:
     container_name: eve_srp_http
     image: nginx:1
-    depends_on: [php-fpm]
+    depends_on: [eve_srp_php]
     volumes: [".:/app", "./config/docker-nginx.conf:/etc/nginx/conf.d/default.conf"]
     ports: ["8000:80"]
+    networks: [eve-srp]
+
+networks:
+  eve-srp:
+    #external:
+    #  name: neucore_network

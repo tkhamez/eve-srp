@@ -26,7 +26,7 @@ class ExternalGroup
      * @ORM\Column(type="string", unique=true, length=255)
      * @var string
      */
-    private $name;
+    private $name = '';
 
     /**
      * @ORM\OneToMany(targetEntity="Permission", mappedBy="externalGroup", cascade={"remove"})
@@ -61,6 +61,6 @@ class ExternalGroup
 
     public function getName(): string
     {
-        return (string) $this->name;
+        return $this->name;
     }
 }

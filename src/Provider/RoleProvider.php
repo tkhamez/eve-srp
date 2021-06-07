@@ -17,7 +17,7 @@ use Tkhamez\Slim\RoleAuth\RoleProviderInterface;
 class RoleProvider implements RoleProviderInterface
 {
     /**
-     * @var \EveSrp\Service\UserService
+     * @var UserService
      */
     private $userService;
 
@@ -59,7 +59,7 @@ class RoleProvider implements RoleProviderInterface
         return $this->roles;
     }
 
-    private function mapGroupsToRoles(User $user)
+    private function mapGroupsToRoles(User $user): array
     {
         $roles = [];
         
