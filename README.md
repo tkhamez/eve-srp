@@ -9,7 +9,8 @@ To run the application you need PHP >=7.3 and a database supported by
 - Create an EVE application at https://developers.eveonline.com
 - Copy `.env.dist` to `.env` and adjust values or set the corresponding environment variables in another way.
   At the very least set EVE_SRP_SSO_CLIENT_ID and EVE_SRP_SSO_CLIENT_SECRET, the rest works as is when using Docker.
-- Install dependencies with `composer install`.
+- Make sure that the `cache` directory is writable by the webserver.
+- Install dependencies and generate Doctrine proxy classes with `composer install`.
 - Clear the template cache: `rm -R cache/compilation_cache`
 - sync db schema:
   - **Backup the database first!**

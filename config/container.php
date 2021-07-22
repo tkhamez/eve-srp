@@ -156,7 +156,13 @@ return [
     EntityManagerInterface::class => function (ContainerInterface $container) {
         return EntityManager::create(
             ['url' => $container->get('settings')['DB_URL']],
-            Setup::createAnnotationMetadataConfiguration([ROOT_DIR . '/src/Model'], true,  null, null, false)
+            Setup::createAnnotationMetadataConfiguration(
+                [ROOT_DIR . '/src/Model'],
+                $container->get('settings')['APP_ENV'] === 'dev',
+                ROOT_DIR . '/cache',
+                null,
+                false
+            )
         );
     },
     ActionRepository::class => function (ContainerInterface $container) {
