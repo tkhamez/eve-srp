@@ -203,7 +203,7 @@ class AdminController
                         // nothing was selected
                         $groupIds = [];
                     }
-                    if ($success) {
+                    if ($success || $success === null) {
                         $success = $this->updateDivision($division, (string) $role, $groupIds);
                     }
                 }
