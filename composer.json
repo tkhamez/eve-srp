@@ -8,15 +8,15 @@
         }
     },
     "require": {
-        "php": "^7.3.0",
+        "php": "^7.3|^8.0",
         "ext-json": "*",
         "bravecollective/neucore-api": "^1.4",
         "bryanjhv/slim-session": "^4.0",
-        "doctrine/dbal": "^2.5",
         "doctrine/orm": "^2.7",
         "php-di/php-di": "^6.0",
         "slim/psr7": "^1.0",
         "slim/slim": "^4.2",
+        "symfony/cache": "^5.3",
         "tkhamez/eve-sso": "^2.0",
         "tkhamez/slim-role-auth": "^3.0",
         "twig/twig": "^3.1",
