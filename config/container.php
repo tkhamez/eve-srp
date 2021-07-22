@@ -139,7 +139,7 @@ return [
         if ($container->get('settings')['APP_ENV'] === 'dev') {
             $options['debug'] = true;
         } else {
-            $options['cache'] = ROOT_DIR . '/cache/compilation_cache';
+            $options['cache'] = ROOT_DIR . '/storage/compilation_cache';
         }
         $loader = new FilesystemLoader(ROOT_DIR . '/templates');
         $loader->addPath(ROOT_DIR . '/web/dist');
@@ -159,7 +159,7 @@ return [
             Setup::createAnnotationMetadataConfiguration(
                 [ROOT_DIR . '/src/Model'],
                 $container->get('settings')['APP_ENV'] === 'dev',
-                ROOT_DIR . '/cache',
+                ROOT_DIR . '/storage',
                 null,
                 false
             )

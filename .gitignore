@@ -1,8 +1,7 @@
 # app
 /.env
-/cache/*
-!/cache/.gitkeep
-/logs/*
+/storage/*
+!/storage/.gitkeep
 /node_modules
 /vendor
 /web/dist/main.css
