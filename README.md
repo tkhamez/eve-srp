@@ -70,6 +70,9 @@ Create/enter shells for PHP and Node.js:
 ```
 docker-compose exec eve_srp_php /bin/sh
 docker-compose run eve_srp_node /bin/sh
+
+# show logs
+docker-compose exec eve_srp_php tail -f /app/logs/error.log
 ```
 
 ## Migration from paxswill/evesrp

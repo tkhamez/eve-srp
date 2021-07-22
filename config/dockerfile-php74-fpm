@@ -3,5 +3,5 @@ RUN apk update && apk add gmp-dev
 RUN docker-php-ext-install pdo_mysql gmp
 COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 ENV COMPOSER_HOME /app/.composer
-RUN echo "error_log=/app/logs/error.log" > /usr/local/etc/php/conf.d/docker-php-neucore.ini && \
-    echo "error_reporting=E_ALL"        >> /usr/local/etc/php/conf.d/docker-php-neucore.ini
+RUN echo "error_log=/app/logs/error.log" > /usr/local/etc/php/conf.d/docker-php-eve-srp.ini && \
+    echo "error_reporting=E_ALL"        >> /usr/local/etc/php/conf.d/docker-php-eve-srp.ini
