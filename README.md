@@ -26,7 +26,7 @@ Depending on which provider is used, the corresponding environment variables mus
 
 ### Error logging
 
-Log messages are send to the file specified in the `error_log` configuration.
+Log messages are sent to the file specified in the `error_log` configuration.
 
 ## Development
 

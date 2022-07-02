@@ -40,4 +40,5 @@ services:
 networks:
   eve-srp:
     #external:
-    #  name: neucore_network
+      #name: neucore_dev
+      #name: neucore_prod
