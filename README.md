@@ -4,7 +4,7 @@
 
 To run the application you need PHP >=7.3 and a database supported by 
 [Doctrine ORM](https://www.doctrine-project.org/projects/doctrine-orm/en/latest/index.html) 
-(tested with MariaDB 10.4).
+(tested with MariaDB 10.2).
 
 - Create an EVE application at https://developers.eveonline.com
 - Copy `.env.dist` to `.env` and adjust values or set the corresponding environment variables in another way.

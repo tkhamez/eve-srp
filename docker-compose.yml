@@ -3,18 +3,19 @@ version: '3'
 services:
   eve_srp_db:
     container_name: eve_srp_db
-    image: mariadb:10.4
+    image: mariadb:10.2
     volumes: ["./.mariadb:/var/lib/mysql"]
     environment:
       MYSQL_ROOT_PASSWORD: eve_srp
       MYSQL_USER: eve_srp
       MYSQL_PASSWORD: eve_srp
       MYSQL_DATABASE: eve_srp
+    ports: ["33061:3306"]
     networks: [eve-srp]
 
   eve_srp_node:
     container_name: eve_srp_node
-    image: node:14.17-alpine
+    image: node:16.15.1-alpine
     volumes: [".:/app"]
     working_dir: /app
 
