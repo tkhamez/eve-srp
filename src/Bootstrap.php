@@ -82,8 +82,14 @@ class Bootstrap
         AppFactory::setContainer($this->container);
         $app = AppFactory::create();
         
-        $routesConfigurator = require_once(ROOT_DIR . '/config/routes.php');
-        $routesConfigurator($app);
+        $routes = require_once ROOT_DIR . '/config/routes.php';
+        foreach ($routes as $route) {
+            if ($route[0] === 'get') {
+                $app->get($route[1],  $route[2]);
+            } elseif ($route[0] === 'post') {
+                $app->post($route[1],  $route[2]);
+            }
+        }
 
         return $app;
     }
