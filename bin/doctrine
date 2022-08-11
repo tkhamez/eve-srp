@@ -1,0 +1,19 @@
+#!/usr/bin/env php
+<?php
+
+declare(strict_types=1);
+
+define('ROOT_DIR', realpath(__DIR__ . '/../'));
+
+use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\Tools\Console\ConsoleRunner;
+use Doctrine\ORM\Tools\Console\EntityManagerProvider\SingleManagerProvider;
+use EveSrp\Bootstrap;
+
+require __DIR__ . '/../vendor/autoload.php';
+
+$entityManager = (new Bootstrap())->getContainer()->get(EntityManagerInterface::class);
+$entityManager->getConnection()->setAutoCommit(false); // Fixes "There is no active transaction" error during
+                                                       // DB migrations with PHP 8.
+
+ConsoleRunner::run(new SingleManagerProvider($entityManager));

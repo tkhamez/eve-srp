@@ -2,11 +2,11 @@
 
 ## Install
 
-To run the application you need PHP >=7.3 and a database supported by 
+To run the application you need PHP >=7.4 and a database supported by 
 [Doctrine ORM](https://www.doctrine-project.org/projects/doctrine-orm/en/latest/index.html) 
 (tested with MariaDB 10.6).
 
-- Create an EVE application at https://developers.eveonline.com
+- Create an EVE application at https://developers.eveonline.com, no scopes required.
 - Clone the repository and build the frontend (see below) - there will be pre-built releases later.
 - Copy `config/.env.dist` to `config/.env` and adjust values or set the corresponding environment variables.
   At the very least set EVE_SRP_SSO_CLIENT_ID and EVE_SRP_SSO_CLIENT_SECRET, the rest works as is when using the
@@ -16,7 +16,7 @@ To run the application you need PHP >=7.3 and a database supported by
 - Clear the template cache: `rm -R storage/compilation_cache`
 - sync db schema:
   - **Backup the database first!**
-  - `vendor/bin/doctrine orm:schema-tool:update --force`
+  - `bin/doctrine orm:schema-tool:update`
 
 ### Permissions
 
@@ -28,7 +28,7 @@ Depending on which provider is used, the corresponding environment variables mus
 
 ### Error logging
 
-Log messages are sent to the file specified in the `error_log` configuration.
+Log messages are sent to the file specified in the PHP `error_log` configuration.
 
 ## Docker Development Environment
 
@@ -51,6 +51,8 @@ docker-compose run -u node eve_srp_node /bin/sh
 ```
 composer install
 ```
+
+The logs are in `storage/error.log`.
 
 ### Build Frontend
 

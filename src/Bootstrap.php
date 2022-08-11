@@ -5,8 +5,6 @@ declare(strict_types=1);
 namespace EveSrp;
 
 use DI\ContainerBuilder;
-use DI\DependencyException;
-use DI\NotFoundException;
 use Dotenv\Dotenv;
 use EveSrp\Slim\ErrorHandler;
 use Psr\Container\ContainerInterface;
@@ -44,7 +42,7 @@ class Bootstrap
         }
 
         $builder = new ContainerBuilder();
-        $builder->addDefinitions(include ROOT_DIR . '/config/container.php');
+        $builder->addDefinitions(Container::getDefinition());
         $this->container = $builder->build();
     }
 
@@ -59,7 +57,7 @@ class Bootstrap
         
         try {
             $this->addMiddleware($app);
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             error_log('Bootstrap::run(): ' . $e->getMessage());
         }
 
@@ -98,8 +96,7 @@ class Bootstrap
 
     /**
      * @param App $app
-     * @throws DependencyException
-     * @throws NotFoundException
+     * @throws \Throwable
      */
     private function addMiddleware(App $app): void
     {

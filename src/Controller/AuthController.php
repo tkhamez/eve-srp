@@ -51,6 +51,9 @@ class AuthController
      */
     private $flashMessage;
 
+    /**
+     * @throws \Throwable
+     */
     public function __construct(ContainerInterface $container)
     {
         $this->settings = $container->get('settings');

@@ -8,28 +8,29 @@
         }
     },
     "require": {
-        "php": "^7.3|^8.0",
+        "php": "^7.4|^8.0",
         "ext-json": "*",
         "bravecollective/neucore-api": "^1.4",
         "bryanjhv/slim-session": "^4.0",
+        "doctrine/annotations": "^1.13",
         "doctrine/orm": "^2.7",
         "php-di/php-di": "^6.0",
         "slim/psr7": "^1.0",
         "slim/slim": "^4.2",
         "symfony/cache": "^5.3",
-        "tkhamez/eve-sso": "^2.0",
+        "tkhamez/eve-sso": "^3.0",
         "tkhamez/slim-role-auth": "^3.0",
         "twig/twig": "^3.1",
         "vlucas/phpdotenv": "^5.2"
     },
     "scripts": {
         "post-install-cmd": [
-            "doctrine orm:generate-proxies"
+            "bin/doctrine orm:generate-proxies"
         ]
     },
     "config": {
         "platform": {
-            "php": "7.3.0"
+            "php": "7.4.0"
         },
         "sort-packages": true
     }
