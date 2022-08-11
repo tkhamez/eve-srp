@@ -44,7 +44,7 @@ use Twig\Extension\DebugExtension;
 use Twig\Loader\FilesystemLoader;
 
 return [
-    'settings' => require_once('config.php'),
+    'settings' => require_once 'config.php',
 
     // Slim
     ResponseFactoryInterface::class => function () {

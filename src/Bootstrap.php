@@ -39,6 +39,8 @@ class Bootstrap
         if (is_readable(ROOT_DIR . '/config/.env')) {
             $dotEnv = Dotenv::createImmutable(ROOT_DIR . '/config');
             $dotEnv->load();
+        } elseif (empty($_ENV)) {
+            $_ENV = getenv();
         }
 
         $builder = new ContainerBuilder();
