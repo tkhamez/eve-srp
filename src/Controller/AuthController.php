@@ -91,9 +91,9 @@ class AuthController
      */
     public function auth(ServerRequestInterface $request, ResponseInterface $response): ResponseInterface
     {
-        $code = $request->getQueryParams()['code'] ?? null;
-        $state = $request->getQueryParams()['state'] ?? null;
-        if (!$code || !$state) {
+        $code = (string)($request->getQueryParams()['code'] ?? '');
+        $state = (string)($request->getQueryParams()['state'] ?? '');
+        if (empty($code) || empty($state)) {
             $this->flashMessage->addMessage('Invalid SSO state.', FlashMessage::TYPE_DANGER);
             return $response->withHeader('Location', '/login');
         }
@@ -101,7 +101,7 @@ class AuthController
         try {
             $eveAuth = $this->authenticationProvider->validateAuthenticationV2(
                 $state,
-                $this->session->get('ssoState'),
+                (string)$this->session->get('ssoState'),
                 $code
             );
         } catch (UnexpectedValueException $e) {

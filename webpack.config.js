@@ -2,8 +2,8 @@ const path = require('path');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const LicenseWebpackPlugin = require('license-webpack-plugin').LicenseWebpackPlugin;
-const MiniCssExtractPlugin = require('mini-css-extract-plugin');
-const OptimizeCSSAssetsPlugin = require("optimize-css-assets-webpack-plugin");
+const MiniCssExtractPlugin = require("mini-css-extract-plugin");
+const CssMinimizerPlugin = require("css-minimizer-webpack-plugin");
 
 module.exports = (env, argv) => {
     const devMode = argv.mode !== 'production';
@@ -42,9 +42,7 @@ module.exports = (env, argv) => {
         optimization: {
             runtimeChunk: 'single',
             minimizer: [
-                new OptimizeCSSAssetsPlugin({
-                    cssProcessorOptions: { safe: true },
-                })
+                new CssMinimizerPlugin()
             ]
         },
     };

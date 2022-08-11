@@ -199,8 +199,8 @@ class SubmitController
             return false;
         }
 
-        $pilot = $this->getPilot($killMailData->victim->character_id);
-        if (! $pilot) {
+        $pilot = $this->getPilot($killMailData->victim->character_id ?? 0);
+        if (!$pilot) {
             $this->flashMessage->addMessage(
                 'Invalid victim. You can only submit requests for your own characters.',
                 FlashMessage::TYPE_WARNING

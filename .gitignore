@@ -4,9 +4,7 @@
 !/storage/.gitkeep
 /node_modules
 /vendor
-/web/dist/main.css
-/web/dist/main.js
-/web/dist/runtime.js
+/web/dist
 
 # docker
 /.mariadb

@@ -1,14 +1,16 @@
 # EVE-SRP
 
-## Install/Update
+## Install
 
 To run the application you need PHP >=7.3 and a database supported by 
 [Doctrine ORM](https://www.doctrine-project.org/projects/doctrine-orm/en/latest/index.html) 
-(tested with MariaDB 10.2).
+(tested with MariaDB 10.6).
 
 - Create an EVE application at https://developers.eveonline.com
-- Copy `.env.dist` to `.env` and adjust values or set the corresponding environment variables in another way.
-  At the very least set EVE_SRP_SSO_CLIENT_ID and EVE_SRP_SSO_CLIENT_SECRET, the rest works as is when using Docker.
+- Clone the repository and build the frontend (see below) - there will be pre-built releases later.
+- Copy `.env.dist` to `.env` and adjust values or set the corresponding environment variables.
+  At the very least set EVE_SRP_SSO_CLIENT_ID and EVE_SRP_SSO_CLIENT_SECRET, the rest works as is when using the
+  Docker development environment.
 - Make sure that the `storage` directory is writable by the webserver.
 - Install dependencies and generate Doctrine proxy classes with `composer install`.
 - Clear the template cache: `rm -R storage/compilation_cache`
@@ -28,18 +30,29 @@ Depending on which provider is used, the corresponding environment variables mus
 
 Log messages are sent to the file specified in the `error_log` configuration.
 
-## Development
+## Docker Development Environment
 
-### Run Backend
-
-You can use the PHP dev server like this:
 ```
-php -S localhost:8000 -t web
+docker-compose build
+docker-compose up
+```
+
+The database connection string is: `mysql://eve_srp:eve_srp@eve_srp_db/eve_srp`.  
+The application is available at: http://localhost:8000.
+
+Create/enter shells for PHP and Node.js:
+```
+docker-compose exec -u www-data eve_srp_php /bin/sh
+docker-compose run -u node eve_srp_node /bin/sh
+```
+
+### Install Backend
+
+```
+composer install
 ```
 
 ### Build Frontend
-
-Tested with Node.js 14 LTS.
 
 Install dependencies:
 ```
@@ -54,25 +67,6 @@ npm run build
 During development:
 ```
 npm run watch
-```
-
-### Docker
-
-```
-docker-compose build
-docker-compose up
-```
-
-The database connection string is: `mysql://eve_srp:eve_srp@eve_srp_db/eve_srp`.  
-The application is available at: http://localhost:8000.
-
-Create/enter shells for PHP and Node.js:
-```
-docker-compose exec eve_srp_php /bin/sh
-docker-compose run eve_srp_node /bin/sh
-
-# show logs
-docker-compose exec eve_srp_php tail -f /app/storage/error.log
 ```
 
 ## Migration from paxswill/evesrp
