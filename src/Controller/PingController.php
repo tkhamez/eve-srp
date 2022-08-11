@@ -4,21 +4,17 @@ declare(strict_types=1);
 
 namespace EveSrp\Controller;
 
-use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use SlimSession\Helper;
 
 class PingController
 {
-    /**
-     * @var Helper
-     */
-    private $session;
+    private Helper $session;
 
-    public function __construct(ContainerInterface $container)
+    public function __construct(Helper $session)
     {
-        $this->session = $container->get(Helper::class);
+        $this->session = $session;
     }
 
     public function __invoke(ServerRequestInterface $request, ResponseInterface $response): ResponseInterface

@@ -13,11 +13,11 @@ use EveSrp\Model\Request;
 use EveSrp\Repository\CharacterRepository;
 use EveSrp\Repository\DivisionRepository;
 use EveSrp\Service\ApiService;
+use EveSrp\Settings;
 use EveSrp\Type;
 use EveSrp\Service\UserService;
 use Doctrine\ORM\EntityManagerInterface;
 use GuzzleHttp\ClientInterface;
-use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Twig\Environment;
@@ -27,79 +27,52 @@ class SubmitController
     use RequestParameter;
     use TwigResponse;
 
-    /**
-     * @var UserService
-     */
-    private $userService;
+    private UserService $userService;
 
-    /**
-     * @var ApiService
-     */
-    private $apiService;
+    private ApiService $apiService;
 
-    /**
-     * @var EntityManagerInterface
-     */
-    private $entityManager;
+    private EntityManagerInterface $entityManager;
 
-    /**
-     * @var DivisionRepository
-     */
-    private $divisionRepository;
+    private DivisionRepository $divisionRepository;
 
-    /**
-     * @var CharacterRepository
-     */
-    private $characterRepository;
+    private CharacterRepository $characterRepository;
 
-    /**
-     * @var FlashMessage
-     */
-    private $flashMessage;
+    private FlashMessage $flashMessage;
 
-    /**
-     * @var ClientInterface
-     */
-    private $httpClient;
+    private ClientInterface $httpClient;
 
-    /**
-     * @var string
-     */
-    private $esiBaseUrl;
+    private string $esiBaseUrl;
 
-    /**
-     * @var string
-     */
-    private $killboardBaseUrl;
+    private string $killboardBaseUrl;
 
-    /**
-     * @var string|null
-     */
-    private $inputDivision;
+    private ?int $inputDivision = null;
 
-    /**
-     * @var string|null
-     */
-    private $inputUrl;
+    private ?string $inputUrl = null;
 
-    /**
-     * @var string|null
-     */
-    private $inputDetails;
+    private ?string $inputDetails = null;
 
-    public function __construct(ContainerInterface $container)
-    {
-        $this->userService = $container->get(UserService::class);
-        $this->apiService = $container->get(ApiService::class);
-        $this->entityManager = $container->get(EntityManagerInterface::class);
-        $this->divisionRepository = $container->get(DivisionRepository::class);
-        $this->characterRepository = $container->get(CharacterRepository::class);
-        $this->flashMessage = $container->get(FlashMessage::class);
-        $this->httpClient = $container->get(ClientInterface::class);
-        $this->esiBaseUrl = $container->get('settings')['ESI_BASE_URL'];
-        $this->killboardBaseUrl = $container->get('settings')['ZKILLBOARD_BASE_URL'];
+    public function __construct(
+        UserService $userService,
+        ApiService $apiService,
+        EntityManagerInterface $entityManager,
+        DivisionRepository $divisionRepository,
+        CharacterRepository $characterRepository,
+        FlashMessage $flashMessage,
+        ClientInterface $httpClient,
+        Settings $settings,
+        Environment $environment
+    ) {
+        $this->userService = $userService;
+        $this->apiService = $apiService;
+        $this->entityManager = $entityManager;
+        $this->divisionRepository = $divisionRepository;
+        $this->characterRepository = $characterRepository;
+        $this->flashMessage = $flashMessage;
+        $this->httpClient = $httpClient;
+        $this->esiBaseUrl = $settings['ESI_BASE_URL'];
+        $this->killboardBaseUrl = $settings['ZKILLBOARD_BASE_URL'];
 
-        $this->twigResponse($container->get(Environment::class));
+        $this->twigResponse($environment);
     }
 
     /**

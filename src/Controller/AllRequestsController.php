@@ -4,50 +4,46 @@ declare(strict_types=1);
 
 namespace EveSrp\Controller;
 
+use EveSrp\Controller\Traits\RequestParameter;
 use EveSrp\Controller\Traits\TwigResponse;
 use EveSrp\Model\Permission;
 use EveSrp\Repository\DivisionRepository;
 use EveSrp\Repository\RequestRepository;
 use EveSrp\Service\UserService;
-use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Twig\Environment;
 
 class AllRequestsController
 {
+    use RequestParameter;
     use TwigResponse;
 
-    /**
-     * @var RequestRepository
-     */
-    private $requestRepository;
+    private RequestRepository $requestRepository;
 
-    /**
-     * @var DivisionRepository
-     */
-    private $divisionRepository;
+    private DivisionRepository $divisionRepository;
 
-    /**
-     * @var UserService
-     */
-    private $userService;
+    private UserService $userService;
 
-    public function __construct(ContainerInterface $container)
-    {
-        $this->requestRepository = $container->get(RequestRepository::class);
-        $this->divisionRepository = $container->get(DivisionRepository::class);
-        $this->userService = $container->get(UserService::class);
+    public function __construct(
+        RequestRepository $requestRepository,
+        DivisionRepository $divisionRepository,
+        UserService $userService,
+        Environment $environment
+    ) {
+        $this->requestRepository = $requestRepository;
+        $this->divisionRepository = $divisionRepository;
+        $this->userService = $userService;
 
-        $this->twigResponse($container->get(Environment::class));
+        $this->twigResponse($environment);
     }
 
     public function __invoke(ServerRequestInterface $request, ResponseInterface $response): ResponseInterface
     {
         # TODO pager
 
-        $selectedStatus = (string) ($request->getQueryParams()['status'] ?? null);
-        $selectedDivision = (int) ($request->getQueryParams()['division'] ?? 0);
+        $selectedStatus = (string) $this->paramGet($request, 'status');
+        $selectedDivision = (int) $this->paramGet($request, 'division', 0);
 
         $divisions = $this->userService->getDivisionsWithRoles([Permission::REVIEW, Permission::PAY]);
 

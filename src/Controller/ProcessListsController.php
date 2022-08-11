@@ -10,7 +10,6 @@ use EveSrp\Model\Permission;
 use EveSrp\Repository\RequestRepository;
 use EveSrp\Type;
 use EveSrp\Service\UserService;
-use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Twig\Environment;
@@ -19,22 +18,19 @@ class ProcessListsController
 {
     use TwigResponse;
 
-    /**
-     * @var RequestRepository
-     */
-    private $requestRepository;
+    private RequestRepository $requestRepository;
 
-    /**
-     * @var UserService
-     */
-    private $userService;
+    private UserService $userService;
 
-    public function __construct(ContainerInterface $container)
-    {
-        $this->requestRepository = $container->get(RequestRepository::class);
-        $this->userService = $container->get(UserService::class);
+    public function __construct(
+        RequestRepository $requestRepository,
+        UserService $userService,
+        Environment $environment
+    ) {
+        $this->requestRepository = $requestRepository;
+        $this->userService = $userService;
 
-        $this->twigResponse($container->get(Environment::class));
+        $this->twigResponse($environment);
     }
 
     /**

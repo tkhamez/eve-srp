@@ -12,9 +12,9 @@ use EveSrp\Repository\RequestRepository;
 use EveSrp\Service\ApiService;
 use EveSrp\Service\UserService;
 use Doctrine\ORM\EntityManagerInterface;
+use EveSrp\Settings;
 use GuzzleHttp\ClientInterface;
 use GuzzleHttp\Exception\GuzzleException;
-use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Twig\Environment;
@@ -41,50 +41,23 @@ class RequestController
     private const SPECIALIZED_AMMO_HOLD = 'Specialized Ammo Hold';
     private const SPECIALIZED_PLANETARY_COMMODITIES_HOLD = 'Specialized Planetary Commodities Hold';
 
-    /**
-     * @var UserService
-     */
-    private $userService;
+    private UserService $userService;
 
-    /**
-     * @var ApiService
-     */
-    private $apiService;
+    private ApiService $apiService;
 
-    /**
-     * @var EntityManagerInterface
-     */
-    private $entityManager;
+    private EntityManagerInterface $entityManager;
 
-    /**
-     * @var RequestRepository
-     */
-    private $requestRepository;
+    private RequestRepository $requestRepository;
 
-    /**
-     * @var EsiTypeRepository
-     */
-    private $esiTypeRepository;
+    private EsiTypeRepository $esiTypeRepository;
 
-    /**
-     * @var ClientInterface
-     */
-    private $httpClient;
+    private ClientInterface $httpClient;
 
-    /**
-     * @var string
-     */
-    private $esiBaseUrl;
+    private string $esiBaseUrl;
 
-    /**
-     * @var string
-     */
-    private $killboardBaseUrl;
+    private string $killboardBaseUrl;
 
-    /**
-     * @var array
-     */
-    private $slotGroups = [
+    private array $slotGroups = [
         // see invFlags.yaml from SDE https://developers.eveonline.com/resource/resources
         5 => self::CARGO, # Cargo
         87 => self::DRONE_BAY, # DroneBay
@@ -147,7 +120,7 @@ class RequestController
         149 => self::SPECIALIZED_PLANETARY_COMMODITIES_HOLD, # SpecializedPlanetaryCommoditiesHold
     ];
 
-    private $slotSort = [
+    private array $slotSort = [
         self::HIGH_POWER_SLOT,
         self::MEDIUM_POWER_SLOT,
         self::LOW_POWER_SLOT,
@@ -167,10 +140,7 @@ class RequestController
         self::IMPLANT,
     ];
 
-    /**
-     * @var array
-     */
-    private $multiSlots = [
+    private array $multiSlots = [
         27 => 'HiSlot0',
         28 => 'HiSlot1',
         29 => 'HiSlot2',
@@ -199,18 +169,26 @@ class RequestController
         18 => 'LoSlot7',
     ];
 
-    public function __construct(ContainerInterface $container)
-    {
-        $this->userService = $container->get(UserService::class);
-        $this->apiService = $container->get(ApiService::class);
-        $this->entityManager = $container->get(EntityManagerInterface::class);
-        $this->requestRepository = $container->get(RequestRepository::class);
-        $this->esiTypeRepository = $container->get(EsiTypeRepository::class);
-        $this->httpClient = $container->get(ClientInterface::class);
-        $this->esiBaseUrl = $container->get('settings')['ESI_BASE_URL'];
-        $this->killboardBaseUrl = $container->get('settings')['ZKILLBOARD_BASE_URL'];
+    public function __construct(
+        UserService $userService,
+        ApiService $apiService,
+        EntityManagerInterface $entityManager,
+        RequestRepository $requestRepository,
+        EsiTypeRepository $esiTypeRepository,
+        ClientInterface $httpClient,
+        Settings $settings,
+        Environment $environment
+    ) {
+        $this->userService = $userService;
+        $this->apiService = $apiService;
+        $this->entityManager = $entityManager;
+        $this->requestRepository = $requestRepository;
+        $this->esiTypeRepository = $esiTypeRepository;
+        $this->httpClient = $httpClient;
+        $this->esiBaseUrl = $settings['ESI_BASE_URL'];
+        $this->killboardBaseUrl = $settings['ZKILLBOARD_BASE_URL'];
 
-        $this->twigResponse($container->get(Environment::class));
+        $this->twigResponse($environment);
     }
 
     /**

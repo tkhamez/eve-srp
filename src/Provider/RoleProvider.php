@@ -7,7 +7,7 @@ namespace EveSrp\Provider;
 use EveSrp\Model\User;
 use EveSrp\Security;
 use EveSrp\Service\UserService;
-use Psr\Container\ContainerInterface;
+use EveSrp\Settings;
 use Psr\Http\Message\ServerRequestInterface;
 use Tkhamez\Slim\RoleAuth\RoleProviderInterface;
 
@@ -16,23 +16,20 @@ use Tkhamez\Slim\RoleAuth\RoleProviderInterface;
  */
 class RoleProvider implements RoleProviderInterface
 {
-    /**
-     * @var UserService
-     */
-    private $userService;
+    private UserService $userService;
 
     /**
      * @var string[] 
      */
-    private $adminGroups = [];
+    private array $adminGroups = [];
 
-    private $roles = [];
+    private array $roles = [];
     
-    public function __construct(ContainerInterface $container)
+    public function __construct(UserService $userService, Settings $settings)
     {
-        $this->userService = $container->get(UserService::class);
-        if ($container->get('settings')['ROLE_GLOBAL_ADMIN'] !== '') {
-            $this->adminGroups = explode(',', $container->get('settings')['ROLE_GLOBAL_ADMIN']);
+        $this->userService = $userService;
+        if ($settings['ROLE_GLOBAL_ADMIN'] !== '') {
+            $this->adminGroups = explode(',', $settings['ROLE_GLOBAL_ADMIN']);
         }
     }
 

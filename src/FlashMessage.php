@@ -13,10 +13,7 @@ class FlashMessage
     const TYPE_WARNING = 'warning';
     const TYPE_DANGER = 'danger';
 
-    /**
-     * @var Helper
-     */
-    private $session;
+    private Helper $session;
 
     public function __construct(Helper $session)
     {

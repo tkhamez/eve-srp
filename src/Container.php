@@ -31,7 +31,6 @@ use EveSrp\Repository\ExternalGroupRepository;
 use EveSrp\Repository\PermissionRepository;
 use EveSrp\Repository\RequestRepository;
 use EveSrp\Repository\UserRepository;
-use EveSrp\Service\UserService;
 use EveSrp\Twig\Extension;
 use EveSrp\Twig\GlobalData;
 use GuzzleHttp\Client;
@@ -51,30 +50,26 @@ final class Container
         return [
             'settings' => require_once ROOT_DIR . '/config/config.php',
 
-            // Slim
-            ResponseFactoryInterface::class => function () {
-                return new ResponseFactory();
+            Settings::class => function (ContainerInterface $container) {
+                return new Settings($container->get('settings'));
             },
 
-            // EVE-SRP
+            // Slim
+            ResponseFactoryInterface::class => function (ContainerInterface $container) {
+                return $container->get(ResponseFactory::class);
+            },
+
+            // Provider
             RoleProviderInterface::class => function (ContainerInterface $container) {
                 return $container->get(RoleProvider::class);
             },
-            RoleProvider::class => function (ContainerInterface $container) {
-                return new RoleProvider($container);
-            },
-            UserService::class => function (ContainerInterface $container) {
-                return new UserService($container);
-            },
-
-            // Pluggable adapter
             InterfaceGroupProvider::class => function (ContainerInterface $container) {
                 $class = $container->get('settings')['GROUP_PROVIDER'];
-                return new $class($container);
+                return $container->get($class);
             },
             InterfaceCharacterProvider::class => function (ContainerInterface $container) {
                 $class = $container->get('settings')['CHARACTER_PROVIDER'];
-                return new $class($container);
+                return $container->get($class);
             },
 
             // Guzzle HTTP client
@@ -144,10 +139,10 @@ final class Container
                 $loader->addPath(ROOT_DIR . '/web/dist');
                 $twig = new Environment($loader, $options);
                 if ($container->get('settings')['APP_ENV'] === 'dev') {
-                    $twig->addExtension(new DebugExtension());
+                    $twig->addExtension($container->get(DebugExtension::class));
                 }
-                $twig->addGlobal('data', new GlobalData($container));
-                $twig->addExtension(new Extension($container));
+                $twig->addGlobal('data', $container->get(GlobalData::class));
+                $twig->addExtension($container->get(Extension::class));
                 return $twig;
             },
 

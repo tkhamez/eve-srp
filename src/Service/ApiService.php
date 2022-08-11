@@ -2,32 +2,23 @@
 
 namespace EveSrp\Service;
 
+use EveSrp\Settings;
 use GuzzleHttp\ClientInterface;
 use GuzzleHttp\Exception\GuzzleException;
-use Psr\Container\ContainerInterface;
 
 class ApiService
 {
-    /**
-     * @var ClientInterface
-     */
-    private $httpClient;
+    private ClientInterface $httpClient;
 
-    /**
-     * @var string
-     */
-    private $esiBaseUrl;
+    private string $esiBaseUrl;
 
-    /**
-     * @var string
-     */
-    private $killboardBaseUrl;
+    private string $killboardBaseUrl;
 
-    public function __construct(ContainerInterface $container)
+    public function __construct(ClientInterface $httpClient, Settings $settings)
     {
-        $this->httpClient = $container->get(ClientInterface::class);
-        $this->esiBaseUrl = $container->get('settings')['ESI_BASE_URL'];
-        $this->killboardBaseUrl = $container->get('settings')['ZKILLBOARD_BASE_URL'];
+        $this->httpClient = $httpClient;
+        $this->esiBaseUrl = $settings['ESI_BASE_URL'];
+        $this->killboardBaseUrl = $settings['ZKILLBOARD_BASE_URL'];
     }
 
     /**

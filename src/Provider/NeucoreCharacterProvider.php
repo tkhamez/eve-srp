@@ -9,24 +9,20 @@ use Brave\NeucoreApi\ApiException;
 use Brave\NeucoreApi\Model\Character;
 use EveSrp\Exception;
 use InvalidArgumentException;
-use Psr\Container\ContainerInterface;
 
 /** @noinspection PhpUnused */
 class NeucoreCharacterProvider implements InterfaceCharacterProvider
 {
-    /**
-     * @var ApplicationCharactersApi
-     */
-    private $api;
+    private ApplicationCharactersApi $api;
 
     /**
      * @var Character[]|null
      */
-    private $characters;
+    private ?array $characters = null;
 
-    public function __construct(ContainerInterface $container)
+    public function __construct(ApplicationCharactersApi $api)
     {
-        $this->api = $container->get(ApplicationCharactersApi::class);
+        $this->api = $api;
     }
 
     public function getCharacters(int $eveCharacterId): array

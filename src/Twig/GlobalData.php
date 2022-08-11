@@ -8,24 +8,18 @@ namespace EveSrp\Twig;
 use EveSrp\Model\Character;
 use EveSrp\Model\User;
 use EveSrp\Service\UserService;
-use Psr\Container\ContainerInterface;
+use EveSrp\Settings;
 
 class GlobalData
 {
-    /**
-     * @var array
-     */
-    private $settings;
+    private Settings $settings;
 
-    /**
-     * @var UserService
-     */
-    private $userService;
+    private UserService $userService;
 
-    public function __construct(ContainerInterface $container)
+    public function __construct(Settings $settings, UserService $userService)
     {
-        $this->settings = $container->get('settings');
-        $this->userService = $container->get(UserService::class);
+        $this->settings = $settings;
+        $this->userService = $userService;
     }
 
     public function appTitle(): string

@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace EveSrp\Provider;
 
 use EveSrp\Exception;
+use EveSrp\Settings;
 use GuzzleHttp\ClientInterface;
 use GuzzleHttp\Exception\GuzzleException;
-use Psr\Container\ContainerInterface;
 
 /**
  * A very simple group and character provider.
@@ -21,20 +21,14 @@ use Psr\Container\ContainerInterface;
  */
 class EsiProvider implements InterfaceCharacterProvider, InterfaceGroupProvider
 {
-    /**
-     * @var ClientInterface
-     */
-    private $httpClient;
+    private ClientInterface $httpClient;
 
-    /**
-     * @var string
-     */
-    private $esiBaseUrl;
+    private string $esiBaseUrl;
 
-    public function __construct(ContainerInterface $container)
+    public function __construct(ClientInterface $httpClient, Settings $settings)
     {
-        $this->httpClient = $container->get(ClientInterface::class);
-        $this->esiBaseUrl = $container->get('settings')['ESI_BASE_URL'];
+        $this->httpClient = $httpClient;
+        $this->esiBaseUrl = $settings['ESI_BASE_URL'];
     }
 
     public function getCharacters(int $eveCharacterId): array

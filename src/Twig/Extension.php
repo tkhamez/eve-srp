@@ -6,26 +6,19 @@ namespace EveSrp\Twig;
 
 use EveSrp\FlashMessage;
 use EveSrp\Service\UserService;
-use Psr\Container\ContainerInterface;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFunction;
 
 class Extension extends AbstractExtension
 {
-    /**
-     * @var UserService
-     */
-    private $userService;
+    private UserService $userService;
 
-    /**
-     * @var FlashMessage
-     */
-    private $flashMessage;
+    private FlashMessage $flashMessage;
 
-    public function __construct(ContainerInterface $container)
+    public function __construct(UserService $userService, FlashMessage $flashMessage)
     {
-        $this->userService = $container->get(UserService::class);
-        $this->flashMessage = $container->get(FlashMessage::class);
+        $this->userService = $userService;
+        $this->flashMessage = $flashMessage;
     }
 
     public function getFunctions(): array

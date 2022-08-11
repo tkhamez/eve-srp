@@ -16,7 +16,6 @@ use EveSrp\Repository\DivisionRepository;
 use EveSrp\Repository\ExternalGroupRepository;
 use EveSrp\Service\UserService;
 use Doctrine\ORM\EntityManagerInterface;
-use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Twig\Environment;
@@ -26,51 +25,37 @@ class AdminController
     use RequestParameter;
     use TwigResponse;
 
-    /**
-     * @var InterfaceGroupProvider
-     */
-    private $groupProvider;
+    private InterfaceGroupProvider $groupProvider;
 
-    /**
-     * @var EntityManagerInterface
-     */
-    private $entityManager;
+    private EntityManagerInterface $entityManager;
     
-    /**
-     * @var DivisionRepository
-     */
-    private $divisionRepository;
+    private DivisionRepository $divisionRepository;
 
-    /**
-     * @var ExternalGroupRepository
-     */
-    private $groupRepository;
+    private ExternalGroupRepository $groupRepository;
 
-    /**
-     * @var FlashMessage
-     */
-    private $flashMessage;
+    private FlashMessage $flashMessage;
 
-    /**
-     * @var UserService
-     */
-    private $userService;
+    private UserService $userService;
 
-    /**
-     * @var array
-     */
-    private $validRoles = [Permission::SUBMIT, Permission::REVIEW, Permission::PAY, Permission::ADMIN];
-    
-    public function __construct(ContainerInterface $container)
-    {
-        $this->groupProvider = $container->get(InterfaceGroupProvider::class);
-        $this->entityManager = $container->get(EntityManagerInterface::class);
-        $this->divisionRepository = $container->get(DivisionRepository::class);
-        $this->groupRepository = $container->get(ExternalGroupRepository::class);
-        $this->flashMessage = $container->get(FlashMessage::class);
-        $this->userService = $container->get(UserService::class);
+    private array $validRoles = [Permission::SUBMIT, Permission::REVIEW, Permission::PAY, Permission::ADMIN];
 
-        $this->twigResponse($container->get(Environment::class));
+    public function __construct(
+        InterfaceGroupProvider $groupProvider,
+        EntityManagerInterface $entityManager,
+        DivisionRepository $divisionRepository,
+        ExternalGroupRepository $groupRepository,
+        FlashMessage $flashMessage,
+        UserService $userService,
+        Environment $environment
+    ) {
+        $this->groupProvider = $groupProvider;
+        $this->entityManager = $entityManager;
+        $this->divisionRepository = $divisionRepository;
+        $this->groupRepository = $groupRepository;
+        $this->flashMessage = $flashMessage;
+        $this->userService = $userService;
+
+        $this->twigResponse($environment);
     }
 
     /**

@@ -10,10 +10,7 @@ use Twig\Error\Error;
 
 trait TwigResponse
 {
-    /**
-     * @var Environment
-     */
-    private $twig;
+    private Environment $twig;
 
     protected function twigResponse(Environment $twig)
     {

@@ -10,25 +10,18 @@ use Brave\NeucoreApi\Api\ApplicationGroupsApi;
 use Brave\NeucoreApi\ApiException;
 use Brave\NeucoreApi\Model\Group;
 use InvalidArgumentException;
-use Psr\Container\ContainerInterface;
 
 /** @noinspection PhpUnused */
 class NeucoreGroupProvider implements InterfaceGroupProvider
 {
-    /**
-     * @var ApplicationApi
-     */
-    private $api;
+    private ApplicationApi $api;
 
-    /**
-     * @var ApplicationGroupsApi
-     */
-    private $groupApi;
+    private ApplicationGroupsApi $groupApi;
 
-    public function __construct(ContainerInterface $container)
+    public function __construct(ApplicationApi $api, ApplicationGroupsApi $groupApi)
     {
-        $this->api = $container->get(ApplicationApi::class);
-        $this->groupApi = $container->get(ApplicationGroupsApi::class);
+        $this->api = $api;
+        $this->groupApi = $groupApi;
     }
 
     public function getGroups(int $eveCharacterId): array

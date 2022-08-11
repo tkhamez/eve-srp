@@ -19,76 +19,55 @@ use EveSrp\Repository\ExternalGroupRepository;
 use EveSrp\Repository\PermissionRepository;
 use EveSrp\Repository\UserRepository;
 use EveSrp\Security;
-use Psr\Container\ContainerInterface;
 use SlimSession\Helper;
 
 class UserService
 {
-    /**
-     * @var Helper
-     */
-    private $session;
+    private Helper $session;
 
-    /**
-     * @var EntityManagerInterface
-     */
-    private $entityManager;
+    private EntityManagerInterface $entityManager;
 
-    /**
-     * @var UserRepository
-     */
-    private $userRepository;
+    private UserRepository $userRepository;
 
-    /**
-     * @var ExternalGroupRepository
-     */
-    private $externalGroupRepository;
+    private ExternalGroupRepository $externalGroupRepository;
 
-    /**
-     * @var CharacterRepository
-     */
-    private $characterRepository;
+    private CharacterRepository $characterRepository;
 
-    /**
-     * @var PermissionRepository
-     */
-    private $permissionRepository;
+    private PermissionRepository $permissionRepository;
 
-    /**
-     * @var DivisionRepository
-     */
-    private $divisionRepository;
+    private DivisionRepository $divisionRepository;
 
-    /**
-     * @var InterfaceCharacterProvider
-     */
-    private $characterProvider;
+    private InterfaceCharacterProvider $characterProvider;
 
-    /**
-     * @var InterfaceGroupProvider
-     */
-    private $groupProvider;
+    private InterfaceGroupProvider $groupProvider;
 
-    /**
-     * @var User|null
-     */
-    private $user;
+    private ?User $user = null;
 
     /**
      * @var string[]
      */
-    private $clientRoles = [];
+    private array $clientRoles = [];
 
-    public function __construct(ContainerInterface $container) {
-        $this->session = $container->get(Helper::class);
-        $this->entityManager = $container->get(EntityManagerInterface::class);
-        $this->userRepository = $container->get(UserRepository::class);
-        $this->externalGroupRepository = $container->get(ExternalGroupRepository::class);
-        $this->characterRepository = $container->get(CharacterRepository::class);
-        $this->permissionRepository = $container->get(PermissionRepository::class);
-        $this->divisionRepository = $container->get(DivisionRepository::class);
-        $this->characterProvider = $container->get(InterfaceCharacterProvider::class);
-        $this->groupProvider = $container->get(InterfaceGroupProvider::class);
+    public function __construct(
+        Helper $helper,
+        EntityManagerInterface $entityManager,
+        UserRepository $userRepository,
+        ExternalGroupRepository $externalGroupRepository,
+        CharacterRepository $characterRepository,
+        PermissionRepository $permissionRepository,
+        DivisionRepository $divisionRepository,
+        InterfaceCharacterProvider $characterProvider,
+        InterfaceGroupProvider $groupProvider
+    ) {
+        $this->session = $helper;
+        $this->entityManager = $entityManager;
+        $this->userRepository = $userRepository;
+        $this->externalGroupRepository = $externalGroupRepository;
+        $this->characterRepository = $characterRepository;
+        $this->permissionRepository = $permissionRepository;
+        $this->divisionRepository = $divisionRepository;
+        $this->characterProvider = $characterProvider;
+        $this->groupProvider = $groupProvider;
     }
 
     /**

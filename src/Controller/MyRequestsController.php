@@ -6,7 +6,6 @@ namespace EveSrp\Controller;
 
 use EveSrp\Controller\Traits\TwigResponse;
 use EveSrp\Service\UserService;
-use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Twig\Environment;
@@ -15,16 +14,13 @@ class MyRequestsController
 {
     use TwigResponse;
 
-    /**
-     * @var UserService
-     */
-    private $userService;
+    private UserService $userService;
 
-    public function __construct(ContainerInterface $container)
+    public function __construct(UserService $userService, Environment $environment)
     {
-        $this->userService = $container->get(UserService::class);
+        $this->userService = $userService;
 
-        $this->twigResponse($container->get(Environment::class));
+        $this->twigResponse($environment);
     }
 
     public function __invoke(ServerRequestInterface $request, ResponseInterface $response): ResponseInterface

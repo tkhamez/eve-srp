@@ -5,12 +5,13 @@ declare(strict_types=1);
 namespace EveSrp\Controller;
 
 use Eve\Sso\AuthenticationProvider;
+use EveSrp\Controller\Traits\RequestParameter;
 use EveSrp\Controller\Traits\TwigResponse;
 use EveSrp\Exception;
 use EveSrp\FlashMessage;
 use EveSrp\Provider\InterfaceGroupProvider;
 use EveSrp\Service\UserService;
-use Psr\Container\ContainerInterface;
+use EveSrp\Settings;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use SlimSession\Helper;
@@ -19,51 +20,38 @@ use UnexpectedValueException;
 
 class AuthController
 {
+    use RequestParameter;
     use TwigResponse;
 
-    /**
-     * @var array
-     */
-    private $settings;
+    private Settings $settings;
 
-    /**
-     * @var Helper
-     */
-    private $session;
+    private Helper $session;
 
-    /**
-     * @var InterfaceGroupProvider
-     */
-    private $groupProvider;
+    private InterfaceGroupProvider $groupProvider;
 
-    /**
-     * @var UserService 
-     */
-    private $userService;
+    private UserService $userService;
 
-    /**
-     * @var AuthenticationProvider
-     */
-    private $authenticationProvider;
+    private AuthenticationProvider $authenticationProvider;
 
-    /**
-     * @var FlashMessage
-     */
-    private $flashMessage;
+    private FlashMessage $flashMessage;
 
-    /**
-     * @throws \Throwable
-     */
-    public function __construct(ContainerInterface $container)
-    {
-        $this->settings = $container->get('settings');
-        $this->session = $container->get(Helper::class);
-        $this->groupProvider = $container->get(InterfaceGroupProvider::class);
-        $this->userService = $container->get(UserService::class);
-        $this->authenticationProvider = $container->get(AuthenticationProvider::class);
-        $this->flashMessage = $container->get(FlashMessage::class);
+    public function __construct(
+        Settings $settings,
+        Helper $session,
+        InterfaceGroupProvider $groupProvider,
+        UserService $userService,
+        AuthenticationProvider $authenticationProvider,
+        FlashMessage $flashMessage,
+        Environment $environment
+    ) {
+        $this->settings = $settings;
+        $this->session = $session;
+        $this->groupProvider = $groupProvider;
+        $this->userService = $userService;
+        $this->authenticationProvider = $authenticationProvider;
+        $this->flashMessage = $flashMessage;
 
-        $this->twigResponse($container->get(Environment::class));
+        $this->twigResponse($environment);
     }
 
     /**
@@ -93,8 +81,8 @@ class AuthController
      */
     public function auth(ServerRequestInterface $request, ResponseInterface $response): ResponseInterface
     {
-        $code = (string)($request->getQueryParams()['code'] ?? '');
-        $state = (string)($request->getQueryParams()['state'] ?? '');
+        $code = (string) $this->paramGet($request, 'code', '');
+        $state = (string) $this->paramGet($request, 'state', '');
         if (empty($code) || empty($state)) {
             $this->flashMessage->addMessage('Invalid SSO state.', FlashMessage::TYPE_DANGER);
             return $response->withHeader('Location', '/login');
