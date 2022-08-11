@@ -8,7 +8,7 @@ To run the application you need PHP >=7.3 and a database supported by
 
 - Create an EVE application at https://developers.eveonline.com
 - Clone the repository and build the frontend (see below) - there will be pre-built releases later.
-- Copy `.env.dist` to `.env` and adjust values or set the corresponding environment variables.
+- Copy `config/.env.dist` to `config/.env` and adjust values or set the corresponding environment variables.
   At the very least set EVE_SRP_SSO_CLIENT_ID and EVE_SRP_SSO_CLIENT_SECRET, the rest works as is when using the
   Docker development environment.
 - Make sure that the `storage` directory is writable by the webserver.
