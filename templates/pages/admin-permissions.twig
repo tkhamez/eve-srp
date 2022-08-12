@@ -2,7 +2,7 @@
 {% set active_page = "admin-permissions" %}
 
 {% block content %}
-    <div class="row">
+    <div class="row mb-3">
         <div class="col">
             <h1>Admin</h1>
             <h2>Permissions</h2>
@@ -11,7 +11,7 @@
     </div>
 
     {% for division in divisions %}
-        <form class="card bg-dark mb-3" 
+        <form class="card bg-dark mb-3 border-light"
               action="/admin/permissions/save"
               method="post" id="division{{ division.id }}">
             <input type="hidden" name="id" value="{{ division.id }}">
@@ -37,7 +37,7 @@
                                 </td>
                                 <td class="form-group">
                                     <input type="hidden" name="groups[{{ role }}]" value="">
-                                    <label for="{{ role }}D{{ division.id }}Groups" class="text-white-50">
+                                    <label for="{{ role }}D{{ division.id }}Groups">
                                         Select groups
                                     </label>
                                     <br>

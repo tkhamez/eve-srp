@@ -1,7 +1,7 @@
 {% extends "layout-base.twig" %}
 
 {% block main %}
-    <header class="navbar navbar-dark bg-eve-srp shadow-1 mb-3 navbar-expand-lg">
+    <header class="navbar navbar-dark border-bottom mb-3 navbar-expand-lg">
         <span class="navbar-brand">{{ data.appTitle }}</span>
         <button class="navbar-toggler" type="button" data-toggle="collapse"
                 data-target="#navBarToggle" aria-controls="navBarToggle"
@@ -63,7 +63,7 @@
                     </a>
                     <div class="dropdown-menu" aria-labelledby="userDropdown">
                         <a class="dropdown-item" href="/logout">
-                            <span role="img" class="material-icons md-24">power_settings_new</span>
+                            <i class="bi bi-power"></i>
                             Logout
                         </a>
                         <div class="dropdown-divider"></div>
@@ -81,11 +81,5 @@
 
     <main>{% block content %}{% endblock %}</main>
 
-    <footer class="page-footer text-center text-white-50">
-        {{ data.footerText|raw }}<br>
-        <span class="text-center small">
-            "EVE", "EVE Online", "CCP" and all related logos and images are
-            trademarks or registered trademarks of <a href="https://www.ccpgames.com" target="_blank">CCP hf</a>.
-        </span>
-    </footer>
+    {% include 'components/footer.html' %}
 {% endblock %}

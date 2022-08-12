@@ -4,10 +4,9 @@
   "license": "MIT",
   "dependencies": {
     "bootstrap": "^4.6.0",
+    "bootstrap-icons": "^1.9.1",
     "bootstrap-select": "^1.13.18",
-    "daemonite-material": "^4.1.1",
     "jquery": "^3.6.0",
-    "material-design-icons": "^3.0.1",
     "popper.js": "^1.16.1"
   },
   "devDependencies": {

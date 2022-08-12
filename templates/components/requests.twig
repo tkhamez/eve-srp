@@ -14,30 +14,35 @@
             </tr>
         </thead>
         <tbody>
-            {% for request in requests %}
-                <tr>
-                    <td><a href="/request/{{ request.id }}/{{ page }}">{{ request.ship }}</a></td>
-                    <td>{{ request.pilot.name }}</td>
-                    <td>{{ request.solarSystem }}</td>
-                    <td>{{ request.killTime|date('Y-m-d H:i') }}</td>
-                    <td>
-                        {% if request.killboardUrl %}
-                            <a href="{{ request.killboardUrl }}" target="_blank" rel="noopener">zKillboard</a>
-                        {% endif %}
-                        {% if request.esiLink %}
-                            <a href="{{ request.esiLink }}" target="_blank" rel="noopener">ESI</a>
-                        {% endif %}
-                    </td>
-                    <td>{{ request.created|date('Y-m-d H:i') }}</td>
-                    <td>{{ request.division.name }}</td>
-                    <td>{{ request.status }}</td>
-                    <td class="text-right">
-                        {% if request.payout is not null %}
-                            {{ request.payout|number_format }}
-                        {% endif %}
-                    </td>
-                </tr>
-            {%  endfor %}
+        {% for request in requests %}
+            <tr>
+                <td><a href="/request/{{ request.id }}/{{ page }}">{{ request.ship }}</a></td>
+                <td>{{ request.pilot.name }}</td>
+                <td>{{ request.solarSystem }}</td>
+                <td>{{ request.killTime|date('Y-m-d H:i') }}</td>
+                <td>
+                    {% if request.killboardUrl %}
+                        <a href="{{ request.killboardUrl }}" target="_blank" rel="noopener noreferrer">
+                            zKillboard <i class="bi bi-box-arrow-up-right srp-external-link"></i>
+                        </a>
+                    {% endif %}
+                    &nbsp;
+                    {% if request.esiLink %}
+                        <a href="{{ request.esiLink }}" target="_blank" rel="noopener noreferrer">
+                            ESI <i class="bi bi-box-arrow-up-right srp-external-link"></i>
+                        </a>
+                    {% endif %}
+                </td>
+                <td>{{ request.created|date('Y-m-d H:i') }}</td>
+                <td>{{ request.division.name }}</td>
+                <td>{{ request.status }}</td>
+                <td class="text-right">
+                    {% if request.payout is not null %}
+                        {{ request.payout|number_format }}
+                    {% endif %}
+                </td>
+            </tr>
+        {%  endfor %}
         </tbody>
     </table>
 </div>

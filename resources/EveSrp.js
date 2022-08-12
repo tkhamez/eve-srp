@@ -15,7 +15,7 @@ window.EveSrp = {
     initDeleteDivision: function () {
         $('body').on('click', '.delete-division', function (evt) {
             const id = $(evt.target).data('id');
-            $('.confirm-delete-division input[name="id"]').val(id);
+            $('#deleteModal input[name="id"]').val(id);
         });
     },
 

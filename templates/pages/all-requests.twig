@@ -5,10 +5,10 @@
     <div class="row mb-3">
         <div class="col">
             <h1>All Requests</h1>
-            <form class="bg-dark-3 p-3" method="get">
+            <form class="p-3 border border-light" method="get">
                 <div class="form-group">
-                    <label class="text-light" for="division">Division</label>
-                    <select class="form-control bg-dark-4 text-light" id="division" name="division">
+                    <label for="division">Division</label>
+                    <select class="form-control" id="division" name="division">
                         <option value=""></option>
                         {% for division in divisions %}
                             <option {% if selectedDivision == division.id %}selected{% endif %}
@@ -19,8 +19,8 @@
                     </select>
                 </div>
                 <div class="form-group">
-                    <label class="text-light" for="status">Status</label>
-                    <select class="form-control bg-dark-4 text-light" id="status" name="status">
+                    <label for="status">Status</label>
+                    <select class="form-control" id="status" name="status">
                         <option></option>
                         {% for status in [
                             constant('EveSrp\\Type::INCOMPLETE'),

@@ -53,11 +53,13 @@ class GlobalData
         return $this->userService->getAuthenticatedUser();
     }
 
-    private function replaceMarkdownLink($text)
+    private function replaceMarkdownLink(string $text): string
     {
         return preg_replace(
             '/\[(.*?)]\((.*?)\)/',
-            '<a href="$2" target="_blank">$1</a> ',
+            '<a href="$2" target="_blank" rel="noopener noreferrer">
+                $1 <i class="bi bi-box-arrow-up-right srp-external-link"></i>
+            </a> ',
             $text
         );
     }

@@ -1,12 +1,29 @@
 
-@import "./colors.scss";
-@import "~daemonite-material/assets/scss/material";
+@import "~bootstrap-icons/font/bootstrap-icons.css";
+@import "~bootstrap/dist/css/bootstrap.css";
 @import "~bootstrap-select/dist/css/bootstrap-select.css";
 
-.popover { 
-    background-color: $material-color-grey-800; /* color of .bg-dark */
+.popover {
+    //background-color: $material-color-grey-800; /* color of .bg-dark */
 }
 
-.page-footer {
+a {
+    color: #00bc8c;
+}
+
+a:hover {
+    color: #009670;
+}
+
+.srp-external-link {
+    font-size: 70%;
+    vertical-align: text-top;
+}
+
+.srp-bg-dark-2 {
+    background-color: rgb(46, 46, 46);
+}
+
+.srp-page-footer {
     border-top: 1px solid grey;
 }
