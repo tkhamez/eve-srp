@@ -10,6 +10,7 @@ use Brave\NeucoreApi\Api\ApplicationGroupsApi;
 use Brave\NeucoreApi\Configuration;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\ORMSetup;
 use Eve\Sso\AuthenticationProvider;
 use EveSrp\Model\Action;
@@ -48,10 +49,11 @@ final class Container
     public static function getDefinition(): array
     {
         return [
-            'settings' => require_once ROOT_DIR . '/config/config.php',
-
-            Settings::class => function (ContainerInterface $container) {
-                return new Settings($container->get('settings'));
+            // Settings
+            Settings::class => function () {
+                return new Settings(
+                    require_once ROOT_DIR . '/config/config.php'
+                );
             },
 
             // Slim
@@ -64,24 +66,24 @@ final class Container
                 return $container->get(RoleProvider::class);
             },
             InterfaceGroupProvider::class => function (ContainerInterface $container) {
-                $class = $container->get('settings')['GROUP_PROVIDER'];
+                $class = $container->get(Settings::class)['GROUP_PROVIDER'];
                 return $container->get($class);
             },
             InterfaceCharacterProvider::class => function (ContainerInterface $container) {
-                $class = $container->get('settings')['CHARACTER_PROVIDER'];
+                $class = $container->get(Settings::class)['CHARACTER_PROVIDER'];
                 return $container->get($class);
             },
 
             // Guzzle HTTP client
             ClientInterface::class => function (ContainerInterface $container) {
                 return new Client([
-                    'headers' => ['User-Agent' => $container->get('settings')['HTTP_USER_AGENT']]
+                    'headers' => ['User-Agent' => $container->get(Settings::class)['HTTP_USER_AGENT']]
                 ]);
             },
 
             // SSO
             AuthenticationProvider::class => function (ContainerInterface $container) {
-                $settings = $container->get('settings');
+                $settings = $container->get(Settings::class);
                 $provider = new AuthenticationProvider([
                     'clientId' => $settings['SSO_CLIENT_ID'],
                     'clientSecret' => $settings['SSO_CLIENT_SECRET'],
@@ -98,13 +100,10 @@ final class Container
 
             // Neucore API
             Configuration::class => function (ContainerInterface $container) {
-                $apiKey = base64_encode(
-                    $container->get('settings')['NEUCORE_APP_ID'] .
-                    ':' .
-                    $container->get('settings')['NEUCORE_APP_TOKEN']
-                );
+                $settings = $container->get(Settings::class);
+                $apiKey = base64_encode($settings['NEUCORE_APP_ID'] . ':' . $settings['NEUCORE_APP_TOKEN']);
                 $config = Configuration::getDefaultConfiguration();
-                $config->setHost($container->get('settings')['NEUCORE_DOMAIN'].'/api');
+                $config->setHost($settings['NEUCORE_DOMAIN'].'/api');
                 $config->setAccessToken($apiKey);
                 return $config;
             },
@@ -129,8 +128,9 @@ final class Container
 
             // Twig
             Environment::class => function (ContainerInterface $container) {
+                $dev = $container->get(Settings::class)['APP_ENV'] === 'dev';
                 $options = [];
-                if ($container->get('settings')['APP_ENV'] === 'dev') {
+                if ($dev) {
                     $options['debug'] = true;
                 } else {
                     $options['cache'] = ROOT_DIR . '/storage/compilation_cache';
@@ -138,7 +138,7 @@ final class Container
                 $loader = new FilesystemLoader(ROOT_DIR . '/templates');
                 $loader->addPath(ROOT_DIR . '/web/dist');
                 $twig = new Environment($loader, $options);
-                if ($container->get('settings')['APP_ENV'] === 'dev') {
+                if ($dev) {
                     $twig->addExtension($container->get(DebugExtension::class));
                 }
                 $twig->addGlobal('data', $container->get(GlobalData::class));
@@ -149,46 +149,50 @@ final class Container
             // Doctrine ORM
             EntityManagerInterface::class => function (ContainerInterface $container) {
                 return EntityManager::create(
-                    ['url' => $container->get('settings')['DB_URL']],
+                    ['url' => $container->get(Settings::class)['DB_URL']],
                     ORMSetup::createAnnotationMetadataConfiguration(
                         [ROOT_DIR . '/src/Model'],
-                        $container->get('settings')['APP_ENV'] === 'dev',
+                        $container->get(Settings::class)['APP_ENV'] === 'dev',
                         ROOT_DIR . '/storage'
                     )
                 );
             },
             ActionRepository::class => function (ContainerInterface $container) {
-                $em = $container->get(EntityManagerInterface::class);
-                return new ActionRepository($em, $em->getClassMetadata(Action::class));
+                return self::getRepository($container, ActionRepository::class, Action::class);
             },
             CharacterRepository::class => function (ContainerInterface $container) {
-                $em = $container->get(EntityManagerInterface::class);
-                return new CharacterRepository($em, $em->getClassMetadata(Character::class));
+                return self::getRepository($container, CharacterRepository::class, Character::class);
             },
             DivisionRepository::class => function (ContainerInterface $container) {
-                $em = $container->get(EntityManagerInterface::class);
-                return new DivisionRepository($em, $em->getClassMetadata(Division::class));
+                return self::getRepository($container, DivisionRepository::class, Division::class);
             },
             EsiTypeRepository::class => function (ContainerInterface $container) {
-                $em = $container->get(EntityManagerInterface::class);
-                return new EsiTypeRepository($em, $em->getClassMetadata(EsiType::class));
+                return self::getRepository($container, EsiTypeRepository::class, EsiType::class);
             },
             ExternalGroupRepository::class => function (ContainerInterface $container) {
-                $em = $container->get(EntityManagerInterface::class);
-                return new ExternalGroupRepository($em, $em->getClassMetadata(ExternalGroup::class));
+                return self::getRepository($container, ExternalGroupRepository::class, ExternalGroup::class);
             },
             PermissionRepository::class => function (ContainerInterface $container) {
-                $em = $container->get(EntityManagerInterface::class);
-                return new PermissionRepository($em, $em->getClassMetadata(Permission::class));
+                return self::getRepository($container, PermissionRepository::class, Permission::class);
             },
             RequestRepository::class => function (ContainerInterface $container) {
-                $em = $container->get(EntityManagerInterface::class);
-                return new RequestRepository($em, $em->getClassMetadata(Request::class));
+                return self::getRepository($container, RequestRepository::class, Request::class);
             },
             UserRepository::class => function (ContainerInterface $container) {
-                $em = $container->get(EntityManagerInterface::class);
-                return new UserRepository($em, $em->getClassMetadata(User::class));
+                return self::getRepository($container, UserRepository::class, User::class);
             },
         ];
+    }
+
+    /**
+     * @throws \Throwable
+     */
+    private static function getRepository(
+        ContainerInterface $container,
+        string $repositoryClass,
+        string $entityClass
+    ): EntityRepository  {
+        $em = $container->get(EntityManagerInterface::class); /* @var EntityManagerInterface $em */
+        return new $repositoryClass($em, $em->getClassMetadata($entityClass));
     }
 }
