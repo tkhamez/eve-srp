@@ -3,6 +3,25 @@
 @import "~bootstrap/dist/css/bootstrap.css";
 @import "~bootstrap-select/dist/css/bootstrap-select.css";
 
+html {
+    // for sticky footer
+    position: relative;
+    min-height: 100%;
+}
+
+body {
+    margin-bottom: 70px; // footer height with a margin
+}
+
+.srp-page-footer {
+    border-top: 1px solid grey;
+    position: absolute;
+    bottom: 0;
+    width: calc(100% - 30px);
+    max-height: 51px;
+    overflow-y: auto;
+}
+
 .popover {
     //background-color: $material-color-grey-800; /* color of .bg-dark */
 }
@@ -22,8 +41,4 @@ a:hover {
 
 .srp-bg-dark-2 {
     background-color: rgb(46, 46, 46);
-}
-
-.srp-page-footer {
-    border-top: 1px solid grey;
 }
