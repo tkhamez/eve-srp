@@ -7,7 +7,7 @@ To run the application you need PHP >=8.0 and a database supported by
 (tested with MariaDB 10.6).
 
 - Create an EVE application at https://developers.eveonline.com, no scopes required.
-- Clone the repository and build the frontend (see below) - there will be pre-built releases later.
+- Clone the repository, build the frontend and backend (see below) - there will be pre-built releases later.
 - Copy `config/.env.dist` to `config/.env` and adjust values or set the corresponding environment variables.
   At the very least set EVE_SRP_SSO_CLIENT_ID and EVE_SRP_SSO_CLIENT_SECRET, the rest works as is when using the
   Docker development environment.

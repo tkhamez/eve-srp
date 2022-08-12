@@ -35,7 +35,7 @@ module.exports = (env, argv) => {
                 inject: false,
             }),
             new MiniCssExtractPlugin({
-                filename: devMode ? '[name].css' : '[name].[hash].css',
+                filename: devMode ? '[name].css' : '[name].[fullhash].css',
             }),
         ],
         devtool: devMode ? 'eval-cheap-source-map' : 'source-map',
