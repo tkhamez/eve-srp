@@ -1,7 +1,6 @@
+import {Popover} from 'bootstrap';
 
-import $ from 'jquery';
-
-$(function () {
+window.addEventListener('load', () => {
     EveSrp.initPopover();
     EveSrp.initDeleteDivision();
     window.setInterval(EveSrp.ping, 300000); // 5 minutes
@@ -9,17 +8,20 @@ $(function () {
 
 window.EveSrp = {
     initPopover: function () {
-        $('[data-toggle="popover"]').popover();
+        [...document.querySelectorAll('[data-bs-toggle="popover"]')]
+            .map(popoverTriggerEl => new Popover(popoverTriggerEl, null))
     },
 
     initDeleteDivision: function () {
-        $('body').on('click', '.delete-division', function (evt) {
-            const id = $(evt.target).data('id');
-            $('#deleteModal input[name="id"]').val(id);
-        });
+        [...document.querySelectorAll('.delete-division')].map(button => {
+            button.addEventListener('click', function (evt) {
+                document.querySelector('#deleteModal input[name="id"]').value = evt.target.dataset.srpId;
+            })
+        })
     },
 
     ping: function () {
-        $.get('/ping');
+        // noinspection JSIgnoredPromiseFromCall
+        fetch('/ping');
     },
 }

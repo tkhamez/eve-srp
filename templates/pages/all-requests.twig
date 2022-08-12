@@ -6,8 +6,8 @@
         <div class="col">
             <h1>All Requests</h1>
             <form class="p-3 border border-light" method="get">
-                <div class="form-group">
-                    <label for="division">Division</label>
+                <div class="mb-3">
+                    <label for="division" class="form-label">Division</label>
                     <select class="form-control" id="division" name="division">
                         <option value=""></option>
                         {% for division in divisions %}
@@ -18,8 +18,8 @@
                         {% endfor %}
                     </select>
                 </div>
-                <div class="form-group">
-                    <label for="status">Status</label>
+                <div class="mb-3">
+                    <label for="status" class="form-label">Status</label>
                     <select class="form-control" id="status" name="status">
                         <option></option>
                         {% for status in [

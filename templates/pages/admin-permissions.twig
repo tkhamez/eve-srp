@@ -35,16 +35,14 @@
                                         {% endfor %}
                                     </ul>
                                 </td>
-                                <td class="form-group">
+                                <td>
                                     <input type="hidden" name="groups[{{ role }}]" value="">
-                                    <label for="{{ role }}D{{ division.id }}Groups">
+                                    <label for="{{ role }}D{{ division.id }}Groups" class="form-label">
                                         Select groups
                                     </label>
                                     <br>
-                                    <select multiple name="groups[{{ role }}][]"
-                                            id="{{ role }}D{{ division.id }}Groups"
-                                            class="form-control form-control-sm selectpicker"
-                                            data-width="300px" data-live-search="true">
+                                    <select multiple name="groups[{{ role }}][]" class="form-select"
+                                            id="{{ role }}D{{ division.id }}Groups">
                                         {% for group in groups %}
                                             {% set selected = '' %}
                                             {% if division.hasPermission(role, group.id) %}

@@ -1,7 +1,16 @@
-
 @import "~bootstrap-icons/font/bootstrap-icons.css";
 @import "~bootstrap/dist/css/bootstrap.css";
-@import "~bootstrap-select/dist/css/bootstrap-select.css";
+
+:root {
+    --srp-text-color: #f8f9fa; // color of .text-light
+
+    --srp-bg-color: #212529; // color of .bg-dark
+    --srp-bg-color-2: #2c3034; // lighter, color of odd table rows
+
+    // Color were taken from the Bootswatch Darkly theme.
+    --srp-link-color: #00bc8c;
+    --srp-link-color-2: #009670;
+}
 
 html {
     // for sticky footer
@@ -23,15 +32,22 @@ body {
 }
 
 .popover {
-    //background-color: $material-color-grey-800; /* color of .bg-dark */
+    background-color: var(--srp-bg-color);
+    border-color: grey;
+    .popover-body {
+        color: var(--srp-text-color);
+    }
+    .popover-header {
+        background-color: var(--srp-bg-color-2);
+        color: var(--srp-text-color);
+    }
 }
 
 a {
-    color: #00bc8c;
-}
-
-a:hover {
-    color: #009670;
+    color: var(--srp-link-color);
+    &:hover {
+        color: var(--srp-link-color-2);
+    }
 }
 
 .srp-external-link {
@@ -40,5 +56,5 @@ a:hover {
 }
 
 .srp-bg-dark-2 {
-    background-color: rgb(46, 46, 46);
+    background-color: var(--srp-bg-color-2);
 }

@@ -10,7 +10,7 @@
                 <th>Created</th>
                 <th>Division</th>
                 <th>Status</th>
-                <th class="text-right">Payout</th>
+                <th class="text-end">Payout</th>
             </tr>
         </thead>
         <tbody>
@@ -23,20 +23,18 @@
                 <td>
                     {% if request.killboardUrl %}
                         <a href="{{ request.killboardUrl }}" target="_blank" rel="noopener noreferrer">
-                            zKillboard <i class="bi bi-box-arrow-up-right srp-external-link"></i>
-                        </a>
+                            zKillboard <i class="bi bi-box-arrow-up-right srp-external-link"></i></a>
                     {% endif %}
                     &nbsp;
                     {% if request.esiLink %}
                         <a href="{{ request.esiLink }}" target="_blank" rel="noopener noreferrer">
-                            ESI <i class="bi bi-box-arrow-up-right srp-external-link"></i>
-                        </a>
+                            ESI <i class="bi bi-box-arrow-up-right srp-external-link"></i></a>
                     {% endif %}
                 </td>
                 <td>{{ request.created|date('Y-m-d H:i') }}</td>
                 <td>{{ request.division.name }}</td>
                 <td>{{ request.status }}</td>
-                <td class="text-right">
+                <td class="text-end">
                     {% if request.payout is not null %}
                         {{ request.payout|number_format }}
                     {% endif %}

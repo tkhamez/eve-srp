@@ -18,15 +18,14 @@
                     <div class="modal-content bg-dark">
                         <div class="modal-header">
                             <h5 class="modal-title" id="exampleModalLabel">Delete Division</h5>
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
+                            <button type="button" class="btn-close bg-light" data-bs-dismiss="modal"
+                                    aria-label="Close"></button>
                         </div>
                         <div class="modal-body">
                             Are you sure?
                         </div>
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-danger" data-dismiss="modal">No</button>
+                            <button type="button" class="btn btn-danger" data-bs-dismiss="modal">No</button>
                             <form action="/admin/divisions/delete" method="post">
                                 <input type="hidden" name="id" value="">
                                 <button type="submit" class="btn btn-success">Yes</button>
@@ -49,9 +48,9 @@
                         <tr>
                             <td>{{ division.id }}</td>
                             <td>{{ division.name }}</td>
-                            <td class="text-right">
-                                <button type="button" class="btn btn-warning delete-division" data-toggle="modal" 
-                                        data-target="#deleteModal" data-id="{{ division.id }}">
+                            <td class="text-end">
+                                <button type="button" class="btn btn-warning delete-division" data-bs-toggle="modal"
+                                        data-bs-target="#deleteModal" data-srp-id="{{ division.id }}">
                                     delete
                                 </button>
                             </td>
@@ -65,8 +64,8 @@
                 <div class="card-body">
                     <h5 class="card-title">Add Division</h5>
                     <p class="card-text">Synchronize (add, remove) external groups.</p>
-                    <div class="form-group">
-                        <label for="nameInput">Name</label>
+                    <div class="mb-3">
+                        <label for="nameInput" class="form-label">Name</label>
                         <input type="text" name="name" class="form-control" id="nameInput">
                     </div>
                     <button type="submit" class="btn btn-primary">Submit</button>

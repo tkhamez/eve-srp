@@ -10,9 +10,9 @@
     </div>
 
     <div id="esiKillMailModal" class="modal" tabindex="-1" role="dialog">
-        <div class="modal-dialog" role="document">
+        <div class="modal-dialog srp-esi-link" role="document" style="max-width: 315px">
             <div class="modal-content">
-                <div class="modal-body bg-dark">
+                <div class="modal-body bg-dark text-center">
                     <img src="/static/killmail.png" alt="ESI Kill Link">
                 </div>
             </div>
@@ -23,8 +23,8 @@
         <div class="col">
             <form class="border border-light p-3" action="/submit" method="post"
                   onsubmit="document.getElementById('formSubmit').disabled = true">
-                <div class="form-group">
-                    <label for="division">Division</label>
+                <div class="mb-3">
+                    <label for="division" class="form-label">Division</label>
                     <select class="form-control" name="division" id="division" required>
                         <option></option>
                         {% for division in divisions %}
@@ -35,17 +35,17 @@
                         {% endfor %}
                     </select>
                 </div>
-                <div class="form-group">
-                    <label for="url">
+                <div class="mb-3">
+                    <label for="url" class="form-label">
                         <a href="{{ killboardUrl }}" target="_blank" rel="noopener noreferrer">
-                            zKillboard <i class="bi bi-box-arrow-up-right srp-external-link"></i>
-                        </a> URL or
-                        <a href="#" data-toggle="modal" data-target="#esiKillMailModal">External Kill Link</a> (ESI)
+                            zKillboard <i class="bi bi-box-arrow-up-right srp-external-link"></i></a> URL or
+                        <a href="#" data-bs-toggle="modal" data-bs-target="#esiKillMailModal">External Kill Link</a>
+                        (ESI)
                     </label>
                     <input type="text" class="form-control" name="url" id="url" value="{{ url }}" required>
                 </div>
-                <div class="form-group">
-                    <label for="details">Details</label>
+                <div class="mb-3">
+                    <label for="details" class="form-label">Details</label>
                     <textarea class="form-control" name="details" id="details"
                               rows="3" required>{{ details }}</textarea>
                 </div>
