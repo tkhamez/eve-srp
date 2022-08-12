@@ -14,12 +14,8 @@ class MyRequestsController
 {
     use TwigResponse;
 
-    private UserService $userService;
-
-    public function __construct(UserService $userService, Environment $environment)
+    public function __construct(private UserService $userService, Environment $environment)
     {
-        $this->userService = $userService;
-
         $this->twigResponse($environment);
     }
 

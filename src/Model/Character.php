@@ -23,22 +23,19 @@ class Character
     private $id;
 
     /**
-     * @var string
      * @ORM\Column(type="string", length=255)
      */
-    private $name = '';
+    private string $name = '';
 
     /**
      * @ORM\Column(type="boolean", options={"default" = 0})
-     * @var bool
      */
-    private $main = false;
+    private bool $main = false;
 
     /**
      * @ORM\ManyToOne(targetEntity="User", inversedBy="characters")
-     * @var User|null
      */
-    private $user;
+    private ?User $user = null;
 
     public function setId(int $id): self
     {

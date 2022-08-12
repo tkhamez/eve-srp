@@ -23,34 +23,15 @@ class AuthController
     use RequestParameter;
     use TwigResponse;
 
-    private Settings $settings;
-
-    private Helper $session;
-
-    private InterfaceGroupProvider $groupProvider;
-
-    private UserService $userService;
-
-    private AuthenticationProvider $authenticationProvider;
-
-    private FlashMessage $flashMessage;
-
     public function __construct(
-        Settings $settings,
-        Helper $session,
-        InterfaceGroupProvider $groupProvider,
-        UserService $userService,
-        AuthenticationProvider $authenticationProvider,
-        FlashMessage $flashMessage,
+        private Settings $settings,
+        private Helper $session,
+        private InterfaceGroupProvider $groupProvider,
+        private UserService $userService,
+        private AuthenticationProvider $authenticationProvider,
+        private FlashMessage $flashMessage,
         Environment $environment
     ) {
-        $this->settings = $settings;
-        $this->session = $session;
-        $this->groupProvider = $groupProvider;
-        $this->userService = $userService;
-        $this->authenticationProvider = $authenticationProvider;
-        $this->flashMessage = $flashMessage;
-
         $this->twigResponse($environment);
     }
 
@@ -61,7 +42,7 @@ class AuthController
     {
         try {
             $state = $this->authenticationProvider->generateState();
-        } catch (\Exception $e) {
+        } catch (\Exception) {
             $state = uniqid('srp', true);
         }
         $this->session->set('ssoState', $state);

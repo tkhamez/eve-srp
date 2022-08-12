@@ -55,8 +55,8 @@ class Permission
     private $externalGroup;
 
     /**
-     * @var string
      * @ORM\Column(type="string", length=8)
+     * @var string
      */
     private $role;
 

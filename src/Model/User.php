@@ -24,10 +24,9 @@ class User
     private $id;
 
     /**
-     * @var string
      * @ORM\Column(type="string", length=255, nullable=true)
      */
-    private $name = '';
+    private string $name = '';
 
     /**
      * @ORM\ManyToMany(targetEntity="ExternalGroup", inversedBy="users")
@@ -36,22 +35,19 @@ class User
      *     inverseJoinColumns={@ORM\JoinColumn(name="external_group_id")}
      * )
      * @ORM\OrderBy({"name" = "ASC"})
-     * @var Collection
      */
-    private $externalGroups;
+    private Collection $externalGroups;
 
     /**
      * @ORM\OneToMany(targetEntity="Character", mappedBy="user")
-     * @var Collection
      */
-    private $characters;
+    private  Collection$characters;
 
     /**
      * @ORM\OneToMany(targetEntity="Request", mappedBy="submitter")
      * @ORM\OrderBy({"created" = "DESC"})
-     * @var Collection
      */
-    private $requests;
+    private Collection $requests;
 
     public function __construct()
     {

@@ -24,22 +24,19 @@ class ExternalGroup
 
     /**
      * @ORM\Column(type="string", unique=true, length=255)
-     * @var string
      */
-    private $name = '';
+    private string $name = '';
 
     /**
      * @ORM\OneToMany(targetEntity="Permission", mappedBy="externalGroup", cascade={"remove"})
-     * @var Collection
      */
-    private $permissions;
+    private Collection $permissions;
 
     /**
      * @ORM\ManyToMany(targetEntity="User", mappedBy="externalGroups")
      * @ORM\OrderBy({"name" = "ASC"})
-     * @var Collection
      */
-    private $users;
+    private Collection $users;
 
     public function __construct()
     {

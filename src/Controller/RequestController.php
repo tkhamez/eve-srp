@@ -41,18 +41,6 @@ class RequestController
     private const SPECIALIZED_AMMO_HOLD = 'Specialized Ammo Hold';
     private const SPECIALIZED_PLANETARY_COMMODITIES_HOLD = 'Specialized Planetary Commodities Hold';
 
-    private UserService $userService;
-
-    private ApiService $apiService;
-
-    private EntityManagerInterface $entityManager;
-
-    private RequestRepository $requestRepository;
-
-    private EsiTypeRepository $esiTypeRepository;
-
-    private ClientInterface $httpClient;
-
     private string $esiBaseUrl;
 
     private string $killboardBaseUrl;
@@ -170,21 +158,15 @@ class RequestController
     ];
 
     public function __construct(
-        UserService $userService,
-        ApiService $apiService,
-        EntityManagerInterface $entityManager,
-        RequestRepository $requestRepository,
-        EsiTypeRepository $esiTypeRepository,
-        ClientInterface $httpClient,
+        private UserService $userService,
+        private ApiService $apiService,
+        private EntityManagerInterface $entityManager,
+        private RequestRepository $requestRepository,
+        private EsiTypeRepository $esiTypeRepository,
+        private ClientInterface $httpClient,
         Settings $settings,
         Environment $environment
     ) {
-        $this->userService = $userService;
-        $this->apiService = $apiService;
-        $this->entityManager = $entityManager;
-        $this->requestRepository = $requestRepository;
-        $this->esiTypeRepository = $esiTypeRepository;
-        $this->httpClient = $httpClient;
         $this->esiBaseUrl = $settings['ESI_BASE_URL'];
         $this->killboardBaseUrl = $settings['ZKILLBOARD_BASE_URL'];
 
@@ -234,7 +216,7 @@ class RequestController
     /**
      * Add missing URLs to zKillboard or ESI
      */
-    private function addMissingURLs(Request $srpRequest)
+    private function addMissingURLs(Request $srpRequest): void
     {
         if (! $srpRequest->getEsiLink() && $srpRequest->getKillboardUrl()) {
             $esiLink = $this->apiService->getEsiUrlFromKillboard($srpRequest->getKillboardUrl());

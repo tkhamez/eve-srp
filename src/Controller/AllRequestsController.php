@@ -19,22 +19,12 @@ class AllRequestsController
     use RequestParameter;
     use TwigResponse;
 
-    private RequestRepository $requestRepository;
-
-    private DivisionRepository $divisionRepository;
-
-    private UserService $userService;
-
     public function __construct(
-        RequestRepository $requestRepository,
-        DivisionRepository $divisionRepository,
-        UserService $userService,
+        private RequestRepository $requestRepository,
+        private DivisionRepository $divisionRepository,
+        private UserService $userService,
         Environment $environment
     ) {
-        $this->requestRepository = $requestRepository;
-        $this->divisionRepository = $divisionRepository;
-        $this->userService = $userService;
-
         $this->twigResponse($environment);
     }
 
@@ -43,7 +33,7 @@ class AllRequestsController
         # TODO pager
 
         $selectedStatus = (string) $this->paramGet($request, 'status');
-        $selectedDivision = (int) $this->paramGet($request, 'division', 0);
+        $selectedDivision = (int) $this->paramGet($request, 'division', '0');
 
         $divisions = $this->userService->getDivisionsWithRoles([Permission::REVIEW, Permission::PAY]);
 

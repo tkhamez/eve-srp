@@ -12,14 +12,8 @@ use EveSrp\Settings;
 
 class GlobalData
 {
-    private Settings $settings;
-
-    private UserService $userService;
-
-    public function __construct(Settings $settings, UserService $userService)
+    public function __construct(private Settings $settings, private UserService $userService)
     {
-        $this->settings = $settings;
-        $this->userService = $userService;
     }
 
     public function appTitle(): string

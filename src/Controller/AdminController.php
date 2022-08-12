@@ -25,36 +25,17 @@ class AdminController
     use RequestParameter;
     use TwigResponse;
 
-    private InterfaceGroupProvider $groupProvider;
-
-    private EntityManagerInterface $entityManager;
-    
-    private DivisionRepository $divisionRepository;
-
-    private ExternalGroupRepository $groupRepository;
-
-    private FlashMessage $flashMessage;
-
-    private UserService $userService;
-
     private array $validRoles = [Permission::SUBMIT, Permission::REVIEW, Permission::PAY, Permission::ADMIN];
 
     public function __construct(
-        InterfaceGroupProvider $groupProvider,
-        EntityManagerInterface $entityManager,
-        DivisionRepository $divisionRepository,
-        ExternalGroupRepository $groupRepository,
-        FlashMessage $flashMessage,
-        UserService $userService,
+        private InterfaceGroupProvider $groupProvider,
+        private EntityManagerInterface $entityManager,
+        private DivisionRepository $divisionRepository,
+        private ExternalGroupRepository $groupRepository,
+        private FlashMessage $flashMessage,
+        private UserService $userService,
         Environment $environment
     ) {
-        $this->groupProvider = $groupProvider;
-        $this->entityManager = $entityManager;
-        $this->divisionRepository = $divisionRepository;
-        $this->groupRepository = $groupRepository;
-        $this->flashMessage = $flashMessage;
-        $this->userService = $userService;
-
         $this->twigResponse($environment);
     }
 

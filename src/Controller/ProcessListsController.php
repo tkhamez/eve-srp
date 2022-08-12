@@ -18,18 +18,11 @@ class ProcessListsController
 {
     use TwigResponse;
 
-    private RequestRepository $requestRepository;
-
-    private UserService $userService;
-
     public function __construct(
-        RequestRepository $requestRepository,
-        UserService $userService,
+        private RequestRepository $requestRepository,
+        private UserService $userService,
         Environment $environment
     ) {
-        $this->requestRepository = $requestRepository;
-        $this->userService = $userService;
-
         $this->twigResponse($environment);
     }
 

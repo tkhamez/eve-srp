@@ -13,14 +13,11 @@ class FlashMessage
     const TYPE_WARNING = 'warning';
     const TYPE_DANGER = 'danger';
 
-    private Helper $session;
-
-    public function __construct(Helper $session)
+    public function __construct(private Helper $session)
     {
-        $this->session = $session;
     }
 
-    public function addMessage(string $message, string $type = self::TYPE_INFO)
+    public function addMessage(string $message, string $type = self::TYPE_INFO): void
     {
         $messages = $this->session->get('flash-messages', []);
         $messages[] = [$message, $type];

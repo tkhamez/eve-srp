@@ -47,9 +47,8 @@ class Request
 
     /**
      * @ORM\OneToMany(targetEntity="Action", mappedBy="request")
-     * @var Collection
      */
-    private $actions;
+    private Collection $actions;
 
     /**
      * @ORM\ManyToOne(targetEntity="Character")
@@ -59,22 +58,21 @@ class Request
     private $pilot;
 
     /**
-     * @var string
      * @ORM\Column(type="string", length=255, nullable=true)
+     * @var string
      */
     private $corporation;
 
     /**
-     * @var string
      * @ORM\Column(type="string", length=255, nullable=true)
+     * @var string
      */
     private $alliance;
 
     /**
-     * @var string
      * @ORM\Column(type="string", length=128)
      */
-    private $ship = '';
+    private string $ship = '';
 
     /**
      * @ORM\Column(type="datetime", name="kill_time")
@@ -83,22 +81,21 @@ class Request
     private $killTime;
 
     /**
-     * @var string
      * @ORM\Column(type="string", name="solar_system", length=32)
      */
-    private $solarSystem = '';
+    private string $solarSystem = '';
 
     /**
-     * @var string
      * @ORM\Column(type="string", name="killboard_url", length=512, nullable=true)
+     * @var string
      */
     private $killboardUrl;
 
     /**
      * The "External Kill Link" from the in-game menu.
      * 
-     * @var string
      * @ORM\Column(type="string", name="esi_link", length=512, nullable=true)
+     * @var string
      */
     private $esiLink;
     
@@ -124,10 +121,9 @@ class Request
      * Request status: one of the EveSrp\Type constants.
      *
      * @ORM\Column(type="string", length=16)
-     * @var string
      * @see Type
      */
-    private $status = '';
+    private string $status = '';
     
     public function __construct()
     {

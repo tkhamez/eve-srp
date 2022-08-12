@@ -129,7 +129,7 @@ class SubmitController
             ->setDivision($division)
             ->setDetails($this->inputDetails);
 
-        if (strpos($this->inputUrl, $this->esiBaseUrl) === 0) {
+        if (str_starts_with($this->inputUrl, $this->esiBaseUrl)) {
             $esiUrl = $this->inputUrl;
         } else {
             $request->setKillboardUrl($this->inputUrl);
@@ -166,7 +166,7 @@ class SubmitController
 
         try {
             $killTime = new \DateTime($killMailData->killmail_time);
-        } catch (\Exception $e) {
+        } catch (\Exception) {
             $this->flashMessage->addMessage('Could not read kill mail time.', FlashMessage::TYPE_WARNING);
             return false;
         }
@@ -219,7 +219,7 @@ class SubmitController
             ->setKillTime($killTime)
             ->setSolarSystem($systemData->name)
             ->setCorporation($corporationData->name)
-            ->setAlliance($allianceData ? $allianceData->name : null);
+            ->setAlliance($allianceData?->name);
         if (! $request->getKillboardUrl()) {
             $request->setKillboardUrl("{$this->killboardBaseUrl}kill/$killMailData->killmail_id/");
         }

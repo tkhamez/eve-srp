@@ -22,9 +22,8 @@ class EsiType
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
-     * @var string
      */
-    private $name = '';
+    private string $name = '';
 
     public function setId(int $id): self
     {

@@ -8,25 +8,19 @@ use GuzzleHttp\Exception\GuzzleException;
 
 class ApiService
 {
-    private ClientInterface $httpClient;
-
     private string $esiBaseUrl;
 
     private string $killboardBaseUrl;
 
-    public function __construct(ClientInterface $httpClient, Settings $settings)
+    public function __construct(private ClientInterface $httpClient, Settings $settings)
     {
-        $this->httpClient = $httpClient;
         $this->esiBaseUrl = $settings['ESI_BASE_URL'];
         $this->killboardBaseUrl = $settings['ZKILLBOARD_BASE_URL'];
     }
 
-    /**
-     * @return \stdClass|array|null
-     */
-    public function getJsonData(string $url)
+    public function getJsonData(string $url): array|\stdClass|null
     {
-        $url = strpos($url, 'http') === 0 ? $url : $this->esiBaseUrl . $url;
+        $url = str_starts_with($url, 'http') ? $url : $this->esiBaseUrl . $url;
         try {
             $apiResponse = $this->httpClient->request('GET', $url);
         } catch (GuzzleException $e) {

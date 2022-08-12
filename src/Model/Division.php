@@ -23,16 +23,14 @@ class Division
     private $id;
 
     /**
-     * @var string
      * @ORM\Column(type="string", length=255)
      */
-    private $name = '';
+    private string $name = '';
 
     /**
      * @ORM\OneToMany(targetEntity="Permission", mappedBy="division", cascade={"remove"})
-     * @var Collection
      */
-    private $permissions;
+    private Collection $permissions;
 
     public function __construct()
     {

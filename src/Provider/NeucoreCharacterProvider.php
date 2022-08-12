@@ -38,7 +38,7 @@ class NeucoreCharacterProvider implements InterfaceCharacterProvider
     {
         try {
             $this->fetchCharacters($eveCharacterId);
-        } catch (Exception $e) {
+        } catch (Exception) {
             return null;
         }
 

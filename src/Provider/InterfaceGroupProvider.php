@@ -15,7 +15,7 @@ interface InterfaceGroupProvider
      *
      * This is called after each character login.
      * 
-     * @param int $eveCharacterId EVE character ID of logged in user
+     * @param int $eveCharacterId EVE character ID of logged-in user
      * @return string[] Array of unique group names, e. g. ['submitter', 'admin']
      * @throws Exception
      */

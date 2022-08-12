@@ -23,24 +23,6 @@ use SlimSession\Helper;
 
 class UserService
 {
-    private Helper $session;
-
-    private EntityManagerInterface $entityManager;
-
-    private UserRepository $userRepository;
-
-    private ExternalGroupRepository $externalGroupRepository;
-
-    private CharacterRepository $characterRepository;
-
-    private PermissionRepository $permissionRepository;
-
-    private DivisionRepository $divisionRepository;
-
-    private InterfaceCharacterProvider $characterProvider;
-
-    private InterfaceGroupProvider $groupProvider;
-
     private ?User $user = null;
 
     /**
@@ -49,25 +31,16 @@ class UserService
     private array $clientRoles = [];
 
     public function __construct(
-        Helper $helper,
-        EntityManagerInterface $entityManager,
-        UserRepository $userRepository,
-        ExternalGroupRepository $externalGroupRepository,
-        CharacterRepository $characterRepository,
-        PermissionRepository $permissionRepository,
-        DivisionRepository $divisionRepository,
-        InterfaceCharacterProvider $characterProvider,
-        InterfaceGroupProvider $groupProvider
+        private Helper $session,
+        private EntityManagerInterface $entityManager,
+        private UserRepository $userRepository,
+        private ExternalGroupRepository $externalGroupRepository,
+        private CharacterRepository $characterRepository,
+        private PermissionRepository $permissionRepository,
+        private DivisionRepository $divisionRepository,
+        private InterfaceCharacterProvider $characterProvider,
+        private InterfaceGroupProvider $groupProvider
     ) {
-        $this->session = $helper;
-        $this->entityManager = $entityManager;
-        $this->userRepository = $userRepository;
-        $this->externalGroupRepository = $externalGroupRepository;
-        $this->characterRepository = $characterRepository;
-        $this->permissionRepository = $permissionRepository;
-        $this->divisionRepository = $divisionRepository;
-        $this->characterProvider = $characterProvider;
-        $this->groupProvider = $groupProvider;
     }
 
     /**
@@ -194,14 +167,14 @@ class UserService
     }
 
     /**
-     * Syncs EVE alts of logged in user.
+     * Syncs EVE alts of logged-in user.
      *
      * @throws Exception
      */
-    public function syncCharacters(User $user, int $characterId)
+    public function syncCharacters(User $user, int $characterId): void
     {
         # TODO if character was moved to another Core account this does not work as expected
-        # use character owner hash? or add an account ID to interface? only allow login for main?
+        #      use character owner hash? or add an account ID to interface? only allow login for main?
 
         if (count($user->getCharacters()) === 0) {
             return;
@@ -296,7 +269,7 @@ class UserService
             return true;
         }
 
-        $divisionId = $request->getDivision() ? $request->getDivision()->getId() : null;
+        $divisionId = $request->getDivision()?->getId();
         if (
             $divisionId &&
             (

@@ -11,14 +11,8 @@ use Twig\TwigFunction;
 
 class Extension extends AbstractExtension
 {
-    private UserService $userService;
-
-    private FlashMessage $flashMessage;
-
-    public function __construct(UserService $userService, FlashMessage $flashMessage)
+    public function __construct(private UserService $userService, private FlashMessage $flashMessage)
     {
-        $this->userService = $userService;
-        $this->flashMessage = $flashMessage;
     }
 
     public function getFunctions(): array

@@ -12,7 +12,7 @@ trait TwigResponse
 {
     private Environment $twig;
 
-    protected function twigResponse(Environment $twig)
+    protected function twigResponse(Environment $twig): void
     {
         $this->twig = $twig;
     }

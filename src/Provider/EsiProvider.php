@@ -21,13 +21,10 @@ use GuzzleHttp\Exception\GuzzleException;
  */
 class EsiProvider implements InterfaceCharacterProvider, InterfaceGroupProvider
 {
-    private ClientInterface $httpClient;
-
     private string $esiBaseUrl;
 
-    public function __construct(ClientInterface $httpClient, Settings $settings)
+    public function __construct(private ClientInterface $httpClient, Settings $settings)
     {
-        $this->httpClient = $httpClient;
         $this->esiBaseUrl = $settings['ESI_BASE_URL'];
     }
 

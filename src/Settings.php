@@ -6,11 +6,8 @@ namespace EveSrp;
 
 final class Settings implements \ArrayAccess
 {
-    private array $settings;
-
-    public function __construct(array $settings)
+    public function __construct(private array $settings)
     {
-        $this->settings = $settings;
     }
 
     public function offsetExists($offset): bool

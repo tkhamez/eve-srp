@@ -10,11 +10,8 @@ use SlimSession\Helper;
 
 class PingController
 {
-    private Helper $session;
-
-    public function __construct(Helper $session)
+    public function __construct(private Helper $session)
     {
-        $this->session = $session;
     }
 
     public function __invoke(ServerRequestInterface $request, ResponseInterface $response): ResponseInterface

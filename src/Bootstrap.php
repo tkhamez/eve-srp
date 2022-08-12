@@ -20,10 +20,7 @@ use Tkhamez\Slim\RoleAuth\SecureRouteMiddleware;
 
 class Bootstrap
 {
-    /**
-     * @var ContainerInterface
-     */
-    private $container;
+    private ContainerInterface $container;
 
     /**
      * Bootstrap constructor
@@ -95,7 +92,6 @@ class Bootstrap
     }
 
     /**
-     * @param App $app
      * @throws \Throwable
      */
     private function addMiddleware(App $app): void
