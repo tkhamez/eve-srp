@@ -18,9 +18,8 @@ class ExternalGroup
      * @ORM\Id
      * @ORM\Column(type="integer")
      * @ORM\GeneratedValue
-     * @var integer
      */
-    private $id;
+    private ?int $id = null;
 
     /**
      * @ORM\Column(type="string", unique=true, length=255)
@@ -59,5 +58,21 @@ class ExternalGroup
     public function getName(): string
     {
         return $this->name;
+    }
+
+    /**
+     * @return Permission[]
+     */
+    public function getPermissions(): array
+    {
+        return $this->permissions->toArray();
+    }
+
+    /**
+     * @return User[]
+     */
+    public function getUsers(): array
+    {
+        return $this->users->toArray();
     }
 }

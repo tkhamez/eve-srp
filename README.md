@@ -20,7 +20,9 @@ To run the application you need PHP >=8.0 and a database supported by
 - Clear the template cache: `rm -R storage/compilation_cache`
 - sync db schema:
   - **Backup the database first!**
-  - `bin/doctrine orm:schema-tool:update`
+  - `bin/doctrine orm:schema-tool:update --dump-sql`  
+    Review SQLs and if ok execute:  
+    `bin/doctrine orm:schema-tool:update --force`
 
 ### Permissions
 
@@ -86,7 +88,7 @@ INSERT INTO eve_srp.users (id) SELECT id FROM evesrp.user;
 INSERT INTO eve_srp.characters (id, user_id, name, main) SELECT id, user_id, name, 0 FROM evesrp.pilot;
 INSERT INTO eve_srp.divisions (id, name) SELECT id, name FROM evesrp.division;
 INSERT INTO eve_srp.requests 
-    (id, submitter_id, division_id, created, pilot_id, corporation, alliance, ship, kill_time, 
+    (id, user_id, division_id, created, character_id, corporation, alliance, ship, kill_time, 
         solar_system, killboard_url, details, status, base_payout, payout)
     SELECT id, submitter_id, division_id, timestamp, pilot_id, corporation, alliance, ship_type, kill_timestamp, 
         `system`, killmail_url, details, status, base_payout, payout

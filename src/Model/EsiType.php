@@ -16,9 +16,8 @@ class EsiType
      * @ORM\Id
      * @ORM\Column(type="bigint")
      * @ORM\GeneratedValue(strategy="NONE")
-     * @var integer
      */
-    private $id;
+    private ?int $id = null;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
@@ -34,8 +33,7 @@ class EsiType
 
     public function getId(): ?int
     {
-        /** @noinspection PhpCastIsUnnecessaryInspection */ // needs cast!
-        return $this->id !== null ? (int) $this->id : null;
+        return $this->id !== null ? (int)$this->id : null;
     }
 
     public function setName(string $name): self

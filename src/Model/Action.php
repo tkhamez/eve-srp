@@ -1,5 +1,4 @@
 <?php
-/** @noinspection PhpUnused */
 
 declare(strict_types=1);
 
@@ -19,71 +18,65 @@ class Action
      * @ORM\Id
      * @ORM\Column(type="integer")
      * @ORM\GeneratedValue
-     * @var integer
      */
-    private $id;
+    private ?int $id = null;
 
     /**
      * @ORM\Column(type="datetime")
-     * @var DateTime
      */
-    private $created;
+    private ?DateTime $created = null;
 
     /**
      * Action category/type: one of the EveSrp\Type constants.
      * 
      * @ORM\Column(type="string", length=16)
-     * @var string
      * @see Type
      */
-    private $category;
+    private ?string $category = null;
     
     /**
      * @ORM\ManyToOne(targetEntity="User")
      * @ORM\JoinColumn(nullable=false)
-     * @var User
      */
-    private $user;
+    private ?User $user = null;
 
     /**
      * @ORM\ManyToOne(targetEntity="Request", inversedBy="actions")
      * @ORM\JoinColumn(nullable=false)
-     * @var User
      */
-    private $request;
+    private ?Request $request = null;
 
     /**
      * @ORM\Column(type="text", length=16777215, nullable=true)
-     * @var string
      */
-    private $note;
+    private ?string $note = null;
 
-    public function getId(): int
+    public function getId(): ?int
     {
         return $this->id;
     }
 
-    public function getCreated(): DateTime
+    public function getCreated(): ?DateTime
     {
         return $this->created;
     }
 
-    public function getCategory(): string
+    public function getCategory(): ?string
     {
         return $this->category;
     }
 
-    public function getUser(): User
+    public function getUser(): ?User
     {
         return $this->user;
     }
 
-    public function getRequest(): User
+    public function getRequest(): ?Request
     {
         return $this->request;
     }
 
-    public function getNote(): string
+    public function getNote(): ?string
     {
         return $this->note;
     }

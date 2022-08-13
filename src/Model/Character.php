@@ -18,9 +18,8 @@ class Character
      * @ORM\Id
      * @ORM\Column(type="bigint")
      * @ORM\GeneratedValue(strategy="NONE")
-     * @var integer|null
      */
-    private $id;
+    private ?int $id = null;
 
     /**
      * @ORM\Column(type="string", length=255)
@@ -44,9 +43,9 @@ class Character
         return $this;
     }
     
-    public function getId(): int
+    public function getId(): ?int
     {
-        return (int) $this->id;
+        return $this->id !== null ? (int)$this->id : null;
     }
     
     public function setName(string $name): self

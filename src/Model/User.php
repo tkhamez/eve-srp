@@ -1,5 +1,4 @@
 <?php
-/** @noinspection PhpUnused */
 
 declare(strict_types=1);
 
@@ -19,9 +18,8 @@ class User
      * @ORM\Id
      * @ORM\Column(type="integer")
      * @ORM\GeneratedValue
-     * @var integer
      */
-    private $id;
+    private ?int $id = null;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
@@ -44,7 +42,7 @@ class User
     private  Collection$characters;
 
     /**
-     * @ORM\OneToMany(targetEntity="Request", mappedBy="submitter")
+     * @ORM\OneToMany(targetEntity="Request", mappedBy="user")
      * @ORM\OrderBy({"created" = "DESC"})
      */
     private Collection $requests;

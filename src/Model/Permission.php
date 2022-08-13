@@ -36,31 +36,27 @@ class Permission
      * @ORM\Id
      * @ORM\Column(type="integer")
      * @ORM\GeneratedValue
-     * @var integer
      */
-    private $id;
+    private ?int $id = null;
 
     /**
      * @ORM\ManyToOne(targetEntity="Division", inversedBy="permissions")
      * @ORM\JoinColumn(nullable=false)
-     * @var Division
      */
-    private $division;
+    private ?Division $division = null;
 
     /**
      * @ORM\ManyToOne(targetEntity="ExternalGroup", inversedBy="permissions")
      * @ORM\JoinColumn(name="external_group_id", nullable=false)
-     * @var ExternalGroup
      */
-    private $externalGroup;
+    private ?ExternalGroup $externalGroup = null;
 
     /**
      * @ORM\Column(type="string", length=8)
-     * @var string
      */
-    private $role;
+    private ?string $role = null;
 
-    public function getId(): int
+    public function getId(): ?int
     {
         return $this->id;
     }
@@ -72,7 +68,7 @@ class Permission
         return $this;
     }
 
-    public function getDivision(): Division
+    public function getDivision(): ?Division
     {
         return $this->division;
     }
@@ -84,7 +80,7 @@ class Permission
         return $this;
     }
 
-    public function getExternalGroup(): ExternalGroup
+    public function getExternalGroup(): ?ExternalGroup
     {
         return $this->externalGroup;
     }
@@ -100,7 +96,7 @@ class Permission
         return $this;
     }
 
-    public function getRole(): string
+    public function getRole(): ?string
     {
         return $this->role;
     }

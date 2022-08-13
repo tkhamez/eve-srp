@@ -1,5 +1,4 @@
 <?php
-/** @noinspection PhpUnused */
 
 declare(strict_types=1);
 
@@ -21,29 +20,25 @@ class Request
      * @ORM\Id
      * @ORM\Column(type="integer")
      * @ORM\GeneratedValue
-     * @var integer
      */
-    private $id;
+    private ?int $id = null;
 
     /**
      * @ORM\Column(type="datetime")
-     * @var DateTime
      */
-    private $created;
+    private ?DateTime $created = null;
 
     /**
      * @ORM\ManyToOne(targetEntity="Division")
      * @ORM\JoinColumn(nullable=true, onDelete="SET NULL")
-     * @var Division
      */
-    private $division;
+    private ?Division $division = null;
 
     /**
      * @ORM\ManyToOne(targetEntity="User", inversedBy="requests")
      * @ORM\JoinColumn(nullable=false)
-     * @var User
      */
-    private $submitter;
+    private ?User $user = null;
 
     /**
      * @ORM\OneToMany(targetEntity="Action", mappedBy="request")
@@ -53,21 +48,18 @@ class Request
     /**
      * @ORM\ManyToOne(targetEntity="Character")
      * @ORM\JoinColumn(nullable=false)
-     * @var Character
      */
-    private $pilot;
+    private ?Character $character = null;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
-     * @var string
      */
-    private $corporation;
+    private ?string $corporation = null;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
-     * @var string
      */
-    private $alliance;
+    private ?string $alliance = null;
 
     /**
      * @ORM\Column(type="string", length=128)
@@ -76,9 +68,8 @@ class Request
 
     /**
      * @ORM\Column(type="datetime", name="kill_time")
-     * @var DateTime
      */
-    private $killTime;
+    private ?DateTime $killTime = null;
 
     /**
      * @ORM\Column(type="string", name="solar_system", length=32)
@@ -87,35 +78,30 @@ class Request
 
     /**
      * @ORM\Column(type="string", name="killboard_url", length=512, nullable=true)
-     * @var string
      */
-    private $killboardUrl;
+    private ?string $killboardUrl = null;
 
     /**
      * The "External Kill Link" from the in-game menu.
      * 
      * @ORM\Column(type="string", name="esi_link", length=512, nullable=true)
-     * @var string
      */
-    private $esiLink;
+    private ?string $esiLink = null;
     
     /**
      * @ORM\Column(type="text", length=16777215, nullable=true)
-     * @var string
      */
-    private $details;
+    private ?string $details = null;
 
     /**
      * @ORM\Column(type="integer", name="base_payout", nullable=true)
-     * @var integer
      */
-    private $basePayout;
+    private ?int $basePayout = null;
 
     /**
      * @ORM\Column(type="integer", nullable=true)
-     * @var integer
      */
-    private $payout;
+    private ?int $payout = null;
 
     /**
      * Request status: one of the EveSrp\Type constants.
@@ -130,12 +116,12 @@ class Request
         $this->actions = new ArrayCollection();
     }
 
-    public function getId(): int
+    public function getId(): ?int
     {
         return $this->id;
     }
 
-    public function getCreated(): DateTime
+    public function getCreated(): ?DateTime
     {
         return $this->created;
     }
@@ -159,14 +145,14 @@ class Request
         return $this;
     }
 
-    public function getSubmitter(): User
+    public function getUser(): ?User
     {
-        return $this->submitter;
+        return $this->user;
     }
 
-    public function setSubmitter(User $submitter): self
+    public function setUser(User $user): self
     {
-        $this->submitter = $submitter;
+        $this->user = $user;
 
         return $this;
     }
@@ -179,14 +165,14 @@ class Request
         return $this->actions->toArray();
     }
 
-    public function getPilot(): Character
+    public function getCharacter(): ?Character
     {
-        return $this->pilot;
+        return $this->character;
     }
 
-    public function setPilot(Character $pilot): self
+    public function setCharacter(Character $character): self
     {
-        $this->pilot = $pilot;
+        $this->character = $character;
 
         return $this;
     }
@@ -227,7 +213,7 @@ class Request
         return $this;
     }
 
-    public function getKillTime(): DateTime
+    public function getKillTime(): ?DateTime
     {
         return $this->killTime;
     }

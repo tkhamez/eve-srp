@@ -125,7 +125,7 @@ class SubmitController
         $request
             ->setCreated(new \DateTime())
             ->setStatus(Type::EVALUATING)
-            ->setSubmitter($user)
+            ->setUser($user)
             ->setDivision($division)
             ->setDetails($this->inputDetails);
 
@@ -214,7 +214,7 @@ class SubmitController
         }
 
         $request
-            ->setPilot($pilot)
+            ->setCharacter($pilot)
             ->setShip($shipData->name)
             ->setKillTime($killTime)
             ->setSolarSystem($systemData->name)

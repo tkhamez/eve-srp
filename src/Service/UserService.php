@@ -265,7 +265,7 @@ class UserService
             return true;
         }
 
-        if ($request->getSubmitter()->getId() === $this->getAuthenticatedUser()->getId()) {
+        if ($request->getUser()->getId() === $this->getAuthenticatedUser()->getId()) {
             return true;
         }
 
