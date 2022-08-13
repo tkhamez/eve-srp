@@ -21,7 +21,7 @@
                     <thead>
                         <tr class="">
                             <th>Role</th>
-                            <th colspan="2">Groups</th>
+                            <th>Groups</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -29,35 +29,22 @@
                             <tr class="">
                                 <td>{{ role }}</td>
                                 <td>
-                                    <ul>
-                                        {% for permission in division.permissions(role) %}
-                                            <li>{{ permission.externalGroup.name }}</li>
-                                        {% endfor %}
-                                    </ul>
-                                </td>
-                                <td>
                                     <input type="hidden" name="groups[{{ role }}]" value="">
-                                    <label for="{{ role }}D{{ division.id }}Groups" class="form-label">
-                                        Select groups
-                                    </label>
-                                    <br>
-                                    <select multiple name="groups[{{ role }}][]" class="form-select"
-                                            id="{{ role }}D{{ division.id }}Groups">
+                                    <!--suppress HtmlFormInputWithoutLabel -->
+                                    <select multiple name="groups[{{ role }}][]" class="form-select srp-multiselect">
                                         {% for group in groups %}
                                             {% set selected = '' %}
                                             {% if division.hasPermission(role, group.id) %}
                                                 {% set selected = 'selected' %}
                                             {% endif %}
-                                            <option value="{{ group.id }}" {{ selected }}>
-                                                {{ group.name }}
-                                            </option>
+                                            <option value="{{ group.id }}" {{ selected }}>{{ group.name }}</option>
                                         {% endfor %}
                                     </select>
                                 </td>
                             </tr>
                         {% endfor %}
                         <tr class="">
-                            <th colspan="2"></th>
+                            <th></th>
                             <th><button type="submit" class="btn btn-primary">Save</button></th>
                         </tr>
                     </tbody>
