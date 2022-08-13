@@ -195,16 +195,19 @@ class RequestController
     {
         $srpRequest = $this->requestRepository->find($id);
         $error = null;
+        $killMail = null;
 
-        if (! $srpRequest) {
+        if (!$srpRequest) {
             $error = 'Request not found.';
-        } elseif (! $this->userService->maySee($srpRequest)) {
+        } elseif (!$this->userService->maySee($srpRequest)) {
             $srpRequest = null;
             $error = 'Not authorized to view this request.';
         }
 
-        $this->addMissingURLs($srpRequest);
-        $killMail = $this->getKillMail($srpRequest->getEsiLink());
+        if ($srpRequest) {
+            $this->addMissingURLs($srpRequest);
+            $killMail = $this->getKillMail($srpRequest->getEsiLink());
+        }
 
         return $this->render($response, 'pages/request.twig', [
             'request' => $srpRequest,
@@ -218,13 +221,13 @@ class RequestController
      */
     private function addMissingURLs(Request $srpRequest): void
     {
-        if (! $srpRequest->getEsiLink() && $srpRequest->getKillboardUrl()) {
+        if (!$srpRequest->getEsiLink() && $srpRequest->getKillboardUrl()) {
             $esiLink = $this->apiService->getEsiUrlFromKillboard($srpRequest->getKillboardUrl());
             if ($esiLink) {
                 $srpRequest->setEsiLink($esiLink);
                 $this->entityManager->flush();
             }
-        } elseif (! $srpRequest->getKillboardUrl() && $srpRequest->getEsiLink()) {
+        } elseif (!$srpRequest->getKillboardUrl() && $srpRequest->getEsiLink()) {
             $urlParts = explode('/', rtrim($srpRequest->getEsiLink(), '/'));
             array_pop($urlParts);
             $killId = end($urlParts);
@@ -237,7 +240,7 @@ class RequestController
 
     private function getKillMail(?string $esiLink)
     {
-        if (! $esiLink) {
+        if (!$esiLink) {
             return null;
         }
 

@@ -1,5 +1,9 @@
 # EVE-SRP
 
+## Notes
+
+Only global admins can see requests without a division.
+
 ## Install
 
 To run the application you need PHP >=8.0 and a database supported by 

@@ -9,6 +9,7 @@ use EveSrp\Controller\Traits\TwigResponse;
 use EveSrp\Model\Permission;
 use EveSrp\Repository\DivisionRepository;
 use EveSrp\Repository\RequestRepository;
+use EveSrp\Security;
 use EveSrp\Service\UserService;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
@@ -30,8 +31,6 @@ class AllRequestsController
 
     public function __invoke(ServerRequestInterface $request, ResponseInterface $response): ResponseInterface
     {
-        # TODO pager
-
         $selectedStatus = (string) $this->paramGet($request, 'status');
         $selectedDivision = (int) $this->paramGet($request, 'division', '0');
 
@@ -45,13 +44,19 @@ class AllRequestsController
                 break;
             }
         }
-        if (! $maySeeDivision) {
+        if (
+            !$maySeeDivision &&
+            (
+                $selectedDivision !== -1 || // -1 = show requests without division ...
+                !$this->userService->hasRole(Security::GLOBAL_ADMIN) // ... but only for global admins
+            )
+        ) {
             $selectedDivision = 0;
         }
 
         $requests = $this->requestRepository->findBy([
             'status' => $selectedStatus,
-            'division' => $selectedDivision
+            'division' => $selectedDivision === -1 ? null : $selectedDivision
         ], ['created' => 'ASC']);
 
         return $this->render($response, 'pages/all-requests.twig', [

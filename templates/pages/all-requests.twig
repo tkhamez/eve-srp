@@ -9,7 +9,7 @@
                 <div class="mb-3">
                     <label for="division" class="form-label">Division</label>
                     <select class="form-control" id="division" name="division">
-                        <option value=""></option>
+                        <option value="-1"></option>
                         {% for division in divisions %}
                             <option {% if selectedDivision == division.id %}selected{% endif %}
                                     value="{{ division.id }}">
@@ -21,7 +21,6 @@
                 <div class="mb-3">
                     <label for="status" class="form-label">Status</label>
                     <select class="form-control" id="status" name="status">
-                        <option></option>
                         {% for status in [
                             constant('EveSrp\\Type::INCOMPLETE'),
                             constant('EveSrp\\Type::EVALUATING'),
