@@ -26,8 +26,8 @@
                 {%  endfor %}
                 <br>
                 <div>pilot: {{ request.character.id }} {{ request.character.name }}</div>
-                <div>corporation: {{ request.corporationName }}</div>
-                <div>alliance: {{ request.allianceName }}</div>
+                <div>corporation: {{ request.corporationId }} {{ request.corporationName }}</div>
+                <div>alliance: {{ request.allianceId }} {{ request.allianceName }}</div>
                 <div>killTime: {{ request.killTime|date('Y-m-d H:i') }}</div>
                 <div>solarSystem: {{ request.solarSystem }}</div>
                 <div>killboardUrl: {{ request.killboardUrl }}</div>

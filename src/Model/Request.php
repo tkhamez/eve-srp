@@ -52,9 +52,19 @@ class Request
     private ?Character $character = null;
 
     /**
+     * @ORM\Column(type="bigint", nullable=true, name="corporation_id")
+     */
+    private ?int $corporationId = null;
+
+    /**
      * @ORM\Column(type="string", length=255, nullable=true, name="corporation_name")
      */
     private ?string $corporationName = null;
+
+    /**
+     * @ORM\Column(type="bigint", nullable=true, name="alliance_id")
+     */
+    private ?int $allianceId = null;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true, name="alliance_name")
@@ -121,6 +131,7 @@ class Request
         return $this->id;
     }
 
+    /** @noinspection PhpUnused */
     public function getCreated(): ?DateTime
     {
         return $this->created;
@@ -159,12 +170,14 @@ class Request
 
     /**
      * @return Action[]
+     * @noinspection PhpUnused
      */
     public function getActions(): array
     {
         return $this->actions->toArray();
     }
 
+    /** @noinspection PhpUnused */
     public function getCharacter(): ?Character
     {
         return $this->character;
@@ -177,6 +190,20 @@ class Request
         return $this;
     }
 
+    /** @noinspection PhpUnused */
+    public function getCorporationId(): ?int
+    {
+        return $this->corporationId;
+    }
+
+    public function setCorporationId(?int $corporationId): self
+    {
+        $this->corporationId = $corporationId;
+
+        return $this;
+    }
+
+    /** @noinspection PhpUnused */
     public function getCorporationName(): ?string
     {
         return $this->corporationName;
@@ -189,6 +216,20 @@ class Request
         return $this;
     }
 
+    /** @noinspection PhpUnused */
+    public function getAllianceId(): ?int
+    {
+        return $this->allianceId;
+    }
+
+    public function setAllianceId(?int $allianceId): self
+    {
+        $this->allianceId = $allianceId;
+
+        return $this;
+    }
+
+    /** @noinspection PhpUnused */
     public function getAllianceName(): ?string
     {
         return $this->allianceName;
@@ -201,6 +242,7 @@ class Request
         return $this;
     }
 
+    /** @noinspection PhpUnused */
     public function getShip(): string
     {
         return $this->ship;
@@ -213,6 +255,7 @@ class Request
         return $this;
     }
 
+    /** @noinspection PhpUnused */
     public function getKillTime(): ?DateTime
     {
         return $this->killTime;
@@ -225,6 +268,7 @@ class Request
         return $this;
     }
 
+    /** @noinspection PhpUnused */
     public function getSolarSystem(): string
     {
         return $this->solarSystem;
@@ -261,6 +305,7 @@ class Request
         return $this;
     }
 
+    /** @noinspection PhpUnused */
     public function getDetails(): ?string
     {
         return $this->details;
@@ -273,6 +318,7 @@ class Request
         return $this;
     }
 
+    /** @noinspection PhpUnused */
     public function getBasePayout(): ?int
     {
         return $this->basePayout;
@@ -285,6 +331,7 @@ class Request
         return $this;
     }
 
+    /** @noinspection PhpUnused */
     public function getPayout(): ?int
     {
         return $this->payout;
@@ -297,6 +344,7 @@ class Request
         return $this;
     }
 
+    /** @noinspection PhpUnused */
     public function getStatus(): string
     {
         return $this->status;

@@ -56,16 +56,19 @@ class Action
         return $this->id;
     }
 
+    /** @noinspection PhpUnused */
     public function getCreated(): ?DateTime
     {
         return $this->created;
     }
 
+    /** @noinspection PhpUnused */
     public function getCategory(): ?string
     {
         return $this->category;
     }
 
+    /** @noinspection PhpUnused */
     public function getUser(): ?User
     {
         return $this->user;
@@ -76,6 +79,7 @@ class Action
         return $this->request;
     }
 
+    /** @noinspection PhpUnused */
     public function getNote(): ?string
     {
         return $this->note;
