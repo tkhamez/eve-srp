@@ -218,8 +218,8 @@ class SubmitController
             ->setShip($shipData->name)
             ->setKillTime($killTime)
             ->setSolarSystem($systemData->name)
-            ->setCorporation($corporationData->name)
-            ->setAlliance($allianceData?->name);
+            ->setCorporationName($corporationData->name)
+            ->setAllianceName($allianceData?->name);
         if (! $request->getKillboardUrl()) {
             $request->setKillboardUrl("{$this->killboardBaseUrl}kill/$killMailData->killmail_id/");
         }

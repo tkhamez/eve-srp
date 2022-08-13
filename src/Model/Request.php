@@ -52,14 +52,14 @@ class Request
     private ?Character $character = null;
 
     /**
-     * @ORM\Column(type="string", length=255, nullable=true)
+     * @ORM\Column(type="string", length=255, nullable=true, name="corporation_name")
      */
-    private ?string $corporation = null;
+    private ?string $corporationName = null;
 
     /**
-     * @ORM\Column(type="string", length=255, nullable=true)
+     * @ORM\Column(type="string", length=255, nullable=true, name="alliance_name")
      */
-    private ?string $alliance = null;
+    private ?string $allianceName = null;
 
     /**
      * @ORM\Column(type="string", length=128)
@@ -177,26 +177,26 @@ class Request
         return $this;
     }
 
-    public function getCorporation(): ?string
+    public function getCorporationName(): ?string
     {
-        return $this->corporation;
+        return $this->corporationName;
     }
 
-    public function setCorporation(?string $corporation): self
+    public function setCorporationName(?string $corporationName): self
     {
-        $this->corporation = $corporation;
+        $this->corporationName = $corporationName;
 
         return $this;
     }
 
-    public function getAlliance(): ?string
+    public function getAllianceName(): ?string
     {
-        return $this->alliance;
+        return $this->allianceName;
     }
 
-    public function setAlliance(?string $alliance): self
+    public function setAllianceName(?string $allianceName): self
     {
-        $this->alliance = $alliance;
+        $this->allianceName = $allianceName;
 
         return $this;
     }
