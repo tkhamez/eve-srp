@@ -8,9 +8,9 @@
     --srp-bg-color: #212529; // color of .bg-dark
     --srp-bg-color-2: #2c3034; // lighter, color of odd table rows
 
-    // Color were taken from the Bootswatch Darkly theme.
-    --srp-link-color: #00bc8c;
-    --srp-link-color-2: #009670;
+    // Colors were taken from the Bootswatch Cyborg theme.
+    --srp-link-color: #2a9fd6;
+    --srp-link-color-hover: #227fab;
 }
 
 html {
@@ -56,13 +56,17 @@ body {
 a {
     color: var(--srp-link-color);
     &:hover {
-        color: var(--srp-link-color-2);
+        color: var(--srp-link-color-hover);
     }
 }
 
-.srp-external-link {
-    font-size: 70%;
-    vertical-align: text-top;
+.srp-external-link:after {
+    //noinspection CssNoGenericFontName
+    font-family: bootstrap-icons;
+    display: inline-block; // removes underline
+    margin-left: 2px;
+    font-size: 0.8em;
+    content: '\F1C5'; // bi bi-box-arrow-up-right
 }
 
 .srp-bg-dark-2 {

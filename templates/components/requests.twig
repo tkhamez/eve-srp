@@ -22,13 +22,13 @@
                 <td>{{ request.killTime|date('Y-m-d H:i') }}</td>
                 <td>
                     {% if request.killboardUrl %}
-                        <a href="{{ request.killboardUrl }}" target="_blank" rel="noopener noreferrer">
-                            zKillboard <i class="bi bi-box-arrow-up-right srp-external-link"></i></a>
+                        <a href="{{ request.killboardUrl }}" target="_blank" rel="noopener noreferrer"
+                           class="srp-external-link">zKillboard</a>
                     {% endif %}
                     &nbsp;
                     {% if request.esiLink %}
-                        <a href="{{ request.esiLink }}" target="_blank" rel="noopener noreferrer">
-                            ESI <i class="bi bi-box-arrow-up-right srp-external-link"></i></a>
+                        <a href="{{ request.esiLink }}" target="_blank" rel="noopener noreferrer"
+                           class="srp-external-link">ESI</a>
                     {% endif %}
                 </td>
                 <td>{{ request.created|date('Y-m-d H:i') }}</td>

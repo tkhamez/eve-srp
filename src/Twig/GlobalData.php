@@ -57,8 +57,7 @@ class GlobalData
     {
         return preg_replace(
             '/\[(.*?)]\((.*?)\)/',
-            '<a href="$2" target="_blank" rel="noopener noreferrer">
-                $1 <i class="bi bi-box-arrow-up-right srp-external-link"></i></a> ',
+            '<a href="$2" target="_blank" rel="noopener noreferrer" class="srp-external-link">$1</a> ',
             $text
         );
     }
