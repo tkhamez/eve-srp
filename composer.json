@@ -19,7 +19,7 @@
         "slim/slim": "^4.2",
         "symfony/cache": "^5.3",
         "tkhamez/eve-sso": "^3.0",
-        "tkhamez/slim-role-auth": "^3.0",
+        "tkhamez/slim-role-auth": "^4.0",
         "twig/twig": "^3.1",
         "vlucas/phpdotenv": "^5.2"
     },

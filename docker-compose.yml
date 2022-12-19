@@ -15,7 +15,7 @@ services:
 
   eve_srp_node:
     container_name: eve_srp_node
-    image: node:16.13.0-alpine
+    image: node:18.12.1-alpine
     volumes: [".:/app"]
     working_dir: /app
 
@@ -23,8 +23,9 @@ services:
     container_name: eve_srp_php
     build:
       context: config
-      dockerfile: dockerfile-php80-fpm
+      #dockerfile: dockerfile-php80-fpm
       #dockerfile: dockerfile-php81-fpm
+      dockerfile: dockerfile-php82-fpm
     depends_on: [eve_srp_db]
     volumes: [".:/app"]
     working_dir: /app
