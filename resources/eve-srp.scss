@@ -13,6 +13,8 @@
     --srp-link-color-hover: #227fab;
 }
 
+// Layout
+
 html {
     // for sticky footer
     position: relative;
@@ -31,6 +33,30 @@ body {
     max-height: 51px;
     overflow-y: auto;
 }
+
+// General
+
+a {
+    color: var(--srp-link-color);
+    &:hover {
+        color: var(--srp-link-color-hover);
+    }
+}
+
+.srp-external-link:after {
+    //noinspection CssNoGenericFontName
+    font-family: bootstrap-icons;
+    display: inline-block; // removes underline
+    margin-left: 2px;
+    font-size: 0.8em;
+    content: '\F1C5'; // bi bi-box-arrow-up-right
+}
+
+.srp-bg-dark-2 {
+    background-color: var(--srp-bg-color-2);
+}
+
+// Libraries
 
 .popover {
     background-color: var(--srp-bg-color);
@@ -53,22 +79,8 @@ body {
     }
 }
 
-a {
-    color: var(--srp-link-color);
-    &:hover {
-        color: var(--srp-link-color-hover);
-    }
-}
+// Pages
 
-.srp-external-link:after {
-    //noinspection CssNoGenericFontName
-    font-family: bootstrap-icons;
-    display: inline-block; // removes underline
-    margin-left: 2px;
-    font-size: 0.8em;
-    content: '\F1C5'; // bi bi-box-arrow-up-right
-}
-
-.srp-bg-dark-2 {
-    background-color: var(--srp-bg-color-2);
+.srp-esi-link {
+    max-width: 315px;
 }

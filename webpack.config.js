@@ -1,6 +1,8 @@
+
 const path = require('path');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const CompressionPlugin = require('compression-webpack-plugin');
 const LicenseWebpackPlugin = require('license-webpack-plugin').LicenseWebpackPlugin;
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const CssMinimizerPlugin = require("css-minimizer-webpack-plugin");
@@ -46,10 +48,18 @@ module.exports = (env, argv) => {
             ]
         },
     };
-    if (! devMode) {
+    if (!devMode) {
+        // noinspection JSCheckFunctionSignatures
+        config.plugins.push(new CompressionPlugin({
+            test: /\.(js|css)$/,
+            threshold: 1,
+            compressionOptions: { level: 6 },
+        }));
+        // noinspection JSCheckFunctionSignatures
         config.plugins.push(new LicenseWebpackPlugin({
             perChunkOutput: false,
         }));
+        // noinspection JSCheckFunctionSignatures
         config.plugins.push(new CleanWebpackPlugin());
     }
     return config;

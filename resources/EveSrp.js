@@ -5,6 +5,7 @@ window.addEventListener('load', () => {
     EveSrp.initPopover();
     EveSrp.initDeleteDivision();
     EveSrp.initMultiselect();
+    EveSrp.initSubmitPage();
     window.setInterval(EveSrp.ping, 300000); // 5 minutes
 });
 
@@ -28,6 +29,16 @@ window.EveSrp = {
             button.addEventListener('click', function (evt) {
                 document.querySelector('#deleteModal input[name="id"]').value = evt.target.dataset.srpId;
             })
+        });
+    },
+
+    initSubmitPage: function () {
+        const form = document.getElementById('requestForm');
+        if (!form) {
+            return;
+        }
+        form.addEventListener('submit', function () {
+            document.getElementById('requestFormSubmit').disabled = true;
         });
     },
 

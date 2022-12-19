@@ -5,7 +5,8 @@
   "dependencies": {
     "bootstrap": "^5.2.0",
     "bootstrap-icons": "^1.9.1",
-    "choices.js": "^10.1.0"
+    "choices.js": "^10.1.0",
+    "compression-webpack-plugin": "^10.0.0"
   },
   "devDependencies": {
     "clean-webpack-plugin": "^4.0.0",
