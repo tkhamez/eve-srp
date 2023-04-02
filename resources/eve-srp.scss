@@ -58,6 +58,12 @@ a {
 
 // Libraries
 
+.form-control,
+.form-control:focus {
+    color: var(--srp-text-color);
+    background-color: var(--srp-bg-color-2);
+}
+
 .popover {
     background-color: var(--srp-bg-color);
     border-color: grey;
@@ -72,9 +78,15 @@ a {
 
 .choices {
     .choices__list--dropdown {
-        background-color: var(--srp-bg-color);
+        background-color: var(--srp-bg-color-2);
         .choices__item--selectable.is-highlighted {
-            background-color: var(--srp-bg-color-2);
+            background-color: var(--srp-bg-color);
+        }
+    }
+    .choices__inner {
+        background-color: var(--srp-bg-color-2);
+        input {
+            background-color: inherit;
         }
     }
 }
