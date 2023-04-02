@@ -15,7 +15,7 @@ final class Settings implements \ArrayAccess
         return array_key_exists($offset, $this->settings);
     }
 
-    public function offsetGet($offset)
+    public function offsetGet($offset): mixed
     {
         return $this->offsetExists($offset) ? $this->settings[$offset] : null;
     }
@@ -23,7 +23,7 @@ final class Settings implements \ArrayAccess
     /**
      * @throws \BadMethodCallException
      */
-    public function offsetSet($offset, $value)
+    public function offsetSet($offset, $value): void
     {
         throw new \BadMethodCallException('Read only.');
     }
@@ -31,7 +31,7 @@ final class Settings implements \ArrayAccess
     /**
      * @throws \BadMethodCallException
      */
-    public function offsetUnset($offset)
+    public function offsetUnset($offset): void
     {
         throw new \BadMethodCallException('Read only.');
     }
