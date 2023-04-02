@@ -21,11 +21,6 @@ class GlobalData
         return $this->settings['APP_TITLE'];
     }
 
-    public function faviconUrl(): string
-    {
-        return $this->settings['APP_FAVICON'];
-    }
-
     public function loginHint(): string
     {
         return $this->replaceMarkdownLink(htmlspecialchars($this->settings['LOGIN_HINT']));
