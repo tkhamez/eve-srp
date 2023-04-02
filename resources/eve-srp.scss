@@ -103,6 +103,11 @@ a {
 
 // Pages
 
-.srp-esi-link {
-    max-width: 315px;
+.page-submit {
+    a.kill-mail {
+        text-decoration-style: dotted;
+    }
+    .popover.kill-mail {
+        max-width: 100%;
+    }
 }

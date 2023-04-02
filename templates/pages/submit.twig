@@ -9,17 +9,7 @@
         </div>
     </div>
 
-    <div id="esiKillMailModal" class="modal" tabindex="-1" role="dialog">
-        <div class="modal-dialog srp-esi-link" role="document">
-            <div class="modal-content">
-                <div class="modal-body bg-dark text-center">
-                    <img src="/static/killmail.png" alt="ESI Kill Link">
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="row mb-3">
+    <div class="page-submit row mb-3">
         <div class="col">
             <form class="border border-light p-3" action="/submit" method="post" id="requestForm">
                 <div class="mb-3">
@@ -39,8 +29,12 @@
                         <a href="{{ killboardUrl }}" target="_blank" rel="noopener noreferrer"
                            class="srp-external-link">zKillboard</a>
                         URL or
-                        <a href="#" data-bs-toggle="modal" data-bs-target="#esiKillMailModal">External Kill Link</a>
-                        (ESI)
+                        <a href="#" class="kill-mail" data-bs-toggle="popover" data-bs-trigger="hover"
+                           data-bs-html="true" data-bs-custom-class="kill-mail" data-bs-container="#requestForm"
+                           title="Kill Report - Copy External Kill Link"
+                           data-bs-content="<img src='/static/kill-report.png' alt='kill report'>">
+                            External Kill Link
+                        </a>
                     </label>
                     <input type="text" class="form-control" name="url" id="url" value="{{ url }}" required>
                 </div>
