@@ -11,7 +11,7 @@
   "devDependencies": {
     "clean-webpack-plugin": "^4.0.0",
     "css-loader": "^6.2.0",
-    "css-minimizer-webpack-plugin": "^4.0.0",
+    "css-minimizer-webpack-plugin": "^5.0.0",
     "html-webpack-plugin": "^5.3.2",
     "license-webpack-plugin": "^4.0.2",
     "mini-css-extract-plugin": "^2.1.0",
