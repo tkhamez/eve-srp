@@ -1,4 +1,3 @@
-
 const path = require('path');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
@@ -39,6 +38,7 @@ module.exports = (env, argv) => {
             new MiniCssExtractPlugin({
                 filename: devMode ? '[name].css' : '[name].[fullhash].css',
             }),
+            new CleanWebpackPlugin(),
         ],
         devtool: devMode ? 'eval-cheap-source-map' : 'source-map',
         optimization: {
@@ -59,8 +59,6 @@ module.exports = (env, argv) => {
         config.plugins.push(new LicenseWebpackPlugin({
             perChunkOutput: false,
         }));
-        // noinspection JSCheckFunctionSignatures
-        config.plugins.push(new CleanWebpackPlugin());
     }
     return config;
 };
