@@ -46,10 +46,10 @@ docker-compose up
 The database connection string is: `mysql://eve_srp:eve_srp@eve_srp_db/eve_srp`.  
 The application is available at: http://localhost:8000.
 
-Create/enter shells for PHP and Node.js:
+Consoles for PHP and Node.js:
 ```
 docker-compose exec -u www-data eve_srp_php /bin/sh
-docker-compose run -u node eve_srp_node /bin/sh
+docker-compose exec -u node eve_srp_node /bin/sh
 ```
 
 ### Install Backend
