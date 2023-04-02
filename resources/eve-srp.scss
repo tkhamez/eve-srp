@@ -32,6 +32,16 @@ body {
     width: calc(100% - 30px);
     max-height: 51px;
     overflow-y: auto;
+
+    .github {
+        float: right;
+        a {
+            text-decoration: none;
+        }
+        img {
+            vertical-align: text-bottom;
+        }
+    }
 }
 
 // General
