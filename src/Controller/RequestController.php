@@ -199,7 +199,7 @@ class RequestController
 
         if (!$srpRequest) {
             $error = 'Request not found.';
-        } elseif (!$this->userService->maySee($srpRequest)) {
+        } elseif (!$this->userService->maySeeRequest($srpRequest)) {
             $srpRequest = null;
             $error = 'Not authorized to view this request.';
         }

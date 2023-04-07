@@ -268,7 +268,7 @@ class UserService
         $this->session->set('lastGroupSync', time());
     }
     
-    public function maySee(Request $request): bool
+    public function maySeeRequest(Request $request): bool
     {
         if ($this->hasRole(Security::GLOBAL_ADMIN)) {
             return true;

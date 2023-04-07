@@ -27,20 +27,6 @@ class SubmitController
     use RequestParameter;
     use TwigResponse;
 
-    private UserService $userService;
-
-    private ApiService $apiService;
-
-    private EntityManagerInterface $entityManager;
-
-    private DivisionRepository $divisionRepository;
-
-    private CharacterRepository $characterRepository;
-
-    private FlashMessage $flashMessage;
-
-    private ClientInterface $httpClient;
-
     private string $esiBaseUrl;
 
     private string $killboardBaseUrl;
@@ -52,23 +38,16 @@ class SubmitController
     private ?string $inputDetails = null;
 
     public function __construct(
-        UserService $userService,
-        ApiService $apiService,
-        EntityManagerInterface $entityManager,
-        DivisionRepository $divisionRepository,
-        CharacterRepository $characterRepository,
-        FlashMessage $flashMessage,
-        ClientInterface $httpClient,
+        private UserService $userService,
+        private ApiService $apiService,
+        private EntityManagerInterface $entityManager,
+        private DivisionRepository $divisionRepository,
+        private CharacterRepository $characterRepository,
+        private FlashMessage $flashMessage,
+        private ClientInterface $httpClient,
         Settings $settings,
-        Environment $environment
+        Environment $environment,
     ) {
-        $this->userService = $userService;
-        $this->apiService = $apiService;
-        $this->entityManager = $entityManager;
-        $this->divisionRepository = $divisionRepository;
-        $this->characterRepository = $characterRepository;
-        $this->flashMessage = $flashMessage;
-        $this->httpClient = $httpClient;
         $this->esiBaseUrl = $settings['ESI_BASE_URL'];
         $this->killboardBaseUrl = $settings['ZKILLBOARD_BASE_URL'];
 
@@ -110,13 +89,13 @@ class SubmitController
         }
 
         $user = $this->userService->getAuthenticatedUser();
-        if ( ! $user) {
+        if (!$user) {
             $this->flashMessage->addMessage('Logged in user not found.', FlashMessage::TYPE_WARNING);
             return null;
         }
 
         $division = $this->divisionRepository->find($this->inputDivision);
-        if (! $division || ! $this->userService->hasDivisionRole($division->getId(), Permission::SUBMIT)) {
+        if (!$division || !$this->userService->hasDivisionRole($division->getId(), Permission::SUBMIT)) {
             $this->flashMessage->addMessage('Invalid division.', FlashMessage::TYPE_WARNING);
             return null;
         }
@@ -134,18 +113,18 @@ class SubmitController
         } else {
             $request->setKillboardUrl($this->inputUrl);
             $esiUrl = $this->apiService->getEsiUrlFromKillboard($this->inputUrl);
-            if (! $esiUrl) {
+            if (!$esiUrl) {
                 $this->flashMessage->addMessage(
                     'Could not get ESI URL from zKillboard URL.',
                     FlashMessage::TYPE_WARNING
                 );
             }
         }
-        if (! $esiUrl) {
+        if (!$esiUrl) {
             return null;
         }
 
-        if (! $this->setDataFromEsi($request, $esiUrl)) {
+        if (!$this->setDataFromEsi($request, $esiUrl)) {
             return null;
         }
 
@@ -222,7 +201,7 @@ class SubmitController
             ->setCorporationName($corporationData->name)
             ->setAllianceId($corporationData->alliance_id)
             ->setAllianceName($allianceData?->name);
-        if (! $request->getKillboardUrl()) {
+        if (!$request->getKillboardUrl()) {
             $request->setKillboardUrl("{$this->killboardBaseUrl}kill/$killMailData->killmail_id/");
         }
 
@@ -232,7 +211,7 @@ class SubmitController
     private function getPilot(int $pilotId): ?Character
     {
         $pilot = $this->characterRepository->find($pilotId);
-        if (! $pilot) {
+        if (!$pilot) {
             return null;
         }
 

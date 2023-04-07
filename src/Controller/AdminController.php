@@ -114,7 +114,7 @@ class AdminController
             // add groups
             foreach ($externalGroupNames as $externalGroupName) {
                 $group = $this->groupRepository->findOneBy(['name' => $externalGroupName]);
-                if (! $group) {
+                if (!$group) {
                     $group = new ExternalGroup();
                     $group->setName($externalGroupName);
                     $this->entityManager->persist($group);
@@ -123,7 +123,7 @@ class AdminController
 
             // remove groups
             foreach ($this->groupRepository->findBy([]) as $externalGroup) {
-                if (! in_array($externalGroup->getName(), $externalGroupNames)) {
+                if (!in_array($externalGroup->getName(), $externalGroupNames)) {
                     $this->entityManager->remove($externalGroup);
                 }
             }
@@ -174,7 +174,7 @@ class AdminController
                 )
             ) {
                 foreach ($groups as $role => $groupIds) {
-                    if (! is_array($groupIds)) {
+                    if (!is_array($groupIds)) {
                         // nothing was selected
                         $groupIds = [];
                     }
@@ -198,7 +198,7 @@ class AdminController
 
     private function updateDivision(Division $division, string $role, array $groupIds): bool
     {
-        if (! in_array($role, $this->validRoles)) {
+        if (!in_array($role, $this->validRoles)) {
             return false;
         }
 
@@ -206,11 +206,11 @@ class AdminController
         $validGroupIds = [];
         foreach ($groupIds as $groupId) {
             $group = $this->groupRepository->find($groupId);
-            if (! $group) {
+            if (!$group) {
                 continue;
             }
             $validGroupIds[] = $group->getId();
-            if (! $division->hasPermission($role, $group->getId())) {
+            if (!$division->hasPermission($role, $group->getId())) {
                 $newPermission = new Permission();
                 $newPermission->setExternalGroup($group);
                 $newPermission->setRole($role);
@@ -222,7 +222,7 @@ class AdminController
 
         // remove permissions
         foreach ($division->getPermissions($role) as $existingPermission) {
-            if (! in_array($existingPermission->getExternalGroup()->getId(), $validGroupIds)) {
+            if (!in_array($existingPermission->getExternalGroup()->getId(), $validGroupIds)) {
                 $this->entityManager->remove($existingPermission);
             }
         }

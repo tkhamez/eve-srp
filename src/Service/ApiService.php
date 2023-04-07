@@ -44,13 +44,13 @@ class ApiService
     {
         $urlParts = explode('/', rtrim($url, '/'));
         $killId = end($urlParts);
-        if (! is_numeric($killId)) {
+        if (!is_numeric($killId)) {
             error_log(__METHOD__ . ': Invalid kill ID: ' . $killId);
             return null;
         }
 
         $killboardData = $this->getJsonData("{$this->killboardBaseUrl}api/killID/$killId/");
-        if ($killboardData === null || ! isset($killboardData[0])) {
+        if ($killboardData === null || !isset($killboardData[0])) {
             return null;
         }
 
