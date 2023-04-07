@@ -48,14 +48,14 @@ class EsiProvider implements ProviderInterface
 
         $userData = \json_decode($result->getBody()->getContents());
 
-        $submitterAlliances = explode(',', (string) $_ENV['EVE_SRP_ESI_SUBMITTER_ALLIANCES']);
-        $submitterCorporations = explode(',', (string) $_ENV['EVE_SRP_ESI_SUBMITTER_CORPORATIONS']);
-        $reviewChars = explode(',', (string) $_ENV['EVE_SRP_ESI_REVIEW_CHARACTERS']);
-        $reviewCorps = explode(',', (string) $_ENV['EVE_SRP_ESI_REVIEW_CORPORATIONS']);
-        $payChars = explode(',', (string) $_ENV['EVE_SRP_ESI_PAY_CHARACTERS']);
-        $payCorps = explode(',', (string) $_ENV['EVE_SRP_ESI_PAY_CORPORATIONS']);
-        $adminChars = explode(',', (string) $_ENV['EVE_SRP_ESI_ADMIN_CHARACTERS']);
-        $globalAdminChars = explode(',', (string) $_ENV['EVE_SRP_ESI_GLOBAL_ADMIN_CHARACTERS']);
+        $submitterAlliances = explode(',', (string)($_ENV['EVE_SRP_ESI_SUBMITTER_ALLIANCES'] ?? ''));
+        $submitterCorporations = explode(',', (string)($_ENV['EVE_SRP_ESI_SUBMITTER_CORPORATIONS'] ?? ''));
+        $reviewChars = explode(',', (string)($_ENV['EVE_SRP_ESI_REVIEW_CHARACTERS'] ?? ''));
+        $reviewCorps = explode(',', (string)($_ENV['EVE_SRP_ESI_REVIEW_CORPORATIONS'] ?? ''));
+        $payChars = explode(',', (string)($_ENV['EVE_SRP_ESI_PAY_CHARACTERS'] ?? ''));
+        $payCorps = explode(',', (string)($_ENV['EVE_SRP_ESI_PAY_CORPORATIONS'] ?? ''));
+        $adminChars = explode(',', (string)($_ENV['EVE_SRP_ESI_ADMIN_CHARACTERS'] ?? ''));
+        $globalAdminChars = explode(',', (string)($_ENV['EVE_SRP_ESI_GLOBAL_ADMIN_CHARACTERS'] ?? ''));
 
         $groups = [];
         if (

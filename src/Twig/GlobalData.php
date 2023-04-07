@@ -28,7 +28,13 @@ class GlobalData
 
     public function footerText(): string
     {
-        return $this->replaceMarkdownLink(htmlspecialchars($this->settings['FOOTER_TEXT']));
+        $html = $this->replaceMarkdownLink(htmlspecialchars($this->settings['FOOTER_TEXT']));
+
+        if (!empty($html)) {
+            $html .= '<br>';
+        }
+
+        return $html;
     }
 
     public function userName(): string
