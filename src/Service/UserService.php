@@ -147,10 +147,9 @@ class UserService
             $authCharacter = new Character();
             $authCharacter->setId($characterId);
             $authCharacter->setMain(true);
-            $authCharacter->setUser($user);
             $authCharacter->setName($eveAuth->getCharacterName());
+            $authCharacter->setUser($user);
             $user->addCharacter($authCharacter);
-            $user->setName($authCharacter->getName());
             $this->entityManager->persist($user);
             $this->entityManager->persist($authCharacter);
         } else {
@@ -162,6 +161,10 @@ class UserService
                 $this->entityManager->persist($user);
             }
         }
+
+        // Names can change, so update and persist everything
+        $user->setName($authCharacter->getName());
+        $this->entityManager->flush();
 
         return $user;
     }
