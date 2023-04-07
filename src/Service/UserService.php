@@ -172,15 +172,11 @@ class UserService
      *
      * @throws Exception
      */
-    public function syncCharacters(User $user, int $characterId): void
+    public function syncCharacters(User $user, int $characterId): User
     {
-        # TODO Use Account->$id to decide which account needs to be modified: if the character was used to login
+        # TODO Use Account->$id to decide which account needs to be modified: if the character that was used to login
         #      was moved to another external account the current sync modifies the wrong srp user.
         #      Note: this may changed the logged in userId.
-
-        if (count($user->getCharacters()) === 0) {
-            return;
-        }
 
         $allKnownCharacterIds = [];
         $mainCharacterId = null;
@@ -237,6 +233,8 @@ class UserService
 
         // persist
         $this->entityManager->flush();
+
+        return $user;
     }
 
     /**

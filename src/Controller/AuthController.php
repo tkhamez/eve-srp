@@ -80,7 +80,7 @@ class AuthController
 
         $user = $this->userService->getUser($eveAuth);
         try {
-            $this->userService->syncCharacters($user, $eveAuth->getCharacterId());
+            $user = $this->userService->syncCharacters($user, $eveAuth->getCharacterId());
         } catch (Exception $e) {
             error_log('AuthController::auth(): ' . $e->getMessage());
             $this->flashMessage->addMessage('Failed to sync characters.', FlashMessage::TYPE_DANGER);
