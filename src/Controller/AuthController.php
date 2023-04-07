@@ -84,12 +84,14 @@ class AuthController
         } catch (Exception $e) {
             error_log(__METHOD__ . ': ' . $e->getMessage());
             $this->flashMessage->addMessage('Failed to sync characters.', FlashMessage::TYPE_DANGER);
+            return $response->withHeader('Location', '/login');
         }
         try {
             $this->userService->syncGroups($user);
         } catch (Exception $e) {
             error_log(__METHOD__ . ': ' . $e->getMessage());
             $this->flashMessage->addMessage('Failed to sync groups.', FlashMessage::TYPE_DANGER);
+            return $response->withHeader('Location', '/login');
         }
         $this->session->set('userId', $user->getId());
 
