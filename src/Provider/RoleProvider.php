@@ -4,11 +4,13 @@ declare(strict_types=1);
 
 namespace EveSrp\Provider;
 
+use EveSrp\Exception;
 use EveSrp\Model\User;
 use EveSrp\Security;
 use EveSrp\Service\UserService;
 use EveSrp\Settings;
 use Psr\Http\Message\ServerRequestInterface;
+use SlimSession\Helper;
 use Tkhamez\Slim\RoleAuth\RoleProviderInterface;
 
 /**
@@ -16,8 +18,6 @@ use Tkhamez\Slim\RoleAuth\RoleProviderInterface;
  */
 class RoleProvider implements RoleProviderInterface
 {
-    private UserService $userService;
-
     /**
      * @var string[] 
      */
@@ -25,8 +25,11 @@ class RoleProvider implements RoleProviderInterface
 
     private array $roles = [];
     
-    public function __construct(UserService $userService, Settings $settings)
-    {
+    public function __construct(
+        private UserService $userService,
+        private Helper $session,
+        Settings $settings,
+    ) {
         $this->userService = $userService;
         if ($settings['ROLE_GLOBAL_ADMIN'] !== '') {
             $this->adminGroups = explode(',', $settings['ROLE_GLOBAL_ADMIN']);
@@ -58,18 +61,28 @@ class RoleProvider implements RoleProviderInterface
 
     private function mapGroupsToRoles(User $user): array
     {
+        // Update groups from service once every hour
+        if ($this->session->get('lastGroupSync') < (time() - 3600)) {
+            try {
+                $this->userService->syncGroups($user);
+            } catch (Exception $e) {
+                error_log(__METHOD__ . ': ' . $e->getMessage());
+                // ignore
+            }
+        }
+
         $roles = [];
         
         // division roles
         foreach ($this->userService->getUserPermissions() as $permission) {
-            if (! in_array($permission->getRole(), $roles)) {
+            if (!in_array($permission->getRole(), $roles)) {
                 $roles[] = $permission->getRole();
             }
         }
         
         // global admin role
         foreach ($user->getExternalGroups() as $group) {
-            if (in_array($group->getName(), $this->adminGroups) && ! in_array(Security::GLOBAL_ADMIN, $roles)) {
+            if (in_array($group->getName(), $this->adminGroups) && !in_array(Security::GLOBAL_ADMIN, $roles)) {
                 $roles[] = Security::GLOBAL_ADMIN;
             }
         }

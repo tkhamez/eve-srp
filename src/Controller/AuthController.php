@@ -86,7 +86,7 @@ class AuthController
             $this->flashMessage->addMessage('Failed to sync characters.', FlashMessage::TYPE_DANGER);
         }
         try {
-            $this->userService->syncGroups($eveAuth->getCharacterId(), $user);
+            $this->userService->syncGroups($user);
         } catch (Exception $e) {
             error_log(__METHOD__ . ': ' . $e->getMessage());
             $this->flashMessage->addMessage('Failed to sync groups.', FlashMessage::TYPE_DANGER);

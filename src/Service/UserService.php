@@ -22,7 +22,7 @@ use SlimSession\Helper;
 
 class UserService
 {
-    private ?User $user = null;
+    private ?User $authenticatedUser = null;
 
     /**
      * @var string[]
@@ -101,17 +101,17 @@ class UserService
      */
     public function getAuthenticatedUser(): ?User
     {
-        if ($this->user !== null) {
-            return $this->user;
+        if ($this->authenticatedUser !== null) {
+            return $this->authenticatedUser;
         }
         
         $userId = $this->session->get('userId');
         if ($userId === null) {
             return null;
         }
-        $this->user = $this->userRepository->find($this->session->get('userId'));
+        $this->authenticatedUser = $this->userRepository->find($this->session->get('userId'));
         
-        return $this->user;
+        return $this->authenticatedUser;
     }
 
     /**
@@ -240,12 +240,15 @@ class UserService
     /**
      * Syncs external groups of logged in EVE character
      *
-     * @param int $characterId
-     * @param User $user
      * @throws Exception
      */
-    public function syncGroups(int $characterId, User $user): void
+    public function syncGroups(User $user): void
     {
+        $characterId = isset($user->getCharacters()[0]) ? $user->getCharacters()[0]->getId() : null;
+        if (!$characterId) {
+            return;
+        }
+
         $groups = $this->provider->getGroups($characterId);
 
         // add groups
@@ -255,7 +258,7 @@ class UserService
                 $group = (new ExternalGroup())->setName($groupName);
                 $this->entityManager->persist($group);
             }
-            if (! $user->hasExternalGroup($group->getName())) {
+            if (!$user->hasExternalGroup($group->getName())) {
                 $user->addExternalGroup($group);
             }
         }
@@ -269,6 +272,8 @@ class UserService
         
         // persist
         $this->entityManager->flush();
+
+        $this->session->set('lastGroupSync', time());
     }
     
     public function maySee(Request $request): bool

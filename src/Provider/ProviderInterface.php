@@ -25,7 +25,7 @@ interface ProviderInterface
      *
      * Those groups can be mapped to internal roles and divisions via configuration.
      *
-     * This is called after each character login.
+     * This is called after each login and periodically when logged in.
      *
      * @param int $eveCharacterId EVE character ID of logged-in user
      * @return string[] Array of unique group names, e. g. ['submitter', 'admin']
