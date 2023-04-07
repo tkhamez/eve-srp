@@ -103,7 +103,7 @@ class AdminController
         try {
             $externalGroupNames = $this->provider->getAvailableGroups();
         } catch (Exception $e) {
-            error_log('AdminController::syncGroups(): ' . $e->getMessage());
+            error_log(__METHOD__ . ': ' . $e->getMessage());
             $this->flashMessage->addMessage('Failed to sync groups.', FlashMessage::TYPE_DANGER);
             return $response->withHeader('Location', '/admin/groups');
         }

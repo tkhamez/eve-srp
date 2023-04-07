@@ -55,7 +55,7 @@ class Bootstrap
         try {
             $this->addMiddleware($app);
         } catch (\Throwable $e) {
-            error_log('Bootstrap::run(): ' . $e->getMessage());
+            error_log(__METHOD__ . ': ' . $e->getMessage());
         }
 
         try {

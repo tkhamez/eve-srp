@@ -24,12 +24,12 @@ class ApiService
         try {
             $apiResponse = $this->httpClient->request('GET', $url);
         } catch (GuzzleException $e) {
-            error_log('getEsiData() request: ' . $e->getMessage());
+            error_log(__METHOD__ . ' request: ' . $e->getMessage());
             return null;
         }
         $apiData = \json_decode($apiResponse->getBody()->__toString());
         if ($apiData === null) {
-            error_log('getEsiData() json: ' . json_last_error_msg());
+            error_log(__METHOD__ . ' json: ' . json_last_error_msg());
             return null;
         }
 
@@ -45,7 +45,7 @@ class ApiService
         $urlParts = explode('/', rtrim($url, '/'));
         $killId = end($urlParts);
         if (! is_numeric($killId)) {
-            error_log('getEsiUrlFromKillboard: Invalid kill ID: ' . $killId);
+            error_log(__METHOD__ . ': Invalid kill ID: ' . $killId);
             return null;
         }
 

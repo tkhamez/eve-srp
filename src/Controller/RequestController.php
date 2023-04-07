@@ -247,7 +247,7 @@ class RequestController
         try {
             $result = $this->httpClient->request('GET', $esiLink);
         } catch (GuzzleException $e) {
-            error_log('getKillMail(): ' . $e->getMessage());
+            error_log(__METHOD__ . ': ' . $e->getMessage());
             return null;
         }
 
@@ -274,7 +274,7 @@ class RequestController
                     'item_type_name' => $this->getEsiTypeName($item->item_type_id),
                 ];
             } else {
-                error_log('sortItems: Unknown flag ' . $item->flag);
+                error_log(__METHOD__ . ': Unknown flag ' . $item->flag);
                 $unknown[$item->flag][][0] = [
                     'item_type_id' => $item->item_type_id,
                     'item_type_name' => $this->getEsiTypeName($item->item_type_id),
@@ -291,7 +291,7 @@ class RequestController
             }
         }
         if (count($result) !== count($itemGroups)) {
-            error_log('sortItems: Missing an item group.');
+            error_log(__METHOD__ . ': Missing an item group.');
         }
 
         return $result + $unknown;
