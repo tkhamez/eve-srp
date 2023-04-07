@@ -42,7 +42,7 @@ Only global admins can see SRP requests without a division, e.g. when a division
 
 ### Error logging
 
-Log messages are sent to the file specified in the PHP `error_log` configuration.
+Log messages are sent to `storage/error-*.log` files.
 
 ## Development Environment (Docker)
 
@@ -65,8 +65,6 @@ docker-compose exec -u node eve_srp_node /bin/sh
 ```
 composer install
 ```
-
-The logs are in `storage/error.log`.
 
 ### Build Frontend
 
