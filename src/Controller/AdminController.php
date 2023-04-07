@@ -14,6 +14,7 @@ use EveSrp\Model\Permission;
 use EveSrp\Provider\ProviderInterface;
 use EveSrp\Repository\DivisionRepository;
 use EveSrp\Repository\ExternalGroupRepository;
+use EveSrp\Security;
 use EveSrp\Service\UserService;
 use Doctrine\ORM\EntityManagerInterface;
 use Psr\Http\Message\ResponseInterface;
@@ -141,7 +142,10 @@ class AdminController
     {
         $divisions = [];
         foreach ($this->divisionRepository->findBy([], ['name' => 'ASC']) as $division) {
-            if ($this->userService->hasDivisionRole($division->getId(), Permission::ADMIN)) {
+            if (
+                $this->userService->hasDivisionRole($division->getId(), Permission::ADMIN) ||
+                $this->userService->hasRole(Security::GLOBAL_ADMIN)
+            ) {
                 $divisions[] = $division;
             }
         }
@@ -162,7 +166,13 @@ class AdminController
         $division = null;
         if ($id && $groups && is_array($groups)) {
             $division = $this->divisionRepository->find($id);
-            if ($division && $this->userService->hasDivisionRole($division->getId(), Permission::ADMIN)) {
+            if (
+                $division &&
+                (
+                    $this->userService->hasDivisionRole($division->getId(), Permission::ADMIN) ||
+                    $this->userService->hasRole(Security::GLOBAL_ADMIN)
+                )
+            ) {
                 foreach ($groups as $role => $groupIds) {
                     if (! is_array($groupIds)) {
                         // nothing was selected

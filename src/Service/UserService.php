@@ -60,10 +60,6 @@ class UserService
 
     public function hasDivisionRole(int $divisionId, string $role): bool
     {
-        if ($this->hasRole(Security::GLOBAL_ADMIN)) {
-            return true;
-        }
-
         foreach ($this->getUserPermissions() as $permission) {
             if ($permission->getDivision()->getId() === $divisionId && $permission->getRole() === $role) {
                 return true;
@@ -81,10 +77,6 @@ class UserService
     {
         $divisions = [];
         foreach ($this->divisionRepository->findBy([]) as $division) {
-            if ($this->hasRole(Security::GLOBAL_ADMIN)) {
-                $divisions[] = $division;
-                continue;
-            }
             foreach ($roles as $role) {
                 if ($this->hasDivisionRole($division->getId(), $role)) {
                     $divisions[] = $division;
