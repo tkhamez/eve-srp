@@ -33,7 +33,7 @@ Depending on which provider is used, the corresponding environment variables mus
 `EVE_SRP_NEUCORE_*` or `EVE_SRP_ESI_*` for the included providers.
 
 There is only one fixed role, the global admin. It is mapped to groups with the environment variable
-`EVE_SRP_ROLE_GLOBAL_ADMIN`. If you use the default configuration with the ESI provider add your own EVE character 
+`EVE_SRP_ROLE_GLOBAL_ADMIN`. If you use the default configuration with the ESI provider, add your own EVE character 
 ID to the `EVE_SRP_ESI_GLOBAL_ADMIN_CHARACTERS` environment variable to become a global admin.
 
 Global admins can create divisions and configure all other permissions for each of them separately.
@@ -43,6 +43,13 @@ Only global admins can see SRP requests without a division, e.g. when a division
 ### Error logging
 
 Log messages are sent to `storage/error-*.log` files.
+
+## Provider
+
+Providers implement the `ProviderInterface` interface and provide groups for the logged-in character and 
+optionally additional alternative characters for which the user can submit requests.
+
+The active provider is configured with an environment variable.
 
 ## Development Environment (Docker)
 
