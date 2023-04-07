@@ -8,6 +8,7 @@ use Brave\NeucoreApi\Api\ApplicationApi;
 use Brave\NeucoreApi\Api\ApplicationCharactersApi;
 use Brave\NeucoreApi\Api\ApplicationGroupsApi;
 use Brave\NeucoreApi\Configuration;
+use Doctrine\DBAL\DriverManager;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\EntityRepository;
@@ -143,14 +144,14 @@ final class Container
 
             // Doctrine ORM
             EntityManagerInterface::class => function (ContainerInterface $container) {
-                return EntityManager::create(
-                    ['url' => $container->get(Settings::class)['DB_URL']],
-                    ORMSetup::createAnnotationMetadataConfiguration(
-                        [ROOT_DIR . '/src/Model'],
-                        $container->get(Settings::class)['APP_ENV'] === 'dev',
-                        ROOT_DIR . '/storage'
-                    )
+                $settings = $container->get(Settings::class);
+                $metaConfig = ORMSetup::createAnnotationMetadataConfiguration(
+                    [ROOT_DIR . '/src/Model'],
+                    $settings['APP_ENV'] === 'dev',
+                    ROOT_DIR . '/storage'
                 );
+                $connection = DriverManager::getConnection(['url' => $settings['DB_URL']], $metaConfig);
+                return new EntityManager($connection, $metaConfig);
             },
             ActionRepository::class => function (ContainerInterface $container) {
                 return self::getRepository($container, ActionRepository::class, Action::class);
