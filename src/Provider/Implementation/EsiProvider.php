@@ -2,9 +2,11 @@
 
 declare(strict_types=1);
 
-namespace EveSrp\Provider;
+namespace EveSrp\Provider\Implementation;
 
 use EveSrp\Exception;
+use EveSrp\Provider\ProviderInterface;
+use EveSrp\Provider\Data\Account;
 use EveSrp\Settings;
 use GuzzleHttp\ClientInterface;
 use GuzzleHttp\Exception\GuzzleException;
@@ -19,7 +21,7 @@ use GuzzleHttp\Exception\GuzzleException;
  *
  * @noinspection PhpUnused
  */
-class EsiProvider implements InterfaceCharacterProvider, InterfaceGroupProvider
+class EsiProvider implements ProviderInterface
 {
     private string $esiBaseUrl;
 
@@ -28,17 +30,7 @@ class EsiProvider implements InterfaceCharacterProvider, InterfaceGroupProvider
         $this->esiBaseUrl = $settings['ESI_BASE_URL'];
     }
 
-    public function getCharacters(int $eveCharacterId): array
-    {
-        return [];
-    }
-
-    public function getMain(int $eveCharacterId): ?int
-    {
-        return null;
-    }
-
-    public function getName(int $eveCharacterId): ?string
+    public function getAccount(int $eveCharacterId): ?Account
     {
         return null;
     }

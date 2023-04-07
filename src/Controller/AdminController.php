@@ -11,7 +11,7 @@ use EveSrp\FlashMessage;
 use EveSrp\Model\Division;
 use EveSrp\Model\ExternalGroup;
 use EveSrp\Model\Permission;
-use EveSrp\Provider\InterfaceGroupProvider;
+use EveSrp\Provider\ProviderInterface;
 use EveSrp\Repository\DivisionRepository;
 use EveSrp\Repository\ExternalGroupRepository;
 use EveSrp\Service\UserService;
@@ -28,13 +28,13 @@ class AdminController
     private array $validRoles = [Permission::SUBMIT, Permission::REVIEW, Permission::PAY, Permission::ADMIN];
 
     public function __construct(
-        private InterfaceGroupProvider $groupProvider,
-        private EntityManagerInterface $entityManager,
-        private DivisionRepository $divisionRepository,
+        private ProviderInterface       $provider,
+        private EntityManagerInterface  $entityManager,
+        private DivisionRepository      $divisionRepository,
         private ExternalGroupRepository $groupRepository,
-        private FlashMessage $flashMessage,
-        private UserService $userService,
-        Environment $environment
+        private FlashMessage            $flashMessage,
+        private UserService             $userService,
+        Environment                     $environment
     ) {
         $this->twigResponse($environment);
     }
@@ -61,7 +61,7 @@ class AdminController
                 $this->entityManager->flush();
                 $this->flashMessage->addMessage('Division added.', FlashMessage::TYPE_SUCCESS);
             } else {
-                $this->flashMessage->addMessage('A division with that name already exists.', FlashMessage::TYPE_INFO);
+                $this->flashMessage->addMessage('A division with that name already exists.');
             }
         } else {
             $this->flashMessage->addMessage('Please enter a name.', FlashMessage::TYPE_WARNING);
@@ -101,7 +101,7 @@ class AdminController
     public function syncGroups(ServerRequestInterface $request, ResponseInterface $response): ResponseInterface
     {
         try {
-            $externalGroupNames = $this->groupProvider->getAvailableGroups();
+            $externalGroupNames = $this->provider->getAvailableGroups();
         } catch (Exception $e) {
             error_log('AdminController::syncGroups(): ' . $e->getMessage());
             $this->flashMessage->addMessage('Failed to sync groups.', FlashMessage::TYPE_DANGER);

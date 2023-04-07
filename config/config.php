@@ -14,9 +14,8 @@ return [
     'FOOTER_TEXT'        => $_ENV['EVE_SRP_FOOTER_TEXT'],
 
     // Admin role, group and character providers
-    'ROLE_GLOBAL_ADMIN'  => $_ENV['EVE_SRP_ROLE_GLOBAL_ADMIN'],
-    'GROUP_PROVIDER'     => $_ENV['EVE_SRP_GROUP_PROVIDER'],
-    'CHARACTER_PROVIDER' => $_ENV['EVE_SRP_CHARACTER_PROVIDER'],
+    'ROLE_GLOBAL_ADMIN' => $_ENV['EVE_SRP_ROLE_GLOBAL_ADMIN'],
+    'PROVIDER'          => $_ENV['EVE_SRP_PROVIDER'],
 
     // SSO configuration
     'SSO_CLIENT_ID'        => $_ENV['EVE_SRP_SSO_CLIENT_ID'],

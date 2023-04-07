@@ -21,8 +21,7 @@ use EveSrp\Model\ExternalGroup;
 use EveSrp\Model\Permission;
 use EveSrp\Model\Request;
 use EveSrp\Model\User;
-use EveSrp\Provider\InterfaceCharacterProvider;
-use EveSrp\Provider\InterfaceGroupProvider;
+use EveSrp\Provider\ProviderInterface;
 use EveSrp\Provider\RoleProvider;
 use EveSrp\Repository\ActionRepository;
 use EveSrp\Repository\CharacterRepository;
@@ -65,12 +64,8 @@ final class Container
             RoleProviderInterface::class => function (ContainerInterface $container) {
                 return $container->get(RoleProvider::class);
             },
-            InterfaceGroupProvider::class => function (ContainerInterface $container) {
-                $class = $container->get(Settings::class)['GROUP_PROVIDER'];
-                return $container->get($class);
-            },
-            InterfaceCharacterProvider::class => function (ContainerInterface $container) {
-                $class = $container->get(Settings::class)['CHARACTER_PROVIDER'];
+            ProviderInterface::class => function (ContainerInterface $container) {
+                $class = $container->get(Settings::class)['PROVIDER'];
                 return $container->get($class);
             },
 

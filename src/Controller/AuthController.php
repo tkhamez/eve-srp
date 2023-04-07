@@ -9,7 +9,6 @@ use EveSrp\Controller\Traits\RequestParameter;
 use EveSrp\Controller\Traits\TwigResponse;
 use EveSrp\Exception;
 use EveSrp\FlashMessage;
-use EveSrp\Provider\InterfaceGroupProvider;
 use EveSrp\Service\UserService;
 use EveSrp\Settings;
 use Psr\Http\Message\ResponseInterface;
@@ -24,13 +23,12 @@ class AuthController
     use TwigResponse;
 
     public function __construct(
-        private Settings $settings,
-        private Helper $session,
-        private InterfaceGroupProvider $groupProvider,
-        private UserService $userService,
+        private Settings               $settings,
+        private Helper                 $session,
+        private UserService            $userService,
         private AuthenticationProvider $authenticationProvider,
-        private FlashMessage $flashMessage,
-        Environment $environment
+        private FlashMessage           $flashMessage,
+        Environment                    $environment
     ) {
         $this->twigResponse($environment);
     }

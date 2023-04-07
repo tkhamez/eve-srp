@@ -11,8 +11,7 @@ use EveSrp\Model\ExternalGroup;
 use EveSrp\Model\Permission;
 use EveSrp\Model\Request;
 use EveSrp\Model\User;
-use EveSrp\Provider\InterfaceCharacterProvider;
-use EveSrp\Provider\InterfaceGroupProvider;
+use EveSrp\Provider\ProviderInterface;
 use EveSrp\Repository\CharacterRepository;
 use EveSrp\Repository\DivisionRepository;
 use EveSrp\Repository\ExternalGroupRepository;
@@ -31,15 +30,14 @@ class UserService
     private array $clientRoles = [];
 
     public function __construct(
-        private Helper $session,
-        private EntityManagerInterface $entityManager,
-        private UserRepository $userRepository,
+        private Helper                  $session,
+        private EntityManagerInterface  $entityManager,
+        private UserRepository          $userRepository,
         private ExternalGroupRepository $externalGroupRepository,
-        private CharacterRepository $characterRepository,
-        private PermissionRepository $permissionRepository,
-        private DivisionRepository $divisionRepository,
-        private InterfaceCharacterProvider $characterProvider,
-        private InterfaceGroupProvider $groupProvider
+        private CharacterRepository     $characterRepository,
+        private PermissionRepository    $permissionRepository,
+        private DivisionRepository      $divisionRepository,
+        private ProviderInterface       $provider,
     ) {
     }
 
@@ -176,40 +174,53 @@ class UserService
      */
     public function syncCharacters(User $user, int $characterId): void
     {
-        # TODO if character was moved to another Core account this does not work as expected
-        #      use character owner hash? or add an account ID to interface? only allow login for main?
+        # TODO Use Account->$id to decide which account needs to be modified: if the character was used to login
+        #      was moved to another external account the current sync modifies the wrong srp user.
+        #      Note: this may changed the logged in userId.
 
         if (count($user->getCharacters()) === 0) {
             return;
         }
 
-        // add alts
-        $allKnownCharacterIds = $this->characterProvider->getCharacters($characterId);
-        foreach ($allKnownCharacterIds as $altId) {
-            $alt = $this->characterRepository->find($altId);
-            if ($alt === null) {
-                $alt = new Character();
-                $alt->setId($altId);
-                $alt->setUser($user);
-                $user->addCharacter($alt);
-                $this->entityManager->persist($alt);
-            } else {
-                $oldUser = $alt->getUser();
-                if ($oldUser && $oldUser->getId() !== $user->getId()) {
-                    $oldUser->removeCharacter($alt);
+        $allKnownCharacterIds = [];
+        $mainCharacterId = null;
+
+        $account = $this->provider->getAccount($characterId);
+
+        if ($account) {
+            $allKnownCharacterIds = array_map(function (\EveSrp\Provider\Data\Character $character) {
+                return $character->getId();
+            }, $account->getCharacters());
+
+            // add alts
+            foreach ($account->getCharacters() as $character) {
+                $alt = $this->characterRepository->find($character->getId());
+                if ($alt === null) {
+                    $alt = new Character();
+                    $alt->setId($character->getId());
+                    $alt->setUser($user);
+                    $user->addCharacter($alt);
+                    $this->entityManager->persist($alt);
+                } else {
+                    $oldUser = $alt->getUser();
+                    if ($oldUser && $oldUser->getId() !== $user->getId()) {
+                        $oldUser->removeCharacter($alt);
+                    }
+                    $alt->setUser($user);
+                    $user->addCharacter($alt);
                 }
-                $alt->setUser($user);
-                $user->addCharacter($alt);
+                $alt->setName($character->getName());
+                if ($character->getMain()) {
+                    $mainCharacterId = $character->getId();
+                }
             }
-            $alt->setName((string) $this->characterProvider->getName($alt->getId()));
         }
 
         // remove alts, set name of player
-        $mainCharacterId = $this->characterProvider->getMain($characterId);
         foreach ($user->getCharacters() as $existingCharacter) {
             if (
                 $existingCharacter->getId() !== $characterId &&
-                ! in_array($existingCharacter->getId(), $allKnownCharacterIds)
+                !in_array($existingCharacter->getId(), $allKnownCharacterIds)
             ) {
                 $user->removeCharacter($existingCharacter);
                 $existingCharacter->setUser();
@@ -237,7 +248,7 @@ class UserService
      */
     public function syncGroups(int $characterId, User $user): void
     {
-        $groups = $this->groupProvider->getGroups($characterId);
+        $groups = $this->provider->getGroups($characterId);
 
         // add groups
         foreach ($groups as $groupName) {
@@ -253,7 +264,7 @@ class UserService
 
         // remove groups
         foreach ($user->getExternalGroups() as $externalGroup) {
-            if (! in_array($externalGroup->getName(), $groups)) {
+            if (!in_array($externalGroup->getName(), $groups)) {
                 $user->removeExternalGroup($externalGroup);
             }
         }

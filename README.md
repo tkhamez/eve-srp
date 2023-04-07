@@ -26,8 +26,8 @@ To run the application you need a web server with support for PHP >=8.0 and URL 
 
 ### Permissions
 
-Permissions are based on groups which are provided by the group provider which is configured by the
-`EVE_SRP_GROUP_PROVIDER` environment variable.
+Permissions are based on groups which are provided by a provider which is configured by the
+`EVE_SRP_PROVIDER` environment variable.
 
 Depending on which provider is used, the corresponding environment variables must be adapted, currently 
 `EVE_SRP_NEUCORE_*` or `EVE_SRP_ESI_*` for the included providers.

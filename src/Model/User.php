@@ -39,7 +39,7 @@ class User
     /**
      * @ORM\OneToMany(targetEntity="Character", mappedBy="user")
      */
-    private  Collection$characters;
+    private Collection $characters;
 
     /**
      * @ORM\OneToMany(targetEntity="Request", mappedBy="user")
@@ -103,6 +103,12 @@ class User
     
     public function addCharacter(Character $character): self
     {
+        foreach ($this->getCharacters() as $existingCharacter) {
+            if ($existingCharacter->getId() === $character->getId()) {
+                return $this;
+            }
+        }
+
         $this->characters[] = $character;
 
         return $this;
