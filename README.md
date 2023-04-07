@@ -1,12 +1,10 @@
 # EVE-SRP
 
-## Notes
-
-Only global admins can see requests without a division.
+A Ship-Replacement-Programm application for [EVE Online](https://www.eveonline.com).
 
 ## Install
 
-To run the application you need PHP >=8.0 and a database supported by 
+To run the application you need a web server with support for PHP >=8.0 and URL rewriting, and a database supported by 
 [Doctrine ORM](https://www.doctrine-project.org/projects/doctrine-orm/en/latest/index.html) 
 (tested with MariaDB 10.6).
 
@@ -15,9 +13,11 @@ To run the application you need PHP >=8.0 and a database supported by
 - Copy `config/.env.dist` to `config/.env` and adjust values or set the corresponding environment variables.
   At the very least set EVE_SRP_SSO_CLIENT_ID and EVE_SRP_SSO_CLIENT_SECRET, the rest works as is when using the
   Docker development environment.
-- Make sure that the `storage` directory is writable by the webserver.
 - Install dependencies and generate Doctrine proxy classes with `composer install`.
 - Clear the template cache: `rm -R storage/compilation_cache`
+- Make sure that the `storage` directory is writable by the webserver.
+- Set the document root to the `web` directory and configure URL rewriting to `index.php` (see
+  [Slim framework - Web Servers](https://www.slimframework.com/docs/v4/start/web-servers.html) for details)
 - sync db schema:
   - **Backup the database first!**
   - `bin/doctrine orm:schema-tool:update --dump-sql`  
@@ -32,11 +32,19 @@ Permissions are based on groups which are provided by the group provider which i
 Depending on which provider is used, the corresponding environment variables must be adapted, currently 
 `EVE_SRP_NEUCORE_*` or `EVE_SRP_ESI_*` for the included providers.
 
+There is only one fixed role, the global admin. It is mapped to groups with the environment variable
+`EVE_SRP_ROLE_GLOBAL_ADMIN`. If you use the default configuration with the ESI provider add your own EVE character 
+ID to the `EVE_SRP_ESI_GLOBAL_ADMIN_CHARACTERS` environment variable to become a global admin.
+
+Global admins can create divisions and configure all other permissions for each of them separately.
+
+Only global admins can see SRP requests without a division, e.g. when a division was deleted.
+
 ### Error logging
 
 Log messages are sent to the file specified in the PHP `error_log` configuration.
 
-## Docker Development Environment
+## Development Environment (Docker)
 
 ```
 docker-compose build
