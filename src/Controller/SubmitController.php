@@ -201,8 +201,8 @@ class SubmitController
             ->setCorporationName($corporationData->name)
             ->setAllianceId($corporationData->alliance_id)
             ->setAllianceName($allianceData?->name);
-        if (!$request->getKillboardUrl()) {
-            $request->setKillboardUrl("{$this->killboardBaseUrl}kill/$killMailData->killmail_id/");
+        if (!$request->getKillboardUrl() && $this->killboardBaseUrl) {
+            $request->setKillboardUrl("{$this->killboardBaseUrl}/kill/$killMailData->killmail_id/");
         }
 
         return true;

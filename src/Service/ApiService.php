@@ -49,7 +49,7 @@ class ApiService
             return null;
         }
 
-        $killboardData = $this->getJsonData("{$this->killboardBaseUrl}api/killID/$killId/");
+        $killboardData = $this->getJsonData("{$this->killboardBaseUrl}/api/killID/$killId/");
         if ($killboardData === null || !isset($killboardData[0])) {
             return null;
         }

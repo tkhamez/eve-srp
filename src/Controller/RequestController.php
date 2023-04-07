@@ -227,12 +227,12 @@ class RequestController
                 $srpRequest->setEsiLink($esiLink);
                 $this->entityManager->flush();
             }
-        } elseif (!$srpRequest->getKillboardUrl() && $srpRequest->getEsiLink()) {
+        } elseif (!$srpRequest->getKillboardUrl() && $srpRequest->getEsiLink() && $this->killboardBaseUrl) {
             $urlParts = explode('/', rtrim($srpRequest->getEsiLink(), '/'));
             array_pop($urlParts);
             $killId = end($urlParts);
             if (is_numeric($killId)) {
-                $srpRequest->setKillboardUrl("{$this->killboardBaseUrl}kill/$killId/");
+                $srpRequest->setKillboardUrl("{$this->killboardBaseUrl}/kill/$killId/");
                 $this->entityManager->flush();
             }
         }

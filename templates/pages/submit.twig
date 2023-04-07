@@ -26,9 +26,11 @@
                 </div>
                 <div class="mb-3">
                     <label for="url" class="form-label">
-                        <a href="{{ killboardUrl }}" target="_blank" rel="noopener noreferrer"
-                           class="srp-external-link">zKillboard</a>
-                        URL or
+                        {% if killboardUrl %}
+                            <a href="{{ killboardUrl }}" target="_blank" rel="noopener noreferrer"
+                               class="srp-external-link">zKillboard</a>
+                            URL or
+                        {% endif %}
                         <a href="#" class="kill-mail" data-bs-toggle="popover" data-bs-trigger="hover"
                            data-bs-html="true" data-bs-custom-class="kill-mail" data-bs-container="#requestForm"
                            title="Kill Report - Copy External Kill Link"
