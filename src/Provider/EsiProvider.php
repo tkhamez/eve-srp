@@ -59,7 +59,9 @@ class EsiProvider implements InterfaceCharacterProvider, InterfaceGroupProvider
         $submitterAlliances = explode(',', (string) $_ENV['EVE_SRP_ESI_SUBMITTER_ALLIANCES']);
         $submitterCorporations = explode(',', (string) $_ENV['EVE_SRP_ESI_SUBMITTER_CORPORATIONS']);
         $reviewChars = explode(',', (string) $_ENV['EVE_SRP_ESI_REVIEW_CHARACTERS']);
+        $reviewCorps = explode(',', (string) $_ENV['EVE_SRP_ESI_REVIEW_CORPORATIONS']);
         $payChars = explode(',', (string) $_ENV['EVE_SRP_ESI_PAY_CHARACTERS']);
+        $payCorps = explode(',', (string) $_ENV['EVE_SRP_ESI_PAY_CORPORATIONS']);
         $adminChars = explode(',', (string) $_ENV['EVE_SRP_ESI_ADMIN_CHARACTERS']);
         $globalAdminChars = explode(',', (string) $_ENV['EVE_SRP_ESI_GLOBAL_ADMIN_CHARACTERS']);
 
@@ -70,10 +72,10 @@ class EsiProvider implements InterfaceCharacterProvider, InterfaceGroupProvider
         ) {
             $groups[] = 'member';
         }
-        if (in_array($eveCharacterId, $reviewChars)) {
+        if (in_array($eveCharacterId, $reviewChars) || in_array($userData->corporation_id, $reviewCorps)) {
             $groups[] = 'review';
         }
-        if (in_array($eveCharacterId, $payChars)) {
+        if (in_array($eveCharacterId, $payChars) || in_array($userData->corporation_id, $payCorps)) {
             $groups[] = 'pay';
         }
         if (in_array($eveCharacterId, $adminChars)) {
