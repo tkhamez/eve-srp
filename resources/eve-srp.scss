@@ -69,7 +69,8 @@ a {
 // Libraries
 
 .form-control,
-.form-control:focus {
+.form-control:focus,
+.form-select {
     color: var(--srp-text-color);
     background-color: var(--srp-bg-color-2);
 }
