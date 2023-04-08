@@ -8,7 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Entity
- * @ORM\Table(name="permissions")
+ * @ORM\Table(name="app_permissions", options={"charset"="utf8mb4", "collate"="utf8mb4_unicode_520_ci"})
  */
 class Permission
 {

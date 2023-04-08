@@ -12,7 +12,7 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Entity
- * @ORM\Table(name="requests")
+ * @ORM\Table(name="requests", options={"charset"="utf8mb4", "collate"="utf8mb4_unicode_520_ci"})
  */
 class Request
 {
@@ -104,12 +104,12 @@ class Request
     private ?string $details = null;
 
     /**
-     * @ORM\Column(type="integer", name="base_payout", nullable=true)
+     * @ORM\Column(type="bigint", name="base_payout", nullable=true)
      */
     private ?int $basePayout = null;
 
     /**
-     * @ORM\Column(type="integer", nullable=true)
+     * @ORM\Column(type="bigint", nullable=true)
      */
     private ?int $payout = null;
 

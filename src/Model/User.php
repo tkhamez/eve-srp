@@ -10,7 +10,7 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Entity
- * @ORM\Table(name="users")
+ * @ORM\Table(name="users", options={"charset"="utf8mb4", "collate"="utf8mb4_unicode_520_ci"})
  */
 class User
 {
@@ -22,9 +22,14 @@ class User
     private ?int $id = null;
 
     /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private string $externalAccountId = '';
+
+    /**
      * @ORM\Column(type="string", length=255, nullable=true)
      */
-    private string $name = '';
+    private ?string $name = null;
 
     /**
      * @ORM\ManyToMany(targetEntity="ExternalGroup", inversedBy="users")
@@ -68,7 +73,17 @@ class User
 
     public function getName(): string
     {
-        return $this->name;
+        return (string)$this->name;
+    }
+
+    public function getExternalAccountId(): string
+    {
+        return $this->externalAccountId;
+    }
+
+    public function setExternalAccountId(string $externalAccountId): void
+    {
+        $this->externalAccountId = $externalAccountId;
     }
 
     public function addExternalGroup(ExternalGroup $externalGroups): self

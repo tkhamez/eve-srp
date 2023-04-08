@@ -8,7 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Entity
- * @ORM\Table(name="esi_types")
+ * @ORM\Table(name="esi_types", options={"charset"="utf8mb4", "collate"="utf8mb4_unicode_520_ci"})
  */
 class EsiType
 {
@@ -22,7 +22,7 @@ class EsiType
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      */
-    private string $name = '';
+    private ?string $name = null;
 
     public function setId(int $id): self
     {
@@ -45,6 +45,6 @@ class EsiType
 
     public function getName(): string
     {
-        return $this->name;
+        return (string)$this->name;
     }
 }
