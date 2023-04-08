@@ -15,7 +15,7 @@ use EveSrp\Provider\ProviderInterface;
 use EveSrp\Repository\DivisionRepository;
 use EveSrp\Repository\ExternalGroupRepository;
 use EveSrp\Security;
-use EveSrp\Service\UserService;
+use EveSrp\Misc\UserService;
 use Doctrine\ORM\EntityManagerInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;

@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace EveSrp\Twig;
 
 use EveSrp\FlashMessage;
-use EveSrp\Service\UserService;
+use EveSrp\Misc\UserService;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFunction;
 

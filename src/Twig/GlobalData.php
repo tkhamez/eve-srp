@@ -7,7 +7,7 @@ namespace EveSrp\Twig;
 
 use EveSrp\Model\Character;
 use EveSrp\Model\User;
-use EveSrp\Service\UserService;
+use EveSrp\Misc\UserService;
 use EveSrp\Settings;
 
 class GlobalData

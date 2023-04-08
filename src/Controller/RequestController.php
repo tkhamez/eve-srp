@@ -9,8 +9,8 @@ use EveSrp\Model\EsiType;
 use EveSrp\Model\Request;
 use EveSrp\Repository\EsiTypeRepository;
 use EveSrp\Repository\RequestRepository;
-use EveSrp\Service\ApiService;
-use EveSrp\Service\UserService;
+use EveSrp\Misc\ApiService;
+use EveSrp\Misc\UserService;
 use Doctrine\ORM\EntityManagerInterface;
 use EveSrp\Settings;
 use GuzzleHttp\ClientInterface;
@@ -232,7 +232,7 @@ class RequestController
             array_pop($urlParts);
             $killId = end($urlParts);
             if (is_numeric($killId)) {
-                $srpRequest->setKillboardUrl("{$this->killboardBaseUrl}/kill/$killId/");
+                $srpRequest->setKillboardUrl("$this->killboardBaseUrl/kill/$killId/");
                 $this->entityManager->flush();
             }
         }

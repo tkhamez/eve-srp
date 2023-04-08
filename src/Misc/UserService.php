@@ -1,6 +1,6 @@
 <?php
 
-namespace EveSrp\Service;
+namespace EveSrp\Misc;
 
 use Doctrine\ORM\EntityManagerInterface;
 use Eve\Sso\EveAuthentication;

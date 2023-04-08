@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace EveSrp\Controller;
 
 use EveSrp\Controller\Traits\TwigResponse;
-use EveSrp\Service\UserService;
+use EveSrp\Misc\UserService;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Twig\Environment;

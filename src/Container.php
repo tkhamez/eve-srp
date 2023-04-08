@@ -23,7 +23,7 @@ use EveSrp\Model\Permission;
 use EveSrp\Model\Request;
 use EveSrp\Model\User;
 use EveSrp\Provider\ProviderInterface;
-use EveSrp\Provider\RoleProvider;
+use EveSrp\Misc\RoleProvider;
 use EveSrp\Repository\ActionRepository;
 use EveSrp\Repository\CharacterRepository;
 use EveSrp\Repository\DivisionRepository;

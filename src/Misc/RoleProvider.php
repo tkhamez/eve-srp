@@ -2,12 +2,11 @@
 
 declare(strict_types=1);
 
-namespace EveSrp\Provider;
+namespace EveSrp\Misc;
 
 use EveSrp\Exception;
 use EveSrp\Model\User;
 use EveSrp\Security;
-use EveSrp\Service\UserService;
 use EveSrp\Settings;
 use Psr\Http\Message\ServerRequestInterface;
 use SlimSession\Helper;
@@ -30,7 +29,6 @@ class RoleProvider implements RoleProviderInterface
         private Helper $session,
         Settings $settings,
     ) {
-        $this->userService = $userService;
         if ($settings['ROLE_GLOBAL_ADMIN'] !== '') {
             $this->adminGroups = explode(',', $settings['ROLE_GLOBAL_ADMIN']);
         }

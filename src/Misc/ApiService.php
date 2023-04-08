@@ -1,6 +1,6 @@
 <?php
 
-namespace EveSrp\Service;
+namespace EveSrp\Misc;
 
 use EveSrp\Settings;
 use GuzzleHttp\ClientInterface;
@@ -49,7 +49,7 @@ class ApiService
             return null;
         }
 
-        $killboardData = $this->getJsonData("{$this->killboardBaseUrl}/api/killID/$killId/");
+        $killboardData = $this->getJsonData("$this->killboardBaseUrl/api/killID/$killId/");
         if ($killboardData === null || !isset($killboardData[0])) {
             return null;
         }

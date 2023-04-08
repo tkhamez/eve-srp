@@ -12,10 +12,10 @@ use EveSrp\Model\Permission;
 use EveSrp\Model\Request;
 use EveSrp\Repository\CharacterRepository;
 use EveSrp\Repository\DivisionRepository;
-use EveSrp\Service\ApiService;
+use EveSrp\Misc\ApiService;
 use EveSrp\Settings;
 use EveSrp\Type;
-use EveSrp\Service\UserService;
+use EveSrp\Misc\UserService;
 use Doctrine\ORM\EntityManagerInterface;
 use GuzzleHttp\ClientInterface;
 use Psr\Http\Message\ResponseInterface;
@@ -202,7 +202,7 @@ class SubmitController
             ->setAllianceId($corporationData->alliance_id)
             ->setAllianceName($allianceData?->name);
         if (!$request->getKillboardUrl() && $this->killboardBaseUrl) {
-            $request->setKillboardUrl("{$this->killboardBaseUrl}/kill/$killMailData->killmail_id/");
+            $request->setKillboardUrl("$this->killboardBaseUrl/kill/$killMailData->killmail_id/");
         }
 
         return true;
