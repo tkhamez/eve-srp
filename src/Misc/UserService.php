@@ -166,41 +166,52 @@ class UserService
      */
     public function syncCharacters(User $user, int $characterId): User
     {
-        # TODO Use Account->$id to decide which account needs to be modified: if the character that was used to login
-        #      was moved to another external account the current sync modifies the wrong srp user.
-        #      Note: this may changed the logged in userId.
+        // Get data from provider
+        $account = $this->provider->getAccount($characterId);
+        if (!$account || empty($account->getId())) {
+            return $user;
+        }
 
+        // Find correct user
+        $externalUser = $this->userRepository->findOneBy(['externalAccountId' => $account->getId()]);
+        if (!$externalUser && empty($user->getExternalAccountId())) {
+            // First sync for this user, set external ID.
+            $user->setExternalAccountId($account->getId());
+        } elseif (!$externalUser) {
+            // Character was moved from a known to an unknown account
+            $newUser = new User();
+            $newUser->setName($user->getName());
+            $this->entityManager->persist($newUser);
+            $user = $newUser;
+        } elseif ($externalUser->getId() !== $user->getId()) {
+            $user = $externalUser;
+        }
+
+        // Variables for last step, set in next step.
         $allKnownCharacterIds = [];
         $mainCharacterId = null;
 
-        $account = $this->provider->getAccount($characterId);
-
-        if ($account) {
-            $allKnownCharacterIds = array_map(function (\EveSrp\Provider\Data\Character $character) {
-                return $character->getId();
-            }, $account->getCharacters());
-
-            // add alts
-            foreach ($account->getCharacters() as $character) {
-                $alt = $this->characterRepository->find($character->getId());
-                if ($alt === null) {
-                    $alt = new Character();
-                    $alt->setId($character->getId());
-                    $alt->setUser($user);
-                    $user->addCharacter($alt);
-                    $this->entityManager->persist($alt);
-                } else {
-                    $oldUser = $alt->getUser();
-                    if ($oldUser && $oldUser->getId() !== $user->getId()) {
-                        $oldUser->removeCharacter($alt);
-                    }
-                    $alt->setUser($user);
-                    $user->addCharacter($alt);
+        // add alts
+        foreach ($account->getCharacters() as $character) {
+            $allKnownCharacterIds[] = $character->getId();
+            $alt = $this->characterRepository->find($character->getId());
+            if ($alt === null) {
+                $alt = new Character();
+                $alt->setId($character->getId());
+                $alt->setUser($user);
+                $user->addCharacter($alt);
+                $this->entityManager->persist($alt);
+            } else {
+                $oldUser = $alt->getUser();
+                if ($oldUser && $oldUser->getId() !== $user->getId()) {
+                    $oldUser->removeCharacter($alt);
                 }
-                $alt->setName($character->getName());
-                if ($character->getMain()) {
-                    $mainCharacterId = $character->getId();
-                }
+                $alt->setUser($user);
+                $user->addCharacter($alt);
+            }
+            $alt->setName($character->getName());
+            if ($character->getMain()) {
+                $mainCharacterId = $character->getId();
             }
         }
 

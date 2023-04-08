@@ -22,9 +22,9 @@ class User
     private ?int $id = null;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="string", unique=true, nullable=true, length=255)
      */
-    private string $externalAccountId = '';
+    private ?string $externalAccountId = null;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
@@ -76,12 +76,12 @@ class User
         return (string)$this->name;
     }
 
-    public function getExternalAccountId(): string
+    public function getExternalAccountId(): ?string
     {
         return $this->externalAccountId;
     }
 
-    public function setExternalAccountId(string $externalAccountId): void
+    public function setExternalAccountId(?string $externalAccountId): void
     {
         $this->externalAccountId = $externalAccountId;
     }
