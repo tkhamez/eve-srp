@@ -36,5 +36,11 @@
             </form>
         </div>
     </div>
-    {% include 'components/requests.twig' with {requests: requests, page: 'process'} only %}
+    {% include 'components/request-list.twig' with {
+        page: 'process',
+        requests: requests,
+        pagerCurrentPage: pagerCurrentPage,
+        pagerTotalPages: pagerTotalPages,
+        pagerLink: pagerLink,
+    } only %}
 {% endblock %}

@@ -102,6 +102,20 @@ a {
     }
 }
 
+.pagination {
+    --bs-pagination-bg: var(--srp-bg-color);
+    --bs-pagination-color: var(--srp-text-color);
+    --bs-pagination-hover-bg: var(--srp-bg-color-2);
+    --bs-pagination-hover-color: var(--srp-text-color);
+    --bs-pagination-focus-bg: var(--srp-bg-color-2);
+    --bs-pagination-focus-color: var(--srp-text-color);
+    --bs-pagination-disabled-bg: var(--srp-bg-color);
+    --bs-pagination-disabled-color: var(--bs-gray-600);
+    --bs-pagination-border-color: var(--srp-bg-color-2);
+    --bs-pagination-hover-border-color: var(--srp-bg-color-2);
+    --bs-pagination-disabled-border-color: var(--srp-bg-color-2);
+}
+
 // Pages
 
 .page-submit {

@@ -1,0 +1,29 @@
+
+{% if totalPages > 0 %}
+    <nav class="d-flex justify-content-center">
+        <ul class="pagination">
+            <li class="page-item">
+                <a class="page-link {{ currentPage == 1 ? 'disabled' :'' }}"
+                   href="{{ link }}{{ currentPage - 1 }}" title="Previous">&laquo;</a>
+            </li>
+            {% set numLinksAround = 2 %}
+            {% for page in range(1, totalPages) %}
+                {% if (currentPage - numLinksAround > page or currentPage + numLinksAround < page) and page > 1 and page < totalPages %}
+                    {% if currentPage - numLinksAround - 1 == page or currentPage + numLinksAround + 1 == page %}
+                        <li class="page-item disabled">
+                            <a class="page-link" href="#">...</a>
+                        </li>
+                    {% endif %}
+                {% else %}
+                    <li class="page-item {{ page == currentPage ? 'active' :'' }}">
+                        <a class="page-link" href="{{ link }}{{ page }}">{{ page }}</a>
+                    </li>
+                {% endif %}
+            {% endfor %}
+            <li class="page-item">
+                <a class="page-link {{ currentPage == totalPages ? 'disabled' :'' }}"
+                   href="{{ link }}{{ currentPage + 1 }}" title="Next">&raquo;</a>
+            </li>
+        </ul>
+    </nav>
+{% endif %}

@@ -31,8 +31,9 @@ class AllRequestsController
 
     public function __invoke(ServerRequestInterface $request, ResponseInterface $response): ResponseInterface
     {
-        $selectedStatus = (string) $this->paramGet($request, 'status');
-        $selectedDivision = (int) $this->paramGet($request, 'division', '0');
+        $selectedStatus = (string)$this->paramGet($request, 'status');
+        $selectedDivision = (int)$this->paramGet($request, 'division', '0');
+        $currentPage = max(1, ((int)$this->paramGet($request, 'page', '1')));
 
         $divisions = $this->userService->getDivisionsWithRoles([Permission::REVIEW, Permission::PAY]);
 
@@ -54,13 +55,22 @@ class AllRequestsController
             $selectedDivision = 0;
         }
 
-        $requests = $this->requestRepository->findBy([
+        // variables for pager
+        $criteria = [
             'status' => $selectedStatus,
             'division' => $selectedDivision === -1 ? null : $selectedDivision
-        ], ['created' => 'ASC']);
+        ];
+        $limit = 100;
+        $totalRequests = $this->requestRepository->count($criteria);
+        $totalPages = ceil($totalRequests / $limit);
+        $currentPage = min($totalPages, $currentPage);
+        $offset = max(0, ($limit * $currentPage) - $limit);
 
         return $this->render($response, 'pages/all-requests.twig', [
-            'requests' => $requests,
+            'pagerCurrentPage' => $currentPage,
+            'pagerTotalPages' => $totalPages,
+            'pagerLink' => "?division=$selectedDivision&status=$selectedStatus&page=",
+            'requests' => $this->requestRepository->findBy($criteria, ['created' => 'ASC'], $limit, $offset),
             'divisions' => $divisions,
             'selectedStatus' => $selectedStatus,
             'selectedDivision' => $selectedDivision

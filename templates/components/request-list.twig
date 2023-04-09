@@ -1,3 +1,10 @@
+
+{% include 'components/request-list-pager.twig' with {
+    currentPage: pagerCurrentPage,
+    totalPages: pagerTotalPages,
+    link: pagerLink,
+} only %}
+
 <div class="table-responsive">
     <table class="table table-sm table-dark table-striped table-bordered table-hover">
         <thead>
@@ -44,3 +51,9 @@
         </tbody>
     </table>
 </div>
+
+{% include 'components/request-list-pager.twig' with {
+    currentPage: pagerCurrentPage,
+    totalPages: pagerTotalPages,
+    link: pagerLink,
+} only %}
