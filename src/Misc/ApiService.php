@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace EveSrp\Misc;
 
 use EveSrp\Settings;
