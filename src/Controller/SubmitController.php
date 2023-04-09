@@ -13,6 +13,7 @@ use EveSrp\Model\Request;
 use EveSrp\Repository\CharacterRepository;
 use EveSrp\Repository\DivisionRepository;
 use EveSrp\Misc\ApiService;
+use EveSrp\Repository\RequestRepository;
 use EveSrp\Settings;
 use EveSrp\Type;
 use EveSrp\Misc\UserService;
@@ -43,6 +44,7 @@ class SubmitController
         private EntityManagerInterface $entityManager,
         private DivisionRepository $divisionRepository,
         private CharacterRepository $characterRepository,
+        private RequestRepository $requestRepository,
         private FlashMessage $flashMessage,
         private ClientInterface $httpClient,
         Settings $settings,
@@ -100,36 +102,45 @@ class SubmitController
             return null;
         }
 
+        // Get ESI URL
+        if (str_starts_with($this->inputUrl, $this->esiBaseUrl)) {
+            $esiUrl = $this->inputUrl;
+        } else {
+            $esiUrl = $this->apiService->getEsiUrlFromKillboard($this->inputUrl);
+        }
+        if (!$esiUrl) {
+            $this->flashMessage->addMessage(
+                'Could not get ESI URL from zKillboard URL.',
+                FlashMessage::TYPE_WARNING
+            );
+            return null;
+        }
+
+        // Create request
         $request = new Request();
         $request
             ->setCreated(new \DateTime())
             ->setStatus(Type::EVALUATING)
             ->setUser($user)
             ->setDivision($division)
-            ->setDetails($this->inputDetails);
-
-        if (str_starts_with($this->inputUrl, $this->esiBaseUrl)) {
-            $esiUrl = $this->inputUrl;
-        } else {
-            $request->setKillboardUrl($this->inputUrl);
-            $esiUrl = $this->apiService->getEsiUrlFromKillboard($this->inputUrl);
-            if (!$esiUrl) {
-                $this->flashMessage->addMessage(
-                    'Could not get ESI URL from zKillboard URL.',
-                    FlashMessage::TYPE_WARNING
-                );
-            }
-        }
-        if (!$esiUrl) {
-            return null;
-        }
-
+            ->setDetails($this->inputDetails)
+            ->setEsiLink($esiUrl);
         if (!$this->setDataFromEsi($request, $esiUrl)) {
             return null;
         }
 
-        $request->setEsiLink($esiUrl);
+        // Check if request exists already. zKill URL check is needed for migrated data where the ESI URL is missing.
+        $exists1 = $this->requestRepository->findOneBy(['esiLink' => $esiUrl]);
+        $exists2 = null;
+        if ($request->getKillboardUrl()) {
+            $exists2 = $this->requestRepository->findOneBy(['killboardUrl' => $request->getKillboardUrl()]);
+        }
+        if ($exists1 || $exists2) {
+            $this->flashMessage->addMessage('This request already exists.', FlashMessage::TYPE_WARNING);
+            return null;
+        }
 
+        // persist and return
         $this->entityManager->persist($request);
         $this->entityManager->flush();
         return $request;
@@ -201,7 +212,7 @@ class SubmitController
             ->setCorporationName($corporationData->name)
             ->setAllianceId($corporationData->alliance_id)
             ->setAllianceName($allianceData?->name);
-        if (!$request->getKillboardUrl() && $this->killboardBaseUrl) {
+        if ($this->killboardBaseUrl) {
             $request->setKillboardUrl("$this->killboardBaseUrl/kill/$killMailData->killmail_id/");
         }
 
