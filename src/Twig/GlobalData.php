@@ -23,7 +23,11 @@ class GlobalData
 
     public function loginHint(): string
     {
-        return $this->replaceMarkdownLink(htmlspecialchars($this->settings['LOGIN_HINT']));
+        return nl2br(str_replace(
+            '\n',
+            '<br>',
+            $this->replaceMarkdownLink(htmlspecialchars($this->settings['LOGIN_HINT']))
+        ));
     }
 
     public function footerText(): string
