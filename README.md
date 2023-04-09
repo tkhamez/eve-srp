@@ -49,16 +49,15 @@ Log messages are sent to `storage/error-*.log` files.
 Providers implement the `ProviderInterface` interface and provide groups for the logged-in character and 
 optionally additional alternative characters for which the user can submit requests.
 
-The active provider is configured with an environment variable.
-
 ## Development Environment
 
 ```
-docker-compose build
 docker-compose up
 ```
 
-The database connection string is: `mysql://eve_srp:eve_srp@eve_srp_db/eve_srp`.  
+The database connection string is: `mysql://root:eve_srp@eve_srp_db/eve_srp`. To run the unit tests add a
+database named `eve_srp_test`.
+
 The application is available at: http://localhost:8000.
 
 Consoles for PHP and Node.js:
