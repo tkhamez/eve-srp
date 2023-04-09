@@ -1,0 +1,26 @@
+
+<div>request id: {{ request.id }}</div>
+<div>created: {{ request.created|date('Y-m-d H:i e') }}</div>
+<div>division: {{ request.division.id }} {{ request.division.name }}</div>
+<br>
+<div>submitter: {{ request.user.id }} {{ request.user.name }}</div>
+<br>
+{% for action in request.actions %}
+    <div>- action id: {{ action.id }}</div>
+    <div>created: {{ action.created|date('Y-m-d H:i e') }}</div>
+    <div>category: {{ action.category }}</div>
+    <div>user: {{ action.user.id }} {{ action.user.name }}</div>
+    <div>note: {{ action.note }}</div>
+{%  endfor %}
+<br>
+<div>pilot: {{ request.character.id }} {{ request.character.name }}</div>
+<div>corporation: {{ request.corporationId }} {{ request.corporationName }}</div>
+<div>alliance: {{ request.allianceId }} {{ request.allianceName }}</div>
+<div>killTime: {{ request.killTime|date('Y-m-d H:i e') }}</div>
+<div>solarSystem: {{ request.solarSystem }}</div>
+<div>killboardUrl: {{ request.killboardUrl }}</div>
+<div>esiLink: {{ request.esiLink }}</div>
+<div>details: {{ request.details|nl2br }}</div>
+<div>basePayout: {{ request.basePayout }}</div>
+<div>payout: {{ request.payout }}</div>
+<div>status: {{ request.status }}</div>

@@ -31,7 +31,7 @@ class ProcessListsController
      */
     public function review(ServerRequestInterface $request, ResponseInterface $response): ResponseInterface
     {
-       return $this->showPage($response, Type::EVALUATING, Permission::REVIEW, 'review.twig');
+       return $this->showPage($response, Type::EVALUATING, Permission::REVIEW, 'review');
     }
 
     /**
@@ -39,7 +39,7 @@ class ProcessListsController
      */
     public function pay(ServerRequestInterface $request, ResponseInterface $response): ResponseInterface
     {
-        return $this->showPage($response, Type::APPROVED, Permission::PAY, 'pay.twig');
+        return $this->showPage($response, Type::APPROVED, Permission::PAY, 'pay');
     }
 
     private function showPage($response, $status, $role, $page): ResponseInterface
@@ -53,6 +53,9 @@ class ProcessListsController
             'division' => $divisions
         ], ['created' => 'ASC']);
 
-        return $this->render($response, "pages/$page", ['requests' => $requests]);
+        return $this->render($response, "pages/process-list.twig", [
+            'requests' => $requests,
+            'page' => $page,
+        ]);
     }
 }
