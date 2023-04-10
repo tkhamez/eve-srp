@@ -72,6 +72,12 @@ docker-compose exec -u node eve_srp_node /bin/sh
 composer install
 ```
 
+Useful commands:
+```
+bin/doctrine orm:validate-schema
+bin/doctrine dbal:reserved-words
+```
+
 ### Build Frontend
 
 Install dependencies:
@@ -117,6 +123,16 @@ INSERT INTO eve_srp.permissions (id, division_id, external_group_id, role_name)
         AND permission IN ('submit', 'review', 'pay', 'admin');
 INSERT INTO eve_srp.user_external_group (user_id, external_group_id)
     SELECT users_groups.user_id, group_id FROM evesrp.users_groups;
+INSERT INTO eve_srp.modifiers 
+    (id, request_id, user_id, created, mod_type, note, voided_time, voided_user_id, mod_value)
+    SELECT modifier.id, request_id, user_id, timestamp, LOWER(SUBSTRING(_type, 1, 8)), note, voided_timestamp, 
+           voided_user_id,
+           CASE WHEN absolute_modifier.value IS NOT NULL THEN  CAST(absolute_modifier.value AS SIGNED) 
+               WHEN relative_modifier.value IS NOT NULL THEN CAST(relative_modifier.value * 100 AS SIGNED) 
+               END AS value
+    FROM evesrp.modifier
+    LEFT JOIN evesrp.absolute_modifier ON modifier.id = absolute_modifier.id
+    LEFT JOIN evesrp.relative_modifier ON modifier.id = relative_modifier.id;
 ```
 
-Note: the permission "audit" is not copied.
+Note: Not everything is copied, e.g. the permission "audit" and user notes.

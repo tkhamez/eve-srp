@@ -19,6 +19,7 @@ use EveSrp\Model\Character;
 use EveSrp\Model\Division;
 use EveSrp\Model\EsiType;
 use EveSrp\Model\ExternalGroup;
+use EveSrp\Model\Modifier;
 use EveSrp\Model\Permission;
 use EveSrp\Model\Request;
 use EveSrp\Model\User;
@@ -29,6 +30,7 @@ use EveSrp\Repository\CharacterRepository;
 use EveSrp\Repository\DivisionRepository;
 use EveSrp\Repository\EsiTypeRepository;
 use EveSrp\Repository\ExternalGroupRepository;
+use EveSrp\Repository\ModifierRepository;
 use EveSrp\Repository\PermissionRepository;
 use EveSrp\Repository\RequestRepository;
 use EveSrp\Repository\UserRepository;
@@ -167,6 +169,9 @@ final class Container
             },
             ExternalGroupRepository::class => function (ContainerInterface $container) {
                 return self::getRepository($container, ExternalGroupRepository::class, ExternalGroup::class);
+            },
+            ModifierRepository::class => function (ContainerInterface $container) {
+                return self::getRepository($container, ModifierRepository::class, Modifier::class);
             },
             PermissionRepository::class => function (ContainerInterface $container) {
                 return self::getRepository($container, PermissionRepository::class, Permission::class);

@@ -47,6 +47,12 @@ class Request
     private Collection $actions;
 
     /**
+     * @ORM\OneToMany(targetEntity="Modifier", mappedBy="request")
+     * @ORM\OrderBy({"created" = "DESC"})
+     */
+    private Collection $modifiers;
+
+    /**
      * @ORM\ManyToOne(targetEntity="Character")
      * @ORM\JoinColumn(nullable=false)
      */
@@ -125,6 +131,7 @@ class Request
     public function __construct()
     {
         $this->actions = new ArrayCollection();
+        $this->modifiers = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -176,6 +183,15 @@ class Request
     public function getActions(): array
     {
         return $this->actions->toArray();
+    }
+
+    /**
+     * @return Modifier[]
+     * @noinspection PhpUnused
+     */
+    public function getModifiers(): array
+    {
+        return $this->modifiers->toArray();
     }
 
     /** @noinspection PhpUnused */
