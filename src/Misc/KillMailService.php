@@ -178,12 +178,15 @@ class KillMailService
         }
     }
 
-    public function getKillMail(?string $esiLink): ?\stdClass
+    public function getKillMail(?string $esiLink): \stdClass|string
     {
         if (!$esiLink) {
-            return null;
+            return 'Missing ESI link.';
         }
-        return $this->apiService->getJsonData($esiLink);
+
+        $result = $this->apiService->getJsonData($esiLink);
+
+        return $result ?: $this->apiService->getLastError();
     }
 
     public function sortItems($items): array

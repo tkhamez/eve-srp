@@ -47,7 +47,8 @@ class RequestController
     {
         $srpRequest = $this->requestRepository->find($id);
         $error = null;
-        $killMail = null;
+        $killItems = null;
+        $killError = null;
 
         if (!$srpRequest) {
             $error = 'Request not found.';
@@ -58,13 +59,19 @@ class RequestController
 
         if ($srpRequest) {
             $this->killMailService->addMissingURLs($srpRequest);
-            $killMail = $this->killMailService->getKillMail($srpRequest->getEsiLink());
+            $killMailOrError = $this->killMailService->getKillMail($srpRequest->getEsiLink());
+            if ($killMailOrError instanceof \stdClass) {
+                $killItems = $this->killMailService->sortItems($killMailOrError->victim->items);
+            } else {
+                $killError = $killMailOrError;
+            }
         }
 
         return $this->render($response, 'pages/request.twig', [
             'request' => $srpRequest,
             'error' => $error,
-            'items' => $killMail ? $this->killMailService->sortItems($killMail->victim->items) : null,
+            'items' => $killItems,
+            'killError' => $killError,
         ]);
     }
 }

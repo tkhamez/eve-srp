@@ -14,24 +14,35 @@ class ApiService
 
     private string $killboardBaseUrl;
 
+    private string $lastError = '';
+
     public function __construct(private ClientInterface $httpClient, Settings $settings)
     {
         $this->esiBaseUrl = $settings['ESI_BASE_URL'];
         $this->killboardBaseUrl = $settings['ZKILLBOARD_BASE_URL'];
     }
 
+    public function getLastError(): string
+    {
+        return $this->lastError;
+    }
+
     public function getJsonData(string $url): array|\stdClass|null
     {
+        $this->lastError = '';
+
         $url = str_starts_with($url, 'http') ? $url : $this->esiBaseUrl . $url;
         try {
             $apiResponse = $this->httpClient->request('GET', $url);
         } catch (GuzzleException $e) {
-            error_log(__METHOD__ . ' request: ' . $e->getMessage());
+            $this->lastError = $e->getMessage();
+            error_log(__METHOD__ . " request: $this->lastError");
             return null;
         }
         $apiData = \json_decode($apiResponse->getBody()->__toString());
         if ($apiData === null) {
-            error_log(__METHOD__ . ' json: ' . json_last_error_msg());
+            $this->lastError = json_last_error_msg();
+            error_log(__METHOD__ . " json: $this->lastError");
             return null;
         }
 
