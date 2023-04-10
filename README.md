@@ -102,7 +102,8 @@ MySQL/MariaDB databases: evesrp => eve_srp
 Replace values for evesrp.entity.type_ (BraveOauthGroup) and evesrp.entity.authmethod (EVESSONeucore) if needed.
 
 ```sql
-INSERT INTO eve_srp.users (id, external_account_id) SELECT id, '' FROM evesrp.user;
+INSERT INTO eve_srp.users (id, name, external_account_id) 
+    SELECT user.id, name, '' FROM evesrp.user LEFT JOIN evesrp.entity ON user.id = entity.id;
 INSERT INTO eve_srp.characters (id, user_id, name, main) SELECT id, user_id, name, 0 FROM evesrp.pilot;
 INSERT INTO eve_srp.divisions (id, name) SELECT id, name FROM evesrp.division;
 INSERT INTO eve_srp.requests
