@@ -51,7 +51,13 @@ class ApiService
             return null;
         }
 
-        $killboardData = $this->getJsonData("$this->killboardBaseUrl/api/killID/$killId/");
+        if ($this->killboardBaseUrl) {
+            $killboardData = $this->getJsonData("$this->killboardBaseUrl/api/killID/$killId/");
+        } else {
+            // Use domain from $url
+            $domain = "$urlParts[0]//$urlParts[2]";
+            $killboardData = $this->getJsonData("$domain/api/killID/$killId/");
+        }
         if ($killboardData === null || !isset($killboardData[0])) {
             return null;
         }
