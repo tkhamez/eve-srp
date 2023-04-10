@@ -1,74 +1,109 @@
 
-<div>
-    Submitter: {{ request.user.name }}
-    {% if request.user.name is empty %}
-        #{{ request.user.id }}
-    {% endif %}
-</div>
-<div>Created: {{ request.created|date('Y-m-d H:i e') }}</div>
-<div>Division: {{ request.division.name }}</div>
-<br>
-<div>Status: {{ request.status }}</div>
-<div>Base payout: {{ request.basePayout|number_format }} ISK</div>
-<div>Payout: {{ request.payout|number_format }} ISK</div>
-<br>
-
-<h5>Kill</h5>
-<div>
-    Pilot:
-    <a href="https://evewho.com/character/{{ request.character.id }}" class="srp-external-link" title="Eve Who"
-       target="_blank" rel="noopener noreferrer">{{ request.character.name }}</a>,
-    {% if request.corporationId %}
-        <a href="https://evewho.com/corporation/{{ request.corporationId }}" class="srp-external-link" title="Eve Who"
-           target="_blank" rel="noopener noreferrer">{{ request.corporationName }}</a>,
-    {% else %}
-        {{ request.corporationName }},
-    {% endif %}
-    {% if request.allianceId %}
-        <a href="https://evewho.com/alliance/{{ request.allianceId }}" class="srp-external-link" title="Eve Who"
-           target="_blank" rel="noopener noreferrer">{{ request.allianceName }}</a>
-    {% elseif request.allianceName %}
-        {{ request.allianceName }}
-    {% endif %}
-</div>
-<div>Time: {{ request.killTime|date('Y-m-d H:i e') }}</div>
-<div>
-    Solar system:
-    <a href="https://evemaps.dotlan.net/system/{{ request.solarSystem }}" class="srp-external-link" title="Eve Who"
-       target="_blank" rel="noopener noreferrer">{{ request.solarSystem }}</a>
-</div>
-<div>
-    External URLs:
-    {% if request.killboardUrl %}
-        <a href="{{ request.killboardUrl }}" class="srp-external-link" title="Eve Who"
-           target="_blank" rel="noopener noreferrer">Killboard</a>,
-    {% endif %}
-    {% if request.esiLink %}
-        <a href="{{ request.esiLink }}" class="srp-external-link" title="Eve Who"
-           target="_blank" rel="noopener noreferrer">ESI</a>
-    {% endif %}
-</div>
-<br>
-
-<h5>Details</h5>
-<div class="srp-bg-dark-2">{{ request.details|nl2br }}</div>
-<br>
-
-<h5>Actions</h5>
-{% for action in request.actions %}
-    <div>
-        <div>Created: {{ action.created|date('Y-m-d H:i e') }}</div>
-        <div>Category: {{ action.category }}</div>
-        <div>
-            User: {{ action.user.name }}
-            {% if action.user.name is empty %}
-                #{{ action.user.id }}
+<table class="table table-dark table-sm mb-2">
+    <tr>
+        <th>Submitter</th>
+        <td>
+            <span title="#{{ request.user.id }}">{{ request.user.name }}</span>
+            {% if request.user.name is empty %}
+                #{{ request.user.id }}
             {% endif %}
-        </div>
-        <div>
-            Note
-            <div class="small srp-bg-dark-2">{{ action.note|nl2br }}</div>
-        </div>
+        </td>
+    </tr>
+    <tr>
+        <th>Created</th>
+        <td>{{ request.created|date('Y-m-d H:i e') }}</td>
+    </tr>
+    <tr>
+        <th>Division</th>
+        <td>{{ request.division.name }}</td>
+    </tr>
+    <tr>
+        <th>Pilot</th>
+        <td>
+            <a href="https://evewho.com/character/{{ request.character.id }}" class="srp-external-link"
+               title="EveWho" target="_blank" rel="noopener noreferrer">{{ request.character.name }}</a>,
+            {% if request.corporationId %}
+                <a href="https://evewho.com/corporation/{{ request.corporationId }}" class="srp-external-link"
+                   title="EveWho" target="_blank" rel="noopener noreferrer">{{ request.corporationName }}</a>,
+            {% else %}
+                {{ request.corporationName }},
+            {% endif %}
+            {% if request.allianceId %}
+                <a href="https://evewho.com/alliance/{{ request.allianceId }}" class="srp-external-link"
+                   title="EveWho" target="_blank" rel="noopener noreferrer">{{ request.allianceName }}</a>
+            {% elseif request.allianceName %}
+                {{ request.allianceName }}
+            {% endif %}
+        </td>
+    </tr>
+    <tr>
+        <th>Time</th>
+        <td>{{ request.killTime|date('Y-m-d H:i e') }}</td>
+    </tr>
+    <tr>
+        <th>Solar system</th>
+        <td>
+            <a href="https://evemaps.dotlan.net/system/{{ request.solarSystem }}" class="srp-external-link"
+               title="Dotlan" target="_blank" rel="noopener noreferrer">{{ request.solarSystem }}</a>
+        </td>
+    </tr>
+    <tr>
+        <th>External URLs</th>
+        <td>
+            {% if request.killboardUrl %}
+                <a href="{{ request.killboardUrl }}" class="srp-external-link"
+                   target="_blank" rel="noopener noreferrer">Killboard</a>,
+            {% endif %}
+            {% if request.esiLink %}
+                <a href="{{ request.esiLink }}" class="srp-external-link"
+                   target="_blank" rel="noopener noreferrer">ESI</a>
+            {% endif %}
+        </td>
+    </tr>
+</table>
+
+<div class="fw-bold">Details</div>
+<div class="srp-bg-dark-2 small p-1">{{ request.details|nl2br }}</div>
+
+<div class="row mt-4">
+    <div class="col">
+        <table class="table table-dark table-sm">
+            <tr>
+                <th class="">Status</th>
+                <td>{{ request.status }}</td>
+            </tr>
+            <tr>
+                <th>Base payout</th>
+                <td>{{ request.basePayout|number_format }} ISK</td>
+            </tr>
+            <tr>
+                <th>Payout</th>
+                <td>{{ request.payout|number_format }} ISK</td>
+            </tr>
+        </table>
     </div>
-    <br>
-{% endfor %}
+    <div class="col">
+        TODO modifier
+    </div>
+</div>
+
+<h5 class="mt-2">Changes</h5>
+<table class="table table-dark table-sm table-borderless small data-changes">
+    {% for action in request.actions %}
+        <tr class="{{ action.note ? '' : 'border-bottom' }}">
+            <td>{{ action.created|date('Y-m-d H:i e') }}</td>
+            <td>{{ action.category }}</td>
+            <td>
+                <span title="#{{ action.user.id }}">{{ action.user.name }}</span>
+                {% if action.user.name is empty %}
+                    #{{ action.user.id }}
+                {% endif %}
+            </td>
+        </tr>
+        {% if action.note %}
+            <tr class="border-bottom">
+                <td colspan="3"><div class="srp-bg-dark-2 p-1">{{ action.note|nl2br }}</div></td>
+            </tr>
+        {% endif %}
+    {% endfor %}
+</table>

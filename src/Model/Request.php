@@ -42,6 +42,7 @@ class Request
 
     /**
      * @ORM\OneToMany(targetEntity="Action", mappedBy="request")
+     * @ORM\OrderBy({"created" = "DESC"})
      */
     private Collection $actions;
 
