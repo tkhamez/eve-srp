@@ -70,11 +70,13 @@ class Modifier
         return $this->id;
     }
 
+    /** @noinspection PhpUnused */
     public function getCreated(): ?\DateTime
     {
         return $this->created;
     }
 
+    /** @noinspection PhpUnused */
     public function getModType(): ?string
     {
         return $this->modType;
@@ -85,26 +87,31 @@ class Modifier
         return $this->request;
     }
 
+    /** @noinspection PhpUnused */
     public function getUser(): ?User
     {
         return $this->user;
     }
 
+    /** @noinspection PhpUnused */
     public function getNote(): ?string
     {
         return $this->note;
     }
 
+    /** @noinspection PhpUnused */
     public function getVoidedUser(): ?User
     {
         return $this->voidedUser;
     }
 
+    /** @noinspection PhpUnused */
     public function getVoidedTime(): ?\DateTime
     {
         return $this->voidedTime;
     }
 
+    /** @noinspection PhpUnused */
     public function getModValue(): ?int
     {
         return $this->modValue;

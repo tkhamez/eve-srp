@@ -128,7 +128,8 @@ a {
 }
 
 .page-request {
-    .data-changes .border-bottom {
+    .data-changes .border-bottom,
+    .data-modifier .border-bottom {
         border-bottom-color: var(--bs-table-border-color) !important;
     }
 }

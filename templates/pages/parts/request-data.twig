@@ -14,10 +14,6 @@
         <td>{{ request.created|date('Y-m-d H:i e') }}</td>
     </tr>
     <tr>
-        <th>Division</th>
-        <td>{{ request.division.name }}</td>
-    </tr>
-    <tr>
         <th>Pilot</th>
         <td>
             <a href="https://evewho.com/character/{{ request.character.id }}" class="srp-external-link"
@@ -37,7 +33,7 @@
         </td>
     </tr>
     <tr>
-        <th>Time</th>
+        <th>Date and time</th>
         <td>{{ request.killTime|date('Y-m-d H:i e') }}</td>
     </tr>
     <tr>
@@ -52,7 +48,7 @@
         <td>
             {% if request.killboardUrl %}
                 <a href="{{ request.killboardUrl }}" class="srp-external-link"
-                   target="_blank" rel="noopener noreferrer">Killboard</a>,
+                   target="_blank" rel="noopener noreferrer">zKillboard</a>,
             {% endif %}
             {% if request.esiLink %}
                 <a href="{{ request.esiLink }}" class="srp-external-link"
@@ -62,12 +58,16 @@
     </tr>
 </table>
 
-<div class="fw-bold">Details</div>
+<h5 class="mb-1 mt-3">Details</h5>
 <div class="srp-bg-dark-2 small p-1">{{ request.details|nl2br }}</div>
 
 <div class="row mt-4">
     <div class="col">
         <table class="table table-dark table-sm">
+            <tr>
+                <th>Division</th>
+                <td>{{ request.division.name }}</td>
+            </tr>
             <tr>
                 <th class="">Status</th>
                 <td>{{ request.status }}</td>
@@ -82,8 +82,38 @@
             </tr>
         </table>
     </div>
-    <div class="col">
-        TODO modifier
+    <div class="col data-modifier">
+        <h6>Modifier</h6>
+        {% for modifier in request.modifiers %}
+            <div class="table-dark border-bottom pb-2 mb-2">
+                <span class=" {{ modifier.voidedTime ? 'text-decoration-line-through' : '' }}">
+                    {{ modifier.modValue|number_format }}{%
+                        if modifier.modType == 'relative' %}%{% else %} ISK{% endif
+                    %}
+                    {% if modifier.modValue > 0 %} bonus {% else %} penalty{% endif %}
+                </span>
+                <br>
+                <small>
+                    <span title="Time zone: {{ modifier.created|date('e') }}">
+                        {{ modifier.created|date('Y-m-d H:i') }}</span>,
+                    <span title="#{{ modifier.user.id }}">{{ modifier.user.name }}</span>
+                    {% if modifier.user.name is empty %}
+                        #{{ modifier.user.id }}
+                    {% endif %}
+                    <br>
+                    {% if modifier.note %}
+                        <div class="srp-bg-dark-2 p-1">{{ modifier.note|nl2br }}</div>
+                    {% endif %}
+                    {% if modifier.voidedTime %}
+                        Voided:
+                        <span title="Time zone: {{ modifier.voidedTime|date('e') }}">
+                            {{ modifier.voidedTime|date('Y-m-d H:i') }}</span>,
+                        <span title="#{{ modifier.voidedUser.id }}">{{ modifier.voidedUser.name }}</span>
+                        {% if modifier.voidedUser.name is empty %}#{{ modifier.voidedUser.id }}{% endif %}
+                    {% endif %}
+                </small>
+            </div>
+        {% endfor %}
     </div>
 </div>
 
