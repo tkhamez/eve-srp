@@ -1,26 +1,74 @@
 
-<div>request id: {{ request.id }}</div>
-<div>created: {{ request.created|date('Y-m-d H:i e') }}</div>
-<div>division: {{ request.division.id }} {{ request.division.name }}</div>
+<div>
+    Submitter: {{ request.user.name }}
+    {% if request.user.name is empty %}
+        #{{ request.user.id }}
+    {% endif %}
+</div>
+<div>Created: {{ request.created|date('Y-m-d H:i e') }}</div>
+<div>Division: {{ request.division.name }}</div>
 <br>
-<div>submitter: {{ request.user.id }} {{ request.user.name }}</div>
+<div>Status: {{ request.status }}</div>
+<div>Base payout: {{ request.basePayout|number_format }} ISK</div>
+<div>Payout: {{ request.payout|number_format }} ISK</div>
 <br>
+
+<h5>Kill</h5>
+<div>
+    Pilot:
+    <a href="https://evewho.com/character/{{ request.character.id }}" class="srp-external-link" title="Eve Who"
+       target="_blank" rel="noopener noreferrer">{{ request.character.name }}</a>,
+    {% if request.corporationId %}
+        <a href="https://evewho.com/corporation/{{ request.corporationId }}" class="srp-external-link" title="Eve Who"
+           target="_blank" rel="noopener noreferrer">{{ request.corporationName }}</a>,
+    {% else %}
+        {{ request.corporationName }},
+    {% endif %}
+    {% if request.allianceId %}
+        <a href="https://evewho.com/alliance/{{ request.allianceId }}" class="srp-external-link" title="Eve Who"
+           target="_blank" rel="noopener noreferrer">{{ request.allianceName }}</a>
+    {% elseif request.allianceName %}
+        {{ request.allianceName }}
+    {% endif %}
+</div>
+<div>Time: {{ request.killTime|date('Y-m-d H:i e') }}</div>
+<div>
+    Solar system:
+    <a href="https://evemaps.dotlan.net/system/{{ request.solarSystem }}" class="srp-external-link" title="Eve Who"
+       target="_blank" rel="noopener noreferrer">{{ request.solarSystem }}</a>
+</div>
+<div>
+    External URLs:
+    {% if request.killboardUrl %}
+        <a href="{{ request.killboardUrl }}" class="srp-external-link" title="Eve Who"
+           target="_blank" rel="noopener noreferrer">Killboard</a>,
+    {% endif %}
+    {% if request.esiLink %}
+        <a href="{{ request.esiLink }}" class="srp-external-link" title="Eve Who"
+           target="_blank" rel="noopener noreferrer">ESI</a>
+    {% endif %}
+</div>
+<br>
+
+<h5>Details</h5>
+<div class="srp-bg-dark-2">{{ request.details|nl2br }}</div>
+<br>
+
+<h5>Actions</h5>
 {% for action in request.actions %}
-    <div>- action id: {{ action.id }}</div>
-    <div>created: {{ action.created|date('Y-m-d H:i e') }}</div>
-    <div>category: {{ action.category }}</div>
-    <div>user: {{ action.user.id }} {{ action.user.name }}</div>
-    <div>note: {{ action.note }}</div>
-{%  endfor %}
-<br>
-<div>pilot: {{ request.character.id }} {{ request.character.name }}</div>
-<div>corporation: {{ request.corporationId }} {{ request.corporationName }}</div>
-<div>alliance: {{ request.allianceId }} {{ request.allianceName }}</div>
-<div>killTime: {{ request.killTime|date('Y-m-d H:i e') }}</div>
-<div>solarSystem: {{ request.solarSystem }}</div>
-<div>killboardUrl: {{ request.killboardUrl }}</div>
-<div>esiLink: {{ request.esiLink }}</div>
-<div>details: {{ request.details|nl2br }}</div>
-<div>basePayout: {{ request.basePayout }}</div>
-<div>payout: {{ request.payout }}</div>
-<div>status: {{ request.status }}</div>
+    <div>
+        <div>Created: {{ action.created|date('Y-m-d H:i e') }}</div>
+        <div>Category: {{ action.category }}</div>
+        <div>
+            User: {{ action.user.name }}
+            {% if action.user.name is empty %}
+                #{{ action.user.id }}
+            {% endif %}
+        </div>
+        <div>
+            Note
+            <div class="small srp-bg-dark-2">{{ action.note|nl2br }}</div>
+        </div>
+    </div>
+    <br>
+{% endfor %}

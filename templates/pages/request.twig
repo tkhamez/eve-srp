@@ -11,11 +11,19 @@
     <div class="row mb-3">
         <div class="col-12 col-lg-6">
             {% if request %}
-                {% include 'pages/parts/request-data.twig' %}
+                <div class="card bg-dark mb-3 border-light">
+                    <div class="card-body">
+                        {% include 'pages/parts/request-data.twig' %}
+                    </div>
+                </div>
             {% endif %}
         </div>
         <div class="col-12 col-lg-6">
-            {% include 'pages/parts/request-ship.twig' %}
+            <div class="card bg-dark border-light">
+                <div class="card-body">
+                    {% include 'pages/parts/request-ship.twig' %}
+                </div>
+            </div>
         </div>
     </div>
 
