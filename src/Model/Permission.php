@@ -8,7 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Entity
- * @ORM\Table(name="app_permissions", options={"charset"="utf8mb4", "collate"="utf8mb4_unicode_520_ci"})
+ * @ORM\Table(name="permissions", options={"charset"="utf8mb4", "collate"="utf8mb4_unicode_520_ci"})
  */
 class Permission
 {
@@ -52,7 +52,7 @@ class Permission
     private ?ExternalGroup $externalGroup = null;
 
     /**
-     * @ORM\Column(type="string", length=8)
+     * @ORM\Column(type="string", length=8, name="role_name")
      */
     private ?string $role = null;
 

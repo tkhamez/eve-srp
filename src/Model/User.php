@@ -22,7 +22,7 @@ class User
     private ?int $id = null;
 
     /**
-     * @ORM\Column(type="string", unique=true, nullable=true, length=255)
+     * @ORM\Column(type="string", unique=true, nullable=true, name="external_account_id", length=255)
      */
     private ?string $externalAccountId = null;
 
