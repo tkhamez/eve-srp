@@ -55,6 +55,7 @@
     </form>
     {% include 'components/request-list.twig' with {
         page: 'process',
+        sort: 'down',
         requests: requests,
         pagerCurrentPage: pagerCurrentPage,
         pagerTotalPages: pagerTotalPages,
