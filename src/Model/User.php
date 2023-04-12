@@ -103,7 +103,7 @@ class User
      */
     public function getExternalGroups(): array
     {
-        return $this->externalGroups->toArray();
+        return array_values($this->externalGroups->toArray());
     }
 
     public function hasExternalGroup(string $name): bool
@@ -139,7 +139,7 @@ class User
      */
     public function getCharacters(): array
     {
-        return $this->characters->toArray();
+        return array_values($this->characters->toArray());
     }
 
     /**
@@ -147,6 +147,6 @@ class User
      */
     public function getRequests(): array
     {
-        return $this->requests->toArray();
+        return array_values($this->requests->toArray());
     }
 }

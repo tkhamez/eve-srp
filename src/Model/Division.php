@@ -67,7 +67,7 @@ class Division
     public function getPermissions(?string $name = null): array
     {
         if ($name === null) {
-            return $this->permissions->toArray();
+            return array_values($this->permissions->toArray());
         }
         
         $result = [];

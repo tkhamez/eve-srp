@@ -65,7 +65,7 @@ class ExternalGroup
      */
     public function getPermissions(): array
     {
-        return $this->permissions->toArray();
+        return array_values($this->permissions->toArray());
     }
 
     /**
@@ -73,6 +73,6 @@ class ExternalGroup
      */
     public function getUsers(): array
     {
-        return $this->users->toArray();
+        return array_values($this->users->toArray());
     }
 }

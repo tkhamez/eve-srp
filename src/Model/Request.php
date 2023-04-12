@@ -182,7 +182,7 @@ class Request
      */
     public function getActions(): array
     {
-        return $this->actions->toArray();
+        return array_values($this->actions->toArray());
     }
 
     /**
@@ -191,7 +191,7 @@ class Request
      */
     public function getModifiers(): array
     {
-        return $this->modifiers->toArray();
+        return array_values($this->modifiers->toArray());
     }
 
     /** @noinspection PhpUnused */
