@@ -23,7 +23,7 @@ class Permission
     public const REVIEW = 'review';
 
     /**
-     * May payout the ISK.
+     * May pay out the ISK.
      */
     public const PAY = 'pay';
 
