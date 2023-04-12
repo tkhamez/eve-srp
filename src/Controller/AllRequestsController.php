@@ -6,6 +6,7 @@ namespace EveSrp\Controller;
 
 use EveSrp\Controller\Traits\RequestParameter;
 use EveSrp\Controller\Traits\TwigResponse;
+use EveSrp\Model\Division;
 use EveSrp\Model\Permission;
 use EveSrp\Repository\CharacterRepository;
 use EveSrp\Repository\DivisionRepository;
@@ -35,7 +36,11 @@ class AllRequestsController
 
     public function __invoke(ServerRequestInterface $request, ResponseInterface $response): ResponseInterface
     {
-        $divisions = $this->userService->getDivisionsWithRoles([Permission::REVIEW, Permission::PAY]);
+        if ($this->userService->hasRole(Security::GLOBAL_ADMIN)) {
+            $divisions = $this->divisionRepository->findBy([]);
+        } else {
+            $divisions = $this->userService->getDivisionsWithRoles([Permission::REVIEW, Permission::PAY]);
+        }
 
         if ($this->paramGet($request, 'submit') !== null) {
             $inputStatus = (string)$this->paramGet($request, 'status');
@@ -45,21 +50,11 @@ class AllRequestsController
             $currentPage = max(1, ((int)$this->paramGet($request, 'page', '1')));
 
             // check division permission
-            $maySeeDivision = false;
-            foreach ($divisions as $division) {
-                if ($division->getId() === $inputDivision) {
-                    $maySeeDivision = true;
-                    break;
-                }
-            }
-            if (
-                !$maySeeDivision &&
-                (
-                    $inputDivision !== -1 || // -1 = show requests without division ...
-                    !$this->userService->hasRole(Security::GLOBAL_ADMIN) // ... but only for global admins
-                )
-            ) {
-                $inputDivision = 0;
+            $allDivisions = array_map(function (Division $division) {
+                return $division->getId();
+            }, $divisions);
+            if ($inputDivision > 0 && !in_array($inputDivision, $allDivisions)) {
+                $inputDivision = -2; // shows nothing
             }
 
             // Search criteria and variables for pager.
@@ -67,7 +62,9 @@ class AllRequestsController
             if ($inputStatus !== '') {
                 $criteria['status'] = $inputStatus;
             }
-            if ($inputDivision !== 0) {
+            if ($inputDivision === 0) {
+                $criteria['division'] = $allDivisions;
+            } else {
                 $criteria['division'] = $inputDivision === -1 ? null : $inputDivision;
             }
             if ($inputUser) {
