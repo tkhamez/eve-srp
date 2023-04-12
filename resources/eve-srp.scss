@@ -97,6 +97,7 @@ a {
     .choices__inner {
         background-color: var(--srp-bg-color-2);
         input {
+            color: inherit;
             background-color: inherit;
         }
     }
