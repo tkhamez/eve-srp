@@ -189,7 +189,7 @@ class KillMailService
         return $result ?: $this->apiService->getLastError();
     }
 
-    public function sortItems($items): array
+    public function sortItems(array $items, int $killMailId): array
     {
         $itemGroups = [];
         $unknown = [];
@@ -226,7 +226,7 @@ class KillMailService
             }
         }
         if (count($result) !== count($itemGroups)) {
-            error_log(__METHOD__ . ': Missing an item group.');
+            error_log(__METHOD__ . ": Missing an item group for $killMailId.");
         }
 
         return $result + $unknown;

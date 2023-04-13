@@ -111,6 +111,11 @@ class Request
     private ?string $details = null;
 
     /**
+     * @ORM\Column(type="text", length=65535, nullable=true)
+     */
+    private ?string $killMail = null;
+
+    /**
      * @ORM\Column(type="bigint", name="base_payout", nullable=true)
      */
     private ?int $basePayout = null;
@@ -331,6 +336,18 @@ class Request
     public function setDetails(?string $details): self
     {
         $this->details = $details;
+
+        return $this;
+    }
+
+    public function getKillMail(): ?\stdClass
+    {
+        return $this->killMail ? json_decode($this->killMail) : null;
+    }
+
+    public function setKillMail(?\stdClass $killMail): self
+    {
+        $this->killMail = $killMail ? json_encode($killMail) : null;
 
         return $this;
     }

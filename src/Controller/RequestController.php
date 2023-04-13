@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace EveSrp\Controller;
 
+use Doctrine\ORM\EntityManagerInterface;
 use EveSrp\Controller\Traits\TwigResponse;
 use EveSrp\Misc\KillMailService;
 use EveSrp\Repository\RequestRepository;
@@ -20,6 +21,7 @@ class RequestController
         private UserService $userService,
         private KillMailService $killMailService,
         private RequestRepository $requestRepository,
+        private EntityManagerInterface  $entityManager,
         Environment $environment
     ) {
         $this->twigResponse($environment);
@@ -59,11 +61,19 @@ class RequestController
 
         if ($srpRequest) {
             $this->killMailService->addMissingURLs($srpRequest);
-            $killMailOrError = $this->killMailService->getKillMail($srpRequest->getEsiLink());
-            if ($killMailOrError instanceof \stdClass) {
-                $killItems = $this->killMailService->sortItems($killMailOrError->victim->items);
-            } else {
-                $killError = $killMailOrError;
+            $killMail = $srpRequest->getKillMail();
+            if (empty($killMail)) {
+                $killMailOrError = $this->killMailService->getKillMail($srpRequest->getEsiLink());
+                if ($killMailOrError instanceof \stdClass) {
+                    $killMail = $killMailOrError;
+                    $srpRequest->setKillMail($killMail);
+                    $this->entityManager->flush();
+                } else {
+                    $killError = $killMailOrError;
+                }
+            }
+            if ($killMail instanceof \stdClass) {
+                $killItems = $this->killMailService->sortItems($killMail->victim->items, $killMail->killmail_id);
             }
         }
 
