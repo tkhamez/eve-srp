@@ -49,6 +49,7 @@ class RequestController
     {
         $srpRequest = $this->requestRepository->find($id);
         $error = null;
+        $shipTypeId = null;
         $killItems = null;
         $killError = null;
 
@@ -73,6 +74,7 @@ class RequestController
                 }
             }
             if ($killMail instanceof \stdClass) {
+                $shipTypeId = $killMail->victim->ship_type_id;
                 $killItems = $this->killMailService->sortItems($killMail->victim->items, $killMail->killmail_id);
             }
         }
@@ -80,6 +82,7 @@ class RequestController
         return $this->render($response, 'pages/request.twig', [
             'request' => $srpRequest,
             'error' => $error,
+            'shipTypeId' => $shipTypeId,
             'items' => $killItems,
             'killError' => $killError,
         ]);

@@ -1,5 +1,10 @@
 
-<h5>{{ request.ship }}</h5>
+<h5>
+    {% if shipTypeId %}
+        <img src="https://images.evetech.net/types/{{ shipTypeId }}/icon?size=64" alt="ship icon">
+    {% endif %}
+    {{ request.ship }}
+</h5>
 
 {% if killError %}
     <div class="alert alert-warning">{{ killError }}</div>
@@ -11,8 +16,7 @@
         {% for itemSlot in itemsInSlot %}
             <div>
                 {% for item in itemSlot %}
-                    <img src="https://images.evetech.net/types/{{ item.item_type_id }}/icon?size=32"
-                         alt="icon">
+                    <img src="https://images.evetech.net/types/{{ item.item_type_id }}/icon?size=32" alt="item icon">
                     {{ item.item_type_name }}
                     <span class="{{ item.quantity_dropped ? 'text-decoration-line-through' : '' }}">
                         ({{ item.quantity_dropped }}{{ item.quantity_destroyed }})
