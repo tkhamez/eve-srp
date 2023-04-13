@@ -105,14 +105,17 @@ class SubmitController
         // Get ESI URL
         if (str_starts_with($this->inputUrl, $this->esiBaseUrl)) {
             $esiUrl = $this->inputUrl;
-        } else {
+        } elseif (!empty($this->killboardBaseUrl) && str_starts_with($this->inputUrl, $this->killboardBaseUrl)) {
             $esiUrl = $this->apiService->getEsiUrlFromKillboard($this->inputUrl);
-        }
-        if (!$esiUrl) {
-            $this->flashMessage->addMessage(
-                'Could not get ESI URL from zKillboard URL.',
-                FlashMessage::TYPE_WARNING
-            );
+            if (!$esiUrl) {
+                $this->flashMessage->addMessage(
+                    'Could not get ESI URL from zKillboard URL.',
+                    FlashMessage::TYPE_WARNING
+                );
+                return null;
+            }
+        } else {
+            $this->flashMessage->addMessage('Invalid URL.', FlashMessage::TYPE_WARNING);
             return null;
         }
 
