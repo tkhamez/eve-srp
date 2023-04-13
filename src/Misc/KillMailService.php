@@ -201,18 +201,24 @@ class KillMailService
                 $itemGroups[$groupName][$multiSlotName][] = [
                     'item_type_id' => $item->item_type_id,
                     'item_type_name' => $this->getEsiTypeName($item->item_type_id),
+                    'quantity_dropped' => $item->quantity_dropped ?? null,
+                    'quantity_destroyed' => $item->quantity_destroyed ?? null,
                 ];
             } elseif ($groupName) {
                 // only one item per slot or hangars etc.
                 $itemGroups[$groupName][][0] = [
                     'item_type_id' => $item->item_type_id,
                     'item_type_name' => $this->getEsiTypeName($item->item_type_id),
+                    'quantity_dropped' => $item->quantity_dropped ?? null,
+                    'quantity_destroyed' => $item->quantity_destroyed ?? null,
                 ];
             } else {
                 error_log(__METHOD__ . ': Unknown flag ' . $item->flag);
                 $unknown[$item->flag][][0] = [
                     'item_type_id' => $item->item_type_id,
                     'item_type_name' => $this->getEsiTypeName($item->item_type_id),
+                    'quantity_dropped' => $item->quantity_dropped ?? null,
+                    'quantity_destroyed' => $item->quantity_destroyed ?? null,
                 ];
             }
         }

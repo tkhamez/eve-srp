@@ -14,6 +14,9 @@
                     <img src="https://images.evetech.net/types/{{ item.item_type_id }}/icon?size=32"
                          alt="icon">
                     {{ item.item_type_name }}
+                    <span class="{{ item.quantity_dropped ? 'text-decoration-line-through' : '' }}">
+                        ({{ item.quantity_dropped }}{{ item.quantity_destroyed }})
+                    </span>
                     &nbsp;
                 {% endfor %}
             </div>
