@@ -224,13 +224,32 @@ class KillMailService
         }
 
         $result = [];
+
+        // Sort groups.
         foreach ($this->slotSort as $sortValue) {
             foreach ($itemGroups as $groupName => $groupContent) {
                 if ($sortValue === $groupName) {
+                    // Sort multi slot items.
+                    foreach ($groupContent as $indexOrMultiSlotName => $slotItems) {
+                        if (is_string($indexOrMultiSlotName) && count($slotItems) > 1) {
+                            // Simply set the item with the lower ID first, so at least they are always
+                            // ordered the same way.
+                            usort($slotItems, function ($a, $b) {
+                                if ($a['item_type_id'] == $b['item_type_id']) {
+                                    return 0;
+                                }
+                                return $a['item_type_id'] < $b['item_type_id'] ? -1 : 1;
+                            });
+                            $groupContent[$indexOrMultiSlotName] = $slotItems;
+                        }
+                    }
+
+                    // Add group in result.
                     $result[$groupName] = $groupContent;
                 }
             }
         }
+
         if (count($result) !== count($itemGroups)) {
             error_log(__METHOD__ . ": Missing an item group for $killMailId.");
         }
