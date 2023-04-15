@@ -8,7 +8,7 @@
             <div class="col">
                 <div class="mb-3">
                     <label for="inputDivision" class="form-label">Division</label>
-                    <select class="form-control" id="inputDivision" name="division">
+                    <select class="form-select" id="inputDivision" name="division">
                         <option value="0" {% if inputDivision == 0 %}selected{% endif %}>all</option>
                         {% if hasRole('global-admin') %}
                             <option value="-1" {% if inputDivision == -1 %}selected{% endif %}>
@@ -24,7 +24,7 @@
                 </div>
                 <div class="mb-3">
                     <label for="inputStatus" class="form-label">Status</label>
-                    <select class="form-control" id="inputStatus" name="status">
+                    <select class="form-select" id="inputStatus" name="status">
                         <option value="" {% if inputStatus == '' %}selected{% endif %}>all</option>
                         {% for status in [
                             constant('EveSrp\\Type::INCOMPLETE'),

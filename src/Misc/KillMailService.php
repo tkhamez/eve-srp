@@ -25,10 +25,19 @@ class KillMailService
     private const SHIP_HANGAR = 'Ship Hangar';
     private const FLEET_HANGAR = 'Fleet Hangar';
     private const SPECIALIZED_FUEL_BAY = 'Specialized Fuel Bay';
-    private const SPECIALIZED_ORE_HOLD = 'Specialized Ore Hold';
+    private const SPECIALIZED_ORE_HOLD = 'Specialized Ore Hold/Mining Hold';
+    private const SPECIALIZED_GAS_HOLD = 'Specialized Gas Hold';
+    private const SPECIALIZED_ICE_HOLD = 'Specialized Ice Hold';
+    #private const SPECIALIZED_ASTEROID_HOLD = 'Specialized Asteroid Hold';
     private const SPECIALIZED_MINERAL_HOLD = 'Specialized Mineral Hold';
+    #private const SPECIALIZED_SHIP_HOLD = 'Specialized Ship Hold';
+    #private const SPECIALIZED_INDUSTRIAL_SHIP_HOLD = 'Specialized Industrial Ship Hold';
     private const SPECIALIZED_AMMO_HOLD = 'Specialized Ammo Hold';
+    private const SPECIALIZED_COMMAND_CENTER_HOLD = 'Specialized Command Center Hold';
     private const SPECIALIZED_PLANETARY_COMMODITIES_HOLD = 'Specialized Planetary Commodities Hold';
+    private const BOOSTER_BAY = 'Booster Hold';
+    private const SUBSYSTEM_BAY = 'Subsystem Hold';
+    private const FRIGATE_ESCAPE_BAY = 'Frigate escape bay Hangar';
 
     private string $esiBaseUrl;
 
@@ -90,11 +99,19 @@ class KillMailService
 
         133 => self::SPECIALIZED_FUEL_BAY, # SpecializedFuelBay
         134 => self::SPECIALIZED_ORE_HOLD, # SpecializedOreHold
+        135 => self::SPECIALIZED_GAS_HOLD, # SpecializedGasHold
+        181 => self::SPECIALIZED_ICE_HOLD, # SpecializedIceHold
+        #182 => self::SPECIALIZED_ASTEROID_HOLD, # SpecializedAsteroidHold
         136 => self::SPECIALIZED_MINERAL_HOLD, # SpecializedMineralHold
         #138 => self::SPECIALIZED_SHIP_HOLD, # SpecializedShipHold
         #142 => self::SPECIALIZED_INDUSTRIAL_SHIP_HOLD, # SpecializedIndustrialShipHold
         143 => self::SPECIALIZED_AMMO_HOLD, # SpecializedAmmoHold
+        148 => self::SPECIALIZED_COMMAND_CENTER_HOLD, # SpecializedCommandCenterHold
         149 => self::SPECIALIZED_PLANETARY_COMMODITIES_HOLD, # SpecializedPlanetaryCommoditiesHold
+
+        176 => self::BOOSTER_BAY, # BoosterBay
+        177 => self::SUBSYSTEM_BAY, # SubsystemBay
+        179 => self::FRIGATE_ESCAPE_BAY, # FrigateEscapeBay
     ];
 
     private array $slotSort = [
@@ -103,17 +120,26 @@ class KillMailService
         self::LOW_POWER_SLOT,
         self::RIG_POWER_SLOT,
         self::SUB_SYSTEM_SLOT,
+        self::STRUCTURE_SERVICE_SLOT,
         self::CARGO,
         self::DRONE_BAY,
         self::FIGHTER_BAY,
+        self::BOOSTER_BAY,
+        self::SUBSYSTEM_BAY,
         self::SHIP_HANGAR,
         self::FLEET_HANGAR,
+        self::FRIGATE_ESCAPE_BAY,
         self::SPECIALIZED_FUEL_BAY,
         self::SPECIALIZED_ORE_HOLD,
+        self::SPECIALIZED_GAS_HOLD,
         self::SPECIALIZED_MINERAL_HOLD,
         self::SPECIALIZED_AMMO_HOLD,
+        self::SPECIALIZED_COMMAND_CENTER_HOLD,
         self::SPECIALIZED_PLANETARY_COMMODITIES_HOLD,
-        self::STRUCTURE_SERVICE_SLOT,
+        self::SPECIALIZED_ICE_HOLD,
+        #self::SPECIALIZED_ASTEROID_HOLD,
+        #self::SPECIALIZED_SHIP_HOLD,
+        #self::SPECIALIZED_INDUSTRIAL_SHIP_HOLD,
         self::IMPLANT,
     ];
 

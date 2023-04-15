@@ -85,7 +85,7 @@ class SubmitController
 
     private function createSrpRequest(): ?Request
     {
-        if ($this->inputDivision <= 0 || empty($this->inputUrl) || empty($this->inputDetails)) {
+        if ($this->inputDivision <= 0 || empty($this->inputUrl) || empty(trim($this->inputDetails))) {
             $this->flashMessage->addMessage('Please fill in all fields.', FlashMessage::TYPE_WARNING);
             return null;
         }
@@ -198,7 +198,7 @@ class SubmitController
         }
 
         $allianceData = null;
-        if ($corporationData->alliance_id) {
+        if (isset($corporationData->alliance_id)) {
             $allianceData = $this->apiService->getJsonData("latest/alliances/$corporationData->alliance_id/");
             if ($allianceData === null) {
                 $this->flashMessage->addMessage("API error (ESI alliances).", FlashMessage::TYPE_WARNING);
@@ -213,7 +213,7 @@ class SubmitController
             ->setSolarSystem($systemData->name)
             ->setCorporationId($killMailData->victim->corporation_id)
             ->setCorporationName($corporationData->name)
-            ->setAllianceId($corporationData->alliance_id)
+            ->setAllianceId($corporationData->alliance_id ?? null)
             ->setAllianceName($allianceData?->name);
         if ($this->killboardBaseUrl) {
             $request->setKillboardUrl("$this->killboardBaseUrl/kill/$killMailData->killmail_id/");

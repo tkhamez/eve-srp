@@ -14,7 +14,7 @@
             <form class="border border-light p-3" action="/submit" method="post" id="requestForm">
                 <div class="mb-3">
                     <label for="division" class="form-label">Division</label>
-                    <select class="form-control" name="division" id="division" required>
+                    <select class="form-select" name="division" id="division" required>
                         <option></option>
                         {% for division in divisions %}
                             <option {% if selectedDivision == division.id %}selected{% endif %}

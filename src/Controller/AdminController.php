@@ -186,7 +186,7 @@ class AdminController
         }
         if ($success && $division) {
             $this->flashMessage->addMessage(
-                'Permissions for division "'.$division->getName().'" save.',
+                'Permissions saved for division "'.$division->getName().'".',
                 FlashMessage::TYPE_SUCCESS
             );
         } else {

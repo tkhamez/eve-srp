@@ -18,7 +18,7 @@ class Request
 {
     /**
      * @ORM\Id
-     * @ORM\Column(type="integer")
+     * @ORM\Column(type="bigint")
      * @ORM\GeneratedValue
      */
     private ?int $id = null;

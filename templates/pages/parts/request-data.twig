@@ -29,6 +29,8 @@
                    title="EveWho" target="_blank" rel="noopener noreferrer">{{ request.allianceName }}</a>
             {% elseif request.allianceName %}
                 {{ request.allianceName }}
+            {% else %}
+                no alliance
             {% endif %}
         </td>
     </tr>

@@ -82,7 +82,7 @@ bin/doctrine dbal:reserved-words
 
 Install dependencies:
 ```
-npm i
+npm install
 ```
 
 Production build:
