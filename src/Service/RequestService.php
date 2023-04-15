@@ -24,9 +24,6 @@ class RequestService
         if ($this->userService->hasRole(Security::GLOBAL_ADMIN)) {
             return true;
         }
-        if (!$request->getDivision()) {
-            return false;
-        }
         return $this->userService->hasDivisionRole($request->getDivision(), Permission::REVIEW);
     }
 
@@ -44,14 +41,13 @@ class RequestService
     public function mayChangeStatus(Request $request): bool
     {
         if (
-            !$request->getDivision() ||
             !$this->userService->hasAnyDivisionRole($request->getDivision(), [Permission::REVIEW, Permission::PAY]) ||
             $request->getStatus() === Type::INCOMPLETE
         ) {
             return false;
         }
 
-        if (in_array($request->getStatus(), $this->getChangeableStatus($request->getDivision()))) {
+        if (in_array($request->getStatus(), $this->getChangeableStatus($request))) {
             return true;
         }
 
@@ -61,8 +57,13 @@ class RequestService
     /**
      * @return string[]
      */
-    public function getChangeableStatus(Division $division): array
+    public function getChangeableStatus(Request $request): array
     {
+        $division = $request->getDivision();
+        if (!$division) {
+            return [];
+        }
+
         $permissions = $this->userService->getRolesForDivision($division);
 
         $status = [];
@@ -78,9 +79,7 @@ class RequestService
 
     public function mayChangePayout(Request $request): bool
     {
-        return
-            $request->getDivision() &&
-            $this->userService->hasDivisionRole($request->getDivision(), Permission::REVIEW);
+        return $this->userService->hasDivisionRole($request->getDivision(), Permission::REVIEW);
     }
 
     public function mayAddComment(Request $request): bool
@@ -90,10 +89,6 @@ class RequestService
         // Submitter permission
         if ($request->getStatus() == Type::INCOMPLETE && $request->getUser()?->getId() === $user->getId()) {
             return true;
-        }
-
-        if (!$request->getDivision()) {
-            return false;
         }
 
         // Editor permission

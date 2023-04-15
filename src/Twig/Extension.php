@@ -67,9 +67,9 @@ class Extension extends AbstractExtension
         return $this->requestService->mayChangeStatus($request);
     }
 
-    public function getChangeableStatus(Division $division): array
+    public function getChangeableStatus(Request $request): array
     {
-        return $this->requestService->getChangeableStatus($division);
+        return $this->requestService->getChangeableStatus($request);
     }
 
     public function mayChangePayout(Request $request): bool

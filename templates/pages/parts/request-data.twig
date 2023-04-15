@@ -89,7 +89,7 @@
                     <th><label for="editStatus">Status</label></th>
                     <td>
                         {% if mayChangeStatus(request) %}
-                            {% set changeableStatus = getChangeableStatus(request.division) %}
+                            {% set changeableStatus = getChangeableStatus(request) %}
                             <select class="form-select form-select-sm" name="status" id="editStatus">
                                 {% for status in data.statuses %}
                                     <option value="{{ status }}"

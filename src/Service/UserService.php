@@ -78,8 +78,11 @@ class UserService
     /**
      * @param string[] $roles
      */
-    public function hasAnyDivisionRole(Division $division, array $roles): bool
+    public function hasAnyDivisionRole(?Division $division, array $roles): bool
     {
+        if (!$division) {
+            return false;
+        }
         foreach ($this->getUserPermissions() as $permission) {
             foreach ($roles as $role) {
                 if ($permission->getDivision()->getId() === $division->getId() && $permission->getRole() === $role) {
@@ -90,7 +93,7 @@ class UserService
         return false;
     }
 
-    public function hasDivisionRole(Division $division, string $role): bool
+    public function hasDivisionRole(?Division $division, string $role): bool
     {
         return $this->hasAnyDivisionRole($division, [$role]);
     }
@@ -306,16 +309,9 @@ class UserService
     
     public function maySeeRequest(Request $request): bool
     {
-        if ($this->hasRole(Security::GLOBAL_ADMIN)) {
-            return true;
-        }
-
-        if ($request->getUser()->getId() === $this->getAuthenticatedUser()->getId()) {
-            return true;
-        }
-
         if (
-            $request->getDivision() &&
+            $this->hasRole(Security::GLOBAL_ADMIN) ||
+            $request->getUser()->getId() === $this->getAuthenticatedUser()->getId() ||
             $this->hasAnyDivisionRole($request->getDivision(), [Permission::REVIEW, Permission::PAY])
         ) {
             return true;
