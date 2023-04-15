@@ -79,7 +79,9 @@ class RequestService
 
     public function mayChangePayout(Request $request): bool
     {
-        return $this->userService->hasDivisionRole($request->getDivision(), Permission::REVIEW);
+        return
+            $this->userService->hasDivisionRole($request->getDivision(), Permission::REVIEW) &&
+            $request->getStatus() == Type::EVALUATING;
     }
 
     public function mayAddComment(Request $request): bool

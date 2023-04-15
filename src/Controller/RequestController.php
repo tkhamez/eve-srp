@@ -83,10 +83,15 @@ class RequestController
         // Validate and save
         if (!$this->validateInput($srpRequest, $newDivision, $newStatus, $newBasePayout, $newComment)) {
             $this->flashMessage->addMessage('Invalid input.', FlashMessage::TYPE_WARNING);
-        } elseif ($this->save($srpRequest, $newDivision, $newStatus, $newBasePayout, $newComment)) {
-            $this->flashMessage->addMessage('Request updated.', FlashMessage::TYPE_SUCCESS);
         } else {
-            $this->flashMessage->addMessage('Failed to updated request.', FlashMessage::TYPE_DANGER);
+            // Change status if submitter added comment.
+            $newStatus = $this->adjustStatus($srpRequest, $newStatus, $newComment);
+
+            if ($this->save($srpRequest, $newDivision, $newStatus, $newBasePayout, $newComment)) {
+                $this->flashMessage->addMessage('Request updated.', FlashMessage::TYPE_SUCCESS);
+            } else {
+                $this->flashMessage->addMessage('Failed to updated request.', FlashMessage::TYPE_DANGER);
+            }
         }
 
         return $response->withHeader('Location', "/request/{$args['id']}");
@@ -177,6 +182,18 @@ class RequestController
         }
 
         return true;
+    }
+
+    private function adjustStatus(Request $srpRequest, ?string $newStatus, string $newComment): ?string
+    {
+        if (
+            $srpRequest->getUser()?->getId() === $this->userService->getAuthenticatedUser()?->getId() &&
+            $srpRequest->getStatus() === Type::INCOMPLETE &&
+            $newComment !== ''
+        ) {
+            return Type::EVALUATING;
+        }
+        return $newStatus;
     }
 
     private function save(
