@@ -9,7 +9,7 @@ use EveSrp\Controller\Traits\RequestParameter;
 use EveSrp\Controller\Traits\TwigResponse;
 use EveSrp\Exception;
 use EveSrp\FlashMessage;
-use EveSrp\Misc\UserService;
+use EveSrp\Service\UserService;
 use EveSrp\Settings;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;

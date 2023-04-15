@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace EveSrp\Controller;
 
+use Doctrine\ORM\EntityManagerInterface;
 use EveSrp\Controller\Traits\RequestParameter;
 use EveSrp\Controller\Traits\TwigResponse;
 use EveSrp\FlashMessage;
@@ -12,12 +13,11 @@ use EveSrp\Model\Permission;
 use EveSrp\Model\Request;
 use EveSrp\Repository\CharacterRepository;
 use EveSrp\Repository\DivisionRepository;
-use EveSrp\Misc\ApiService;
 use EveSrp\Repository\RequestRepository;
+use EveSrp\Service\ApiService;
+use EveSrp\Service\UserService;
 use EveSrp\Settings;
 use EveSrp\Type;
-use EveSrp\Misc\UserService;
-use Doctrine\ORM\EntityManagerInterface;
 use GuzzleHttp\ClientInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;

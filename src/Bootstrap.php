@@ -6,7 +6,7 @@ namespace EveSrp;
 
 use DI\ContainerBuilder;
 use Dotenv\Dotenv;
-use EveSrp\Slim\ErrorHandler;
+use EveSrp\Misc\SlimErrorHandler;
 use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ResponseFactoryInterface;
 use Slim\App;
@@ -115,7 +115,7 @@ class Bootstrap
         ]));
 
         $errorMiddleware = $app->addErrorMiddleware(false, true, true);
-        $errorMiddleware->setDefaultErrorHandler(new ErrorHandler(
+        $errorMiddleware->setDefaultErrorHandler(new SlimErrorHandler(
             $app->getCallableResolver(),
             $app->getResponseFactory()
         ));

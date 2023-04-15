@@ -6,9 +6,9 @@ namespace EveSrp\Controller;
 
 use Doctrine\ORM\EntityManagerInterface;
 use EveSrp\Controller\Traits\TwigResponse;
-use EveSrp\Misc\KillMailService;
 use EveSrp\Repository\RequestRepository;
-use EveSrp\Misc\UserService;
+use EveSrp\Service\KillMailService;
+use EveSrp\Service\UserService;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Twig\Environment;

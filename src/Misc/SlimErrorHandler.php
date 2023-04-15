@@ -2,12 +2,13 @@
 
 declare(strict_types=1);
 
-namespace EveSrp\Slim;
+namespace EveSrp\Misc;
 
 use Slim\Exception\HttpMethodNotAllowedException;
 use Slim\Exception\HttpNotFoundException;
+use Slim\Handlers\ErrorHandler;
 
-class ErrorHandler extends \Slim\Handlers\ErrorHandler
+class SlimErrorHandler extends ErrorHandler
 {
     protected function writeToErrorLog(): void
     {

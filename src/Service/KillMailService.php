@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace EveSrp\Misc;
+namespace EveSrp\Service;
 
 use Doctrine\ORM\EntityManagerInterface;
 use EveSrp\Model\EsiType;

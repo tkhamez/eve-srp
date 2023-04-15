@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace EveSrp\Controller;
 
+use Doctrine\ORM\EntityManagerInterface;
 use EveSrp\Controller\Traits\RequestParameter;
 use EveSrp\Controller\Traits\TwigResponse;
 use EveSrp\Exception;
@@ -15,8 +16,7 @@ use EveSrp\Provider\ProviderInterface;
 use EveSrp\Repository\DivisionRepository;
 use EveSrp\Repository\ExternalGroupRepository;
 use EveSrp\Security;
-use EveSrp\Misc\UserService;
-use Doctrine\ORM\EntityManagerInterface;
+use EveSrp\Service\UserService;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Twig\Environment;

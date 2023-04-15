@@ -7,7 +7,7 @@ namespace EveSrp\Twig;
 
 use EveSrp\Model\Character;
 use EveSrp\Model\User;
-use EveSrp\Misc\UserService;
+use EveSrp\Service\UserService;
 use EveSrp\Settings;
 use EveSrp\Type;
 

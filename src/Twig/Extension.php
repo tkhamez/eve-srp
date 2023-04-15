@@ -5,10 +5,10 @@ declare(strict_types=1);
 namespace EveSrp\Twig;
 
 use EveSrp\FlashMessage;
-use EveSrp\Misc\RequestService;
-use EveSrp\Misc\UserService;
 use EveSrp\Model\Division;
 use EveSrp\Model\Request;
+use EveSrp\Service\RequestService;
+use EveSrp\Service\UserService;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFunction;
 

@@ -6,13 +6,13 @@ namespace EveSrp\Controller;
 
 use EveSrp\Controller\Traits\RequestParameter;
 use EveSrp\Controller\Traits\TwigResponse;
-use EveSrp\Misc\RequestService;
 use EveSrp\Model\Division;
 use EveSrp\Repository\CharacterRepository;
 use EveSrp\Repository\DivisionRepository;
 use EveSrp\Repository\RequestRepository;
 use EveSrp\Repository\UserRepository;
-use EveSrp\Misc\UserService;
+use EveSrp\Service\RequestService;
+use EveSrp\Service\UserService;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Twig\Environment;

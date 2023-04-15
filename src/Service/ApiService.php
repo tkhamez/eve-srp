@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace EveSrp\Misc;
+namespace EveSrp\Service;
 
 use EveSrp\Settings;
 use GuzzleHttp\ClientInterface;

@@ -7,6 +7,7 @@ namespace EveSrp\Misc;
 use EveSrp\Exception;
 use EveSrp\Model\User;
 use EveSrp\Security;
+use EveSrp\Service\UserService;
 use EveSrp\Settings;
 use Psr\Http\Message\ServerRequestInterface;
 use SlimSession\Helper;
