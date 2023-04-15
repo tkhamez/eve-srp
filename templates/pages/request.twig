@@ -3,28 +3,30 @@
 
 {% block content %}
 
-    <h1>Request</h1>
-    {% if error %}
-        <div class="alert alert-warning">{{ error }}</div>
-    {% endif %}
+    <div class="row mb-3">
+        <div class="col">
+            <h1>Request</h1>
+            {{ flashMessages()|raw }}
+        </div>
+    </div>
 
-    <div class="page-request row mb-3">
-        <div class="col-12 col-lg-6">
-            {% if request %}
+    {% if request %}
+        <div class="page-request row mb-3">
+            <div class="col-12 col-lg-6">
                 <div class="card bg-dark mb-3 border-light">
                     <div class="card-body">
                         {% include 'pages/parts/request-data.twig' %}
                     </div>
                 </div>
-            {% endif %}
-        </div>
-        <div class="col-12 col-lg-6">
-            <div class="card bg-dark border-light">
-                <div class="card-body">
-                    {% include 'pages/parts/request-ship.twig' %}
+            </div>
+            <div class="col-12 col-lg-6">
+                <div class="card bg-dark border-light">
+                    <div class="card-body">
+                        {% include 'pages/parts/request-ship.twig' %}
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
+    {% endif %}
 
 {% endblock %}

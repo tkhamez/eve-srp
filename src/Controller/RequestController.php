@@ -6,6 +6,7 @@ namespace EveSrp\Controller;
 
 use Doctrine\ORM\EntityManagerInterface;
 use EveSrp\Controller\Traits\TwigResponse;
+use EveSrp\FlashMessage;
 use EveSrp\Repository\RequestRepository;
 use EveSrp\Service\KillMailService;
 use EveSrp\Service\UserService;
@@ -22,6 +23,7 @@ class RequestController
         private KillMailService $killMailService,
         private RequestRepository $requestRepository,
         private EntityManagerInterface  $entityManager,
+        private FlashMessage $flashMessage,
         Environment $environment
     ) {
         $this->twigResponse($environment);
@@ -35,19 +37,27 @@ class RequestController
         return $this->showPage($response, $args['id']);
     }
 
+    public function update(ServerRequestInterface $request, ResponseInterface $response, array $args): ResponseInterface
+    {
+        # TODO
+        $this->flashMessage->addMessage('TODO', FlashMessage::TYPE_INFO);
+
+        return $response->withHeader('Location', "/request/{$args['id']}");
+    }
+
     private function showPage($response, $id): ResponseInterface
     {
         $srpRequest = $this->requestRepository->find($id);
-        $error = null;
         $shipTypeId = null;
         $killItems = null;
         $killError = null;
 
-        if (!$srpRequest) {
-            $error = 'Request not found.';
-        } elseif (!$this->userService->maySeeRequest($srpRequest)) {
+        if (!$srpRequest || !$this->userService->maySeeRequest($srpRequest)) {
             $srpRequest = null;
-            $error = 'Not authorized to view this request.';
+            $this->flashMessage->addMessage(
+                'Request not found or not authorized to view it.',
+                FlashMessage::TYPE_WARNING
+            );
         }
 
         if ($srpRequest) {
@@ -71,7 +81,6 @@ class RequestController
 
         return $this->render($response, 'pages/request.twig', [
             'request' => $srpRequest,
-            'error' => $error,
             'shipTypeId' => $shipTypeId,
             'items' => $killItems,
             'killError' => $killError,
