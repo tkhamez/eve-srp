@@ -91,7 +91,11 @@ class Extension extends AbstractExtension
     {
         $html = [];
         foreach ($this->flashMessage->getMessages() as $message) {
-            $html[] = '<div class="alert alert-'.$message[1].'">'.htmlspecialchars($message[0]).'</div>';
+            $html[] =
+                '<div class="alert alert-'.$message[1].' alert-dismissible fade show">' .
+                    htmlspecialchars($message[0]) .
+                    '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>' .
+                '</div>';
         }
         return implode("\n", $html);
     }
