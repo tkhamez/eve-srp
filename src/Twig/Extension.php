@@ -29,7 +29,7 @@ class Extension extends AbstractExtension
             new TwigFunction('mayChangeDivision', [$this, 'mayChangeDivision']),
             new TwigFunction('getDivisionsWithEditPermission', [$this, 'getDivisionsWithEditPermission']),
             new TwigFunction('mayChangeStatus', [$this, 'mayChangeStatus']),
-            new TwigFunction('getChangeableStatus', [$this, 'getChangeableStatus']),
+            new TwigFunction('getAllowedNewStatuses', [$this, 'getAllowedNewStatuses']),
             new TwigFunction('mayChangePayout', [$this, 'mayChangePayout']),
             new TwigFunction('mayAddComment', [$this, 'mayAddComment']),
             new TwigFunction('maySave', [$this, 'maySave']),
@@ -67,9 +67,9 @@ class Extension extends AbstractExtension
         return $this->requestService->mayChangeStatus($request);
     }
 
-    public function getChangeableStatus(Request $request): array
+    public function getAllowedNewStatuses(Request $request): array
     {
-        return $this->requestService->getChangeableStatus($request);
+        return $this->requestService->getAllowedNewStatuses($request);
     }
 
     public function mayChangePayout(Request $request): bool

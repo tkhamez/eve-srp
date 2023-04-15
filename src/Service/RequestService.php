@@ -40,24 +40,15 @@ class RequestService
 
     public function mayChangeStatus(Request $request): bool
     {
-        if (
-            !$this->userService->hasAnyDivisionRole($request->getDivision(), [Permission::REVIEW, Permission::PAY]) ||
-            $request->getStatus() === Type::INCOMPLETE
-        ) {
-            return false;
-        }
-
-        if (in_array($request->getStatus(), $this->getChangeableStatus($request))) {
-            return true;
-        }
-
-        return false;
+        return $this->userService->hasAnyDivisionRole($request->getDivision(), [Permission::REVIEW, Permission::PAY]);
     }
 
     /**
+     * Returns allowed new statuses based on current status and user permissions.
+     *
      * @return string[]
      */
-    public function getChangeableStatus(Request $request): array
+    public function getAllowedNewStatuses(Request $request): array
     {
         $division = $request->getDivision();
         if (!$division) {
@@ -66,15 +57,36 @@ class RequestService
 
         $permissions = $this->userService->getRolesForDivision($division);
 
-        $status = [];
-        if (in_array(Permission::REVIEW, $permissions)) {
-            $status = array_merge($status, [Type::INCOMPLETE, Type::EVALUATING, Type::APPROVED, Type::REJECTED]);
+        // New status based on current status
+        $newStatuses = [];
+        if ($request->getStatus() === Type::INCOMPLETE) {
+            $newStatuses = [Type::EVALUATING];
         }
-        if (in_array(Permission::PAY, $permissions)) {
-            $status = array_merge($status, [Type::EVALUATING, Type::APPROVED, Type::PAID]);
+        if ($request->getStatus() === Type::EVALUATING) {
+            $newStatuses = [Type::INCOMPLETE, Type::APPROVED, Type::REJECTED];
+        }
+        if ($request->getStatus() === Type::APPROVED) {
+            $newStatuses = [Type::EVALUATING, Type::PAID];
+        }
+        if ($request->getStatus() === Type::REJECTED) {
+            $newStatuses = [Type::EVALUATING];
+        }
+        if ($request->getStatus() === Type::PAID) {
+            $newStatuses = [Type::EVALUATING];
         }
 
-        return array_values(array_unique($status));
+        // Status based on permission
+        $permissionStatues = [];
+        if (in_array(Permission::REVIEW, $permissions)) {
+            array_push($permissionStatues, Type::INCOMPLETE, Type::EVALUATING, Type::APPROVED, Type::REJECTED);
+        }
+        if (in_array(Permission::PAY, $permissions)) {
+            array_push($permissionStatues, Type::EVALUATING, Type::APPROVED, Type::PAID);
+        }
+
+        $statuses = array_intersect($newStatuses, $permissionStatues);
+
+        return array_values(array_unique($statuses));
     }
 
     public function mayChangePayout(Request $request): bool

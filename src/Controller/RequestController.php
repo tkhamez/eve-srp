@@ -163,7 +163,7 @@ class RequestController
         if ($newStatus !== null) {
             if (
                 !$this->requestService->mayChangeStatus($request) ||
-                !in_array($newStatus, $this->requestService->getChangeableStatus($request))
+                !in_array($newStatus, $this->requestService->getAllowedNewStatuses($request))
             ) {
                 return false;
             }
