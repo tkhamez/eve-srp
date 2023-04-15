@@ -23,7 +23,7 @@
         <tbody>
         {% for request in requests %}
             <tr>
-                <td><a href="/request/{{ request.id }}/{{ page }}">{{ request.ship }}</a></td>
+                <td><a href="/request/{{ request.id }}">{{ request.ship }}</a></td>
                 <td>{{ request.character.name }}</td>
                 <td>{{ request.solarSystem }}</td>
                 <td>{{ request.killTime|date('Y-m-d H:i') }}</td>

@@ -14,7 +14,7 @@ use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Twig\Environment;
 
-class ProcessListsController
+class ListsController
 {
     use TwigResponse;
 
@@ -29,9 +29,19 @@ class ProcessListsController
     /**
      * @noinspection PhpUnusedParameterInspection
      */
+    public function myRequests(ServerRequestInterface $request, ResponseInterface $response): ResponseInterface
+    {
+        $user = $this->userService->getAuthenticatedUser();
+
+        return $this->renderView($response, $user->getRequests(), 'my-requests', 'My Requests');
+    }
+
+    /**
+     * @noinspection PhpUnusedParameterInspection
+     */
     public function review(ServerRequestInterface $request, ResponseInterface $response): ResponseInterface
     {
-       return $this->showPage($response, Type::EVALUATING, Permission::REVIEW, 'review');
+       return $this->showList($response, Type::EVALUATING, Permission::REVIEW, 'review');
     }
 
     /**
@@ -39,10 +49,10 @@ class ProcessListsController
      */
     public function pay(ServerRequestInterface $request, ResponseInterface $response): ResponseInterface
     {
-        return $this->showPage($response, Type::APPROVED, Permission::PAY, 'pay');
+        return $this->showList($response, Type::APPROVED, Permission::PAY, 'pay');
     }
 
-    private function showPage($response, $status, $role, $page): ResponseInterface
+    private function showList($response, $status, $role, $page): ResponseInterface
     {
         $divisions = array_map(function (Division $division) {
             return $division->getId();
@@ -53,9 +63,15 @@ class ProcessListsController
             'division' => $divisions
         ], ['created' => 'ASC']);
 
-        return $this->render($response, "pages/process-list.twig", [
+        return $this->renderView($response, $requests, $page, ucfirst($page));
+    }
+
+    private function renderView($response, $requests, $page, $pageName): ResponseInterface
+    {
+        return $this->render($response, 'pages/list.twig', [
             'requests' => $requests,
-            'page' => $page,
+            'pageActive' => $page,
+            'pageName' => $pageName,
         ]);
     }
 }

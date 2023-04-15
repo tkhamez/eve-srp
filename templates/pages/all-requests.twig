@@ -2,7 +2,11 @@
 {% set active_page = "all-requests" %}
 
 {% block content %}
-    <h1>All Requests</h1>
+    <div class="row mb-3">
+        <div class="col">
+            <h1>All Requests</h1>
+        </div>
+    </div>
     <form class="mb-3 p-3 border border-light" method="get">
         <div class="row">
             <div class="col">
@@ -48,9 +52,8 @@
         </div>
     </form>
     {% include 'components/request-list.twig' with {
-        page: 'process',
-        sort: 'down',
         requests: requests,
+        sort: 'down',
         pagerCurrentPage: pagerCurrentPage,
         pagerTotalPages: pagerTotalPages,
         pagerLink: pagerLink,

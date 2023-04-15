@@ -35,14 +35,6 @@ class RequestController
         return $this->showPage($response, $args['id']);
     }
 
-    /**
-     * @noinspection PhpUnusedParameterInspection
-     */
-    public function process(ServerRequestInterface $request, ResponseInterface $response, array $args): ResponseInterface
-    {
-        return $this->showPage($response, $args['id']);
-    }
-
     private function showPage($response, $id): ResponseInterface
     {
         $srpRequest = $this->requestRepository->find($id);
