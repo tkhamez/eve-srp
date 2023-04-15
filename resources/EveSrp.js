@@ -6,6 +6,7 @@ window.addEventListener('load', () => {
     EveSrp.initMultiselect();
     EveSrp.initPageAdminDivisions();
     EveSrp.initPageSubmit();
+    EveSrp.initPageRequest();
     window.setInterval(EveSrp.ping, 300000); // 5 minutes
 });
 
@@ -41,6 +42,20 @@ window.EveSrp = {
         form.addEventListener('submit', () => {
             document.getElementById('requestFormSubmit').disabled = true;
         });
+    },
+
+    initPageRequest: () => {
+        const editPayout = document.getElementById('editPayout');
+        if (editPayout) {
+            editPayout.addEventListener('input', evt => {
+                // noinspection JSUnresolvedVariable
+                let value = evt.target.value.replace(/[^0-9]/g, '');
+                if (value !== '') {
+                    value = parseInt(value).toLocaleString('en-US');
+                }
+                evt.target.value = value;
+            })
+        }
     },
 
     ping: () => {

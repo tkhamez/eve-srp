@@ -26,13 +26,7 @@
                     <label for="inputStatus" class="form-label">Status</label>
                     <select class="form-select" id="inputStatus" name="status">
                         <option value="" {% if inputStatus == '' %}selected{% endif %}>all</option>
-                        {% for status in [
-                            constant('EveSrp\\Type::INCOMPLETE'),
-                            constant('EveSrp\\Type::EVALUATING'),
-                            constant('EveSrp\\Type::APPROVED'),
-                            constant('EveSrp\\Type::REJECTED'),
-                            constant('EveSrp\\Type::PAID'),
-                        ] %}
+                        {% for status in data.statuses %}
                             <option {% if inputStatus == status %}selected{% endif %}>{{ status }}</option>
                         {% endfor %}
                     </select>

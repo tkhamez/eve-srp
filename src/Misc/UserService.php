@@ -58,19 +58,45 @@ class UserService
         return in_array($role, $this->clientRoles);
     }
 
-    public function hasDivisionRole(int $divisionId, string $role): bool
+    /**
+     * @return string[] $roles
+     */
+    public function getRolesForDivision(Division $division): array
     {
+        $roles = [];
+
         foreach ($this->getUserPermissions() as $permission) {
-            if ($permission->getDivision()->getId() === $divisionId && $permission->getRole() === $role) {
-                return true;
+            if ($permission->getDivision()->getId() !== $division->getId()) {
+                continue;
             }
+            $roles[] = $permission->getRole();
         }
 
-        return false;
+        return $roles;
     }
 
     /**
-     * @param array $roles
+     * @param string[] $roles
+     */
+    public function hasAnyDivisionRole(Division $division, array $roles): bool
+    {
+        foreach ($this->getUserPermissions() as $permission) {
+            foreach ($roles as $role) {
+                if ($permission->getDivision()->getId() === $division->getId() && $permission->getRole() === $role) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    public function hasDivisionRole(Division $division, string $role): bool
+    {
+        return $this->hasAnyDivisionRole($division, [$role]);
+    }
+
+    /**
+     * @param string[] $roles
      * @return Division[]
      */
     public function getDivisionsWithRoles(array $roles): array
@@ -78,18 +104,17 @@ class UserService
         $divisions = [];
         foreach ($this->divisionRepository->findBy([]) as $division) {
             foreach ($roles as $role) {
-                if ($this->hasDivisionRole($division->getId(), $role)) {
+                if ($this->hasDivisionRole($division, $role)) {
                     $divisions[] = $division;
                     continue 2;
                 }
             }
         }
-
         return $divisions;
     }
 
     /**
-     * Returns the logged in user, if available.
+     * Returns the logged-in user, if available.
      */
     public function getAuthenticatedUser(): ?User
     {
@@ -289,13 +314,9 @@ class UserService
             return true;
         }
 
-        $divisionId = $request->getDivision()?->getId();
         if (
-            $divisionId &&
-            (
-                $this->hasDivisionRole($divisionId, Permission::REVIEW) ||
-                $this->hasDivisionRole($divisionId, Permission::PAY)
-            )
+            $request->getDivision() &&
+            $this->hasAnyDivisionRole($request->getDivision(), [Permission::REVIEW, Permission::PAY])
         ) {
             return true;
         }

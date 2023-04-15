@@ -9,6 +9,7 @@ use EveSrp\Model\Character;
 use EveSrp\Model\User;
 use EveSrp\Misc\UserService;
 use EveSrp\Settings;
+use EveSrp\Type;
 
 class GlobalData
 {
@@ -51,6 +52,11 @@ class GlobalData
         return $this->getUser() ? array_map(function(Character $char) {
             return $char->getName();
         }, $this->getUser()->getCharacters()) : [];
+    }
+
+    public function statuses(): array
+    {
+        return [Type::INCOMPLETE, Type::EVALUATING, Type::APPROVED, Type::REJECTED, Type::PAID];
     }
 
     private function getUser(): ?User

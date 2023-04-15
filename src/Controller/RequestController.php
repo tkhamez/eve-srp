@@ -32,7 +32,6 @@ class RequestController
      */
     public function show(ServerRequestInterface $request, ResponseInterface $response, array $args): ResponseInterface
     {
-        # page for submitter
         return $this->showPage($response, $args['id']);
     }
 
@@ -41,7 +40,6 @@ class RequestController
      */
     public function process(ServerRequestInterface $request, ResponseInterface $response, array $args): ResponseInterface
     {
-        # TODO page review or pay
         return $this->showPage($response, $args['id']);
     }
 

@@ -97,7 +97,7 @@ class SubmitController
         }
 
         $division = $this->divisionRepository->find($this->inputDivision);
-        if (!$division || !$this->userService->hasDivisionRole($division->getId(), Permission::SUBMIT)) {
+        if (!$division || !$this->userService->hasDivisionRole($division, Permission::SUBMIT)) {
             $this->flashMessage->addMessage('Invalid division.', FlashMessage::TYPE_WARNING);
             return null;
         }

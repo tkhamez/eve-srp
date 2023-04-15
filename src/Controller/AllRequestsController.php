@@ -6,13 +6,12 @@ namespace EveSrp\Controller;
 
 use EveSrp\Controller\Traits\RequestParameter;
 use EveSrp\Controller\Traits\TwigResponse;
+use EveSrp\Misc\RequestService;
 use EveSrp\Model\Division;
-use EveSrp\Model\Permission;
 use EveSrp\Repository\CharacterRepository;
 use EveSrp\Repository\DivisionRepository;
 use EveSrp\Repository\RequestRepository;
 use EveSrp\Repository\UserRepository;
-use EveSrp\Security;
 use EveSrp\Misc\UserService;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
@@ -29,6 +28,7 @@ class AllRequestsController
         private UserRepository $userRepository,
         private CharacterRepository $characterRepository,
         private UserService $userService,
+        private RequestService $requestService,
         Environment $environment
     ) {
         $this->twigResponse($environment);
@@ -36,11 +36,7 @@ class AllRequestsController
 
     public function __invoke(ServerRequestInterface $request, ResponseInterface $response): ResponseInterface
     {
-        if ($this->userService->hasRole(Security::GLOBAL_ADMIN)) {
-            $divisions = $this->divisionRepository->findBy([]);
-        } else {
-            $divisions = $this->userService->getDivisionsWithRoles([Permission::REVIEW, Permission::PAY]);
-        }
+        $divisions = $this->requestService->getDivisionsWithEditPermission();
 
         if ($this->paramGet($request, 'submit') !== null) {
             $inputStatus = (string)$this->paramGet($request, 'status');

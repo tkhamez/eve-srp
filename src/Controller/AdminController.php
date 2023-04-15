@@ -143,7 +143,7 @@ class AdminController
         $divisions = [];
         foreach ($this->divisionRepository->findBy([], ['name' => 'ASC']) as $division) {
             if (
-                $this->userService->hasDivisionRole($division->getId(), Permission::ADMIN) ||
+                $this->userService->hasDivisionRole($division, Permission::ADMIN) ||
                 $this->userService->hasRole(Security::GLOBAL_ADMIN)
             ) {
                 $divisions[] = $division;
@@ -169,7 +169,7 @@ class AdminController
             if (
                 $division &&
                 (
-                    $this->userService->hasDivisionRole($division->getId(), Permission::ADMIN) ||
+                    $this->userService->hasDivisionRole($division, Permission::ADMIN) ||
                     $this->userService->hasRole(Security::GLOBAL_ADMIN)
                 )
             ) {
