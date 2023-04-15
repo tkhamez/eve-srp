@@ -6,9 +6,10 @@
     <div class="row mb-3">
         <div class="col">
             <h1>Request</h1>
-            {{ flashMessages()|raw }}
         </div>
     </div>
+
+    {{ flashMessages()|raw }}
 
     {% if request %}
         <div class="page-request row mb-3">

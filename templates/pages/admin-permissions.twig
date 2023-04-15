@@ -6,9 +6,10 @@
         <div class="col">
             <h1>Admin</h1>
             <h2>Permissions</h2>
-            {{ flashMessages()|raw }}
         </div>
     </div>
+
+    {{ flashMessages()|raw }}
 
     {% for division in divisions %}
         <form class="card bg-dark mb-3 border-light"
