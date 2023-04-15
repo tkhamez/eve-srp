@@ -27,10 +27,7 @@ class RequestService
         if (!$request->getDivision()) {
             return false;
         }
-        return $this->userService->hasAnyDivisionRole(
-            $request->getDivision(),
-            [Permission::REVIEW, Permission::PAY]
-        );
+        return $this->userService->hasDivisionRole($request->getDivision(), Permission::REVIEW);
     }
 
     /**
