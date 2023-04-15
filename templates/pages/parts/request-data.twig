@@ -176,7 +176,7 @@
     {% for action in request.actions %}
         <tr class="{{ action.note ? '' : 'border-bottom' }}">
             <td>{{ action.created|date('Y-m-d H:i e') }}</td>
-            <td>{{ action.category }}</td>
+            <td>{{ action.category|capitalize }}</td>
             <td>
                 <span title="#{{ action.user.id }}">{{ action.user.name }}</span>
                 {% if action.user.name is empty %}
