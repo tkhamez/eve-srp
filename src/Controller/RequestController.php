@@ -8,12 +8,15 @@ use Doctrine\ORM\EntityManagerInterface;
 use EveSrp\Controller\Traits\RequestParameter;
 use EveSrp\Controller\Traits\TwigResponse;
 use EveSrp\FlashMessage;
+use EveSrp\Model\Action;
 use EveSrp\Model\Division;
 use EveSrp\Model\Request;
+use EveSrp\Repository\DivisionRepository;
 use EveSrp\Repository\RequestRepository;
 use EveSrp\Service\KillMailService;
 use EveSrp\Service\RequestService;
 use EveSrp\Service\UserService;
+use EveSrp\Type;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Twig\Environment;
@@ -28,6 +31,7 @@ class RequestController
         private KillMailService $killMailService,
         private RequestService $requestService,
         private RequestRepository $requestRepository,
+        private DivisionRepository $divisionRepository,
         private EntityManagerInterface  $entityManager,
         private FlashMessage $flashMessage,
         Environment $environment
@@ -58,7 +62,7 @@ class RequestController
         $newStatus = $this->paramPost($request, 'status');
         $newBasePayout = null;
         if ($this->paramPost($request, 'payout') !== null) {
-            $newBasePayout = (int)str_replace(',', '', (string)$this->paramPost($request, 'payout'));
+            $newBasePayout = abs((int)str_replace(',', '', (string)$this->paramPost($request, 'payout')));
         }
         $newComment = trim((string)$this->paramPost($request, 'comment'));
 
@@ -76,10 +80,13 @@ class RequestController
             return $response->withHeader('Location', "/request/{$args['id']}");
         }
 
+        // Validate and save
         if (!$this->validateInput($srpRequest, $newDivision, $newStatus, $newBasePayout, $newComment)) {
             $this->flashMessage->addMessage('Invalid input.', FlashMessage::TYPE_WARNING);
+        } elseif ($this->save($srpRequest, $newDivision, $newStatus, $newBasePayout, $newComment)) {
+            $this->flashMessage->addMessage('Request updated.', FlashMessage::TYPE_SUCCESS);
         } else {
-            $this->flashMessage->addMessage('TODO'); # TODO
+            $this->flashMessage->addMessage('Failed to updated request.', FlashMessage::TYPE_DANGER);
         }
 
         return $response->withHeader('Location', "/request/{$args['id']}");
@@ -167,6 +174,81 @@ class RequestController
             if (!$this->requestService->mayAddComment($request)) {
                 return false;
             }
+        }
+
+        return true;
+    }
+
+    private function save(
+        Request $request,
+        ?int $newDivision,
+        ?string $newStatus,
+        ?int $newBasePayout,
+        string $newComment,
+    ): bool {
+        if ($newDivision !== null) {
+            $division = $this->divisionRepository->find($newDivision);
+            $oldDivision = $request->getDivision();
+            $request->setDivision($division);
+
+            $action = new Action();
+            $action->setCreated(new \DateTime());
+            $action->setUser($this->userService->getAuthenticatedUser());
+            $action->setCategory(Type::COMMENT);
+            $action->setNote("Moved from division \"{$oldDivision?->getName()}\" to \"{$division->getName()}\".");
+
+            $action->setRequest($request);
+            $this->entityManager->persist($action);
+        }
+
+        if ($newStatus !== null) {
+            $request->setStatus($newStatus);
+
+            $action = new Action();
+            $action->setCreated(new \DateTime());
+            $action->setUser($this->userService->getAuthenticatedUser());
+            $action->setCategory($newStatus);
+            if ($newComment !== '') {
+                $action->setNote($newComment);
+                $newComment = '';
+            }
+
+            $action->setRequest($request);
+            $this->entityManager->persist($action);
+        }
+
+        if ($newBasePayout !== null) {
+            $oldPayout = $request->getBasePayout();
+            $request->setBasePayout($newBasePayout);
+
+            $action = new Action();
+            $action->setCreated(new \DateTime());
+            $action->setUser($this->userService->getAuthenticatedUser());
+            $action->setCategory(Type::COMMENT);
+            $action->setNote(
+                'Changed base payout from  ' . number_format($oldPayout) . ' to ' .
+                number_format($newBasePayout) . ' ISK.'
+            );
+
+            $action->setRequest($request);
+            $this->entityManager->persist($action);
+        }
+
+        if ($newComment !== '') {
+            $action = new Action();
+            $action->setCreated(new \DateTime());
+            $action->setUser($this->userService->getAuthenticatedUser());
+            $action->setCategory(Type::COMMENT);
+            $action->setNote($newComment);
+
+            $action->setRequest($request);
+            $this->entityManager->persist($action);
+        }
+
+        try {
+            $this->entityManager->flush();
+        } catch (\Throwable) {
+            return false;
         }
 
         return true;

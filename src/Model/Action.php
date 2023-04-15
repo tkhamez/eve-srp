@@ -56,10 +56,20 @@ class Action
         return $this->id;
     }
 
+    public function setCreated(?DateTime $created): void
+    {
+        $this->created = $created;
+    }
+
     /** @noinspection PhpUnused */
     public function getCreated(): ?DateTime
     {
         return $this->created;
+    }
+
+    public function setCategory(?string $category): void
+    {
+        $this->category = $category;
     }
 
     /** @noinspection PhpUnused */
@@ -68,15 +78,30 @@ class Action
         return $this->category;
     }
 
+    public function setUser(?User $user): void
+    {
+        $this->user = $user;
+    }
+
     /** @noinspection PhpUnused */
     public function getUser(): ?User
     {
         return $this->user;
     }
 
+    public function setRequest(Request $request): void
+    {
+        $this->request = $request;
+    }
+
     public function getRequest(): ?Request
     {
         return $this->request;
+    }
+
+    public function setNote(?string $note): void
+    {
+        $this->note = $note;
     }
 
     /** @noinspection PhpUnused */
