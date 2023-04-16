@@ -50,11 +50,24 @@ window.EveSrp = {
             if (element) {
                 element.addEventListener('input', evt => {
                     // noinspection JSUnresolvedVariable
-                    let value = evt.target.value.replace(/[^0-9]/g, '');
-                    if (value !== '') {
-                        value = parseInt(value).toLocaleString('en-US');
+                    const orgValue = evt.target.value;
+                    // noinspection JSUnresolvedVariable
+                    const orgPosition = evt.target.selectionStart;
+
+                    let newValue = orgValue.replace(/[^0-9]/g, '');
+                    if (newValue !== '') {
+                        newValue = parseInt(newValue).toLocaleString('en-US');
                     }
-                    evt.target.value = value;
+
+                    // Number of thousand separators of original and newly formatted string
+                    const numSep1 = (orgValue.substring(0, orgPosition).match(/,/g) || []).length;
+                    const numSep2 = (newValue.substring(0, orgPosition).match(/,/g) || []).length;
+
+                    const newPosition = orgPosition + numSep2 - numSep1;
+
+                    evt.target.value = newValue;
+                    evt.target.selectionStart = newPosition;
+                    evt.target.selectionEnd = newPosition;
                 })
             }
         }
