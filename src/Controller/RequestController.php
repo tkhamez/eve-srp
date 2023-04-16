@@ -90,6 +90,7 @@ class RequestController
 
             // Save
             $this->save($srpRequest, $newDivision, $newStatus, $newBasePayout, $newComment);
+            $this->setPayout($srpRequest);
             $this->flashMessage->addMessage('Request updated.', FlashMessage::TYPE_SUCCESS);
         }
 
@@ -116,7 +117,11 @@ class RequestController
 
         // Validate input
         $validTypes = ['relative-bonus', 'relative-deduction', 'absolute-bonus', 'absolute-deduction'];
-        if ($amount === 0 || !in_array($type, $validTypes)) {
+        if (
+            $amount === 0 ||
+            !in_array($type, $validTypes) ||
+            ($type == 'relative-deduction' && $amount > 100)
+        ) {
             $this->flashMessage->addMessage('Invalid input.', FlashMessage::TYPE_WARNING);
             return $response->withHeader('Location', "/request/{$args['id']}");
         }
@@ -125,14 +130,19 @@ class RequestController
         $modifier = new Modifier();
         $modifier->setCreated(new \DateTime());
         $modifier->setUser($this->userService->getAuthenticatedUser());
-        $modifier->setModType(in_array($type, ['relative-bonus', 'relative-deduction']) ? 'relative' : 'absolute');
+        $modifier->setModType(
+            in_array($type, ['relative-bonus', 'relative-deduction']) ?
+                Modifier::TYPE_RELATIVE :
+                Modifier::TYPE_ABSOLUTE
+        );
         $modifier->setModValue(in_array($type, ['relative-deduction', 'absolute-deduction']) ? $amount * -1 : $amount);
         $modifier->setNote($reason);
         $modifier->setRequest($srpRequest);
 
         $this->entityManager->persist($modifier);
-
         $this->entityManager->flush();
+
+        $this->setPayout($srpRequest);
         $this->flashMessage->addMessage('Modifier added.', FlashMessage::TYPE_SUCCESS);
 
         return $response->withHeader('Location', "/request/{$args['id']}");
@@ -166,6 +176,8 @@ class RequestController
             $modifierToRemove->setVoidedTime(new \DateTime());
             $modifierToRemove->setVoidedUser($this->userService->getAuthenticatedUser());
             $this->entityManager->flush();
+
+            $this->setPayout($srpRequest);
             $this->flashMessage->addMessage('Modifier removed.', FlashMessage::TYPE_SUCCESS);
         } else {
             $this->flashMessage->addMessage('Modifier not found.', FlashMessage::TYPE_WARNING);
@@ -359,5 +371,41 @@ class RequestController
         }
 
         return $srpRequest;
+    }
+
+    private function setPayout(Request $request): void
+    {
+        $basePayout = $request->getBasePayout();
+        if (!$basePayout) {
+            return;
+        }
+
+        $payout = $basePayout;
+        $modifiers = $request->getModifiers();
+
+        // Sort modifiers by date created ascending
+        usort($modifiers, function (Modifier $a, Modifier $b) {
+            return $a->getCreated()->getTimestamp() < $b->getCreated()->getTimestamp() ? -1 : 1;
+        });
+
+        foreach ($modifiers as $modifier) {
+            if ($modifier->getVoidedTime()) {
+                continue;
+            }
+            if ($modifier->getModType() === Modifier::TYPE_RELATIVE) {
+                if ($modifier->getModValue() > 0) {
+                    $payout *= 1 + ($modifier->getModValue() / 100);
+                } else {
+                    $payout *= $modifier->getModValue() * -1 / 100;
+                }
+            } elseif ($modifier->getModType() === Modifier::TYPE_ABSOLUTE) {
+                $payout += $modifier->getModValue();
+            }
+        }
+
+        if ($payout !== $request->getPayout()) {
+            $request->setPayout((int)round($payout));
+            $this->entityManager->flush();
+        }
     }
 }

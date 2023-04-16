@@ -12,6 +12,10 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class Modifier
 {
+    public const TYPE_RELATIVE = 'relative';
+
+    public const TYPE_ABSOLUTE = 'absolute';
+
     /**
      * @ORM\Id
      * @ORM\Column(type="integer")

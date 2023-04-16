@@ -11,6 +11,7 @@ use EveSrp\Model\Character;
 use EveSrp\Model\Division;
 use EveSrp\Model\EsiType;
 use EveSrp\Model\ExternalGroup;
+use EveSrp\Model\Modifier;
 use EveSrp\Model\Permission;
 use EveSrp\Model\Request;
 use EveSrp\Model\User;
@@ -29,6 +30,7 @@ class TestHelper
         Division::class,
         EsiType::class,
         ExternalGroup::class,
+        Modifier::class,
         Permission::class,
         Request::class,
         User::class,
