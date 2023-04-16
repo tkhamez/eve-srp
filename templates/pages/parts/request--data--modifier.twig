@@ -1,0 +1,31 @@
+<h6 class="mt-2">Modifier</h6>
+{% for modifier in request.modifiers %}
+    <div class="table-dark border-bottom pb-2 mb-2">
+        <span class=" {{ modifier.voidedTime ? 'text-decoration-line-through' : '' }}">
+            {{ modifier.modValue|number_format }}{%
+                if modifier.modType == 'relative' %}%{% else %} ISK{% endif
+            %}
+            {% if modifier.modValue > 0 %} bonus {% else %} penalty{% endif %}
+        </span>
+        <br>
+        <small>
+            <span title="Time zone: {{ modifier.created|date('e') }}">
+                {{ modifier.created|date('Y-m-d H:i') }}</span>,
+            <span title="#{{ modifier.user.id }}">{{ modifier.user.name }}</span>
+            {% if modifier.user.name is empty %}
+                #{{ modifier.user.id }}
+            {% endif %}
+            <br>
+            {% if modifier.note %}
+                <div class="srp-bg-dark-2 p-1">{{ modifier.note|nl2br }}</div>
+            {% endif %}
+            {% if modifier.voidedTime %}
+                Voided:
+                <span title="Time zone: {{ modifier.voidedTime|date('e') }}">
+                    {{ modifier.voidedTime|date('Y-m-d H:i') }}</span>,
+                <span title="#{{ modifier.voidedUser.id }}">{{ modifier.voidedUser.name }}</span>
+                {% if modifier.voidedUser.name is empty %}#{{ modifier.voidedUser.id }}{% endif %}
+            {% endif %}
+        </small>
+    </div>
+{% endfor %}

@@ -1,0 +1,94 @@
+
+<table class="table table-dark table-sm mb-2">
+    <tr>
+        <th>Submitter</th>
+        <td>
+            <span title="#{{ request.user.id }}">{{ request.user.name }}</span>
+            {% if request.user.name is empty %}
+                #{{ request.user.id }}
+            {% endif %}
+        </td>
+    </tr>
+    <tr>
+        <th>Submitted</th>
+        <td>{{ request.created|date('Y-m-d H:i e') }}</td>
+    </tr>
+    <tr>
+        <th>Pilot</th>
+        <td>
+            <a href="https://evewho.com/character/{{ request.character.id }}" class="srp-external-link"
+               title="EveWho" target="_blank" rel="noopener noreferrer">{{ request.character.name }}</a>,
+            {% if request.corporationId %}
+                <a href="https://evewho.com/corporation/{{ request.corporationId }}" class="srp-external-link"
+                   title="EveWho" target="_blank" rel="noopener noreferrer">{{ request.corporationName }}</a>,
+            {% else %}
+                {{ request.corporationName }},
+            {% endif %}
+            {% if request.allianceId %}
+                <a href="https://evewho.com/alliance/{{ request.allianceId }}" class="srp-external-link"
+                   title="EveWho" target="_blank" rel="noopener noreferrer">{{ request.allianceName }}</a>
+            {% elseif request.allianceName %}
+                {{ request.allianceName }}
+            {% else %}
+                no alliance
+            {% endif %}
+        </td>
+    </tr>
+    <tr>
+        <th>Date and time</th>
+        <td>{{ request.killTime|date('Y-m-d H:i e') }}</td>
+    </tr>
+    <tr>
+        <th>Solar system</th>
+        <td>
+            <a href="https://evemaps.dotlan.net/system/{{ request.solarSystem }}" class="srp-external-link"
+               title="Dotlan" target="_blank" rel="noopener noreferrer">{{ request.solarSystem }}</a>
+        </td>
+    </tr>
+    <tr>
+        <th>External URLs</th>
+        <td>
+            {% if request.killboardUrl %}
+                <a href="{{ request.killboardUrl }}" class="srp-external-link"
+                   target="_blank" rel="noopener noreferrer">zKillboard</a>,
+            {% endif %}
+            {% if request.esiLink %}
+                <a href="{{ request.esiLink }}" class="srp-external-link"
+                   target="_blank" rel="noopener noreferrer">ESI</a>
+            {% endif %}
+        </td>
+    </tr>
+</table>
+
+<h5 class="mb-1 mt-3">Details</h5>
+<div class="srp-bg-dark-2 small p-1">{{ request.details|nl2br }}</div>
+
+<div class="row mt-3">
+    <div class="col">
+        {% include 'pages/parts/request--data--edit.twig' with { request: request } only %}
+    </div>
+    <div class="col data-modifier">
+        {% include 'pages/parts/request--data--modifier.twig' with { request: request } only %}
+    </div>
+</div>
+
+<h5 class="mt-2">Changes</h5>
+<table class="table table-dark table-sm table-borderless small data-changes">
+    {% for action in request.actions %}
+        <tr class="{{ action.note ? '' : 'border-bottom' }}">
+            <td>{{ action.created|date('Y-m-d H:i e') }}</td>
+            <td>{{ action.category|capitalize }}</td>
+            <td>
+                <span title="#{{ action.user.id }}">{{ action.user.name }}</span>
+                {% if action.user.name is empty %}
+                    #{{ action.user.id }}
+                {% endif %}
+            </td>
+        </tr>
+        {% if action.note %}
+            <tr class="border-bottom">
+                <td colspan="3"><div class="srp-bg-dark-2 p-1">{{ action.note|nl2br }}</div></td>
+            </tr>
+        {% endif %}
+    {% endfor %}
+</table>
