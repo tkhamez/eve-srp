@@ -97,6 +97,28 @@ class RequestController
         return $response->withHeader('Location', "/request/{$args['id']}");
     }
 
+    public function modifierAdd(
+        ServerRequestInterface $request,
+        ResponseInterface $response,
+        array $args
+    ): ResponseInterface
+    {
+        # TODO implement
+        $this->flashMessage->addMessage('TODO add modifier');
+        return $response->withHeader('Location', "/request/{$args['id']}");
+    }
+
+    public function modifierRemove(
+        ServerRequestInterface $request,
+        ResponseInterface $response,
+        array $args
+    ): ResponseInterface
+    {
+        # TODO implement
+        $this->flashMessage->addMessage('TODO remove modifier');
+        return $response->withHeader('Location', "/request/{$args['id']}");
+    }
+
     private function showPage($response, $id): ResponseInterface
     {
         $srpRequest = $this->requestRepository->find($id);

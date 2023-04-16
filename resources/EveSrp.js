@@ -45,16 +45,18 @@ window.EveSrp = {
     },
 
     initPageRequest: () => {
-        const editPayout = document.getElementById('editPayout');
-        if (editPayout) {
-            editPayout.addEventListener('input', evt => {
-                // noinspection JSUnresolvedVariable
-                let value = evt.target.value.replace(/[^0-9]/g, '');
-                if (value !== '') {
-                    value = parseInt(value).toLocaleString('en-US');
-                }
-                evt.target.value = value;
-            })
+        for (const elementId of ['editPayout', 'addModifier']) {
+            const element = document.getElementById(elementId);
+            if (element) {
+                element.addEventListener('input', evt => {
+                    // noinspection JSUnresolvedVariable
+                    let value = evt.target.value.replace(/[^0-9]/g, '');
+                    if (value !== '') {
+                        value = parseInt(value).toLocaleString('en-US');
+                    }
+                    evt.target.value = value;
+                })
+            }
         }
     },
 
@@ -62,4 +64,4 @@ window.EveSrp = {
         // noinspection JSIgnoredPromiseFromCall
         fetch('/ping');
     },
-}
+};

@@ -11,18 +11,19 @@ use EveSrp\Security;
  * First route match will be used, matched by "starts-with"
  */
 return [
-    '/login'   => [Security::ROLE_ANY],
-    '/auth'    => [Security::ROLE_ANY],
-    '/request' => [Permission::SUBMIT, Permission::REVIEW, Permission::PAY],
-    '/submit'  => [Permission::SUBMIT],
-    '/review'  => [Permission::REVIEW],
-    '/pay'     => [Permission::PAY],
+    '/login'    => [Security::ROLE_ANY],
+    '/auth'     => [Security::ROLE_ANY],
 
+    '/submit'   => [Permission::SUBMIT],
+    '/review'   => [Permission::REVIEW],
+    '/pay'      => [Permission::PAY],
     '/all-requests' => [Permission::REVIEW, Permission::PAY, Permission::ADMIN, Security::GLOBAL_ADMIN],
+
+    '/request/' => [Permission::SUBMIT, Permission::REVIEW, Permission::PAY],
 
     '/admin/divisions' => [Security::GLOBAL_ADMIN],
     '/admin/groups'    => [Security::GLOBAL_ADMIN],
     '/admin'           => [Security::GLOBAL_ADMIN, Permission::ADMIN],
     
-    '/'        => [Security::ROLE_AUTHENTICATED],
+    '/' => [Security::ROLE_AUTHENTICATED],
 ];

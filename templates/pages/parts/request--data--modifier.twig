@@ -1,31 +1,70 @@
-<h6 class="mt-2 mb-3">Modifier</h6>
+<h6 class="mt-1 mb-2">Modifiers</h6>
+
+{% if mayChangePayout(request) %}
+    <div class="data-modifier row mb-3 pb-2 table-dark border-bottom">
+        <form action="/request/{{ request.id }}/modifier-add" method="post" class="col">
+            <div class="input-group input-group-sm mt-1">
+                <label class="input-group-text bg-dark text-light" for="addModifier">&nbsp;Add</label>
+                <input type="text" class="form-control form-control-sm" name="modifier" id="addModifier"
+                       placeholder="Percent or ISK">
+            </div>
+
+            <div class="input-group input-group-sm mt-1">
+                <label class="input-group-text bg-dark text-light" for="modifierType">Type</label>
+                <select class="form-select" name="type" id="modifierType" required>
+                    <option selected>Choose...</option>
+                    <option value="relative-bonus">% Bonus</option>
+                    <option value="relative-deduction">% Deduction</option>
+                    <option value="absolute-bonus">ISK Bonus</option>
+                    <option value="absolute-deduction">ISK Deduction</option>
+                </select>
+            </div>
+
+            <label for="addReason" class="form-label small mt-1 mb-1">Reason</label>
+            <textarea class="form-control" name="reason" id="addReason" rows="2"></textarea>
+
+            <button type="submit" class="mt-2 btn btn-primary btn-sm float-end">Add</button>
+        </form>
+    </div>
+{% endif %}
+
 {% for modifier in request.modifiers %}
-    <div class="table-dark border-bottom pb-3 mb-3">
-        <span class=" {{ modifier.voidedTime ? 'text-decoration-line-through' : '' }}">
-            {{ modifier.modValue|number_format }}{%
-                if modifier.modType == 'relative' %}%{% else %} ISK{% endif
-            %}
-            {% if modifier.modValue > 0 %} bonus {% else %} penalty{% endif %}
-        </span>
-        <br>
-        <small>
-            <span title="Time zone: {{ modifier.created|date('e') }}">
-                {{ modifier.created|date('Y-m-d H:i') }}</span>,
-            <span title="#{{ modifier.user.id }}">{{ modifier.user.name }}</span>
-            {% if modifier.user.name is empty %}
-                #{{ modifier.user.id }}
+    <div class="row">
+        <div class="data-modifier col table-dark border-bottom pb-3 mb-3">
+            <span class=" {{ modifier.voidedTime ? 'text-decoration-line-through' : '' }}">
+                {{ modifier.modValue|number_format }}{%
+                    if modifier.modType == 'relative' %}%{% else %} ISK{% endif
+                %}
+                {% if modifier.modValue > 0 %} bonus {% else %} penalty{% endif %}
+            </span>
+
+            {% if mayChangePayout(request) and not modifier.voidedTime %}
+                <form action="/request/{{ request.id }}/modifier-remove" method="post" class="d-inline">
+                    <input type="hidden" name="id" value="{{ modifier.id }}">
+                    <button type="submit" class="border-0 badge bg-danger float-end">remove</button>
+                </form>
             {% endif %}
+
             <br>
-            {% if modifier.note %}
-                <div class="srp-bg-dark-2 p-1">{{ modifier.note|nl2br }}</div>
-            {% endif %}
-            {% if modifier.voidedTime %}
-                Voided:
-                <span title="Time zone: {{ modifier.voidedTime|date('e') }}">
-                    {{ modifier.voidedTime|date('Y-m-d H:i') }}</span>,
-                <span title="#{{ modifier.voidedUser.id }}">{{ modifier.voidedUser.name }}</span>
-                {% if modifier.voidedUser.name is empty %}#{{ modifier.voidedUser.id }}{% endif %}
-            {% endif %}
-        </small>
+            <small>
+                <span title="Time zone: {{ modifier.created|date('e') }}">
+                    {{ modifier.created|date('Y-m-d H:i') }}</span>,
+                <span title="#{{ modifier.user.id }}">{{ modifier.user.name }}</span>
+                {% if modifier.user.name is empty %}
+                    #{{ modifier.user.id }}
+                {% endif %}
+                <br>
+                {% if modifier.note %}
+                    <div class="srp-bg-dark-2 p-1">{{ modifier.note|nl2br }}</div>
+                {% endif %}
+                {% if modifier.voidedTime %}
+                    Voided:
+                    <span title="Time zone: {{ modifier.voidedTime|date('e') }}">
+                        {{ modifier.voidedTime|date('Y-m-d H:i') }}</span>,
+                    <span title="#{{ modifier.voidedUser.id }}">{{ modifier.voidedUser.name }}</span>
+                    {% if modifier.voidedUser.name is empty %}#{{ modifier.voidedUser.id }}{% endif %}
+                {% endif %}
+            </small>
+        </div>
     </div>
 {% endfor %}
