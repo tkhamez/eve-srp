@@ -4,15 +4,15 @@
     <div class="data-modifier row mb-3 pb-2 table-dark border-bottom">
         <form action="/request/{{ request.id }}/modifier-add" method="post" class="col">
             <div class="input-group input-group-sm mt-1">
-                <label class="input-group-text bg-dark text-light" for="addModifier">&nbsp;Add</label>
-                <input type="text" class="form-control form-control-sm" name="modifier" id="addModifier"
+                <label class="input-group-text bg-dark text-light" for="modifierAmount">&nbsp;Add</label>
+                <input type="text" required class="form-control form-control-sm" name="amount" id="modifierAmount"
                        placeholder="Percent or ISK">
             </div>
 
             <div class="input-group input-group-sm mt-1">
                 <label class="input-group-text bg-dark text-light" for="modifierType">Type</label>
-                <select class="form-select" name="type" id="modifierType" required>
-                    <option selected>Choose...</option>
+                <select required class="form-select" name="type" id="modifierType">
+                    <option selected value=""></option>
                     <option value="relative-bonus">% Bonus</option>
                     <option value="relative-deduction">% Deduction</option>
                     <option value="absolute-bonus">ISK Bonus</option>
@@ -30,9 +30,9 @@
 
 {% for modifier in request.modifiers %}
     <div class="row">
-        <div class="data-modifier col table-dark border-bottom pb-3 mb-3">
-            <span class=" {{ modifier.voidedTime ? 'text-decoration-line-through' : '' }}">
-                {{ modifier.modValue|number_format }}{%
+        <div class="data-modifier col table-dark border-bottom pb-3 mb-3 {{ modifier.voidedTime ? 'text-muted' : '' }}">
+            <span class="{{ modifier.voidedTime ? 'text-decoration-line-through' : '' }}">
+                {{ modifier.modValue|abs|number_format }}{%
                     if modifier.modType == 'relative' %}%{% else %} ISK{% endif
                 %}
                 {% if modifier.modValue > 0 %} bonus {% else %} penalty{% endif %}

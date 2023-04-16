@@ -70,10 +70,20 @@ class Modifier
         return $this->id;
     }
 
+    public function setCreated(?\DateTime $created): void
+    {
+        $this->created = $created;
+    }
+
     /** @noinspection PhpUnused */
     public function getCreated(): ?\DateTime
     {
         return $this->created;
+    }
+
+    public function setModType(?string $modType): void
+    {
+        $this->modType = $modType;
     }
 
     /** @noinspection PhpUnused */
@@ -82,9 +92,19 @@ class Modifier
         return $this->modType;
     }
 
+    public function setRequest(?Request $request): void
+    {
+        $this->request = $request;
+    }
+
     public function getRequest(): ?Request
     {
         return $this->request;
+    }
+
+    public function setUser(?User $user): void
+    {
+        $this->user = $user;
     }
 
     /** @noinspection PhpUnused */
@@ -93,10 +113,20 @@ class Modifier
         return $this->user;
     }
 
+    public function setNote(?string $note): void
+    {
+        $this->note = $note;
+    }
+
     /** @noinspection PhpUnused */
     public function getNote(): ?string
     {
         return $this->note;
+    }
+
+    public function setVoidedUser(?User $voidedUser): void
+    {
+        $this->voidedUser = $voidedUser;
     }
 
     /** @noinspection PhpUnused */
@@ -105,10 +135,20 @@ class Modifier
         return $this->voidedUser;
     }
 
+    public function setVoidedTime(?\DateTime $voidedTime): void
+    {
+        $this->voidedTime = $voidedTime;
+    }
+
     /** @noinspection PhpUnused */
     public function getVoidedTime(): ?\DateTime
     {
         return $this->voidedTime;
+    }
+
+    public function setModValue(?int $modValue): void
+    {
+        $this->modValue = $modValue;
     }
 
     /** @noinspection PhpUnused */

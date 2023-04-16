@@ -45,7 +45,7 @@ window.EveSrp = {
     },
 
     initPageRequest: () => {
-        for (const elementId of ['editPayout', 'addModifier']) {
+        for (const elementId of ['editPayout', 'modifierAmount']) {
             const element = document.getElementById(elementId);
             if (element) {
                 element.addEventListener('input', evt => {

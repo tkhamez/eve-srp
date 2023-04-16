@@ -10,6 +10,7 @@ use EveSrp\Controller\Traits\TwigResponse;
 use EveSrp\FlashMessage;
 use EveSrp\Model\Action;
 use EveSrp\Model\Division;
+use EveSrp\Model\Modifier;
 use EveSrp\Model\Request;
 use EveSrp\Repository\DivisionRepository;
 use EveSrp\Repository\RequestRepository;
@@ -81,17 +82,15 @@ class RequestController
         }
 
         // Validate and save
-        if (!$this->validateInput($srpRequest, $newDivision, $newStatus, $newBasePayout, $newComment)) {
+        if (!$this->validateInputAndPermission($srpRequest, $newDivision, $newStatus, $newBasePayout, $newComment)) {
             $this->flashMessage->addMessage('Invalid input.', FlashMessage::TYPE_WARNING);
         } else {
             // Change status if submitter added comment.
             $newStatus = $this->adjustStatus($srpRequest, $newStatus, $newComment);
 
-            if ($this->save($srpRequest, $newDivision, $newStatus, $newBasePayout, $newComment)) {
-                $this->flashMessage->addMessage('Request updated.', FlashMessage::TYPE_SUCCESS);
-            } else {
-                $this->flashMessage->addMessage('Failed to updated request.', FlashMessage::TYPE_DANGER);
-            }
+            // Save
+            $this->save($srpRequest, $newDivision, $newStatus, $newBasePayout, $newComment);
+            $this->flashMessage->addMessage('Request updated.', FlashMessage::TYPE_SUCCESS);
         }
 
         return $response->withHeader('Location', "/request/{$args['id']}");
@@ -103,8 +102,39 @@ class RequestController
         array $args
     ): ResponseInterface
     {
-        # TODO implement
-        $this->flashMessage->addMessage('TODO add modifier');
+        $check = $this->modifierGetRequestCheckPermission($response, (int)$args['id']);
+        if ($check instanceof ResponseInterface) {
+            return $check;
+        } else {
+            $srpRequest = $check;
+        }
+
+        // Get input
+        $amount = abs((int)str_replace(',', '', (string)$this->paramPost($request, 'amount')));
+        $type = (string)$this->paramPost($request, 'type');
+        $reason = trim((string)$this->paramPost($request, 'reason'));
+
+        // Validate input
+        $validTypes = ['relative-bonus', 'relative-deduction', 'absolute-bonus', 'absolute-deduction'];
+        if ($amount === 0 || !in_array($type, $validTypes)) {
+            $this->flashMessage->addMessage('Invalid input.', FlashMessage::TYPE_WARNING);
+            return $response->withHeader('Location', "/request/{$args['id']}");
+        }
+
+        // Add modifier
+        $modifier = new Modifier();
+        $modifier->setCreated(new \DateTime());
+        $modifier->setUser($this->userService->getAuthenticatedUser());
+        $modifier->setModType(in_array($type, ['relative-bonus', 'relative-deduction']) ? 'relative' : 'absolute');
+        $modifier->setModValue(in_array($type, ['relative-deduction', 'absolute-deduction']) ? $amount * -1 : $amount);
+        $modifier->setNote($reason);
+        $modifier->setRequest($srpRequest);
+
+        $this->entityManager->persist($modifier);
+
+        $this->entityManager->flush();
+        $this->flashMessage->addMessage('Modifier added.', FlashMessage::TYPE_SUCCESS);
+
         return $response->withHeader('Location', "/request/{$args['id']}");
     }
 
@@ -114,8 +144,33 @@ class RequestController
         array $args
     ): ResponseInterface
     {
-        # TODO implement
-        $this->flashMessage->addMessage('TODO remove modifier');
+        $check = $this->modifierGetRequestCheckPermission($response, (int)$args['id']);
+        if ($check instanceof ResponseInterface) {
+            return $check;
+        } else {
+            $srpRequest = $check;
+        }
+
+        // Find existing modifier
+        $modifierId = (int)$this->paramPost($request, 'id');
+        $modifierToRemove = null;
+        foreach ($srpRequest->getModifiers() as $modifier) {
+            if ($modifier->getId() === $modifierId) {
+                $modifierToRemove = $modifier;
+                break;
+            }
+        }
+
+        if ($modifierToRemove) {
+            // Remove modifier
+            $modifierToRemove->setVoidedTime(new \DateTime());
+            $modifierToRemove->setVoidedUser($this->userService->getAuthenticatedUser());
+            $this->entityManager->flush();
+            $this->flashMessage->addMessage('Modifier removed.', FlashMessage::TYPE_SUCCESS);
+        } else {
+            $this->flashMessage->addMessage('Modifier not found.', FlashMessage::TYPE_WARNING);
+        }
+
         return $response->withHeader('Location', "/request/{$args['id']}");
     }
 
@@ -161,7 +216,7 @@ class RequestController
         ]);
     }
 
-    private function validateInput(
+    private function validateInputAndPermission(
         Request $request,
         ?int $newDivision,
         ?string $newStatus,
@@ -224,7 +279,7 @@ class RequestController
         ?string $newStatus,
         ?int $newBasePayout,
         string $newComment,
-    ): bool {
+    ): void {
         if ($newDivision !== null) {
             $division = $this->divisionRepository->find($newDivision);
             $oldDivision = $request->getDivision();
@@ -284,12 +339,25 @@ class RequestController
             $this->entityManager->persist($action);
         }
 
-        try {
-            $this->entityManager->flush();
-        } catch (\Throwable) {
-            return false;
+        $this->entityManager->flush();
+    }
+
+    private function modifierGetRequestCheckPermission(
+        ResponseInterface $response,
+        int $requestId,
+    ): ResponseInterface|Request {
+        // Get SRP request
+        $srpRequest = $this->requestRepository->find($requestId);
+        if (!$srpRequest) {
+            return $response->withHeader('Location', "/request/$requestId");
         }
 
-        return true;
+        // Check permission
+        if (!$this->requestService->mayChangePayout($srpRequest)) {
+            $this->flashMessage->addMessage('Permission denied.', FlashMessage::TYPE_WARNING);
+            return $response->withHeader('Location', "/request/$requestId");
+        }
+
+        return $srpRequest;
     }
 }
