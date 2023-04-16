@@ -120,7 +120,7 @@
                 </tr>
                 <tr>
                     <th>Payout</th>
-                    <td>{{ request.payout ? request.payout|number_format + ' ISK' : '' }}</td>
+                    <td>{{ request.payout ? request.payout|number_format ~ ' ISK' : '' }}</td>
                 </tr>
             </table>
 
