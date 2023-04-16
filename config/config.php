@@ -28,7 +28,7 @@ return [
     // Neucore
     'NEUCORE_DOMAIN'    => $_ENV['EVE_SRP_NEUCORE_DOMAIN'] ?? '',
     'NEUCORE_APP_ID'    => $_ENV['EVE_SRP_NEUCORE_APP_ID'] ?? '',
-    'NEUCORE_APP_TOKEN' => $_ENV['EVE_SRP_NEUCORE_APP_TOKEN'] ?? '',
+    'NEUCORE_APP_SECRET' => $_ENV['EVE_SRP_NEUCORE_APP_SECRET'] ?? '',
 
     // other stuff
     'HTTP_USER_AGENT'     => $_ENV['EVE_SRP_HTTP_USER_AGENT'] ?? 'EVE-SRP (https://github.com/tkhamez/eve-srp)',

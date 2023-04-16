@@ -99,7 +99,7 @@ final class Container
             // Neucore API
             Configuration::class => function (ContainerInterface $container) {
                 $settings = $container->get(Settings::class);
-                $apiKey = base64_encode($settings['NEUCORE_APP_ID'] . ':' . $settings['NEUCORE_APP_TOKEN']);
+                $apiKey = base64_encode($settings['NEUCORE_APP_ID'] . ':' . $settings['NEUCORE_APP_SECRET']);
                 $config = Configuration::getDefaultConfiguration();
                 $config->setHost($settings['NEUCORE_DOMAIN'].'/api');
                 $config->setAccessToken($apiKey);

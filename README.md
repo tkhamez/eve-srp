@@ -8,20 +8,21 @@ To run the application you need a web server with support for PHP >=8.0 and URL 
 [Doctrine ORM](https://www.doctrine-project.org/projects/doctrine-orm/en/latest/index.html) 
 (tested with MariaDB 10.6).
 
-- Create an EVE application at https://developers.eveonline.com, no scopes required.
+- Create an EVE application at https://developers.eveonline.com, no scopes required. Set the callback URL to
+  `https://your.domain.tld/auth`.
 - Clone the repository, build the frontend and backend (see below) - there will be pre-built releases later.
 - Copy `config/.env.dist` to `config/.env` and adjust values or set the corresponding environment variables.
-  At the very least set EVE_SRP_SSO_CLIENT_ID and EVE_SRP_SSO_CLIENT_SECRET, the rest works as is when using the
-  Docker development environment.
+  At the very least set EVE_SRP_SSO_CLIENT_ID, EVE_SRP_SSO_CLIENT_SECRET and EVE_SRP_SSO_REDIRECT_URI, the rest 
+  works as is when using the Docker development environment.
 - Install dependencies and generate Doctrine proxy classes with `composer install`.
-- Clear the template cache: `rm -R storage/compilation_cache`
+- Clear the template cache: `rm -R storage/compilation_cache`.
 - Make sure that the `storage` directory is writable by the webserver.
 - Set the document root to the `web` directory and configure URL rewriting to `index.php` (see
-  [Slim framework - Web Servers](https://www.slimframework.com/docs/v4/start/web-servers.html) for details)
-- sync db schema:
+  [Slim framework - Web Servers](https://www.slimframework.com/docs/v4/start/web-servers.html) for details).
+- Sync database schema:
   - **Backup the database first!**
   - `bin/doctrine orm:schema-tool:update --complete --dump-sql`  
-    Review SQLs and if ok execute:  
+    Review SQLs and if OK execute:  
     `bin/doctrine orm:schema-tool:update --complete --force`
 
 ### Permissions
