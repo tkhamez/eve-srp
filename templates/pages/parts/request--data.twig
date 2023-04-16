@@ -75,7 +75,7 @@
 <h5 class="mt-2">Changes</h5>
 <table class="table table-dark table-sm table-borderless small data-changes">
     {% for action in request.actions %}
-        <tr class="{{ action.note ? '' : 'border-bottom' }}">
+        <tr class="{{ action.note ? 'data' : 'data border-bottom' }}">
             <td>{{ action.created|date('Y-m-d H:i e') }}</td>
             <td>{{ action.category|capitalize }}</td>
             <td>

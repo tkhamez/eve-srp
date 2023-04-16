@@ -1,6 +1,6 @@
-<h6 class="mt-2">Modifier</h6>
+<h6 class="mt-2 mb-3">Modifier</h6>
 {% for modifier in request.modifiers %}
-    <div class="table-dark border-bottom pb-2 mb-2">
+    <div class="table-dark border-bottom pb-3 mb-3">
         <span class=" {{ modifier.voidedTime ? 'text-decoration-line-through' : '' }}">
             {{ modifier.modValue|number_format }}{%
                 if modifier.modType == 'relative' %}%{% else %} ISK{% endif

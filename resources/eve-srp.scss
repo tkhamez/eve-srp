@@ -136,4 +136,12 @@ a {
     .data-modifier .border-bottom {
         border-bottom-color: var(--bs-table-border-color) !important;
     }
+    .data-changes {
+        .data td {
+            padding-top: 1rem;
+        }
+        .border-bottom td {
+            padding-bottom: 1rem;
+        }
+    }
 }
