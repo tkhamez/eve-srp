@@ -1,10 +1,10 @@
 # EVE-SRP
 
-A Ship-Replacement-Programm application for [EVE Online](https://www.eveonline.com).
+A Ship-Replacement-Program application for [EVE Online](https://www.eveonline.com).
 
 ## Install
 
-To run the application you need a web server with support for PHP >=8.0 and URL rewriting, and a database supported by 
+To run the application you need a web server with support for PHP >=8.0, URL rewriting, and a database supported by 
 [Doctrine ORM](https://www.doctrine-project.org/projects/doctrine-orm/en/latest/index.html) 
 (tested with MariaDB 10.6).
 
@@ -12,7 +12,7 @@ To run the application you need a web server with support for PHP >=8.0 and URL 
   `https://your.domain.tld/auth`.
 - Clone the repository, build the frontend and backend (see below) - there will be pre-built releases later.
 - Copy `config/.env.dist` to `config/.env` and adjust values or set the corresponding environment variables.
-  At the very least set EVE_SRP_SSO_CLIENT_ID, EVE_SRP_SSO_CLIENT_SECRET and EVE_SRP_SSO_REDIRECT_URI, the rest 
+  At the very least set `EVE_SRP_SSO_CLIENT_ID`, `EVE_SRP_SSO_CLIENT_SECRET` and `EVE_SRP_SSO_REDIRECT_URI`, the rest 
   works as is when using the Docker development environment.
 - Install dependencies and generate Doctrine proxy classes with `composer install`.
 - Clear the template cache: `rm -R storage/compilation_cache`.
@@ -21,9 +21,9 @@ To run the application you need a web server with support for PHP >=8.0 and URL 
   [Slim framework - Web Servers](https://www.slimframework.com/docs/v4/start/web-servers.html) for details).
 - Sync database schema:
   - **Backup the database first!**
-  - `bin/doctrine orm:schema-tool:update --complete --dump-sql`  
+  - `php bin/doctrine orm:schema-tool:update --complete --dump-sql`  
     Review SQLs and if OK execute:  
-    `bin/doctrine orm:schema-tool:update --complete --force`
+    `php bin/doctrine orm:schema-tool:update --complete --force`
 
 ### Permissions
 
@@ -75,8 +75,8 @@ composer install
 
 Useful commands:
 ```
-bin/doctrine orm:validate-schema
-bin/doctrine dbal:reserved-words
+php bin/doctrine orm:validate-schema
+php bin/doctrine dbal:reserved-words
 ```
 
 ### Build Frontend
