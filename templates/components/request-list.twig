@@ -26,7 +26,11 @@
                 <td><a href="/request/{{ request.id }}">{{ request.ship }}</a></td>
                 <td>{{ request.character.name }}</td>
                 <td>{{ request.solarSystem }}</td>
-                <td>{{ request.killTime|date('Y-m-d H:i') }}</td>
+                <td>
+                    {% include 'components/timestamp.twig' with {
+                        'timestamp': request.killTime,
+                    } only %}
+                </td>
                 <td>
                     {% if request.killboardUrl %}
                         <a href="{{ request.killboardUrl }}" target="_blank" rel="noopener noreferrer"
@@ -38,7 +42,11 @@
                            class="srp-external-link">ESI</a>
                     {% endif %}
                 </td>
-                <td>{{ request.created|date('Y-m-d H:i') }}</td>
+                <td>
+                    {% include 'components/timestamp.twig' with {
+                        'timestamp': request.created
+                    } only %}
+                </td>
                 <td>{{ request.division.name }}</td>
                 <td>{{ request.status }}</td>
                 <td class="text-end">

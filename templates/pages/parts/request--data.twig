@@ -11,7 +11,12 @@
     </tr>
     <tr>
         <th>Submitted</th>
-        <td>{{ request.created|date('Y-m-d H:i e') }}</td>
+        <td>
+            {% include 'components/timestamp.twig' with {
+                'timestamp': request.created,
+                'format': 'Y-m-d H:i e'
+            } only %}
+        </td>
     </tr>
     <tr>
         <th>Pilot</th>
@@ -36,7 +41,12 @@
     </tr>
     <tr>
         <th>Date and time</th>
-        <td>{{ request.killTime|date('Y-m-d H:i e') }}</td>
+        <td>
+            {% include 'components/timestamp.twig' with {
+                'timestamp': request.killTime,
+                'format': 'Y-m-d H:i e'
+            } only %}
+        </td>
     </tr>
     <tr>
         <th>Solar system</th>
