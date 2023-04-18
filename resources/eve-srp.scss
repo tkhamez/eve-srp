@@ -66,6 +66,15 @@ a {
     background-color: var(--srp-bg-color-2);
 }
 
+.srp-text {
+    color: var(--srp-text-color);
+}
+
+.srp-list-caption {
+    caption-side: bottom;
+    text-align: center;
+}
+
 // Libraries
 
 .form-control,

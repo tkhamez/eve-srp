@@ -49,6 +49,17 @@
             </tr>
         {%  endfor %}
         </tbody>
+        <caption class="srp-list-caption">
+            <span class="srp-text">
+                {{ requests|length }} Requests for a total of 
+                    {% set totalPayoutsAmount = 0 %}
+                    {% for request in requests %}
+                        {% set totalPayoutsAmount = totalPayoutsAmount + request.payout %}
+                        {% if loop.last %}{{ totalPayoutsAmount|number_format }}{% endif %}
+                    {% endfor %}
+                ISK
+            </span>
+        </caption>
     </table>
 </div>
 
