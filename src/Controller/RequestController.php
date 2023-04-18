@@ -331,10 +331,17 @@ class RequestController
             $action->setCreated(new \DateTime());
             $action->setUser($this->userService->getAuthenticatedUser());
             $action->setCategory(Type::COMMENT);
-            $action->setNote(
-                'Changed base payout from  ' . number_format($oldPayout) . ' to ' .
-                number_format($newBasePayout) . ' ISK.'
-            );
+
+            if ($oldPayout === null) {
+                $action->setNote(
+                    'Set base payout to ' . number_format($newBasePayout) . ' ISK.'
+                );
+            } else {
+                $action->setNote(
+                    'Changed base payout from ' . number_format($oldPayout) . ' to ' .
+                    number_format($newBasePayout) . ' ISK.'
+                );
+            }
 
             $action->setRequest($request);
             $this->entityManager->persist($action);
