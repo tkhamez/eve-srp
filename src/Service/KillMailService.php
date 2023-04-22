@@ -41,8 +41,6 @@ class KillMailService
 
     private string $esiBaseUrl;
 
-    private string $killboardBaseUrl;
-
     private array $slotGroups = [
         // see invFlags.yaml from SDE https://developers.eveonline.com/resource/resources
         5 => self::CARGO, # Cargo
@@ -179,37 +177,29 @@ class KillMailService
         Settings $settings,
     ) {
         $this->esiBaseUrl = $settings['ESI_BASE_URL'];
-        $this->killboardBaseUrl = $settings['ZKILLBOARD_BASE_URL'];
     }
 
     /**
      * Add missing URLs to zKillboard or ESI
      */
-    public function addMissingURLs(Request $srpRequest): void
+    public function addMissingEsiHash(Request $srpRequest): void
     {
-        if (!$srpRequest->getEsiLink() && $srpRequest->getKillboardUrl()) {
-            $esiLink = $this->apiService->getEsiUrlFromKillboard($srpRequest->getKillboardUrl());
-            if ($esiLink) {
-                $srpRequest->setEsiLink($esiLink);
-                $this->entityManager->flush();
-            }
-        } elseif (!$srpRequest->getKillboardUrl() && $srpRequest->getEsiLink() && $this->killboardBaseUrl) {
-            $urlParts = explode('/', rtrim($srpRequest->getEsiLink(), '/'));
-            array_pop($urlParts);
-            $killId = end($urlParts);
-            if (is_numeric($killId)) {
-                $srpRequest->setKillboardUrl("$this->killboardBaseUrl/kill/$killId/");
+        if (!$srpRequest->getEsiHash()) {
+            $esiHash = $this->apiService->getEsiHashFromZKillboard($srpRequest->getId());
+            if ($esiHash) {
+                $srpRequest->setEsiHash($esiHash);
                 $this->entityManager->flush();
             }
         }
     }
 
-    public function getKillMail(?string $esiLink): \stdClass|string
+    public function getKillMail(Request $request): \stdClass|string
     {
-        if (!$esiLink) {
+        if (!$request->getEsiHash()) {
             return 'Missing ESI link.';
         }
 
+        $esiLink = $this->apiService->getEsiKillUrl($request->getId(), $request->getEsiHash());
         $result = $this->apiService->getJsonData($esiLink);
 
         return $result ?: $this->apiService->getLastError();

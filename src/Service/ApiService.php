@@ -53,26 +53,63 @@ class ApiService
      * @param string $url e.g. https://zkillboard.com/kill/82474608/
      * @return string|null
      */
-    public function getEsiUrlFromKillboard(string $url): ?string
+    public function getEsiUrlFromZKillboardUrl(string $url): ?string
     {
         $urlParts = explode('/', rtrim($url, '/'));
         $killId = end($urlParts);
         if (!is_numeric($killId)) {
-            error_log(__METHOD__ . ': Invalid kill ID: ' . $killId);
+            error_log(__METHOD__ . ': Invalid zKillboard URL ' . $url);
             return null;
         }
 
+        $hash = $this->getEsiHashFromZKillboard((int)$killId);
+
+        return $this->getEsiKillUrlBase() . "$killId/$hash/";
+    }
+
+    public function getHashFromEsiUrl(string $url): ?string
+    {
+        $url = rtrim($url);
+        return substr($url, strrpos($url, '/') + 1);
+    }
+
+    public function getEsiHashFromZKillboard(int $killId): ?string
+    {
         if ($this->killboardBaseUrl) {
             $killboardData = $this->getJsonData("$this->killboardBaseUrl/api/killID/$killId/");
-        } else {
-            // Use domain from $url
-            $domain = "$urlParts[0]//$urlParts[2]";
-            $killboardData = $this->getJsonData("$domain/api/killID/$killId/");
         }
-        if ($killboardData === null || !isset($killboardData[0])) {
+
+        if (!isset($killboardData[0])) {
             return null;
         }
 
-        return "$this->esiBaseUrl/latest/killmails/$killId/{$killboardData[0]->zkb->hash}/";
+        return $killboardData[0]->zkb->hash;
+    }
+
+    public function getKillIdFromEsiUrl(string $esiUrl): int
+    {
+        $temp = str_replace($this->getEsiKillUrlBase(), '', $esiUrl);
+        return (int)substr($temp, 0, strpos($temp, '/'));
+    }
+
+    public function getEsiKillUrl(int $killId, string $hash): string
+    {
+        if ($hash) {
+            return "{$this->getEsiKillUrlBase()}$killId/$hash";
+        }
+        return '';
+    }
+
+    public function getZKillboardUrl(int $killId): string
+    {
+        if ($this->killboardBaseUrl) {
+            return "$this->killboardBaseUrl/kill/$killId/";
+        }
+        return '';
+    }
+
+    private function getEsiKillUrlBase(): string
+    {
+        return "$this->esiBaseUrl/latest/killmails/";
     }
 }

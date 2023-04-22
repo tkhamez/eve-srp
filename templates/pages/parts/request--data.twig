@@ -58,12 +58,12 @@
     <tr>
         <th>External URLs</th>
         <td>
-            {% if request.killboardUrl %}
-                <a href="{{ request.killboardUrl }}" class="srp-external-link"
+            {% if zKillboardUrl(request) %}
+                <a href="{{ zKillboardUrl(request) }}" class="srp-external-link"
                    target="_blank" rel="noopener noreferrer">zKillboard</a>,
             {% endif %}
-            {% if request.esiLink %}
-                <a href="{{ request.esiLink }}" class="srp-external-link"
+            {% if esiUrl(request) %}
+                <a href="{{ esiUrl(request) }}" class="srp-external-link"
                    target="_blank" rel="noopener noreferrer">ESI</a>
             {% endif %}
         </td>

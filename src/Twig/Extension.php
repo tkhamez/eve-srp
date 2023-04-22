@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace EveSrp\Twig;
 
 use EveSrp\FlashMessage;
-use EveSrp\Model\Division;
 use EveSrp\Model\Request;
+use EveSrp\Service\ApiService;
 use EveSrp\Service\RequestService;
 use EveSrp\Service\UserService;
 use Twig\Extension\AbstractExtension;
@@ -18,6 +18,7 @@ class Extension extends AbstractExtension
         private UserService $userService,
         private FlashMessage $flashMessage,
         private RequestService $requestService,
+        private ApiService $apiService,
     ) {
     }
 
@@ -34,6 +35,8 @@ class Extension extends AbstractExtension
             new TwigFunction('mayAddComment', [$this, 'mayAddComment']),
             new TwigFunction('maySave', [$this, 'maySave']),
             new TwigFunction('flashMessages', [$this, 'flashMessages']),
+            new TwigFunction('zKillboardUrl', [$this, 'zKillboardUrl']),
+            new TwigFunction('esiUrl', [$this, 'esiUrl']),
         ];
     }
 
@@ -98,5 +101,15 @@ class Extension extends AbstractExtension
                 '</div>';
         }
         return implode("\n", $html);
+    }
+
+    public function zKillboardUrl(Request $request): string
+    {
+        return $this->apiService->getZKillboardUrl($request->getId());
+    }
+
+    public function esiUrl(Request $request): string
+    {
+        return $this->apiService->getEsiKillUrl($request->getId(), (string)$request->getEsiHash());
     }
 }

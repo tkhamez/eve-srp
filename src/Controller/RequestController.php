@@ -202,10 +202,10 @@ class RequestController
         }
 
         if ($srpRequest) {
-            $this->killMailService->addMissingURLs($srpRequest);
+            $this->killMailService->addMissingEsiHash($srpRequest);
             $killMail = $srpRequest->getKillMail();
             if (empty($killMail)) {
-                $killMailOrError = $this->killMailService->getKillMail($srpRequest->getEsiLink());
+                $killMailOrError = $this->killMailService->getKillMail($srpRequest);
                 if ($killMailOrError instanceof \stdClass) {
                     $killMail = $killMailOrError;
                     $srpRequest->setKillMail($killMail);

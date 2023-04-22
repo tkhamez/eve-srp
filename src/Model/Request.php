@@ -19,7 +19,7 @@ class Request
     /**
      * @ORM\Id
      * @ORM\Column(type="bigint")
-     * @ORM\GeneratedValue
+     * @ORM\GeneratedValue(strategy="NONE")
      */
     private ?int $id = null;
 
@@ -94,16 +94,11 @@ class Request
     private string $solarSystem = '';
 
     /**
-     * @ORM\Column(type="string", name="killboard_url", length=512, nullable=true)
-     */
-    private ?string $killboardUrl = null;
-
-    /**
      * The "External Kill Link" from the in-game menu.
      * 
-     * @ORM\Column(type="string", name="esi_link", length=512, nullable=true)
+     * @ORM\Column(type="string", name="esi_hash", length=512, nullable=true)
      */
-    private ?string $esiLink = null;
+    private ?string $esiHash = null;
     
     /**
      * @ORM\Column(type="text", length=16777215, nullable=true)
@@ -137,6 +132,13 @@ class Request
     {
         $this->actions = new ArrayCollection();
         $this->modifiers = new ArrayCollection();
+    }
+
+    public function setId(int $id): self
+    {
+        $this->id = $id;
+
+        return $this;
     }
 
     public function getId(): ?int
@@ -303,26 +305,14 @@ class Request
         return $this;
     }
 
-    public function getKillboardUrl(): ?string
+    public function getEsiHash(): ?string
     {
-        return $this->killboardUrl;
+        return $this->esiHash;
     }
 
-    public function setKillboardUrl(?string $url): self
+    public function setEsiHash(?string $url): self
     {
-        $this->killboardUrl = $url;
-
-        return $this;
-    }
-
-    public function getEsiLink(): ?string
-    {
-        return $this->esiLink;
-    }
-
-    public function setEsiLink(?string $url): self
-    {
-        $this->esiLink = $url;
+        $this->esiHash = $url;
 
         return $this;
     }

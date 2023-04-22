@@ -106,7 +106,7 @@ class SubmitController
         if (str_starts_with($this->inputUrl, $this->esiBaseUrl)) {
             $esiUrl = $this->inputUrl;
         } elseif (!empty($this->killboardBaseUrl) && str_starts_with($this->inputUrl, $this->killboardBaseUrl)) {
-            $esiUrl = $this->apiService->getEsiUrlFromKillboard($this->inputUrl);
+            $esiUrl = $this->apiService->getEsiUrlFromZKillboardUrl($this->inputUrl);
             if (!$esiUrl) {
                 $this->flashMessage->addMessage(
                     'Could not get ESI URL from zKillboard URL.',
@@ -122,23 +122,19 @@ class SubmitController
         // Create request
         $request = new Request();
         $request
+            ->setId($this->apiService->getKillIdFromEsiUrl($esiUrl))
             ->setCreated(new \DateTime())
             ->setStatus(Type::EVALUATING)
             ->setUser($user)
             ->setDivision($division)
             ->setDetails($this->inputDetails)
-            ->setEsiLink($esiUrl);
+            ->setEsiHash($this->apiService->getHashFromEsiUrl($esiUrl));
         if (!$this->setDataFromEsi($request, $esiUrl)) {
             return null;
         }
 
-        // Check if request exists already. zKill URL check is needed for migrated data where the ESI URL is missing.
-        $exists1 = $this->requestRepository->findOneBy(['esiLink' => $esiUrl]);
-        $exists2 = null;
-        if ($request->getKillboardUrl()) {
-            $exists2 = $this->requestRepository->findOneBy(['killboardUrl' => $request->getKillboardUrl()]);
-        }
-        if ($exists1 || $exists2) {
+        // Check if request exists already.
+        if ($this->requestRepository->find($request->getId())) {
             $this->flashMessage->addMessage('This request already exists.', FlashMessage::TYPE_WARNING);
             return null;
         }
@@ -215,9 +211,6 @@ class SubmitController
             ->setCorporationName($corporationData->name)
             ->setAllianceId($corporationData->alliance_id ?? null)
             ->setAllianceName($allianceData?->name);
-        if ($this->killboardBaseUrl) {
-            $request->setKillboardUrl("$this->killboardBaseUrl/kill/$killMailData->killmail_id/");
-        }
 
         return true;
     }

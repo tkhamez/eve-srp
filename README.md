@@ -1,6 +1,7 @@
 # EVE-SRP
 
-A Ship-Replacement-Program application for [EVE Online](https://www.eveonline.com).
+A Ship-Replacement-Program application for [EVE Online](https://www.eveonline.com) with optional 
+[zKillboard](https://github.com/zKillboard/zKillboard) integration. 
 
 <!-- toc -->
 
@@ -65,6 +66,8 @@ optionally additional alternative characters for which the user can submit reque
 
 ## Development Environment
 
+Only tested on Linux.
+
 ```
 docker-compose up
 ```
@@ -122,9 +125,9 @@ INSERT INTO eve_srp.characters (id, user_id, name, main) SELECT id, user_id, nam
 INSERT INTO eve_srp.divisions (id, name) SELECT id, name FROM evesrp.division;
 INSERT INTO eve_srp.requests
     (id, user_id, division_id, created, character_id, corporation_name, alliance_name, ship, kill_time, 
-     solar_system, killboard_url, details, status, base_payout, payout)
+     solar_system, details, status, base_payout, payout)
     SELECT id, submitter_id, division_id, timestamp, pilot_id, corporation, alliance, ship_type, kill_timestamp, 
-           `system`, killmail_url, details, status, base_payout, payout
+           `system`, details, status, base_payout, payout
     FROM evesrp.request;
 INSERT INTO eve_srp.actions (id, user_id, request_id, created, category, note)
     SELECT id, user_id, request_id, timestamp, type_, note FROM evesrp.action;
