@@ -40,7 +40,7 @@ class EsiProvider implements ProviderInterface
         try {
             $result = $this->httpClient->request(
                 'GET',
-                "{$this->esiBaseUrl}latest/characters/$eveCharacterId/?datasource=tranquility"
+                "$this->esiBaseUrl/latest/characters/$eveCharacterId/?datasource=tranquility"
             );
         } catch (GuzzleException $e) {
             throw new Exception('EsiProvider::getGroups: ' . $e->getMessage());

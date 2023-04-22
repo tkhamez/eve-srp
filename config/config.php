@@ -32,6 +32,6 @@ return [
 
     // other stuff
     'HTTP_USER_AGENT'     => $_ENV['EVE_SRP_HTTP_USER_AGENT'] ?? 'EVE-SRP (https://github.com/tkhamez/eve-srp)',
-    'ESI_BASE_URL'        => 'https://esi.evetech.net/',
+    'ESI_BASE_URL'        => 'https://esi.evetech.net',
     'ZKILLBOARD_BASE_URL' => $_ENV['EVE_SRP_ZKILLBOARD_URL'] ?? 'https://zkillboard.com',
 ];

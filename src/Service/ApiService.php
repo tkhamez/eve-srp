@@ -31,7 +31,7 @@ class ApiService
     {
         $this->lastError = '';
 
-        $url = str_starts_with($url, 'http') ? $url : $this->esiBaseUrl . $url;
+        $url = str_starts_with($url, 'http') ? $url : "$this->esiBaseUrl/$url";
         try {
             $apiResponse = $this->httpClient->request('GET', $url);
         } catch (GuzzleException $e) {
@@ -73,6 +73,6 @@ class ApiService
             return null;
         }
 
-        return "{$this->esiBaseUrl}latest/killmails/$killId/{$killboardData[0]->zkb->hash}/";
+        return "$this->esiBaseUrl/latest/killmails/$killId/{$killboardData[0]->zkb->hash}/";
     }
 }

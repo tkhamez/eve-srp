@@ -288,7 +288,7 @@ class KillMailService
         $type = $this->esiTypeRepository->find($id);
 
         if ($type === null) {
-            $data = $this->apiService->getJsonData("{$this->esiBaseUrl}latest/universe/types/$id");
+            $data = $this->apiService->getJsonData("$this->esiBaseUrl/latest/universe/types/$id");
             if ($data) {
                 $type = new EsiType();
                 $type->setId($id)->setName($data->name);
