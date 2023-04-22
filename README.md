@@ -1,19 +1,32 @@
 # EVE-SRP
 
-A Ship-Replacement-Programm application for [EVE Online](https://www.eveonline.com).
+A Ship-Replacement-Program application for [EVE Online](https://www.eveonline.com).
+
+<!-- toc -->
+
+- [Install](#install)
+  * [Permissions](#permissions)
+  * [Error logging](#error-logging)
+- [Provider](#provider)
+- [Development Environment](#development-environment)
+  * [Install Backend](#install-backend)
+  * [Build Frontend](#build-frontend)
+- [Migration from paxswill/evesrp](#migration-from-paxswillevesrp)
+
+<!-- tocstop -->
 
 ## Install
 
-To run the application you need a web server with support for PHP >=8.0 and URL rewriting, and a database supported by 
-[Doctrine ORM](https://www.doctrine-project.org/projects/doctrine-orm/en/latest/index.html) 
-(tested with MariaDB 10.6).
+To run the application you need a Linux OS (others may work but were not tested), a web server with support 
+for PHP >=8.0 and URL rewriting, and a database supported by 
+[Doctrine ORM](https://www.doctrine-project.org/projects/doctrine-orm/en/latest/index.html) (tested with MariaDB 10.6).
 
 - Create an EVE application at https://developers.eveonline.com, no scopes required. Set the callback URL to
   `https://your.domain.tld/auth`.
 - Clone the repository, build the frontend and backend (see below) - there will be pre-built releases later.
 - Copy `config/.env.dist` to `config/.env` and adjust values or set the corresponding environment variables.
-  At the very least set EVE_SRP_SSO_CLIENT_ID, EVE_SRP_SSO_CLIENT_SECRET and EVE_SRP_SSO_REDIRECT_URI, the rest 
-  works as is when using the Docker development environment.
+  At the very least set `EVE_SRP_SSO_CLIENT_ID`, `EVE_SRP_SSO_CLIENT_SECRET` and `EVE_SRP_SSO_REDIRECT_URI`, the rest 
+  works as it is when using the Docker development environment.
 - Install dependencies and generate Doctrine proxy classes with `composer install`.
 - Clear the template cache: `rm -R storage/compilation_cache`.
 - Make sure that the `storage` directory is writable by the webserver.
