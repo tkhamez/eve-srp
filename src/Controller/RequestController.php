@@ -332,15 +332,13 @@ class RequestController
             $action->setUser($this->userService->getAuthenticatedUser());
             $action->setCategory(Type::COMMENT);
 
-            if ($oldPayout === null) {
-                $action->setNote(
-                    'Set base payout to ' . number_format($newBasePayout) . ' ISK.'
-                );
-            } else {
+            if ($oldPayout) {
                 $action->setNote(
                     'Changed base payout from ' . number_format($oldPayout) . ' to ' .
                     number_format($newBasePayout) . ' ISK.'
                 );
+            } else {
+                $action->setNote('Set base payout to ' . number_format($newBasePayout) . ' ISK.');
             }
 
             $action->setRequest($request);
