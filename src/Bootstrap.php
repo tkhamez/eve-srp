@@ -28,6 +28,7 @@ class Bootstrap
      */
     public function __construct()
     {
+        date_default_timezone_set('UTC');
         ini_set('display_errors', '0');
         ini_set('log_errors', '1');
         ini_set('error_log', ROOT_DIR . '/storage/error-' . date('Ym') . '.log');
