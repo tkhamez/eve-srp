@@ -14,7 +14,7 @@
     <div>
         <h6 class="mt-3">{{ slot }}</h6>
         {% for itemSlot in itemsInSlot %}
-            <div>
+            <div class="small">
                 {% for item in itemSlot %}
                     <img src="https://images.evetech.net/types/{{ item.item_type_id }}/icon?size=32" alt="item icon">
                     {{ item.item_type_name }}
