@@ -9,7 +9,6 @@ return [
     ['get', '/ping',   EveSrp\Controller\PingController::class],
 
     ['get',  '/',             [EveSrp\Controller\ListsController::class, 'myRequests']],
-    ['get',  '/my-requests',  [EveSrp\Controller\ListsController::class, 'myRequests']],
     ['get',  '/submit',       [EveSrp\Controller\SubmitController::class, 'showForm']],
     ['post', '/submit',       [EveSrp\Controller\SubmitController::class, 'submitForm']],
     ['get',  '/review',       [EveSrp\Controller\ListsController::class, 'review']],
