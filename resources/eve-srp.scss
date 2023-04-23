@@ -11,6 +11,9 @@
     // Colors were taken from the Bootswatch Cyborg theme.
     --srp-link-color: #2a9fd6;
     --srp-link-color-hover: #227fab;
+
+    --srp-max-width: 1600px;
+    --srp-footer-height: 51px;
 }
 
 // Layout
@@ -22,15 +25,17 @@ html {
 }
 
 body {
-    margin-bottom: 70px; // footer height with a margin
+    margin-bottom: calc(var(--srp-footer-height) + 19px);
+    max-width: var(--srp-max-width);
 }
 
 .srp-page-footer {
     border-top: 1px solid grey;
     position: absolute;
     bottom: 0;
-    width: calc(100% - 30px);
-    max-height: 51px;
+    width: 100%;
+    max-width: calc(min(var(--srp-max-width), 100%) - var(--bs-gutter-x));
+    max-height: var(--srp-footer-height);
     overflow-y: auto;
 
     .github {

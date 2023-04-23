@@ -9,6 +9,7 @@
     </head>
     <body class="container-fluid bg-dark text-light">
         {% block main %}{% endblock %}
+        {% include 'components/footer.html' with {} only %}
         {{ include('js.html') }}
     </body>
 </html>
