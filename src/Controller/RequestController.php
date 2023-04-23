@@ -280,7 +280,7 @@ class RequestController
             $srpRequest->getStatus() === Type::INCOMPLETE &&
             $newComment !== ''
         ) {
-            return Type::EVALUATING;
+            return Type::IN_PROGRESS;
         }
         return $newStatus;
     }
@@ -292,6 +292,10 @@ class RequestController
         ?int $newBasePayout,
         string $newComment,
     ): void {
+        if ($request->getStatus() !== Type::INCOMPLETE) { // check old status
+            $request->setLastEditor($this->userService->getAuthenticatedUser());
+        }
+
         if ($newDivision !== null) {
             $division = $this->divisionRepository->find($newDivision);
             $oldDivision = $request->getDivision();

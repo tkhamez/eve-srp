@@ -56,7 +56,7 @@ class GlobalData
 
     public function statuses(): array
     {
-        return [Type::INCOMPLETE, Type::EVALUATING, Type::APPROVED, Type::REJECTED, Type::PAID];
+        return [Type::INCOMPLETE, Type::OPEN, Type::IN_PROGRESS, Type::APPROVED, Type::PAID, Type::REJECTED];
     }
 
     private function getUser(): ?User

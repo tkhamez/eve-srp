@@ -18,6 +18,9 @@
                 <th>Division</th>
                 <th>Status</th>
                 <th class="text-end">Payout</th>
+                {% if pageActive == 'in_progress' %}
+                    <th>Last Editor</th>
+                {% endif %}
             </tr>
         </thead>
         <tbody>
@@ -46,6 +49,9 @@
                         {{ request.payout|number_format }}
                     {% endif %}
                 </td>
+                {% if pageActive == 'in_progress' %}
+                    <td>{{ request.lastEditor.name }}</td>
+                {% endif %}
             </tr>
         {%  endfor %}
         </tbody>

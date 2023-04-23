@@ -39,9 +39,14 @@ class ListsController
     /**
      * @noinspection PhpUnusedParameterInspection
      */
-    public function review(ServerRequestInterface $request, ResponseInterface $response): ResponseInterface
+    public function open(ServerRequestInterface $request, ResponseInterface $response): ResponseInterface
     {
-       return $this->showList($response, Type::EVALUATING, Permission::REVIEW, 'review');
+       return $this->showList($response, Type::OPEN, Permission::REVIEW, 'open', 'Open Requests');
+    }
+
+    public function inProgress(ServerRequestInterface $request, ResponseInterface $response): ResponseInterface
+    {
+        return $this->showList($response, Type::IN_PROGRESS, Permission::REVIEW, 'in_progress', 'In Progress');
     }
 
     /**
@@ -49,10 +54,10 @@ class ListsController
      */
     public function pay(ServerRequestInterface $request, ResponseInterface $response): ResponseInterface
     {
-        return $this->showList($response, Type::APPROVED, Permission::PAY, 'pay');
+        return $this->showList($response, Type::APPROVED, Permission::PAY, 'pay', 'Pay');
     }
 
-    private function showList($response, $status, $role, $page): ResponseInterface
+    private function showList($response, $status, $role, $page, $pageName): ResponseInterface
     {
         $divisions = array_map(function (Division $division) {
             return $division->getId();
@@ -63,7 +68,7 @@ class ListsController
             'division' => $divisions
         ], ['created' => 'ASC']);
 
-        return $this->renderView($response, $requests, $page, ucfirst($page));
+        return $this->renderView($response, $requests, $page, $pageName);
     }
 
     private function renderView($response, $requests, $page, $pageName): ResponseInterface

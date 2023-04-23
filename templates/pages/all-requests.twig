@@ -53,6 +53,7 @@
         </div>
     </form>
     {% include 'components/request-list.twig' with {
+        pageActive: pageActive,
         requests: requests,
         sort: 'down',
         pagerCurrentPage: pagerCurrentPage,

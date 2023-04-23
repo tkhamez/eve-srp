@@ -25,8 +25,12 @@
                     {% endif %}
                     {% if hasRole('review') %}
                         <li class="nav-item">
-                            <a class="nav-link {% if active_page == 'review' %}active{% endif%}"
-                               href="/review">Review</a>
+                            <a class="nav-link {% if active_page == 'open' %}active{% endif%}"
+                               href="/open">Open</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link {% if active_page == 'in_progress' %}active{% endif%}"
+                               href="/in-progress">In Progress</a>
                         </li>
                     {% endif %}
                     {% if hasRole('pay') %}

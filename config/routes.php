@@ -11,7 +11,8 @@ return [
     ['get',  '/',             [EveSrp\Controller\ListsController::class, 'myRequests']],
     ['get',  '/submit',       [EveSrp\Controller\SubmitController::class, 'showForm']],
     ['post', '/submit',       [EveSrp\Controller\SubmitController::class, 'submitForm']],
-    ['get',  '/review',       [EveSrp\Controller\ListsController::class, 'review']],
+    ['get',  '/open',         [EveSrp\Controller\ListsController::class, 'open']],
+    ['get',  '/in-progress',  [EveSrp\Controller\ListsController::class, 'inProgress']],
     ['get',  '/pay',          [EveSrp\Controller\ListsController::class, 'pay']],
     ['get',  '/all-requests', EveSrp\Controller\AllRequestsController::class],
 

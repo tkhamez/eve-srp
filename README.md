@@ -127,7 +127,7 @@ INSERT INTO eve_srp.requests
     (id, user_id, division_id, created, character_id, corporation_name, alliance_name, ship, kill_time, 
      solar_system, details, status, base_payout, payout)
     SELECT id, submitter_id, division_id, timestamp, pilot_id, corporation, alliance, ship_type, kill_timestamp, 
-           `system`, details, status, base_payout, payout
+           `system`, details, IF(status = 'evaluating', 'open', status), base_payout, payout
     FROM evesrp.request;
 INSERT INTO eve_srp.actions (id, user_id, request_id, created, category, note)
     SELECT id, user_id, request_id, timestamp, type_, note FROM evesrp.action;

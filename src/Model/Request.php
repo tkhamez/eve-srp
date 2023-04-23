@@ -41,6 +41,12 @@ class Request
     private ?User $user = null;
 
     /**
+     * @ORM\ManyToOne(targetEntity="User")
+     * @ORM\JoinColumn(name="last_editor")
+     */
+    private ?User $lastEditor = null;
+
+    /**
      * @ORM\OneToMany(targetEntity="Action", mappedBy="request")
      * @ORM\OrderBy({"created" = "DESC"})
      */
@@ -171,16 +177,31 @@ class Request
         return $this;
     }
 
-    public function getUser(): ?User
-    {
-        return $this->user;
-    }
-
     public function setUser(User $user): self
     {
         $this->user = $user;
 
         return $this;
+    }
+
+    public function getUser(): ?User
+    {
+        return $this->user;
+    }
+
+    public function setLastEditor(User $lastEditor): self
+    {
+        $this->lastEditor = $lastEditor;
+
+        return $this;
+    }
+
+    /**
+     * @noinspection PhpUnused
+     */
+    public function getLastEditor(): ?User
+    {
+        return $this->lastEditor;
     }
 
     /**

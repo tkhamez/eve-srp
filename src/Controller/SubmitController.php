@@ -124,7 +124,7 @@ class SubmitController
         $request
             ->setId($this->apiService->getKillIdFromEsiUrl($esiUrl))
             ->setCreated(new \DateTime())
-            ->setStatus(Type::EVALUATING)
+            ->setStatus(Type::OPEN)
             ->setUser($user)
             ->setDivision($division)
             ->setDetails($this->inputDetails)

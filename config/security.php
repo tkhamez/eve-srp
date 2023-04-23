@@ -14,9 +14,10 @@ return [
     '/login'    => [Security::ROLE_ANY],
     '/auth'     => [Security::ROLE_ANY],
 
-    '/submit'   => [Permission::SUBMIT],
-    '/review'   => [Permission::REVIEW],
-    '/pay'      => [Permission::PAY],
+    '/submit'       => [Permission::SUBMIT],
+    '/open'         => [Permission::REVIEW],
+    '/in-progress'  => [Permission::REVIEW],
+    '/pay'          => [Permission::PAY],
     '/all-requests' => [Permission::REVIEW, Permission::PAY, Permission::ADMIN, Security::GLOBAL_ADMIN],
 
     '/request/' => [Permission::SUBMIT, Permission::REVIEW, Permission::PAY],

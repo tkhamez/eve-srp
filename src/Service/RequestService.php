@@ -60,28 +60,35 @@ class RequestService
         // New status based on current status
         $newStatuses = [];
         if ($request->getStatus() === Type::INCOMPLETE) {
-            $newStatuses = [Type::EVALUATING];
+            $newStatuses = [Type::INCOMPLETE, Type::IN_PROGRESS];
         }
-        if ($request->getStatus() === Type::EVALUATING) {
-            $newStatuses = [Type::INCOMPLETE, Type::APPROVED, Type::REJECTED];
+        if ($request->getStatus() === Type::OPEN || $request->getStatus() === Type::IN_PROGRESS) {
+            $newStatuses = [Type::INCOMPLETE, Type::OPEN, Type::IN_PROGRESS, Type::APPROVED, Type::REJECTED];
         }
         if ($request->getStatus() === Type::APPROVED) {
-            $newStatuses = [Type::EVALUATING, Type::PAID];
+            $newStatuses = [Type::OPEN, Type::IN_PROGRESS, Type::APPROVED, Type::PAID];
         }
         if ($request->getStatus() === Type::REJECTED) {
-            $newStatuses = [Type::EVALUATING];
+            $newStatuses = [Type::OPEN, Type::IN_PROGRESS];
         }
         if ($request->getStatus() === Type::PAID) {
-            $newStatuses = [Type::EVALUATING];
+            $newStatuses = [Type::OPEN, Type::IN_PROGRESS];
         }
 
         // Status based on permission
         $permissionStatues = [];
         if (in_array(Permission::REVIEW, $permissions)) {
-            array_push($permissionStatues, Type::INCOMPLETE, Type::EVALUATING, Type::APPROVED, Type::REJECTED);
+            array_push(
+                $permissionStatues,
+                Type::INCOMPLETE,
+                Type::OPEN,
+                Type::IN_PROGRESS,
+                Type::APPROVED,
+                Type::REJECTED
+            );
         }
         if (in_array(Permission::PAY, $permissions)) {
-            array_push($permissionStatues, Type::EVALUATING, Type::APPROVED, Type::PAID);
+            array_push($permissionStatues, Type::OPEN, Type::IN_PROGRESS, Type::APPROVED, Type::PAID);
         }
 
         $statuses = array_intersect($newStatuses, $permissionStatues);
@@ -93,7 +100,7 @@ class RequestService
     {
         return
             $this->userService->hasDivisionRole($request->getDivision(), Permission::REVIEW) &&
-            $request->getStatus() == Type::EVALUATING;
+            in_array($request->getStatus(), [Type::OPEN, Type::IN_PROGRESS]) ;
     }
 
     public function mayAddComment(Request $request): bool
@@ -108,7 +115,7 @@ class RequestService
         // Editor permission
         if (
             (
-                $request->getStatus() === Type::EVALUATING &&
+                in_array($request->getStatus(), [Type::OPEN, Type::IN_PROGRESS]) &&
                 $this->userService->hasAnyDivisionRole($request->getDivision(), [Permission::REVIEW])
             ) || (
                 $request->getStatus() === Type::APPROVED &&
