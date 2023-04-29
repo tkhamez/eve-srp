@@ -53,7 +53,12 @@
         </tr>
         <tr>
             <th>Payout</th>
-            <td>{{ request.payout ? (request.payout|number_format ~ ' ISK') : '' }}</td>
+            <td>
+                {% if request.payout %}
+                    {{ request.payout|number_format }} ISK
+                    {% include 'components/clipboard-copy.twig' with { text: request.payout } only %}
+                {% endif %}
+            </td>
         </tr>
     </table>
 

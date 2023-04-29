@@ -4,6 +4,7 @@ import Choices from "choices.js";
 window.addEventListener('load', () => {
     EveSrp.initPopover();
     EveSrp.initMultiselect();
+    EveSrp.initCopyText();
     EveSrp.initPageAdminDivisions();
     EveSrp.initPageSubmit();
     EveSrp.initPageRequest();
@@ -22,6 +23,24 @@ window.EveSrp = {
             new Choices(select, {
                 removeItemButton: true,
                 allowHTML: false,
+            });
+        });
+    },
+
+    initCopyText: () => {
+        document.querySelectorAll('.srp-copy-text').forEach((copyText) => {
+            copyText.addEventListener('click', () => {
+                if (!navigator.clipboard) {
+                    return;
+                }
+                navigator.clipboard.writeText(copyText.dataset.text).then(() => {
+                    copyText.classList.remove('bi-clipboard');
+                    copyText.classList.add('bi-check2');
+                    window.setTimeout(() => {
+                        copyText.classList.remove('bi-check2');
+                        copyText.classList.add('bi-clipboard');
+                    }, 1000)
+                });
             });
         });
     },

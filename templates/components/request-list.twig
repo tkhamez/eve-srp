@@ -63,6 +63,7 @@
                 <td class="text-end">
                     {% if request.payout is not null %}
                         {{ request.payout|number_format }}
+                        {% include 'components/clipboard-copy.twig' with { text: request.payout } only %}
                     {% endif %}
                 </td>
                 {% if pageActive == 'in_progress' %}
