@@ -3,10 +3,11 @@
     <tr>
         <th>Submitter</th>
         <td>
-            <span title="#{{ request.user.id }}">{{ request.user.name }}</span>
-            {% if request.user.name is empty %}
-                #{{ request.user.id }}
+            {% if request.user.name is not empty %}
+                <a title="All Requests from user" href="/all-requests?user={{ request.user.name|url_encode }}&submit">
+                    {{ request.user.name }}</a>
             {% endif %}
+            <span class="text-muted">#{{ request.user.id }}</span>
         </td>
     </tr>
     <tr>
