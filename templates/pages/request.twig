@@ -16,14 +16,14 @@
             <div class="col-12 col-lg-7">
                 <div class="card bg-dark mb-3 border-light">
                     <div class="card-body">
-                        {% include 'pages/parts/request--data.twig' with { 'request': request } only %}
+                        {% include 'pages/request--data.twig' with { 'request': request } only %}
                     </div>
                 </div>
             </div>
             <div class="col-12 col-lg-5">
                 <div class="card bg-dark border-light">
                     <div class="card-body">
-                        {% include 'pages/parts/request--ship.twig' with {
+                        {% include 'pages/request--ship.twig' with {
                             'shipName': request.ship,
                             'shipTypeId': shipTypeId,
                             'items': items,
