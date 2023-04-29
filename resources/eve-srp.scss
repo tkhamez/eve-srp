@@ -9,7 +9,7 @@
     --srp-bg-color-2: #2c3034; // lighter, color of odd table rows
 
     // Colors were taken from the Bootswatch Cyborg theme.
-    --srp-link-color: #2a9fd6;
+    --srp-link-color: #2a9fd6; // also used in .srp-external-link
     --srp-link-color-hover: #227fab;
 
     --srp-max-width: 1600px;
@@ -58,13 +58,13 @@ a {
     }
 }
 
-.srp-external-link:after {
-    //noinspection CssNoGenericFontName
-    font-family: bootstrap-icons;
-    display: inline-block; // removes underline
-    margin-left: 2px;
-    font-size: 0.8em;
-    content: '\F1C5'; // bi bi-box-arrow-up-right
+.srp-external-link {
+    // bi bi-box-arrow-up-right
+    background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" fill="%232a9fd6" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M8.636 3.5a.5.5 0 0 0-.5-.5H1.5A1.5 1.5 0 0 0 0 4.5v10A1.5 1.5 0 0 0 1.5 16h10a1.5 1.5 0 0 0 1.5-1.5V7.864a.5.5 0 0 0-1 0V14.5a.5.5 0 0 1-.5.5h-10a.5.5 0 0 1-.5-.5v-10a.5.5 0 0 1 .5-.5h6.636a.5.5 0 0 0 .5-.5z"/><path fill-rule="evenodd" d="M16 .5a.5.5 0 0 0-.5-.5h-5a.5.5 0 0 0 0 1h3.793L6.146 9.146a.5.5 0 1 0 .708.708L15 1.707V5.5a.5.5 0 0 0 1 0v-5z"/></svg>');
+    background-position: 100%;
+    background-size: 0.825em;
+    background-repeat: no-repeat;
+    padding-right: 1em;
 }
 
 .srp-bg-dark-2 {
@@ -89,6 +89,7 @@ a {
     background-color: var(--srp-bg-color-2);
 }
 .form-select {
+    // $form-select-indicator
     background-image: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'><path fill='none' stroke='lightgrey' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='m2 5 6 6 6-6'/></svg>");
 }
 
