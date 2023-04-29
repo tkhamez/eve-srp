@@ -71,6 +71,11 @@ a {
     background-color: var(--srp-bg-color-2);
 }
 
+.srp-text-with-title {
+    text-decoration: underline;
+    text-decoration-style: dotted;
+}
+
 // Libraries
 
 .form-control,

@@ -319,4 +319,15 @@ class UserService
 
         return false;
     }
+
+    public function getMain(int $characterId): ?Character
+    {
+        $character = $this->characterRepository->find($characterId);
+        foreach ($character?->getUser()?->getCharacters() ?? [] as $char) {
+            if ($char->getMain()) {
+                return $char;
+            }
+        }
+        return null;
+    }
 }

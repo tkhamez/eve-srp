@@ -25,9 +25,12 @@
         </thead>
         <tbody>
         {% for request in requests %}
+            {% set main = getMainIfDifferent(request.character.id) %}
             <tr>
                 <td><a href="/request/{{ request.id }}">{{ request.ship }}</a></td>
-                <td>{{ request.character.name }}</td>
+                <td title="{{ main ? 'Main: ' ~ main : '' }}" class="{{ main ? 'srp-text-with-title' : '' }}">
+                    {{ request.character.name }}
+                </td>
                 <td>{{ request.solarSystem }}</td>
                 <td>{% include 'components/timestamp.twig' with { 'timestamp': request.killTime } only %}</td>
                 <td>

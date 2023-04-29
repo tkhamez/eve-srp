@@ -37,6 +37,7 @@ class Extension extends AbstractExtension
             new TwigFunction('flashMessages', [$this, 'flashMessages']),
             new TwigFunction('zKillboardUrl', [$this, 'zKillboardUrl']),
             new TwigFunction('esiUrl', [$this, 'esiUrl']),
+            new TwigFunction('getMainIfDifferent', [$this, 'getMainIfDifferent']),
         ];
     }
 
@@ -111,5 +112,11 @@ class Extension extends AbstractExtension
     public function esiUrl(Request $request): string
     {
         return $this->apiService->getEsiKillUrl($request->getId(), (string)$request->getEsiHash());
+    }
+
+    public function getMainIfDifferent(int $characterId): string
+    {
+        $main = $this->userService->getMain($characterId);
+        return $main && $main->getId() !== $characterId ? $main->getName() : '';
     }
 }
