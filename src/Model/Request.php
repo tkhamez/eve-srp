@@ -12,7 +12,15 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Entity
- * @ORM\Table(name="requests", options={"charset"="utf8mb4", "collate"="utf8mb4_unicode_520_ci"})
+ * @ORM\Table(
+ *     name="requests",
+ *     options={"charset"="utf8mb4", "collate"="utf8mb4_unicode_520_ci"},
+ *     indexes={
+ *         @ORM\Index(name="requests_status_idx", columns={"status"}),
+ *         @ORM\Index(name="requests_corporation_name_idx", columns={"corporation_name"}),
+ *         @ORM\Index(name="requests_ship_idx", columns={"ship"})
+ *     }
+ * )
  */
 class Request
 {

@@ -7,6 +7,7 @@ window.addEventListener('load', () => {
     EveSrp.initPageAdminDivisions();
     EveSrp.initPageSubmit();
     EveSrp.initPageRequest();
+    EveSrp.initPageAllRequests();
     window.setInterval(EveSrp.ping, 300000); // 5 minutes
 });
 
@@ -70,6 +71,17 @@ window.EveSrp = {
                     evt.target.selectionEnd = newPosition;
                 })
             }
+        }
+    },
+
+    initPageAllRequests: () => {
+        const element = document.getElementById('searchFormReset');
+        if (element) {
+            element.addEventListener('click', () => {
+                document.querySelectorAll('form select, form input').forEach((select) => {
+                    select.value = '';
+                });
+            });
         }
     },
 

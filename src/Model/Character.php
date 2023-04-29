@@ -8,7 +8,13 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Entity
- * @ORM\Table(name="characters", options={"charset"="utf8mb4", "collate"="utf8mb4_unicode_520_ci"})
+ * @ORM\Table(
+ *     name="characters",
+ *     options={"charset"="utf8mb4", "collate"="utf8mb4_unicode_520_ci"},
+ *     indexes={
+ *         @ORM\Index(name="characters_name_idx", columns={"name"})
+ *     }
+ * )
  */
 class Character
 {

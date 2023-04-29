@@ -6,7 +6,9 @@ namespace EveSrp\Controller;
 
 use EveSrp\Controller\Traits\RequestParameter;
 use EveSrp\Controller\Traits\TwigResponse;
+use EveSrp\Model\Character;
 use EveSrp\Model\Division;
+use EveSrp\Model\User;
 use EveSrp\Repository\CharacterRepository;
 use EveSrp\Repository\DivisionRepository;
 use EveSrp\Repository\RequestRepository;
@@ -40,9 +42,11 @@ class AllRequestsController
 
         if ($this->paramGet($request, 'submit') !== null) {
             $inputStatus = (string)$this->paramGet($request, 'status');
-            $inputDivision = (int)$this->paramGet($request, 'division', '0');
-            $inputUser = (string)$this->paramGet($request, 'user');
-            $inputPilot = (string)$this->paramGet($request, 'pilot');
+            $inputDivision = (string)$this->paramGet($request, 'division', '');
+            $inputShip = trim((string)$this->paramGet($request, 'ship'));
+            $inputPilot = trim((string)$this->paramGet($request, 'pilot'));
+            $inputCorporation = trim((string)$this->paramGet($request, 'corporation'));
+            $inputUser = trim((string)$this->paramGet($request, 'user'));
             $currentPage = max(1, ((int)$this->paramGet($request, 'page', '1')));
 
             // check division permission
@@ -58,31 +62,48 @@ class AllRequestsController
             if ($inputStatus !== '') {
                 $criteria['status'] = $inputStatus;
             }
-            if ($inputDivision === 0) {
+            if ($inputDivision === '') {
                 $criteria['division'] = $allDivisions;
             } else {
-                $criteria['division'] = $inputDivision === -1 ? null : $inputDivision;
+                $criteria['division'] = $inputDivision === '-1' ? null : (int)$inputDivision;
             }
-            if ($inputUser) {
-                $criteria['user'] = $this->getUserId($inputUser);
+            if (mb_strlen($inputShip) > 2) {
+                $criteria['ship'] = "$inputShip%";
+            } else {
+                $inputShip = '';
             }
-            if ($inputPilot) {
-                $criteria['character'] = $this->getCharacterId($inputPilot);
+            if (mb_strlen($inputPilot) > 2) {
+                $criteria['character'] = $this->getCharacterIds("$inputPilot%");
+            } else {
+                $inputPilot = '';
+            }
+            if (mb_strlen($inputCorporation) > 2) {
+                $criteria['corporationName'] = "$inputCorporation%";
+            } else {
+                $inputCorporation = '';
+            }
+            if (mb_strlen($inputUser) > 2) {
+                $criteria['user'] = $this->getUserIds("$inputUser%");
+            } else {
+                $inputUser = '';
             }
             $limit = 100;
-            $totalRequests = $this->requestRepository->count($criteria);
+            $totalRequests = $this->requestRepository->countByCriteria($criteria);
             $totalPages = ceil($totalRequests / $limit);
             $currentPage = min($totalPages, $currentPage);
-            $offset = max(0, ($limit * $currentPage) - $limit);
+            $offset = (int)max(0, ($limit * $currentPage) - $limit);
 
-            $pagerLink = "?division=$inputDivision&status=$inputStatus&user=$inputUser&pilot=$inputPilot&submit&page=";
-            $requests = $this->requestRepository->findBy($criteria, ['created' => 'DESC'], $limit, $offset);
+            $pagerLink = "?division=$inputDivision&status=$inputStatus&ship=$inputShip&pilot=$inputPilot" .
+                "&corporation=$inputCorporation&user=$inputUser&submit&page=";
+            $requests = $this->requestRepository->findByCriteria($criteria, $limit, $offset);
         }
 
         return $this->render($response, 'pages/all-requests.twig', [
             'divisions' => $divisions,
             'inputDivision' => $inputDivision ?? 0,
             'inputStatus' => $inputStatus ?? '',
+            'inputShip' => $inputShip ?? null,
+            'inputCorporation' => $inputCorporation ?? null,
             'inputUser' => $inputUser ?? null,
             'inputPilot' => $inputPilot ?? null,
             'requests' => $requests ?? [],
@@ -92,15 +113,23 @@ class AllRequestsController
         ]);
     }
 
-    private function getUserId(string $name): ?int
+    /**
+     * @return int[]
+     */
+    private function getUserIds(string $name): array
     {
-        $result = $this->userRepository->findOneBy(['name' => $name]);
-        return $result?->getId();
+        return array_map(function (User $user) {
+            return $user->getId();
+        }, $this->userRepository->findByName($name));
     }
 
-    private function getCharacterId(string $name): ?int
+    /**
+     * @return int[]
+     */
+    private function getCharacterIds(string $name): array
     {
-        $result = $this->characterRepository->findOneBy(['name' => $name]);
-        return $result?->getId();
+        return array_map(function (Character $user) {
+            return $user->getId();
+        }, $this->characterRepository->findByName($name));
     }
 }

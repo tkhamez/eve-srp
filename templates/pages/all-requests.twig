@@ -14,7 +14,7 @@
                 <div class="mb-3">
                     <label for="inputDivision" class="form-label">Division</label>
                     <select class="form-select" id="inputDivision" name="division">
-                        <option value="0" {% if inputDivision == 0 %}selected{% endif %}>all</option>
+                        <option value="" {% if inputDivision == '' %}selected{% endif %}>all</option>
                         {% if hasRole('global-admin') %}
                             <option value="-1" {% if inputDivision == -1 %}selected{% endif %}>
                                 (without division)
@@ -36,19 +36,38 @@
                         {% endfor %}
                     </select>
                 </div>
-                <button type="submit" name="submit" class="btn btn-primary">Show</button>
             </div>
+            {% set textPlaceholder = 'starts-with search, at least 3 characters' %}
             <div class="col">
                 <div class="mb-3">
-                    <label for="inputUser" class="form-label">User</label>
-                    <input type="text" name="user" class="form-control" id="inputUser" value="{{ inputUser }}"
-                           placeholder="Full main character name">
+                    <label for="inputShip" class="form-label">Ship</label>
+                    <input type="text" name="ship" class="form-control" id="inputShip" value="{{ inputShip }}"
+                           minlength="3" placeholder="{{ textPlaceholder }}">
                 </div>
                 <div class="mb-3">
                     <label for="inputPilot" class="form-label">Pilot</label>
                     <input type="text" name="pilot" class="form-control" id="inputPilot" value="{{ inputPilot }}"
-                           placeholder="Full pilot name">
+                           minlength="3" placeholder="{{ textPlaceholder }}">
                 </div>
+            </div>
+            <div class="col">
+                <div class="mb-3">
+                    <label for="inputCorporation" class="form-label">Corporation</label>
+                    <input type="text" name="corporation" class="form-control" id="inputCorporation"
+                           value="{{ inputCorporation }}"
+                           minlength="3" placeholder="{{ textPlaceholder }}">
+                </div>
+                <div class="mb-3">
+                    <label for="inputUser" class="form-label">User</label>
+                    <input type="text" name="user" class="form-control" id="inputUser" value="{{ inputUser }}"
+                           minlength="3" placeholder="{{ textPlaceholder }}">
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col text-center">
+                <button type="button" id="searchFormReset" class="btn btn-secondary">Reset</button>
+                <button type="submit" name="submit" class="btn btn-primary">Show</button>
             </div>
         </div>
     </form>

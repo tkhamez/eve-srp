@@ -14,4 +14,15 @@ use Doctrine\ORM\EntityRepository;
  */
 class UserRepository extends EntityRepository
 {
+    /**
+     * @return User[]
+     */
+    public function findByName(string $search): array
+    {
+        $qb = $this->createQueryBuilder('u');
+        $qb->where($qb->expr()->like('u.name', ':search'))
+            ->setParameter('search', $search);
+
+        return $qb->getQuery()->getResult();
+    }
 }
