@@ -18,12 +18,19 @@ class RequestRepository extends EntityRepository
     /**
      * @return Request[]
      */
-    public function findByCriteria(array $criteria, int $limit, int $offset): array
-    {
+    public function findByCriteria(
+        array $criteria,
+        int $limit = null,
+        int $offset = 0,
+        string $sort = 'created',
+        string $order = 'DESC',
+    ): array {
         $qb = $this->createQueryBuilder('r')
-            ->orderBy('r.created', 'DESC')
-            ->setMaxResults($limit) // don't use with JOIN
-            ->setFirstResult($offset);
+            ->setFirstResult($offset)
+            ->orderBy("r.$sort", $order);
+        if ($limit) {
+            $qb->setMaxResults($limit); // don't use with JOIN
+        }
         $this->addCriteria($qb, $criteria);
 
         return $qb->getQuery()->getResult();
