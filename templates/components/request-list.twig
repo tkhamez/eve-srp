@@ -17,6 +17,7 @@
             <tr>
                 <th>Ship</th>
                 <th>Pilot</th>
+                <th>Corporation</th>
                 <th>System</th>
                 <th>Kill Time</th>
                 <th>External URLs</th>
@@ -37,6 +38,7 @@
                 <td title="{{ main ? 'Main: ' ~ main : '' }}" class="{{ main ? 'srp-text-with-title' : '' }}">
                     {{ request.character.name }}
                 </td>
+                <td>{{ request.corporationName }}</td>
                 <td>{{ request.solarSystem }}</td>
                 <td>{% include 'components/link-nakamura.twig' with { timestamp: request.killTime } only %}</td>
                 <td>
