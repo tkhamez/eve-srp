@@ -1,9 +1,7 @@
-<a 
+<a
     href="{{ data.url('nakamura') }}/?#{{ timestamp|date('U') }}"
     target="_blank" 
     rel="noopener noreferrer"
     class="srp-external-link"
     title="Nakamura Time"
->
-    {{ timestamp|date(format|default('Y-m-d H:i')) }}
-</a>
+>{{ timestamp|date(format|default('Y-m-d H:i')) }}</a>

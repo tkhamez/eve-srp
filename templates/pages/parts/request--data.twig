@@ -13,26 +13,32 @@
     <tr>
         <th>Submitted Time</th>
         <td>
-            {% include 'components/timestamp.twig' with {
-                'timestamp': request.created,
-                'format': 'Y-m-d H:i e'
+            {% include 'components/link-nakamura.twig' with {
+                timestamp: request.created,
+                format: 'Y-m-d H:i e'
             } only %}
         </td>
     </tr>
     <tr>
         <th>Pilot</th>
         <td>
-            <a href="{{ data.url('evewho') }}/character/{{ request.character.id }}" class="srp-external-link"
-               title="EveWho" target="_blank" rel="noopener noreferrer">{{ request.character.name }}</a>,
+            {% include 'components/link-evewho.twig' with {
+                path: 'character/' ~ request.character.id,
+                name: request.character.name
+            } only %},
             {% if request.corporationId %}
-                <a href="{{ data.url('evewho') }}/corporation/{{ request.corporationId }}" class="srp-external-link"
-                   title="EveWho" target="_blank" rel="noopener noreferrer">{{ request.corporationName }}</a>,
+                {% include 'components/link-evewho.twig' with {
+                    path: 'corporation/' ~ request.corporationId,
+                    name: request.corporationName
+                } only %},
             {% else %}
                 {{ request.corporationName }},
             {% endif %}
             {% if request.allianceId %}
-                <a href="{{ data.url('evewho') }}/alliance/{{ request.allianceId }}" class="srp-external-link"
-                   title="EveWho" target="_blank" rel="noopener noreferrer">{{ request.allianceName }}</a>
+                {% include 'components/link-evewho.twig' with {
+                    path: 'alliance/' ~ request.allianceId,
+                    name: request.allianceName
+                } only %}
             {% elseif request.allianceName %}
                 {{ request.allianceName }}
             {% else %}
@@ -43,17 +49,19 @@
     <tr>
         <th>Kill Time</th>
         <td>
-            {% include 'components/timestamp.twig' with {
-                'timestamp': request.killTime,
-                'format': 'Y-m-d H:i e'
+            {% include 'components/link-nakamura.twig' with {
+                timestamp: request.killTime,
+                format: 'Y-m-d H:i e'
             } only %}
         </td>
     </tr>
     <tr>
         <th>System</th>
         <td>
-            <a href="{{ data.url('dotlan') }}/system/{{ request.solarSystem }}" class="srp-external-link"
-               title="Dotlan" target="_blank" rel="noopener noreferrer">{{ request.solarSystem }}</a>
+            {% include 'components/link-dotlan.twig' with {
+                path: 'system/' ~ request.solarSystem,
+                name: request.solarSystem
+            } only %}
         </td>
     </tr>
     <tr>

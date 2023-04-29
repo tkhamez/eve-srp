@@ -33,12 +33,12 @@
         {% for request in requests %}
             {% set main = getMainIfDifferent(request.character.id) %}
             <tr>
-                <td><a href="/request/{{ request.id }}">{{ request.ship }}</a></td>
+                <td><a href="/request/{{ request.id }}" title="Show request">{{ request.ship }}</a></td>
                 <td title="{{ main ? 'Main: ' ~ main : '' }}" class="{{ main ? 'srp-text-with-title' : '' }}">
                     {{ request.character.name }}
                 </td>
                 <td>{{ request.solarSystem }}</td>
-                <td>{% include 'components/timestamp.twig' with { 'timestamp': request.killTime } only %}</td>
+                <td>{% include 'components/link-nakamura.twig' with { timestamp: request.killTime } only %}</td>
                 <td>
                     {% if zKillboardUrl(request) %}
                         <a href="{{ zKillboardUrl(request) }}" target="_blank" rel="noopener noreferrer"
@@ -50,7 +50,7 @@
                            class="srp-external-link">ESI</a>
                     {% endif %}
                 </td>
-                <td>{% include 'components/timestamp.twig' with { 'timestamp': request.created } only %}</td>
+                <td>{% include 'components/link-nakamura.twig' with { timestamp: request.created } only %}</td>
                 <td>{{ request.division.name }}</td>
                 <td>{{ request.status }}</td>
                 <td class="text-end">
