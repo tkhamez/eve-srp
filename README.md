@@ -1,7 +1,7 @@
 # EVE-SRP
 
-A Ship-Replacement-Program application for [EVE Online](https://www.eveonline.com) with optional 
-[zKillboard](https://github.com/zKillboard/zKillboard) integration. 
+A web application to manage a **Ship Replacement Program** for [EVE Online](https://www.eveonline.com) 
+with optional [zKillboard](https://github.com/zKillboard/zKillboard) integration. 
 
 <!-- toc -->
 
