@@ -40,6 +40,17 @@ class RequestRepository extends EntityRepository
         return isset($r[0][1]) ? (int)$r[0][1] : null;
     }
 
+    public function sumPayout(array $criteria): ?int
+    {
+        $qb = $this->createQueryBuilder('r');
+        $qb->select('SUM(r.payout)');
+        $this->addCriteria($qb, $criteria);
+
+        $r = $qb->getQuery()->getResult();
+
+        return isset($r[0]) ? (int)$r[0][1] : null;
+    }
+
     private function addCriteria(QueryBuilder $qb, array $criteria): void
     {
         foreach ($criteria as $field => $value) {

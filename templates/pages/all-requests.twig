@@ -71,9 +71,11 @@
             </div>
         </div>
     </form>
+
     {% include 'components/request-list.twig' with {
         pageActive: pageActive,
         requests: requests,
+        payoutSum: payoutSum,
         sort: 'down',
         pagerCurrentPage: pagerCurrentPage,
         pagerTotalPages: pagerTotalPages,

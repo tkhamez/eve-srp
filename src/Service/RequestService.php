@@ -136,4 +136,20 @@ class RequestService
             $this->mayChangePayout($request) ||
             $this->mayAddComment($request);
     }
+
+    /**
+     * @param Request[] $requests
+     */
+    public function calculatePayoutSum(array $requests): ?int
+    {
+        if (empty($requests)) {
+            return null;
+        }
+
+        $sum = 0;
+        foreach ($requests as $request) {
+            $sum += $request->getPayout();
+        }
+        return $sum;
+    }
 }

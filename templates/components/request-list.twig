@@ -5,6 +5,12 @@
     link: pagerLink,
 } only %}
 
+{% if payoutSum is not null %}
+    <div class="text-end">
+        Total payout: {{ (payoutSum/1000000)|number_format(2)|trim('0', 'right')|trim('.') }} million ISK
+    </div>
+{% endif %}
+
 <div class="table-responsive">
     <table class="table table-sm table-dark table-striped table-bordered table-hover">
         <thead>

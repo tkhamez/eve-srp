@@ -8,6 +8,7 @@ use EveSrp\Controller\Traits\TwigResponse;
 use EveSrp\Model\Division;
 use EveSrp\Model\Permission;
 use EveSrp\Repository\RequestRepository;
+use EveSrp\Service\RequestService;
 use EveSrp\Service\UserService;
 use EveSrp\Type;
 use Psr\Http\Message\ResponseInterface;
@@ -21,6 +22,7 @@ class ListsController
     public function __construct(
         private RequestRepository $requestRepository,
         private UserService $userService,
+        private RequestService $requestService,
         Environment $environment
     ) {
         $this->twigResponse($environment);
@@ -44,6 +46,9 @@ class ListsController
        return $this->showList($response, Type::OPEN, Permission::REVIEW, 'open', 'Open Requests');
     }
 
+    /**
+     * @noinspection PhpUnusedParameterInspection
+     */
     public function inProgress(ServerRequestInterface $request, ResponseInterface $response): ResponseInterface
     {
         return $this->showList($response, Type::IN_PROGRESS, Permission::REVIEW, 'in_progress', 'In Progress');
@@ -75,6 +80,7 @@ class ListsController
     {
         return $this->render($response, 'pages/list.twig', [
             'requests' => $requests,
+            'payoutSum' => $this->requestService->calculatePayoutSum($requests),
             'pageActive' => $page,
             'pageName' => $pageName,
         ]);

@@ -93,9 +93,11 @@ class AllRequestsController
             $currentPage = min($totalPages, $currentPage);
             $offset = (int)max(0, ($limit * $currentPage) - $limit);
 
+            $requests = $this->requestRepository->findByCriteria($criteria, $limit, $offset);
+            $payoutSum = $this->requestRepository->sumPayout($criteria);
+
             $pagerLink = "?division=$inputDivision&status=$inputStatus&ship=$inputShip&pilot=$inputPilot" .
                 "&corporation=$inputCorporation&user=$inputUser&submit&page=";
-            $requests = $this->requestRepository->findByCriteria($criteria, $limit, $offset);
         }
 
         return $this->render($response, 'pages/all-requests.twig', [
@@ -107,6 +109,7 @@ class AllRequestsController
             'inputUser' => $inputUser ?? null,
             'inputPilot' => $inputPilot ?? null,
             'requests' => $requests ?? [],
+            'payoutSum' => $payoutSum ?? null,
             'pagerCurrentPage' => $currentPage ?? 0,
             'pagerTotalPages' => $totalPages ?? 0,
             'pagerLink' => $pagerLink ?? '',

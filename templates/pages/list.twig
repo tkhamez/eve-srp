@@ -7,5 +7,10 @@
             <h1>{{ pageName }}</h1>
         </div>
     </div>
-    {% include 'components/request-list.twig' with { pageActive: pageActive, requests: requests, sort: 'up' } only %}
+    {% include 'components/request-list.twig' with {
+        pageActive: pageActive,
+        requests: requests,
+        payoutSum: payoutSum,
+        sort: 'up'
+    } only %}
 {% endblock %}
