@@ -33,12 +33,13 @@ window.EveSrp = {
                 if (!navigator.clipboard) {
                     return;
                 }
+                const icon = copyText.querySelector('.bi');
                 navigator.clipboard.writeText(copyText.dataset.text).then(() => {
-                    copyText.classList.remove('bi-clipboard');
-                    copyText.classList.add('bi-check2');
+                    icon.classList.remove('bi-clipboard');
+                    icon.classList.add('bi-check2');
                     window.setTimeout(() => {
-                        copyText.classList.remove('bi-check2');
-                        copyText.classList.add('bi-clipboard');
+                        icon.classList.remove('bi-check2');
+                        icon.classList.add('bi-clipboard');
                     }, 1000)
                 });
             });

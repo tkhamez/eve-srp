@@ -17,6 +17,9 @@
             <tr>
                 <th>Ship</th>
                 <th>Pilot</th>
+                {% if pageActive == 'pay' %}
+                    <th>Reason</th>
+                {% endif %}
                 <th>Corporation</th>
                 <th>System</th>
                 <th>Kill Time</th>
@@ -36,8 +39,23 @@
             <tr>
                 <td><a href="/request/{{ request.id }}" title="Show request">{{ request.ship }}</a></td>
                 <td title="{{ main ? 'Main: ' ~ main : '' }}" class="{{ main ? 'srp-text-with-title' : '' }}">
-                    {{ request.character.name }}
+                    {% if pageActive == 'pay' %}
+                        {% include 'components/clipboard-copy.twig' with {
+                            display: request.character.name,
+                            copy: request.character.name,
+                        } only %}
+                    {% else %}
+                        {{ request.character.name }}
+                    {% endif %}
                 </td>
+                {% if pageActive == 'pay' %}
+                    <td>
+                        {% include 'components/clipboard-copy.twig' with {
+                            display: 'Loss ' ~ request.id,
+                            copy: 'Loss ' ~ request.id,
+                        } only %}
+                    </td>
+                {% endif %}
                 <td>{{ request.corporationName }}</td>
                 <td>
                     {% include 'components/link-dotlan.twig' with {
@@ -62,8 +80,14 @@
                 <td>{{ request.status }}</td>
                 <td class="text-end">
                     {% if request.payout is not null %}
-                        {{ request.payout|number_format }}
-                        {% include 'components/clipboard-copy.twig' with { text: request.payout } only %}
+                        {% if pageActive == 'pay' %}
+                            {% include 'components/clipboard-copy.twig' with {
+                                display: request.payout|number_format,
+                                copy: request.payout,
+                            } only %}
+                        {% else %}
+                            {{ request.payout|number_format }}
+                        {% endif %}
                     {% endif %}
                 </td>
                 {% if pageActive == 'in_progress' %}

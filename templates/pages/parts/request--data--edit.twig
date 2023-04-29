@@ -55,11 +55,24 @@
             <th>Payout</th>
             <td>
                 {% if request.payout %}
-                    {{ request.payout|number_format }} ISK
-                    {% include 'components/clipboard-copy.twig' with { text: request.payout } only %}
+                    {% include 'components/clipboard-copy.twig' with {
+                        display: request.payout|number_format ~ ' ISK',
+                        copy: request.payout,
+                    } only %}
                 {% endif %}
             </td>
         </tr>
+        {% if request.status == constant('EveSrp\\Type::APPROVED') %}
+            <tr>
+                <th>Reason</th>
+                <td>
+                    {% include 'components/clipboard-copy.twig' with {
+                        display: 'Loss ' ~ request.id,
+                        copy: 'Loss ' ~ request.id,
+                    } only %}
+                </td>
+            </tr>
+        {% endif %}
     </table>
 
     {% if mayAddComment(request) %}

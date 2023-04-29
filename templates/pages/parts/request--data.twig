@@ -22,22 +22,32 @@
     <tr>
         <th>Pilot</th>
         <td>
-            {% include 'components/link-evewho.twig' with {
-                path: 'character/' ~ request.character.id,
-                name: request.character.name
-            } only %},
+            {% if request.status == constant('EveSrp\\Type::APPROVED') %}
+                {% include 'components/clipboard-copy.twig' with {
+                    display: request.character.name,
+                    copy: request.character.name,
+                } only %}
+                {% include 'components/link-evewho.twig' with { path: 'character/' ~ request.character.id } only %},
+            {% else %}
+                {% include 'components/link-evewho.twig' with {
+                    path: 'character/' ~ request.character.id,
+                    name: request.character.name,
+                } only %},
+            {% endif %}
+
             {% if request.corporationId %}
                 {% include 'components/link-evewho.twig' with {
                     path: 'corporation/' ~ request.corporationId,
-                    name: request.corporationName
+                    name: request.corporationName,
                 } only %},
             {% else %}
                 {{ request.corporationName }},
             {% endif %}
+
             {% if request.allianceId %}
                 {% include 'components/link-evewho.twig' with {
                     path: 'alliance/' ~ request.allianceId,
-                    name: request.allianceName
+                    name: request.allianceName,
                 } only %}
             {% elseif request.allianceName %}
                 {{ request.allianceName }}
