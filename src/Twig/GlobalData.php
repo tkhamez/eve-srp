@@ -31,7 +31,7 @@ class GlobalData
     {
         return nl2br(str_replace(
             '\n',
-            '<br>',
+            "\n",
             $this->replaceMarkdownLink(htmlspecialchars($this->settings['LOGIN_HINT']))
         ));
     }
@@ -45,6 +45,16 @@ class GlobalData
         }
 
         return $html;
+    }
+
+    public function submitDetailsPlaceholder(): string
+    {
+        return str_replace('\n', "\n", $this->settings['SUBMIT_DETAILS_PLACEHOLDER']);
+    }
+
+    public function submitDetailsHelp(): string
+    {
+        return $this->replaceMarkdownLink(htmlspecialchars($this->settings['SUBMIT_DETAILS_HELP']));
     }
 
     public function userName(): string

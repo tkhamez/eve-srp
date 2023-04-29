@@ -8,11 +8,13 @@ return [
     'DB_URL'  => $_ENV['EVE_SRP_DB_URL'],
 
     // Customizing
-    'APP_TITLE'    => $_ENV['EVE_SRP_APP_TITLE']    ?? 'Ship Replacement Program',
-    'APP_LOGO'     => $_ENV['EVE_SRP_APP_LOGO']     ?? '/static/logo-srp.png',
-    'APP_LOGO_ALT' => $_ENV['EVE_SRP_APP_LOGO_ALT'] ?? 'SRP Logo',
-    'LOGIN_HINT'   => $_ENV['EVE_SRP_LOGIN_HINT']   ?? '',
-    'FOOTER_TEXT'  => $_ENV['EVE_SRP_FOOTER_TEXT']  ?? '',
+    'APP_TITLE'                  => $_ENV['EVE_SRP_APP_TITLE']    ?? 'Ship Replacement Program',
+    'APP_LOGO'                   => $_ENV['EVE_SRP_APP_LOGO']     ?? '/static/logo-srp.png',
+    'APP_LOGO_ALT'               => $_ENV['EVE_SRP_APP_LOGO_ALT'] ?? 'SRP Logo',
+    'LOGIN_HINT'                 => $_ENV['EVE_SRP_LOGIN_HINT']   ?? '',
+    'FOOTER_TEXT'                => $_ENV['EVE_SRP_FOOTER_TEXT']  ?? '',
+    'SUBMIT_DETAILS_PLACEHOLDER' => $_ENV['EVE_SRP_SUBMIT_DETAILS_PLACEHOLDER']  ?? '',
+    'SUBMIT_DETAILS_HELP'        => $_ENV['EVE_SRP_SUBMIT_DETAILS_HELP']  ?? '',
 
     // Global admin role, group and character provider
     'ROLE_GLOBAL_ADMIN' => $_ENV['EVE_SRP_ROLE_GLOBAL_ADMIN'],

@@ -43,8 +43,9 @@
                 </div>
                 <div class="mb-3">
                     <label for="details" class="form-label">Details</label>
-                    <textarea class="form-control" name="details" id="details"
-                              rows="3" required>{{ details }}</textarea>
+                    <textarea class="form-control" name="details" id="details" rows="6" required
+                              placeholder="{{ data.submitDetailsPlaceholder }}">{{ details }}</textarea>
+                    <div class="form-text">{{ data.submitDetailsHelp|raw }}</div>
                 </div>
                 <button type="submit" class="btn btn-primary" id="requestFormSubmit">Submit</button>
             </form>
