@@ -23,7 +23,7 @@ class RequestRepository extends EntityRepository
         int $limit = null,
         int $offset = 0,
         string $sort = 'created',
-        string $order = 'DESC',
+        string $order = 'ASC',
     ): array {
         $qb = $this->createQueryBuilder('r')
             ->setFirstResult($offset)

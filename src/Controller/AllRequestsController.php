@@ -93,7 +93,7 @@ class AllRequestsController
             $currentPage = min($totalPages, $currentPage);
             $offset = (int)max(0, ($limit * $currentPage) - $limit);
 
-            $requests = $this->requestRepository->findByCriteria($criteria, $limit, $offset);
+            $requests = $this->requestRepository->findByCriteria($criteria, $limit, $offset, order: 'DESC');
             $payoutSum = $this->requestRepository->sumPayout($criteria);
 
             $pagerLink = "?division=$inputDivision&status=$inputStatus&ship=$inputShip&pilot=$inputPilot" .
@@ -110,6 +110,7 @@ class AllRequestsController
             'inputPilot' => $inputPilot ?? null,
             'requests' => $requests ?? [],
             'payoutSum' => $payoutSum ?? null,
+            'sortOrder' => 'down',
             'pagerCurrentPage' => $currentPage ?? 0,
             'pagerTotalPages' => $totalPages ?? 0,
             'pagerLink' => $pagerLink ?? '',

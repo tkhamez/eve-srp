@@ -35,7 +35,7 @@ class ListsController
     {
         $user = $this->userService->getAuthenticatedUser();
 
-        return $this->renderView($response, $user->getRequests(), 'my-requests', 'My Requests');
+        return $this->renderView($response, $user->getRequests(), 'down', 'my-requests', 'My Requests');
     }
 
     /**
@@ -73,14 +73,15 @@ class ListsController
             'division' => $divisions
         ], ['created' => 'ASC']);
 
-        return $this->renderView($response, $requests, $page, $pageName);
+        return $this->renderView($response, $requests, 'up', $page, $pageName);
     }
 
-    private function renderView($response, $requests, $page, $pageName): ResponseInterface
+    private function renderView($response, $requests, $sortOrder, $page, $pageName): ResponseInterface
     {
         return $this->render($response, 'pages/list.twig', [
             'requests' => $requests,
             'payoutSum' => $this->requestService->calculatePayoutSum($requests),
+            'sortOrder' => $sortOrder,
             'pageActive' => $page,
             'pageName' => $pageName,
         ]);
