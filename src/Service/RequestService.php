@@ -33,7 +33,7 @@ class RequestService
     public function getDivisionsWithEditPermission(): array
     {
         if ($this->userService->hasRole(Security::GLOBAL_ADMIN)) {
-            return $this->divisionRepository->findBy([]);
+            return $this->divisionRepository->findBy([], ['name' => 'ASC']);
         }
         return $this->userService->getDivisionsWithRoles([Permission::REVIEW, Permission::PAY]);
     }

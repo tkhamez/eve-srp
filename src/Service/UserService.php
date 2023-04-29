@@ -105,7 +105,7 @@ class UserService
     public function getDivisionsWithRoles(array $roles): array
     {
         $divisions = [];
-        foreach ($this->divisionRepository->findBy([]) as $division) {
+        foreach ($this->divisionRepository->findBy([], ['name' => 'ASC']) as $division) {
             foreach ($roles as $role) {
                 if ($this->hasDivisionRole($division, $role)) {
                     $divisions[] = $division;
