@@ -39,7 +39,12 @@
                     {{ request.character.name }}
                 </td>
                 <td>{{ request.corporationName }}</td>
-                <td>{{ request.solarSystem }}</td>
+                <td>
+                    {% include 'components/link-dotlan.twig' with {
+                        path: 'system/' ~ request.solarSystem,
+                        name: request.solarSystem
+                    } only %}
+                </td>
                 <td>{% include 'components/link-nakamura.twig' with { timestamp: request.killTime } only %}</td>
                 <td>
                     {% if zKillboardUrl(request) %}
