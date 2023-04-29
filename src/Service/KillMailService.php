@@ -176,7 +176,7 @@ class KillMailService
         private EntityManagerInterface $entityManager,
         Settings $settings,
     ) {
-        $this->esiBaseUrl = $settings['ESI_BASE_URL'];
+        $this->esiBaseUrl = $settings['URLs']['esi'];
     }
 
     /**

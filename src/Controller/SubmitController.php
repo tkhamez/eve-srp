@@ -50,8 +50,8 @@ class SubmitController
         Settings $settings,
         Environment $environment,
     ) {
-        $this->esiBaseUrl = $settings['ESI_BASE_URL'];
-        $this->killboardBaseUrl = $settings['ZKILLBOARD_BASE_URL'];
+        $this->esiBaseUrl = $settings['URLs']['esi'];
+        $this->killboardBaseUrl = $settings['URLs']['zkillboard'];
 
         $this->twigResponse($environment);
     }

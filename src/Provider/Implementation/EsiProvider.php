@@ -27,7 +27,7 @@ class EsiProvider implements ProviderInterface
 
     public function __construct(private ClientInterface $httpClient, Settings $settings)
     {
-        $this->esiBaseUrl = $settings['ESI_BASE_URL'];
+        $this->esiBaseUrl = $settings['URLs']['esi'];
     }
 
     public function getAccount(int $eveCharacterId): ?Account

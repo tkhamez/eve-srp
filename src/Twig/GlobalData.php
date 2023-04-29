@@ -17,6 +17,11 @@ class GlobalData
     {
     }
 
+    public function url(string $service): string
+    {
+        return $this->settings['URLs'][$service] ?? '';
+    }
+
     public function appTitle(): string
     {
         return $this->settings['APP_TITLE'];

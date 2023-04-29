@@ -18,8 +18,8 @@ class ApiService
 
     public function __construct(private ClientInterface $httpClient, Settings $settings)
     {
-        $this->esiBaseUrl = $settings['ESI_BASE_URL'];
-        $this->killboardBaseUrl = $settings['ZKILLBOARD_BASE_URL'];
+        $this->esiBaseUrl = $settings['URLs']['esi'];
+        $this->killboardBaseUrl = $settings['URLs']['zkillboard'];
     }
 
     public function getLastError(): string

@@ -21,16 +21,16 @@
     <tr>
         <th>Pilot</th>
         <td>
-            <a href="https://evewho.com/character/{{ request.character.id }}" class="srp-external-link"
+            <a href="{{ data.url('evewho') }}/character/{{ request.character.id }}" class="srp-external-link"
                title="EveWho" target="_blank" rel="noopener noreferrer">{{ request.character.name }}</a>,
             {% if request.corporationId %}
-                <a href="https://evewho.com/corporation/{{ request.corporationId }}" class="srp-external-link"
+                <a href="{{ data.url('evewho') }}/corporation/{{ request.corporationId }}" class="srp-external-link"
                    title="EveWho" target="_blank" rel="noopener noreferrer">{{ request.corporationName }}</a>,
             {% else %}
                 {{ request.corporationName }},
             {% endif %}
             {% if request.allianceId %}
-                <a href="https://evewho.com/alliance/{{ request.allianceId }}" class="srp-external-link"
+                <a href="{{ data.url('evewho') }}/alliance/{{ request.allianceId }}" class="srp-external-link"
                    title="EveWho" target="_blank" rel="noopener noreferrer">{{ request.allianceName }}</a>
             {% elseif request.allianceName %}
                 {{ request.allianceName }}
@@ -51,7 +51,7 @@
     <tr>
         <th>System</th>
         <td>
-            <a href="https://evemaps.dotlan.net/system/{{ request.solarSystem }}" class="srp-external-link"
+            <a href="{{ data.url('dotlan') }}/system/{{ request.solarSystem }}" class="srp-external-link"
                title="Dotlan" target="_blank" rel="noopener noreferrer">{{ request.solarSystem }}</a>
         </td>
     </tr>
