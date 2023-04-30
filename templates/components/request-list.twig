@@ -11,26 +11,28 @@
     </div>
 {% endif %}
 
+{% set colReason = pageActive == 'approved' %}
+{% set colStatus = pageActive not in ['open', 'in-progress', 'approved'] %}
+{% set colLastEditor = pageActive == 'in_progress' %}
+{% set colKillboard = pageActive in ['my-requests', 'all-requests'] or (pageActive == 'open' and hasKillboardUrl()) %}
+
 <div class="table-responsive">
     <table class="table table-sm table-dark table-striped table-bordered table-hover">
         <thead>
             <tr>
                 <th>Ship</th>
-                <th>Pilot</th>
-                {% if pageActive == 'approved' %}
-                    <th>Reason</th>
-                {% endif %}
-                <th>Corporation</th>
                 <th>System</th>
-                <th>Kill Time</th>
-                <th>External URLs</th>
-                <th>Submitted Time <i class="bi bi-sort-{{ sortOrder }} float-end"></i></th>
+                <th>Pilot</th>
+                <th>Corporation</th>
+                {% if colReason %}<th>Reason</th>{% endif %}
+                {% if colStatus %}<th>Status</th>{% endif %}
+                <th>Payout</th>
+                <th title="TimeZone = UTC" class="srp-text-with-title">
+                    Submitted Time <i class="bi bi-sort-{{ sortOrder }} float-end"></i>
+                </th>
                 <th>Division</th>
-                <th>Status</th>
-                <th class="text-end">Payout</th>
-                {% if pageActive == 'in_progress' %}
-                    <th>Last Editor</th>
-                {% endif %}
+                {% if colLastEditor %}<th>Last Editor</th>{% endif %}
+                {% if colKillboard %}<th>Killboard</th>{% endif %}
             </tr>
         </thead>
         <tbody>
@@ -38,6 +40,14 @@
             {% set main = getMainIfDifferent(request.character.id) %}
             <tr>
                 <td><a href="/request/{{ request.id }}" title="Show request">{{ request.ship }}</a></td>
+
+                <td>
+                    {% include 'components/link-dotlan.twig' with {
+                        path: 'system/' ~ request.solarSystem,
+                        name: request.solarSystem
+                    } only %}
+                </td>
+
                 <td>
                     {% if pageActive == 'approved' %}
                         {% include 'components/clipboard-copy.twig' with {
@@ -49,7 +59,10 @@
                         {{ request.character.name }}
                     {% endif %}
                 </td>
-                {% if pageActive == 'approved' %}
+
+                <td>{{ request.corporationName }}</td>
+
+                {% if colReason %}
                     <td>
                         {% include 'components/clipboard-copy.twig' with {
                             display: getPayoutReason(request),
@@ -57,28 +70,11 @@
                         } only %}
                     </td>
                 {% endif %}
-                <td>{{ request.corporationName }}</td>
-                <td>
-                    {% include 'components/link-dotlan.twig' with {
-                        path: 'system/' ~ request.solarSystem,
-                        name: request.solarSystem
-                    } only %}
-                </td>
-                <td>{% include 'components/link-nakamura.twig' with { timestamp: request.killTime } only %}</td>
-                <td>
-                    {% if zKillboardUrl(request) %}
-                        <a href="{{ zKillboardUrl(request) }}" target="_blank" rel="noopener noreferrer"
-                           class="srp-external-link">zKillboard</a>
-                        &nbsp;
-                    {% endif %}
-                    {% if esiUrl(request) %}
-                        <a href="{{ esiUrl(request) }}" target="_blank" rel="noopener noreferrer"
-                           class="srp-external-link">ESI</a>
-                    {% endif %}
-                </td>
-                <td>{% include 'components/link-nakamura.twig' with { timestamp: request.created } only %}</td>
-                <td>{{ request.division.name }}</td>
-                <td>{{ request.status }}</td>
+
+                {% if colStatus %}
+                    <td>{{ request.status }}</td>
+                {% endif %}
+
                 <td class="text-end">
                     {% if request.payout is not null %}
                         {% if pageActive == 'approved' %}
@@ -91,8 +87,20 @@
                         {% endif %}
                     {% endif %}
                 </td>
-                {% if pageActive == 'in_progress' %}
+
+                <td>{{ request.created|date('Y-m-d H:i') }}</td>
+
+                <td>{{ request.division.name }}</td>
+
+                {% if colLastEditor %}
                     <td>{{ request.lastEditor.name }}</td>
+                {% endif %}
+
+                {% if colKillboard %}
+                    <td>
+                        <a href="{{ getKillboardUrl(request) }}" target="_blank" rel="noopener noreferrer"
+                           class="srp-external-link">zKillboard</a>
+                    </td>
                 {% endif %}
             </tr>
         {%  endfor %}

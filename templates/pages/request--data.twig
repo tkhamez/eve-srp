@@ -12,12 +12,7 @@
     </tr>
     <tr>
         <th>Submitted Time</th>
-        <td>
-            {% include 'components/link-nakamura.twig' with {
-                timestamp: request.created,
-                format: 'Y-m-d H:i e'
-            } only %}
-        </td>
+        <td>{{ request.created|date('Y-m-d H:i e') }}</td>
     </tr>
     <tr>
         <th>Pilot</th>
@@ -59,10 +54,7 @@
     <tr>
         <th>Kill Time</th>
         <td>
-            {% include 'components/link-nakamura.twig' with {
-                timestamp: request.killTime,
-                format: 'Y-m-d H:i e'
-            } only %}
+            {% include 'components/link-nakamura.twig' with { timestamp: request.killTime } only %}
         </td>
     </tr>
     <tr>
@@ -77,8 +69,8 @@
     <tr>
         <th>External URLs</th>
         <td>
-            {% if zKillboardUrl(request) %}
-                <a href="{{ zKillboardUrl(request) }}" class="srp-external-link"
+            {% if hasKillboardUrl() %}
+                <a href="{{ getKillboardUrl(request) }}" class="srp-external-link"
                    target="_blank" rel="noopener noreferrer">zKillboard</a>,
             {% endif %}
             {% if esiUrl(request) %}

@@ -100,7 +100,12 @@ class ApiService
         return '';
     }
 
-    public function getZKillboardUrl(int $killId): string
+    public function hasKillboardUrl(): bool
+    {
+        return !empty($this->killboardBaseUrl);
+    }
+
+    public function getKillboardUrl(int $killId): string
     {
         if ($this->killboardBaseUrl) {
             return "$this->killboardBaseUrl/kill/$killId/";

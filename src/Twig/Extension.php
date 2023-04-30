@@ -35,7 +35,8 @@ class Extension extends AbstractExtension
             new TwigFunction('mayAddComment', [$this, 'mayAddComment']),
             new TwigFunction('maySave', [$this, 'maySave']),
             new TwigFunction('flashMessages', [$this, 'flashMessages']),
-            new TwigFunction('zKillboardUrl', [$this, 'zKillboardUrl']),
+            new TwigFunction('hasKillboardUrl', [$this, 'hasKillboardUrl']),
+            new TwigFunction('getKillboardUrl', [$this, 'getKillboardUrl']),
             new TwigFunction('esiUrl', [$this, 'esiUrl']),
             new TwigFunction('getMainIfDifferent', [$this, 'getMainIfDifferent']),
             new TwigFunction('getPayoutReason', [$this, 'getPayoutReason']),
@@ -105,9 +106,14 @@ class Extension extends AbstractExtension
         return implode("\n", $html);
     }
 
-    public function zKillboardUrl(Request $request): string
+    public function hasKillboardUrl(): bool
     {
-        return $this->apiService->getZKillboardUrl($request->getId());
+        return $this->apiService->hasKillboardUrl();
+    }
+
+    public function getKillboardUrl(Request $request): string
+    {
+        return $this->apiService->getKillboardUrl($request->getId());
     }
 
     public function esiUrl(Request $request): string

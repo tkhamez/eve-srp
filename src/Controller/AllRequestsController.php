@@ -101,6 +101,7 @@ class AllRequestsController
         }
 
         return $this->render($response, 'pages/all-requests.twig', [
+            'pageActive' => 'all-requests',
             'divisions' => $divisions,
             'inputDivision' => $inputDivision ?? 0,
             'inputStatus' => $inputStatus ?? '',

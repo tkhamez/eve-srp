@@ -17,12 +17,6 @@
                                href="/submit">Submit Request</a>
                         </li>
                     {% endif %}
-                    {% if hasAnyRole(['review', 'pay', 'admin', 'global-admin']) %}
-                        <li class="nav-item">
-                            <a class="nav-link {% if active_page == 'all-requests' %}active{% endif%}"
-                               href="/all-requests">All Requests</a>
-                        </li>
-                    {% endif %}
                     {% if hasRole('review') %}
                         <li class="nav-item">
                             <a class="nav-link {% if active_page == 'open' %}active{% endif%}"
@@ -38,6 +32,12 @@
                             <a class="nav-link {% if active_page == 'approved' %}active{% endif%}" href="/approved">
                                 Approved
                             </a>
+                        </li>
+                    {% endif %}
+                    {% if hasAnyRole(['review', 'pay', 'admin', 'global-admin']) %}
+                        <li class="nav-item">
+                            <a class="nav-link {% if active_page == 'all-requests' %}active{% endif%}"
+                               href="/all-requests">All Requests</a>
                         </li>
                     {% endif %}
                     {% if hasAnyRole(['admin', 'global-admin']) %}
