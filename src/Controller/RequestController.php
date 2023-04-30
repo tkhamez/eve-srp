@@ -59,9 +59,10 @@ class RequestController
             $newDivision = (int)$this->paramPost($request, 'division');
         }
         $newStatus = $this->paramPost($request, 'status');
-        $newBasePayout = null;
-        if ($this->paramPost($request, 'payout', '') !== '') {
-            $newBasePayout = abs((int)str_replace(',', '', (string)$this->paramPost($request, 'payout')));
+        // Need to distinguish between null and empty string in save() for base payout.
+        $newBasePayout = $this->paramPost($request, 'payout');
+        if ($newBasePayout !== '' && $newBasePayout !== null) { // allow '0'
+            $newBasePayout = abs((int)preg_replace('/[^0-9]+/', '', $newBasePayout));
         }
         $newComment = trim((string)$this->paramPost($request, 'comment'));
 
@@ -72,7 +73,10 @@ class RequestController
         if ($srpRequest->getStatus() === $newStatus) {
             $newStatus = null;
         }
-        if ($srpRequest->getBasePayout() === $newBasePayout) {
+        if (
+            $srpRequest->getBasePayout() === $newBasePayout ||
+            ($srpRequest->getBasePayout() === null && $newBasePayout === '')
+        ) {
             $newBasePayout = null;
         }
         if ($newDivision === null && $newStatus === null && $newBasePayout === null && $newComment === '') {

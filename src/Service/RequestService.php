@@ -144,7 +144,7 @@ class RequestService
         Request $request,
         ?int $newDivision = null,
         ?string $newStatus = null,
-        ?int $newBasePayout = null,
+        int|string|null $newBasePayout = null,
         string $newComment = '',
     ): bool {
         if ($newDivision !== null) {
@@ -189,7 +189,7 @@ class RequestService
         Request $request,
         ?int $newDivision = null,
         ?string $newStatus = null,
-        ?int $newBasePayout = null,
+        int|string|null $newBasePayout = null, // empty string to remove, null to ignore
         string $newComment = '',
     ): void {
         if ($request->getStatus() !== Type::INCOMPLETE) { // check old status
@@ -229,14 +229,20 @@ class RequestService
 
         if ($newBasePayout !== null) {
             $oldPayout = $request->getBasePayout();
-            $request->setBasePayout($newBasePayout);
+            $request->setBasePayout($newBasePayout !== '' ? (int)$newBasePayout : null);
 
             $action = new Action();
             $action->setCreated(new \DateTime());
             $action->setUser($this->userService->getAuthenticatedUser());
             $action->setCategory(Type::COMMENT);
 
-            if ($oldPayout) {
+            if ($newBasePayout === '') {
+                $action->setNote(
+                    'Removed based payout' .
+                    // Note: $oldPayout *should* never be null here, that's handled in the RequestController.
+                    ($oldPayout !== null ? ', old value was ' . number_format($oldPayout) . ' ISK.' : '.')
+                );
+            } elseif ($oldPayout !== null) {
                 $action->setNote(
                     'Changed base payout from ' . number_format($oldPayout) . ' to ' .
                     number_format($newBasePayout) . ' ISK.'
