@@ -29,8 +29,9 @@
                 {% if colReason %}<th>Reason</th>{% endif %}
                 {% if colStatus %}<th>Status</th>{% endif %}
                 <th>Payout</th>
-                <th title="TimeZone = UTC" class="srp-text-with-title">
-                    Submitted Time <i class="bi bi-sort-{{ sortOrder }} float-end"></i>
+                <th class="srp-text-with-title">
+                    <span title="TimeZone = UTC">Submitted Time</span>
+                    <i class="bi bi-sort-{{ sortOrder }} float-end"></i>
                 </th>
                 <th>Division</th>
                 {% if colLastEditor %}<th>Last Editor</th>{% endif %}
@@ -64,7 +65,9 @@
                             copy: request.character.name,
                         } only %}
                     {% else %}
-                        {{ request.character.name }}
+                        <span title="{{ main ? 'Main: ' ~ main : '' }}" class="{{ main ? 'srp-text-with-title' : '' }}">
+                            {{ request.character.name }}
+                        </span>
                     {% endif %}
                 </td>
 
