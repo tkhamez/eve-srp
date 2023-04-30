@@ -17,7 +17,9 @@
     <tr>
         <th>Pilot</th>
         <td>
-            {% if request.status == constant('EveSrp\\Type::APPROVED') %}
+            {% if request.status == constant('EveSrp\\Type::APPROVED') and
+                  hasRole(constant('EveSrp\\Model\\Permission::PAY'))
+            %}
                 {% include 'components/clipboard-copy.twig' with {
                     display: request.character.name,
                     copy: request.character.name,

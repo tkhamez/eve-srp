@@ -55,7 +55,9 @@
             <th>Payout</th>
             <td>
                 {% if request.payout is not null %}
-                    {% if request.status == constant('EveSrp\\Type::APPROVED') %}
+                    {% if request.status == constant('EveSrp\\Type::APPROVED') and
+                          hasRole(constant('EveSrp\\Model\\Permission::PAY'))
+                    %}
                         {% include 'components/clipboard-copy.twig' with {
                             display: request.payout|number_format ~ ' ISK',
                             copy: request.payout,
@@ -66,9 +68,8 @@
                 {% endif %}
             </td>
         </tr>
-        {%
-            if request.status == constant('EveSrp\\Type::APPROVED') and
-               hasRole(constant('EveSrp\\Model\\Permission::PAY'))
+        {% if request.status == constant('EveSrp\\Type::APPROVED') and
+              hasRole(constant('EveSrp\\Model\\Permission::PAY'))
         %}
             <tr>
                 <th>Reason</th>
