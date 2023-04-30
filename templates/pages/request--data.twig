@@ -99,8 +99,10 @@
         <tr class="{{ action.note ? 'data' : 'data border-bottom' }}">
             <td>{{ action.created|date('Y-m-d H:i e') }}</td>
             <td>{{ action.category|capitalize }}</td>
-            <td>
-                <span title="#{{ action.user.id }}">{{ action.user.name }}</span>
+            <td class="{{ action.user.id == request.user.id ? 'fw-bold srp-text-with-title' : '' }}">
+                <span title="{{ action.user.id == request.user.id ? 'Submitter' : '#' ~ action.user.id }}">
+                    {{ action.user.name }}
+                </span>
                 {% if action.user.name is empty %}
                     #{{ action.user.id }}
                 {% endif %}
