@@ -9,6 +9,7 @@ use EveSrp\Controller\Traits\TwigResponse;
 use EveSrp\FlashMessage;
 use EveSrp\Model\Division;
 use EveSrp\Model\Permission;
+use EveSrp\Model\Request;
 use EveSrp\Repository\RequestRepository;
 use EveSrp\Service\RequestService;
 use EveSrp\Service\UserService;
@@ -108,10 +109,26 @@ class ListsController
     {
         return $this->render($response, 'pages/list.twig', [
             'requests' => $requests,
-            'payoutSum' => $this->requestService->calculatePayoutSum($requests),
+            'payoutSum' => $this->calculatePayoutSum($requests),
             'sortOrder' => $sortOrder,
             'pageActive' => $page,
             'pageName' => $pageName,
         ]);
+    }
+
+    /**
+     * @param Request[] $requests
+     */
+    private function calculatePayoutSum(array $requests): ?int
+    {
+        if (empty($requests)) {
+            return null;
+        }
+
+        $sum = 0;
+        foreach ($requests as $request) {
+            $sum += $request->getPayout();
+        }
+        return $sum;
     }
 }
