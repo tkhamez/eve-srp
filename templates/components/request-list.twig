@@ -7,7 +7,7 @@
 
 {% if payoutSum is not null %}
     <div class="text-end">
-        Total payout: {{ (payoutSum/1000000)|number_format(2)|trim('0', 'right')|trim('.') }} million ISK
+        Total payout: {{ formatMillions(payoutSum, false) }} million ISK
     </div>
 {% endif %}
 
@@ -28,7 +28,7 @@
                 <th>Corporation</th>
                 {% if colReason %}<th>Reason</th>{% endif %}
                 {% if colStatus %}<th>Status</th>{% endif %}
-                <th>Payout</th>
+                <th class="srp-text-with-title"><span title="million ISK">Payout</span></th>
                 <th class="srp-text-with-title">
                     <span title="TimeZone = UTC">Submitted Time</span>
                     <i class="bi bi-sort-{{ sortOrder }} float-end"></i>
@@ -90,11 +90,11 @@
                     {% if request.payout is not null %}
                         {% if pageActive == 'approved' %}
                             {% include 'components/clipboard-copy.twig' with {
-                                display: request.payout|number_format,
+                                display: formatMillions(request.payout),
                                 copy: request.payout,
                             } only %}
                         {% else %}
-                            {{ request.payout|number_format }}
+                            {{ formatMillions(request.payout) }}
                         {% endif %}
                     {% endif %}
                 </td>

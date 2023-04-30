@@ -6,7 +6,7 @@
             <div class="input-group input-group-sm mt-1">
                 <label class="input-group-text bg-dark text-light" for="modifierAmount">&nbsp;Add</label>
                 <input type="text" required class="form-control form-control-sm" name="amount" id="modifierAmount"
-                       placeholder="Percent or ISK" autocomplete="off">
+                       placeholder="Percent or million ISK" autocomplete="off">
             </div>
 
             <div class="input-group input-group-sm mt-1">
@@ -15,8 +15,8 @@
                     <option selected value=""></option>
                     <option value="relative-bonus">% Bonus</option>
                     <option value="relative-deduction">% Deduction</option>
-                    <option value="absolute-bonus">ISK Bonus</option>
-                    <option value="absolute-deduction">ISK Deduction</option>
+                    <option value="absolute-bonus">ISK Bonus (millions)</option>
+                    <option value="absolute-deduction">ISK Deduction (millions)</option>
                 </select>
             </div>
 
@@ -32,9 +32,11 @@
     <div class="row">
         <div class="data-modifier col table-dark border-bottom pb-3 mb-3 {{ modifier.voidedTime ? 'text-muted' : '' }}">
             <span class="{{ modifier.voidedTime ? 'text-decoration-line-through' : '' }}">
-                {{ modifier.modValue|abs|number_format }}{%
-                    if modifier.modType == 'relative' %}%{% else %} ISK{% endif
-                %}
+                {% if modifier.modType == 'relative' %}
+                    {{ modifier.modValue|abs|number_format }}%
+                {% else %}
+                    {{ formatMillions(modifier.modValue) }} ISK
+                {% endif %}
                 {% if modifier.modValue > 0 %} bonus {% else %} penalty{% endif %}
             </span>
 

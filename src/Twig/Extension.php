@@ -41,6 +41,7 @@ class Extension extends AbstractExtension
             new TwigFunction('esiUrl', [$this, 'esiUrl']),
             new TwigFunction('getMainIfDifferent', [$this, 'getMainIfDifferent']),
             new TwigFunction('getPayoutReason', [$this, 'getPayoutReason']),
+            new TwigFunction('formatMillions', [$this, 'formatMillions']),
         ];
     }
 
@@ -131,5 +132,10 @@ class Extension extends AbstractExtension
     public function getPayoutReason(Request $request): string
     {
         return "Loss {$request->getId()}, {$request->getShip()}, {$request->getKillTime()->format('Y-m-d H:i')}";
+    }
+
+    public function formatMillions(int $number, bool $includeM = true): string
+    {
+        return Util::formatMillions($number, $includeM);
     }
 }

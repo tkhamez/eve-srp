@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace EveSrp\Service;
 
 use Doctrine\ORM\EntityManagerInterface;
+use EveSrp\Misc\Util;
 use EveSrp\Model\Action;
 use EveSrp\Model\Division;
 use EveSrp\Model\Permission;
@@ -240,15 +241,15 @@ class RequestService
                 $action->setNote(
                     'Removed based payout' .
                     // Note: $oldPayout *should* never be null here, that's handled in the RequestController.
-                    ($oldPayout !== null ? ', old value was ' . number_format($oldPayout) . ' ISK.' : '.')
+                    ($oldPayout !== null ? ', old value was ' . Util::formatMillions($oldPayout) . ' ISK.' : '.')
                 );
             } elseif ($oldPayout !== null) {
                 $action->setNote(
-                    'Changed base payout from ' . number_format($oldPayout) . ' to ' .
-                    number_format($newBasePayout) . ' ISK.'
+                    'Changed base payout from ' . Util::formatMillions($oldPayout) . ' to ' .
+                    Util::formatMillions($newBasePayout) . ' ISK.'
                 );
             } else {
-                $action->setNote('Set base payout to ' . number_format($newBasePayout) . ' ISK.');
+                $action->setNote('Set base payout to ' . Util::formatMillions($newBasePayout) . ' ISK.');
             }
 
             $action->setRequest($request);

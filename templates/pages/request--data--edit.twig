@@ -43,11 +43,11 @@
                 {% if mayChangePayout(request) %}
                     <div class="input-group input-group-sm">
                         <input type="text" class="form-control" name="payout" id="editPayout" autocomplete="off"
-                               value="{{ request.basePayout is not null ? request.basePayout|number_format : '' }}">
-                        <span class="input-group-text text-light bg-dark">ISK</span>
+                               value="{{ request.basePayout is not null ? formatMillions(request.basePayout, false) : '' }}">
+                        <span class="input-group-text text-light bg-dark" title="million ISK">m ISK</span>
                     </div>
                 {% elseif request.basePayout is not null %}
-                    {{ request.basePayout|number_format }} ISK
+                    {{ formatMillions(request.basePayout) }} ISK
                 {% endif %}
             </td>
         </tr>
@@ -59,11 +59,11 @@
                           hasRole(constant('EveSrp\\Model\\Permission::PAY'))
                     %}
                         {% include 'components/clipboard-copy.twig' with {
-                            display: request.payout|number_format ~ ' ISK',
+                            display: formatMillions(request.payout) ~ ' ISK',
                             copy: request.payout,
                         } only %}
                     {% else %}
-                        {{ request.payout|number_format ~ ' ISK' }}
+                        {{ formatMillions(request.payout) ~ ' ISK' }}
                     {% endif %}
                 {% endif %}
             </td>
