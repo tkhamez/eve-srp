@@ -60,7 +60,7 @@ class RequestController
         }
         $newStatus = $this->paramPost($request, 'status');
         $newBasePayout = null;
-        if ($this->paramPost($request, 'payout') !== null) {
+        if ($this->paramPost($request, 'payout', '') !== '') {
             $newBasePayout = abs((int)str_replace(',', '', (string)$this->paramPost($request, 'payout')));
         }
         $newComment = trim((string)$this->paramPost($request, 'comment'));

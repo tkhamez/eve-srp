@@ -43,10 +43,10 @@
                 {% if mayChangePayout(request) %}
                     <div class="input-group input-group-sm">
                         <input type="text" class="form-control" name="payout" id="editPayout"
-                               value="{{ request.basePayout ? request.basePayout|number_format : '' }}">
+                               value="{{ request.basePayout is not null ? request.basePayout|number_format : '' }}">
                         <span class="input-group-text text-light bg-dark">ISK</span>
                     </div>
-                {% elseif request.basePayout %}
+                {% elseif request.basePayout is not null %}
                     {{ request.basePayout|number_format }} ISK
                 {% endif %}
             </td>
