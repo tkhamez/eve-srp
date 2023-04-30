@@ -5,6 +5,7 @@ declare(strict_types=1);
 
 namespace EveSrp\Twig;
 
+use EveSrp\Misc\Util;
 use EveSrp\Model\Character;
 use EveSrp\Model\User;
 use EveSrp\Service\UserService;
@@ -32,13 +33,13 @@ class GlobalData
         return nl2br(str_replace(
             '\n',
             "\n",
-            $this->replaceMarkdownLink(htmlspecialchars($this->settings['LOGIN_HINT']))
+            Util::replaceMarkdownLink(htmlspecialchars($this->settings['LOGIN_HINT']))
         ));
     }
 
     public function footerText(): string
     {
-        $html = $this->replaceMarkdownLink(htmlspecialchars($this->settings['FOOTER_TEXT']));
+        $html = Util::replaceMarkdownLink(htmlspecialchars($this->settings['FOOTER_TEXT']));
 
         if (!empty($html)) {
             $html .= '<br>';
@@ -54,7 +55,7 @@ class GlobalData
 
     public function submitDetailsHelp(): string
     {
-        return $this->replaceMarkdownLink(htmlspecialchars($this->settings['SUBMIT_DETAILS_HELP']));
+        return Util::replaceMarkdownLink(htmlspecialchars($this->settings['SUBMIT_DETAILS_HELP']));
     }
 
     public function userName(): string
@@ -77,14 +78,5 @@ class GlobalData
     private function getUser(): ?User
     {
         return $this->userService->getAuthenticatedUser();
-    }
-
-    private function replaceMarkdownLink(string $text): string
-    {
-        return preg_replace(
-            '/\[(.*?)]\((.*?)\)/',
-            '<a href="$2" target="_blank" rel="noopener noreferrer" class="srp-external-link">$1</a> ',
-            $text
-        );
     }
 }

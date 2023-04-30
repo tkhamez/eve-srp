@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace EveSrp\Twig;
 
 use EveSrp\FlashMessage;
+use EveSrp\Misc\Util;
 use EveSrp\Model\Request;
 use EveSrp\Service\ApiService;
 use EveSrp\Service\RequestService;
@@ -99,7 +100,7 @@ class Extension extends AbstractExtension
         foreach ($this->flashMessage->getMessages() as $message) {
             $html[] =
                 '<div class="alert alert-'.$message[1].' alert-dismissible fade show">' .
-                    htmlspecialchars($message[0]) .
+                    Util::replaceMarkdownLink(htmlspecialchars($message[0])) .
                     '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>' .
                 '</div>';
         }
