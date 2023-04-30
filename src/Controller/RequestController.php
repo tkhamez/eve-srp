@@ -83,6 +83,19 @@ class RequestController
             return $response->withHeader('Location', "/request/{$args['id']}");
         }
 
+        // Check if there is a base payout if status was changed to approved
+        if (
+            $newStatus === Type::APPROVED &&
+            ($newBasePayout === null || $newBasePayout === '') &&
+            $srpRequest->getBasePayout() === null
+        ) {
+            $this->flashMessage->addMessage(
+                'Please add a base payout if you want to approve the request',
+                FlashMessage::TYPE_WARNING
+            );
+            return $response->withHeader('Location', "/request/{$args['id']}");
+        }
+
         // Validate and save
         if (!$this->requestService->validateInputAndPermission(
             $srpRequest, $newDivision, $newStatus, $newBasePayout, $newComment
