@@ -7,6 +7,9 @@
             <h1>{{ pageName }}</h1>
         </div>
     </div>
+
+    {{ flashMessages()|raw }}
+
     {% include 'components/request-list.twig' with {
         pageActive: pageActive,
         requests: requests,

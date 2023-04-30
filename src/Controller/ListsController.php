@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace EveSrp\Controller;
 
+use EveSrp\Controller\Traits\RequestParameter;
 use EveSrp\Controller\Traits\TwigResponse;
+use EveSrp\FlashMessage;
 use EveSrp\Model\Division;
 use EveSrp\Model\Permission;
 use EveSrp\Repository\RequestRepository;
@@ -17,12 +19,14 @@ use Twig\Environment;
 
 class ListsController
 {
+    use RequestParameter;
     use TwigResponse;
 
     public function __construct(
         private RequestRepository $requestRepository,
         private UserService $userService,
         private RequestService $requestService,
+        private FlashMessage $flashMessage,
         Environment $environment
     ) {
         $this->twigResponse($environment);
@@ -60,6 +64,30 @@ class ListsController
     public function approved(ServerRequestInterface $request, ResponseInterface $response): ResponseInterface
     {
         return $this->showList($response, Type::APPROVED, Permission::PAY, 'approved', 'Approved');
+    }
+
+    public function approvedPayed(ServerRequestInterface $request, ResponseInterface $response): ResponseInterface
+    {
+        $requestId = (int)$this->paramPost($request, 'id');
+        $srpRequest = $this->requestRepository->find($requestId);
+
+        if (!$srpRequest) {
+            $this->flashMessage->addMessage('Request not found.', FlashMessage::TYPE_WARNING);
+            return $response->withHeader('Location', '/approved');
+        }
+
+        if (!$this->requestService->validateInputAndPermission($srpRequest, newStatus: Type::PAID)) {
+            $this->flashMessage->addMessage('You are not allowed to pay this request.', FlashMessage::TYPE_WARNING);
+            return $response->withHeader('Location', '/approved');
+        }
+
+        $this->requestService->save($srpRequest, newStatus: Type::PAID);
+        $this->flashMessage->addMessage(
+            "Success, paid request [$requestId](/request/$requestId).",
+            FlashMessage::TYPE_SUCCESS
+        );
+
+        return $response->withHeader('Location', '/approved');
     }
 
     private function showList($response, $status, $role, $page, $pageName): ResponseInterface

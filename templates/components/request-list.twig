@@ -11,6 +11,7 @@
     </div>
 {% endif %}
 
+{% set colPayed = pageActive == 'approved' %}
 {% set colReason = pageActive == 'approved' %}
 {% set colStatus = pageActive not in ['open', 'in-progress', 'approved'] %}
 {% set colLastEditor = pageActive == 'in_progress' %}
@@ -20,6 +21,7 @@
     <table class="table table-sm table-dark table-striped table-bordered table-hover">
         <thead>
             <tr>
+                {% if colPayed %}<th>Action</th>{% endif %}
                 <th>Ship</th>
                 <th>System</th>
                 <th>Pilot</th>
@@ -39,6 +41,12 @@
         {% for request in requests %}
             {% set main = getMainIfDifferent(request.character.id) %}
             <tr>
+                {% if colPayed %}<td>
+                    <form action="/approved/payed" method="post">
+                        <input type="hidden" name="id" value="{{ request.id }}">
+                        <button type="submit" class="btn btn-sm btn-primary">Paid</button>
+                    </form>
+                </td>{% endif %}
                 <td><a href="/request/{{ request.id }}" title="Show request">{{ request.ship }}</a></td>
 
                 <td>
