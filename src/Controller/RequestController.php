@@ -262,7 +262,7 @@ class RequestController
     private function setPayout(Request $request): void
     {
         $basePayout = $request->getBasePayout();
-        if (!$basePayout) {
+        if ($basePayout === null) {
             return;
         }
 
