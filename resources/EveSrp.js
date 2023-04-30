@@ -75,9 +75,25 @@ window.EveSrp = {
                     // noinspection JSUnresolvedVariable
                     const orgPosition = evt.target.selectionStart;
 
-                    let newValue = orgValue.replace(/[^0-9]/g, '');
-                    if (newValue !== '') {
-                        newValue = parseInt(newValue).toLocaleString('en-US');
+                    let newValue = orgValue;
+                    if (
+                        // ignore if last char is the decimal separator
+                        orgValue.charAt(orgValue.length-1) !== '.' &&
+
+                        // ignore trailing zeros after the decimal separator
+                        !(orgValue.indexOf('.') !== -1 && orgValue.charAt(orgValue.length-1) === '0')
+                    ) {
+                        newValue = orgValue.replace(/[^0-9.]/g, '');
+
+                        if (newValue !== '') {
+                            // max 6 decimal numbers allowed
+                            if (orgValue.indexOf('.') !== -1 && orgValue.length - orgValue.indexOf('.') > 7) {
+                                newValue = newValue.substring(0, newValue.length - 1);
+                            }
+
+                            // format number
+                            newValue = parseFloat(newValue).toLocaleString('en-US', { maximumFractionDigits: 6 });
+                        }
                     }
 
                     // Number of thousand separators of original and newly formatted string

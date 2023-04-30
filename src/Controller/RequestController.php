@@ -63,7 +63,7 @@ class RequestController
         // Need to distinguish between null and empty string in save() for base payout.
         $newBasePayout = $this->paramPost($request, 'payout');
         if ($newBasePayout !== '' && $newBasePayout !== null) { // allow '0'
-            $newBasePayout = abs((int)preg_replace('/[^0-9]+/', '', $newBasePayout)) * Util::ONE_MILLION;
+            $newBasePayout = $this->sanitizeNumberInput($newBasePayout);
         }
         $newComment = trim((string)$this->paramPost($request, 'comment'));
 
@@ -129,7 +129,7 @@ class RequestController
         }
 
         // Get input
-        $amount = abs((int)str_replace(',', '', (string)$this->paramPost($request, 'amount'))) * Util::ONE_MILLION;
+        $amount = $this->sanitizeNumberInput((string)$this->paramPost($request, 'amount'));
         $type = (string)$this->paramPost($request, 'type');
         $reason = trim((string)$this->paramPost($request, 'reason'));
 
@@ -311,5 +311,10 @@ class RequestController
             $request->setPayout((int)round($payout));
             $this->entityManager->flush();
         }
+    }
+
+    private function sanitizeNumberInput(string $input): int
+    {
+        return (int)abs(((float)preg_replace('/[^0-9.]+/', '', $input)) * Util::ONE_MILLION);
     }
 }
