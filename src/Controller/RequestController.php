@@ -282,7 +282,7 @@ class RequestController
                 if ($modifier->getModValue() > 0) {
                     $payout *= 1 + ($modifier->getModValue() / 100);
                 } else {
-                    $payout *= $modifier->getModValue() * -1 / 100;
+                    $payout *= 1 - ($modifier->getModValue() * -1 / 100);
                 }
             } elseif ($modifier->getModType() === Modifier::TYPE_ABSOLUTE) {
                 $payout += $modifier->getModValue();
