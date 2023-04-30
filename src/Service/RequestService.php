@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace EveSrp\Service;
 
+use Doctrine\ORM\EntityManagerInterface;
+use EveSrp\Model\Action;
 use EveSrp\Model\Division;
 use EveSrp\Model\Permission;
 use EveSrp\Model\Request;
@@ -16,6 +18,7 @@ class RequestService
     public function __construct(
         private UserService $userService,
         private DivisionRepository $divisionRepository,
+        private EntityManagerInterface  $entityManager,
     ) {
     }
 
@@ -135,6 +138,129 @@ class RequestService
             $this->mayChangeStatus($request) ||
             $this->mayChangePayout($request) ||
             $this->mayAddComment($request);
+    }
+
+    public function validateInputAndPermission(
+        Request $request,
+        ?int $newDivision = null,
+        ?string $newStatus = null,
+        ?int $newBasePayout = null,
+        string $newComment = '',
+    ): bool {
+        if ($newDivision !== null) {
+            if (!$this->mayChangeDivision($request)) {
+                return false;
+            }
+
+            $allowedDivisionIds = array_map(function (Division $division) {
+                return $division->getId();
+            }, $this->getDivisionsWithEditPermission());
+
+            if (!in_array($newDivision, $allowedDivisionIds)) {
+                return false;
+            }
+        }
+
+        if ($newStatus !== null) {
+            if (
+                !$this->mayChangeStatus($request) ||
+                !in_array($newStatus, $this->getAllowedNewStatuses($request))
+            ) {
+                return false;
+            }
+        }
+
+        if ($newBasePayout !== null) {
+            if (!$this->mayChangePayout($request)) {
+                return false;
+            }
+        }
+
+        if ($newComment !== '') {
+            if (!$this->mayAddComment($request)) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    public function save(
+        Request $request,
+        ?int $newDivision = null,
+        ?string $newStatus = null,
+        ?int $newBasePayout = null,
+        string $newComment = '',
+    ): void {
+        if ($request->getStatus() !== Type::INCOMPLETE) { // check old status
+            $request->setLastEditor($this->userService->getAuthenticatedUser());
+        }
+
+        if ($newDivision !== null) {
+            $division = $this->divisionRepository->find($newDivision);
+            $oldDivision = $request->getDivision();
+            $request->setDivision($division);
+
+            $action = new Action();
+            $action->setCreated(new \DateTime());
+            $action->setUser($this->userService->getAuthenticatedUser());
+            $action->setCategory(Type::COMMENT);
+            $action->setNote("Moved from division \"{$oldDivision?->getName()}\" to \"{$division->getName()}\".");
+
+            $action->setRequest($request);
+            $this->entityManager->persist($action);
+        }
+
+        if ($newStatus !== null) {
+            $request->setStatus($newStatus);
+
+            $action = new Action();
+            $action->setCreated(new \DateTime());
+            $action->setUser($this->userService->getAuthenticatedUser());
+            $action->setCategory($newStatus);
+            if ($newComment !== '') {
+                $action->setNote($newComment);
+                $newComment = '';
+            }
+
+            $action->setRequest($request);
+            $this->entityManager->persist($action);
+        }
+
+        if ($newBasePayout !== null) {
+            $oldPayout = $request->getBasePayout();
+            $request->setBasePayout($newBasePayout);
+
+            $action = new Action();
+            $action->setCreated(new \DateTime());
+            $action->setUser($this->userService->getAuthenticatedUser());
+            $action->setCategory(Type::COMMENT);
+
+            if ($oldPayout) {
+                $action->setNote(
+                    'Changed base payout from ' . number_format($oldPayout) . ' to ' .
+                    number_format($newBasePayout) . ' ISK.'
+                );
+            } else {
+                $action->setNote('Set base payout to ' . number_format($newBasePayout) . ' ISK.');
+            }
+
+            $action->setRequest($request);
+            $this->entityManager->persist($action);
+        }
+
+        if ($newComment !== '') {
+            $action = new Action();
+            $action->setCreated(new \DateTime());
+            $action->setUser($this->userService->getAuthenticatedUser());
+            $action->setCategory(Type::COMMENT);
+            $action->setNote($newComment);
+
+            $action->setRequest($request);
+            $this->entityManager->persist($action);
+        }
+
+        $this->entityManager->flush();
     }
 
     /**

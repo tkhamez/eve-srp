@@ -8,8 +8,6 @@ use Doctrine\ORM\EntityManagerInterface;
 use EveSrp\Controller\Traits\RequestParameter;
 use EveSrp\Controller\Traits\TwigResponse;
 use EveSrp\FlashMessage;
-use EveSrp\Model\Action;
-use EveSrp\Model\Division;
 use EveSrp\Model\Modifier;
 use EveSrp\Model\Request;
 use EveSrp\Repository\DivisionRepository;
@@ -81,15 +79,16 @@ class RequestController
             return $response->withHeader('Location', "/request/{$args['id']}");
         }
 
+        // Change status if submitter added comment.
+        $newStatus = $this->adjustStatus($srpRequest, $newStatus, $newComment);
+
         // Validate and save
-        if (!$this->validateInputAndPermission($srpRequest, $newDivision, $newStatus, $newBasePayout, $newComment)) {
+        if (!$this->requestService->validateInputAndPermission(
+            $srpRequest, $newDivision, $newStatus, $newBasePayout, $newComment
+        )) {
             $this->flashMessage->addMessage('Invalid input.', FlashMessage::TYPE_WARNING);
         } else {
-            // Change status if submitter added comment.
-            $newStatus = $this->adjustStatus($srpRequest, $newStatus, $newComment);
-
-            // Save
-            $this->save($srpRequest, $newDivision, $newStatus, $newBasePayout, $newComment);
+            $this->requestService->save($srpRequest, $newDivision, $newStatus, $newBasePayout, $newComment);
             $this->setPayout($srpRequest);
             $this->flashMessage->addMessage('Request updated.', FlashMessage::TYPE_SUCCESS);
         }
@@ -228,51 +227,6 @@ class RequestController
         ]);
     }
 
-    private function validateInputAndPermission(
-        Request $request,
-        ?int $newDivision,
-        ?string $newStatus,
-        ?int $newBasePayout,
-        string $newComment,
-    ): bool {
-        if ($newDivision !== null) {
-            if (!$this->requestService->mayChangeDivision($request)) {
-                return false;
-            }
-
-            $allowedDivisionIds = array_map(function (Division $division) {
-                return $division->getId();
-            }, $this->requestService->getDivisionsWithEditPermission());
-
-            if (!in_array($newDivision, $allowedDivisionIds)) {
-                return false;
-            }
-        }
-
-        if ($newStatus !== null) {
-            if (
-                !$this->requestService->mayChangeStatus($request) ||
-                !in_array($newStatus, $this->requestService->getAllowedNewStatuses($request))
-            ) {
-                return false;
-            }
-        }
-
-        if ($newBasePayout !== null) {
-            if (!$this->requestService->mayChangePayout($request)) {
-                return false;
-            }
-        }
-
-        if ($newComment !== '') {
-            if (!$this->requestService->mayAddComment($request)) {
-                return false;
-            }
-        }
-
-        return true;
-    }
-
     private function adjustStatus(Request $srpRequest, ?string $newStatus, string $newComment): ?string
     {
         if (
@@ -283,84 +237,6 @@ class RequestController
             return Type::IN_PROGRESS;
         }
         return $newStatus;
-    }
-
-    private function save(
-        Request $request,
-        ?int $newDivision,
-        ?string $newStatus,
-        ?int $newBasePayout,
-        string $newComment,
-    ): void {
-        if ($request->getStatus() !== Type::INCOMPLETE) { // check old status
-            $request->setLastEditor($this->userService->getAuthenticatedUser());
-        }
-
-        if ($newDivision !== null) {
-            $division = $this->divisionRepository->find($newDivision);
-            $oldDivision = $request->getDivision();
-            $request->setDivision($division);
-
-            $action = new Action();
-            $action->setCreated(new \DateTime());
-            $action->setUser($this->userService->getAuthenticatedUser());
-            $action->setCategory(Type::COMMENT);
-            $action->setNote("Moved from division \"{$oldDivision?->getName()}\" to \"{$division->getName()}\".");
-
-            $action->setRequest($request);
-            $this->entityManager->persist($action);
-        }
-
-        if ($newStatus !== null) {
-            $request->setStatus($newStatus);
-
-            $action = new Action();
-            $action->setCreated(new \DateTime());
-            $action->setUser($this->userService->getAuthenticatedUser());
-            $action->setCategory($newStatus);
-            if ($newComment !== '') {
-                $action->setNote($newComment);
-                $newComment = '';
-            }
-
-            $action->setRequest($request);
-            $this->entityManager->persist($action);
-        }
-
-        if ($newBasePayout !== null) {
-            $oldPayout = $request->getBasePayout();
-            $request->setBasePayout($newBasePayout);
-
-            $action = new Action();
-            $action->setCreated(new \DateTime());
-            $action->setUser($this->userService->getAuthenticatedUser());
-            $action->setCategory(Type::COMMENT);
-
-            if ($oldPayout) {
-                $action->setNote(
-                    'Changed base payout from ' . number_format($oldPayout) . ' to ' .
-                    number_format($newBasePayout) . ' ISK.'
-                );
-            } else {
-                $action->setNote('Set base payout to ' . number_format($newBasePayout) . ' ISK.');
-            }
-
-            $action->setRequest($request);
-            $this->entityManager->persist($action);
-        }
-
-        if ($newComment !== '') {
-            $action = new Action();
-            $action->setCreated(new \DateTime());
-            $action->setUser($this->userService->getAuthenticatedUser());
-            $action->setCategory(Type::COMMENT);
-            $action->setNote($newComment);
-
-            $action->setRequest($request);
-            $this->entityManager->persist($action);
-        }
-
-        $this->entityManager->flush();
     }
 
     private function modifierGetRequestCheckPermission(
