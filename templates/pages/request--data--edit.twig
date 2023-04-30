@@ -62,7 +62,10 @@
                 {% endif %}
             </td>
         </tr>
-        {% if request.status == constant('EveSrp\\Type::APPROVED') %}
+        {%
+            if request.status == constant('EveSrp\\Type::APPROVED') and
+               hasRole(constant('EveSrp\\Model\\Permission::PAY'))
+        %}
             <tr>
                 <th>Reason</th>
                 <td>

@@ -15,7 +15,7 @@
                     <label for="inputDivision" class="form-label">Division</label>
                     <select class="form-select" id="inputDivision" name="division">
                         <option value="" {% if inputDivision == '' %}selected{% endif %}>all</option>
-                        {% if hasRole('global-admin') %}
+                        {% if hasRole(constant('EveSrp\\Security::GLOBAL_ADMIN')) %}
                             <option value="-1" {% if inputDivision == -1 %}selected{% endif %}>
                                 (without division)
                             </option>

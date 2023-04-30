@@ -11,13 +11,13 @@
             </button>
             <div class="collapse navbar-collapse" id="navBarToggle">
                 <ul class="navbar-nav me-auto">
-                    {% if hasRole('submit') %}
+                    {% if hasRole(constant('EveSrp\\Model\\Permission::SUBMIT')) %}
                         <li class="nav-item">
                             <a class="nav-link {% if active_page == 'submit' %}active{% endif%}"
                                href="/submit">Submit Request</a>
                         </li>
                     {% endif %}
-                    {% if hasRole('review') %}
+                    {% if hasRole(constant('EveSrp\\Model\\Permission::REVIEW')) %}
                         <li class="nav-item">
                             <a class="nav-link {% if active_page == 'open' %}active{% endif%}"
                                href="/open">Open</a>
@@ -27,20 +27,24 @@
                                href="/in-progress">In Progress</a>
                         </li>
                     {% endif %}
-                    {% if hasRole('pay') %}
+                    {% if hasRole(constant('EveSrp\\Model\\Permission::PAY')) %}
                         <li class="nav-item">
                             <a class="nav-link {% if active_page == 'approved' %}active{% endif%}" href="/approved">
                                 Approved
                             </a>
                         </li>
                     {% endif %}
-                    {% if hasAnyRole(['review', 'pay', 'admin', 'global-admin']) %}
+                    {% if hasAnyRole([constant('EveSrp\\Model\\Permission::REVIEW'),
+                                      constant('EveSrp\\Model\\Permission::PAY'),
+                                      constant('EveSrp\\Model\\Permission::ADMIN'),
+                                      constant('EveSrp\\Security::GLOBAL_ADMIN')]) %}
                         <li class="nav-item">
                             <a class="nav-link {% if active_page == 'all-requests' %}active{% endif%}"
                                href="/all-requests">All Requests</a>
                         </li>
                     {% endif %}
-                    {% if hasAnyRole(['admin', 'global-admin']) %}
+                    {% if hasAnyRole([constant('EveSrp\\Model\\Permission::ADMIN'),
+                                      constant('EveSrp\\Security::GLOBAL_ADMIN')]) %}
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle {% if active_page matches '/admin-*/' %}active{% endif%}"
                                href="#" id="adminDropdown" role="button"
@@ -48,11 +52,11 @@
                                 Admin
                             </a>
                             <div class="dropdown-menu dropdown-menu-dark" aria-labelledby="adminDropdown">
-                                {% if hasRole('global-admin') %}
+                                {% if hasRole(constant('EveSrp\\Security::GLOBAL_ADMIN')) %}
                                     <a class="dropdown-item {% if active_page == 'admin-divisions' %}active{% endif%}"
                                        href="/admin/divisions">Divisions</a>
                                 {% endif %}
-                                {% if hasRole('global-admin') %}
+                                {% if hasRole(constant('EveSrp\\Security::GLOBAL_ADMIN')) %}
                                     <a class="dropdown-item {% if active_page == 'admin-groups' %}active{% endif%}"
                                        href="/admin/groups">Groups</a>
                                 {% endif %}
