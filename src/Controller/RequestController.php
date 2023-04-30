@@ -79,15 +79,16 @@ class RequestController
             return $response->withHeader('Location', "/request/{$args['id']}");
         }
 
-        // Change status if submitter added comment.
-        $newStatus = $this->adjustStatus($srpRequest, $newStatus, $newComment);
-
         // Validate and save
         if (!$this->requestService->validateInputAndPermission(
             $srpRequest, $newDivision, $newStatus, $newBasePayout, $newComment
         )) {
             $this->flashMessage->addMessage('Invalid input.', FlashMessage::TYPE_WARNING);
         } else {
+            // Change status if submitter added comment.
+            $newStatus = $this->adjustStatus($srpRequest, $newStatus, $newComment);
+
+            // Save
             $this->requestService->save($srpRequest, $newDivision, $newStatus, $newBasePayout, $newComment);
             $this->setPayout($srpRequest);
             $this->flashMessage->addMessage('Request updated.', FlashMessage::TYPE_SUCCESS);
@@ -231,8 +232,8 @@ class RequestController
     {
         if (
             $srpRequest->getUser()?->getId() === $this->userService->getAuthenticatedUser()?->getId() &&
-            $srpRequest->getStatus() === Type::INCOMPLETE &&
-            $newComment !== ''
+            $newComment !== '' &&
+            $srpRequest->getStatus() !== Type::OPEN
         ) {
             return Type::IN_PROGRESS;
         }

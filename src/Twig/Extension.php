@@ -30,7 +30,7 @@ class Extension extends AbstractExtension
             new TwigFunction('hasAnyRole', [$this, 'hasAnyRole']),
             new TwigFunction('mayChangeDivision', [$this, 'mayChangeDivision']),
             new TwigFunction('getDivisionsWithEditPermission', [$this, 'getDivisionsWithEditPermission']),
-            new TwigFunction('mayChangeStatus', [$this, 'mayChangeStatus']),
+            new TwigFunction('mayChangeStatusManually', [$this, 'mayChangeStatusManually']),
             new TwigFunction('getAllowedNewStatuses', [$this, 'getAllowedNewStatuses']),
             new TwigFunction('mayChangePayout', [$this, 'mayChangePayout']),
             new TwigFunction('mayAddComment', [$this, 'mayAddComment']),
@@ -69,9 +69,9 @@ class Extension extends AbstractExtension
         return $this->requestService->getDivisionsWithEditPermission();
     }
 
-    public function mayChangeStatus(Request $request): bool
+    public function mayChangeStatusManually(Request $request): bool
     {
-        return $this->requestService->mayChangeStatus($request);
+        return $this->requestService->mayChangeStatusManually($request);
     }
 
     public function getAllowedNewStatuses(Request $request): array

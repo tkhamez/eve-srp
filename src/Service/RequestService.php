@@ -41,7 +41,7 @@ class RequestService
         return $this->userService->getDivisionsWithRoles([Permission::REVIEW, Permission::PAY]);
     }
 
-    public function mayChangeStatus(Request $request): bool
+    public function mayChangeStatusManually(Request $request): bool
     {
         return $this->userService->hasAnyDivisionRole($request->getDivision(), [Permission::REVIEW, Permission::PAY]);
     }
@@ -65,7 +65,7 @@ class RequestService
         if ($request->getStatus() === Type::INCOMPLETE) {
             $newStatuses = [Type::INCOMPLETE, Type::IN_PROGRESS];
         }
-        if ($request->getStatus() === Type::OPEN || $request->getStatus() === Type::IN_PROGRESS) {
+        if (in_array($request->getStatus(), [Type::OPEN, Type::IN_PROGRESS])) {
             $newStatuses = [Type::INCOMPLETE, Type::OPEN, Type::IN_PROGRESS, Type::APPROVED, Type::REJECTED];
         }
         if ($request->getStatus() === Type::APPROVED) {
@@ -78,7 +78,7 @@ class RequestService
             $newStatuses = [Type::OPEN, Type::IN_PROGRESS];
         }
 
-        // Status based on permission
+        // New status based on permissions
         $permissionStatues = [];
         if (in_array(Permission::REVIEW, $permissions)) {
             array_push(
@@ -111,7 +111,7 @@ class RequestService
         $user = $this->userService->getAuthenticatedUser();
 
         // Submitter permission
-        if ($request->getStatus() == Type::INCOMPLETE && $request->getUser()?->getId() === $user->getId()) {
+        if ($request->getUser()?->getId() === $user->getId() && $request->getStatus() !== Type::IN_PROGRESS) {
             return true;
         }
 
@@ -135,7 +135,7 @@ class RequestService
     {
         return
             $this->mayChangeDivision($request) ||
-            $this->mayChangeStatus($request) ||
+            $this->mayChangeStatusManually($request) ||
             $this->mayChangePayout($request) ||
             $this->mayAddComment($request);
     }
@@ -163,7 +163,7 @@ class RequestService
 
         if ($newStatus !== null) {
             if (
-                !$this->mayChangeStatus($request) ||
+                !$this->mayChangeStatusManually($request) ||
                 !in_array($newStatus, $this->getAllowedNewStatuses($request))
             ) {
                 return false;
