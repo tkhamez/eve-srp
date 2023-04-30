@@ -14,8 +14,8 @@
 {% set colPayed = pageActive == 'approved' %}
 {% set colReason = pageActive == 'approved' %}
 {% set colStatus = pageActive not in ['open', 'in-progress', 'approved'] %}
-{% set colLastEditor = pageActive == 'in_progress' %}
-{% set colKillboard = pageActive in ['my-requests', 'all-requests'] or (pageActive == 'open' and hasKillboardUrl()) %}
+{% set colLastEditor = pageActive == 'in-progress' %}
+{% set colKillboard = pageActive in ['my-requests', 'open', 'in-progress', 'all-requests'] and hasKillboardUrl() %}
 
 <div class="table-responsive">
     <table class="table table-sm table-dark table-striped table-bordered table-hover">
@@ -34,8 +34,9 @@
                     <i class="bi bi-sort-{{ sortOrder }} float-end"></i>
                 </th>
                 <th>Division</th>
-                {% if colLastEditor %}<th>Last Editor</th>{% endif %}
+                <th>Kill Time</th>
                 {% if colKillboard %}<th>Killboard</th>{% endif %}
+                {% if colLastEditor %}<th>Last Editor</th>{% endif %}
             </tr>
         </thead>
         <tbody>
@@ -74,7 +75,7 @@
                 <td>{{ request.corporationName }}</td>
 
                 {% if colReason %}
-                    <td>
+                    <td class="small">
                         {% include 'components/clipboard-copy.twig' with {
                             display: getPayoutReason(request),
                             copy: getPayoutReason(request),
@@ -103,15 +104,17 @@
 
                 <td>{{ request.division.name }}</td>
 
-                {% if colLastEditor %}
-                    <td>{{ request.lastEditor.name }}</td>
-                {% endif %}
+                <td>{% include 'components/link-nakamura.twig' with { timestamp: request.killTime } only %}</td>
 
                 {% if colKillboard %}
                     <td>
                         <a href="{{ getKillboardUrl(request) }}" target="_blank" rel="noopener noreferrer"
                            class="srp-external-link">zKillboard</a>
                     </td>
+                {% endif %}
+
+                {% if colLastEditor %}
+                    <td>{{ request.lastEditor.name }}</td>
                 {% endif %}
             </tr>
         {%  endfor %}

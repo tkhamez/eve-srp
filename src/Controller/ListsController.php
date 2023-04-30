@@ -56,7 +56,7 @@ class ListsController
      */
     public function inProgress(ServerRequestInterface $request, ResponseInterface $response): ResponseInterface
     {
-        return $this->showList($response, Type::IN_PROGRESS, Permission::REVIEW, 'in_progress', 'In Progress');
+        return $this->showList($response, Type::IN_PROGRESS, Permission::REVIEW, 'in-progress', 'In Progress');
     }
 
     /**
