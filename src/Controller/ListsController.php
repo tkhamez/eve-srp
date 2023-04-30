@@ -57,9 +57,9 @@ class ListsController
     /**
      * @noinspection PhpUnusedParameterInspection
      */
-    public function pay(ServerRequestInterface $request, ResponseInterface $response): ResponseInterface
+    public function approved(ServerRequestInterface $request, ResponseInterface $response): ResponseInterface
     {
-        return $this->showList($response, Type::APPROVED, Permission::PAY, 'pay', 'Pay');
+        return $this->showList($response, Type::APPROVED, Permission::PAY, 'approved', 'Approved');
     }
 
     private function showList($response, $status, $role, $page, $pageName): ResponseInterface

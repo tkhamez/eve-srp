@@ -13,7 +13,7 @@ return [
     ['post', '/submit',       [EveSrp\Controller\SubmitController::class, 'submitForm']],
     ['get',  '/open',         [EveSrp\Controller\ListsController::class, 'open']],
     ['get',  '/in-progress',  [EveSrp\Controller\ListsController::class, 'inProgress']],
-    ['get',  '/pay',          [EveSrp\Controller\ListsController::class, 'pay']],
+    ['get',  '/approved',     [EveSrp\Controller\ListsController::class, 'approved']],
     ['get',  '/all-requests', EveSrp\Controller\AllRequestsController::class],
 
     ['get',  '/request/{id}',                 [EveSrp\Controller\RequestController::class, 'show']],

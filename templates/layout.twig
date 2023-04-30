@@ -35,7 +35,9 @@
                     {% endif %}
                     {% if hasRole('pay') %}
                         <li class="nav-item">
-                            <a class="nav-link {% if active_page == 'pay' %}active{% endif%}" href="/pay">Pay</a>
+                            <a class="nav-link {% if active_page == 'approved' %}active{% endif%}" href="/approved">
+                                Approved
+                            </a>
                         </li>
                     {% endif %}
                     {% if hasAnyRole(['admin', 'global-admin']) %}

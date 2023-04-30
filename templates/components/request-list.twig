@@ -17,7 +17,7 @@
             <tr>
                 <th>Ship</th>
                 <th>Pilot</th>
-                {% if pageActive == 'pay' %}
+                {% if pageActive == 'approved' %}
                     <th>Reason</th>
                 {% endif %}
                 <th>Corporation</th>
@@ -39,7 +39,7 @@
             <tr>
                 <td><a href="/request/{{ request.id }}" title="Show request">{{ request.ship }}</a></td>
                 <td>
-                    {% if pageActive == 'pay' %}
+                    {% if pageActive == 'approved' %}
                         {% include 'components/clipboard-copy.twig' with {
                             display: request.character.name,
                             title: main ? 'Main: ' ~ main : '',
@@ -49,7 +49,7 @@
                         {{ request.character.name }}
                     {% endif %}
                 </td>
-                {% if pageActive == 'pay' %}
+                {% if pageActive == 'approved' %}
                     <td>
                         {% include 'components/clipboard-copy.twig' with {
                             display: getPayoutReason(request),
@@ -81,7 +81,7 @@
                 <td>{{ request.status }}</td>
                 <td class="text-end">
                     {% if request.payout is not null %}
-                        {% if pageActive == 'pay' %}
+                        {% if pageActive == 'approved' %}
                             {% include 'components/clipboard-copy.twig' with {
                                 display: request.payout|number_format,
                                 copy: request.payout,
