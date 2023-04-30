@@ -38,6 +38,7 @@ class Extension extends AbstractExtension
             new TwigFunction('zKillboardUrl', [$this, 'zKillboardUrl']),
             new TwigFunction('esiUrl', [$this, 'esiUrl']),
             new TwigFunction('getMainIfDifferent', [$this, 'getMainIfDifferent']),
+            new TwigFunction('getPayoutReason', [$this, 'getPayoutReason']),
         ];
     }
 
@@ -118,5 +119,10 @@ class Extension extends AbstractExtension
     {
         $main = $this->userService->getMain($characterId);
         return $main && $main->getId() !== $characterId ? $main->getName() : '';
+    }
+
+    public function getPayoutReason(Request $request): string
+    {
+        return "Loss {$request->getId()}, {$request->getShip()}, {$request->getKillTime()->format('Y-m-d H:i')}";
     }
 }

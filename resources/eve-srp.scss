@@ -67,8 +67,8 @@ a {
     padding-right: 1em;
 }
 
-.srp-copy-text {
-    white-space: nowrap;
+.srp-cursor-pointer {
+    cursor: pointer;
 }
 
 .srp-bg-dark-2 {
@@ -80,8 +80,14 @@ a {
     text-decoration-style: dotted;
 }
 
-.srp-cursor-pointer {
-    cursor: pointer;
+.srp-text-no-wrap {
+    white-space: nowrap;
+}
+
+// Components
+
+.srp-copy-text:hover {
+    filter: brightness(0.7);
 }
 
 // Libraries

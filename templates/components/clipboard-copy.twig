@@ -1,4 +1,15 @@
 
+{% set titleIcon = 'Copy to clipboard' %}
+{% set titleText = title ? title : titleIcon %}
+{% set class = title ? 'srp-text-with-title' : '' %}
+{% set words = display|split(' ') %}
+
 <span class="srp-copy-text srp-cursor-pointer" data-text="{{ copy }}">
-    {{ display }} <i class="bi bi-clipboard" title="Copy to clipboard"></i>
+    <span class="{{ class }}" title="{{ titleText }}">
+        {{ words|slice(0, length-1)|join(' ') }}
+    </span>
+    <span class="srp-text-no-wrap {{ class }}" title="{{ titleText }}">
+        {{ words|slice(length-1)[0] }}
+        <i class="bi bi-clipboard" title="{{ titleIcon }}"></i>
+    </span>
 </span>

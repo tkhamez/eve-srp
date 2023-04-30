@@ -67,8 +67,8 @@
                 <th>Reason</th>
                 <td>
                     {% include 'components/clipboard-copy.twig' with {
-                        display: 'Loss ' ~ request.id,
-                        copy: 'Loss ' ~ request.id,
+                        display: getPayoutReason(request),
+                        copy: getPayoutReason(request),
                     } only %}
                 </td>
             </tr>

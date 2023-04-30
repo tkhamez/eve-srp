@@ -38,10 +38,11 @@
             {% set main = getMainIfDifferent(request.character.id) %}
             <tr>
                 <td><a href="/request/{{ request.id }}" title="Show request">{{ request.ship }}</a></td>
-                <td title="{{ main ? 'Main: ' ~ main : '' }}" class="{{ main ? 'srp-text-with-title' : '' }}">
+                <td>
                     {% if pageActive == 'pay' %}
                         {% include 'components/clipboard-copy.twig' with {
                             display: request.character.name,
+                            title: main ? 'Main: ' ~ main : '',
                             copy: request.character.name,
                         } only %}
                     {% else %}
@@ -51,8 +52,8 @@
                 {% if pageActive == 'pay' %}
                     <td>
                         {% include 'components/clipboard-copy.twig' with {
-                            display: 'Loss ' ~ request.id,
-                            copy: 'Loss ' ~ request.id,
+                            display: getPayoutReason(request),
+                            copy: getPayoutReason(request),
                         } only %}
                     </td>
                 {% endif %}
