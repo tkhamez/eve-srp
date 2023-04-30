@@ -93,6 +93,7 @@ Useful commands:
 ```
 bin/doctrine orm:validate-schema
 bin/doctrine dbal:reserved-words
+sudo rm -R ./storage/compilation_cache/*
 ```
 
 ### Build Frontend
