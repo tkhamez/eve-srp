@@ -1,4 +1,5 @@
 <form action="/request/{{ request.id }}/update" method="post">
+    {{ data.csrfFormInput|raw }}
     <table class="table table-dark table-sm">
         <tr>
             <th><label for="editDivision">Division</label></th>

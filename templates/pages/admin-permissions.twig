@@ -15,6 +15,7 @@
         <form class="card bg-dark mb-3 border-light"
               action="/admin/permissions/save"
               method="post" id="division{{ division.id }}">
+            {{ data.csrfFormInput|raw }}
             <input type="hidden" name="id" value="{{ division.id }}">
             <div class="card-body">
                 <h4 class="card-title">Division: {{ division.name }}</h4>

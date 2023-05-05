@@ -5,16 +5,18 @@ declare(strict_types=1);
 
 namespace EveSrp\Twig;
 
+use EveSrp\Misc\CSRFTokenMiddleware;
 use EveSrp\Misc\Util;
 use EveSrp\Model\Character;
 use EveSrp\Model\User;
 use EveSrp\Service\UserService;
 use EveSrp\Settings;
 use EveSrp\Type;
+use SlimSession\Helper;
 
 class GlobalData
 {
-    public function __construct(private Settings $settings, private UserService $userService)
+    public function __construct(private Settings $settings, private UserService $userService, private Helper $session)
     {
     }
 
@@ -73,6 +75,13 @@ class GlobalData
     public function statuses(): array
     {
         return [Type::INCOMPLETE, Type::OPEN, Type::IN_PROGRESS, Type::APPROVED, Type::PAID, Type::REJECTED];
+    }
+
+    public function csrfFormInput(): string
+    {
+        $name = CSRFTokenMiddleware::CSRF_KEY_NAME;
+        $token = $this->session->get(CSRFTokenMiddleware::CSRF_KEY_NAME);
+        return "<input type='hidden' name='$name' value='$token'>";
     }
 
     private function getUser(): ?User

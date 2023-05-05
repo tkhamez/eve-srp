@@ -13,6 +13,7 @@
     <div class="page-submit row mb-3">
         <div class="col">
             <form class="border border-light p-3" action="/submit" method="post" id="requestForm">
+                {{ data.csrfFormInput|raw }}
                 <div class="mb-3">
                     <label for="division" class="form-label">Division</label>
                     <select class="form-select" name="division" id="division" required>

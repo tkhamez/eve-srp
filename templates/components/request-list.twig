@@ -45,6 +45,7 @@
             <tr>
                 {% if colPayed %}<td>
                     <form action="/approved/payed" method="post">
+                        {{ data.csrfFormInput|raw }}
                         <input type="hidden" name="id" value="{{ request.id }}">
                         <button type="submit" class="btn btn-sm btn-primary">Paid</button>
                     </form>

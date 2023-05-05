@@ -6,6 +6,7 @@ namespace EveSrp;
 
 use DI\ContainerBuilder;
 use Dotenv\Dotenv;
+use EveSrp\Misc\CSRFTokenMiddleware;
 use EveSrp\Misc\SlimErrorHandler;
 use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ResponseFactoryInterface;
@@ -108,6 +109,8 @@ class Bootstrap
 
         // Add routing middleware after SecureRouteMiddleware and RoleMiddleware because they depend on the route.
         $app->addRoutingMiddleware();
+
+        $app->add($this->container->get(CSRFTokenMiddleware::class));
 
         $app->add(new Session([
             'name' => 'eve_srp_session',

@@ -27,6 +27,7 @@
                         <tr>
                             <td>
                                 <form id="rename{{ division.id }}" method="post" action="/admin/divisions/rename">
+                                    {{ data.csrfFormInput|raw }}
                                     <input type="hidden" name="id" value="{{ division.id }}">
                                 </form>
                                 {{ division.id }}
@@ -55,6 +56,7 @@
         </div>
         <div class="col">
             <form class="mb-3 card bg-dark border-light" action="/admin/divisions/new" method="post">
+                {{ data.csrfFormInput|raw }}
                 <div class="card-body">
                     <h5 class="card-title">Add Division</h5>
                     <div class="mb-3">
@@ -82,6 +84,7 @@
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No, cancel</button>
                     <form action="/admin/divisions/delete" method="post">
+                        {{ data.csrfFormInput|raw }}
                         <input type="hidden" name="id" value="">
                         <button type="submit" class="btn btn-danger">Yes, delete</button>
                     </form>

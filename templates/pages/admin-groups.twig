@@ -32,6 +32,7 @@
         </div>
         <div class="col">
             <form class="mb-3 card bg-dark border-light" action="/admin/groups/sync" method="post">
+                {{ data.csrfFormInput|raw }}
                 <div class="card-body">
                     <h5 class="card-title">Update Groups</h5>
                     <p class="card-text">Synchronize (add, remove) external groups.</p>

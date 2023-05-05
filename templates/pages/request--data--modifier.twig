@@ -3,6 +3,7 @@
 {% if mayChangePayout(request) %}
     <div class="data-modifier row mb-3 pb-2 table-dark border-bottom">
         <form action="/request/{{ request.id }}/modifier-add" method="post" class="col">
+            {{ data.csrfFormInput|raw }}
             <div class="input-group input-group-sm mt-1">
                 <label class="input-group-text bg-dark text-light" for="modifierAmount">&nbsp;Add</label>
                 <input type="text" required class="form-control form-control-sm" name="amount" id="modifierAmount"
@@ -48,6 +49,7 @@
 
             {% if mayChangePayout(request) and not modifier.voidedTime %}
                 <form action="/request/{{ request.id }}/modifier-remove" method="post" class="d-inline">
+                    {{ data.csrfFormInput|raw }}
                     <input type="hidden" name="id" value="{{ modifier.id }}">
                     <button type="submit" class="border-0 badge bg-danger float-end">remove</button>
                 </form>
