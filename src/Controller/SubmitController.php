@@ -115,7 +115,7 @@ class SubmitController
                 return null;
             }
         } else {
-            $this->flashMessage->addMessage('Invalid URL.', FlashMessage::TYPE_WARNING);
+            $this->flashMessage->addMessage('Invalid link.', FlashMessage::TYPE_WARNING);
             return null;
         }
 
