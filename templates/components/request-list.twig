@@ -76,7 +76,7 @@
                 <td>{{ request.corporationName }}</td>
 
                 {% if colReason %}
-                    <td class="small">
+                    <td>
                         {% include 'components/clipboard-copy.twig' with {
                             display: getPayoutReason(request),
                             copy: getPayoutReason(request),
