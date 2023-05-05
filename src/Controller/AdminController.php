@@ -52,7 +52,7 @@ class AdminController
 
     public function newDivision(ServerRequestInterface $request, ResponseInterface $response): ResponseInterface
     {
-        $name = (string) $this->paramPost($request, 'name');
+        $name = (string)$this->paramPost($request, 'name');
         if ($name !== '') {
             $division = $this->divisionRepository->findOneBy(['name' => $name]);
             if ($division === null) {
@@ -62,10 +62,31 @@ class AdminController
                 $this->entityManager->flush();
                 $this->flashMessage->addMessage('Division added.', FlashMessage::TYPE_SUCCESS);
             } else {
-                $this->flashMessage->addMessage('A division with that name already exists.');
+                $this->flashMessage->addMessage('A division with this name already exists.');
             }
         } else {
             $this->flashMessage->addMessage('Please enter a name.', FlashMessage::TYPE_WARNING);
+        }
+
+        return $response->withHeader('Location', '/admin/divisions');
+    }
+
+    public function renameDivision(ServerRequestInterface $request, ResponseInterface $response): ResponseInterface
+    {
+        $id = (int)$this->paramPost($request, 'id');
+        $name = (string)$this->paramPost($request, 'name');
+
+        $divisionEdit = $this->divisionRepository->find($id);
+
+        if ($divisionEdit && $name !== '' && $divisionEdit->getName() !== $name) {
+            $divisionExisting = $this->divisionRepository->findOneBy(['name' => $name]);
+            if ($divisionExisting) {
+                $this->flashMessage->addMessage('A division with this name already exists.');
+            } else {
+                $divisionEdit->setName($name);
+                $this->entityManager->flush();
+                $this->flashMessage->addMessage("Division name changed to '$name'.", FlashMessage::TYPE_SUCCESS);
+            }
         }
 
         return $response->withHeader('Location', '/admin/divisions');

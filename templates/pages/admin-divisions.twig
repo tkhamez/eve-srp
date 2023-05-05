@@ -13,46 +13,38 @@
 
     <div class="row">
         <div class="col">
-
-            <div class="modal fade" id="deleteModal" tabindex="-1" role="dialog"
-                 aria-labelledby="deleteModalLabel" aria-hidden="true">
-                <div class="modal-dialog" role="document">
-                    <div class="modal-content bg-dark">
-                        <div class="modal-header">
-                            <h5 class="modal-title" id="exampleModalLabel">Delete Division</h5>
-                            <button type="button" class="btn-close bg-light" data-bs-dismiss="modal"
-                                    aria-label="Close"></button>
-                        </div>
-                        <div class="modal-body">
-                            Are you sure?
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No, cancel</button>
-                            <form action="/admin/divisions/delete" method="post">
-                                <input type="hidden" name="id" value="">
-                                <button type="submit" class="btn btn-danger">Yes, delete</button>
-                            </form>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            
             <table class="table table-sm table-dark table-striped table-bordered">
                 <thead class="bg-dark-2">
                     <tr>
                         <th>ID</th>
                         <th>Name</th>
                         <th></th>
+                        <th></th>
                     </tr>
                 </thead>
                 <tbody>
                     {% for division in divisions %}
                         <tr>
-                            <td>{{ division.id }}</td>
-                            <td>{{ division.name }}</td>
+                            <td>
+                                <form id="rename{{ division.id }}" method="post" action="/admin/divisions/rename">
+                                    <input type="hidden" name="id" value="{{ division.id }}">
+                                </form>
+                                {{ division.id }}
+                            </td>
+                            <td>
+                                <input form="rename{{ division.id }}" type="text" name="name"
+                                       aria-label="division name" class="form-control form-control-sm"
+                                       value="{{ division.name }}">
+                            </td>
+                            <td>
+                                <button form="rename{{ division.id }}" type="submit" class="btn btn-sm btn-primary">
+                                    rename
+                                </button>
+                            </td>
                             <td class="text-end">
-                                <button type="button" class="btn btn-warning delete-division" data-bs-toggle="modal"
-                                        data-bs-target="#deleteModal" data-srp-id="{{ division.id }}">
+                                <button type="button" class="btn  btn-sm btn-warning delete-division"
+                                        data-bs-toggle="modal" data-bs-target="#deleteModal"
+                                        data-srp-id="{{ division.id }}">
                                     delete
                                 </button>
                             </td>
@@ -66,12 +58,36 @@
                 <div class="card-body">
                     <h5 class="card-title">Add Division</h5>
                     <div class="mb-3">
-                        <label for="nameInput" class="form-label">Name</label>
-                        <input type="text" name="name" class="form-control" id="nameInput">
+                        <label for="newNameInput" class="form-label">Name</label>
+                        <input type="text" name="name" class="form-control" id="newNameInput">
                     </div>
                     <button type="submit" class="btn btn-primary">Submit</button>
                 </div>
             </form>
         </div>
     </div>
+
+    <div class="modal fade" id="deleteModal" tabindex="-1" role="dialog"
+         aria-labelledby="deleteModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content bg-dark">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="deleteModalLabel">Delete Division</h5>
+                    <button type="button" class="btn-close bg-light" data-bs-dismiss="modal"
+                            aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    Are you sure?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No, cancel</button>
+                    <form action="/admin/divisions/delete" method="post">
+                        <input type="hidden" name="id" value="">
+                        <button type="submit" class="btn btn-danger">Yes, delete</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
 {% endblock %}

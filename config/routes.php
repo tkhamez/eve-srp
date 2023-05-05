@@ -24,6 +24,7 @@ return [
 
     ['get',  '/admin/divisions',        [EveSrp\Controller\AdminController::class, 'divisions']],
     ['post', '/admin/divisions/new',    [EveSrp\Controller\AdminController::class, 'newDivision']],
+    ['post', '/admin/divisions/rename', [EveSrp\Controller\AdminController::class, 'renameDivision']],
     ['post', '/admin/divisions/delete', [EveSrp\Controller\AdminController::class, 'deleteDivision']],
     ['get',  '/admin/groups',           [EveSrp\Controller\AdminController::class, 'groups']],
     ['post', '/admin/groups/sync',      [EveSrp\Controller\AdminController::class, 'syncGroups']],
