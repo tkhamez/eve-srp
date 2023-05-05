@@ -13,10 +13,16 @@
                 <label class="input-group-text bg-dark text-light" for="modifierType">Type</label>
                 <select required class="form-select" name="type" id="modifierType">
                     <option selected value=""></option>
-                    <option value="relative-bonus">% Bonus</option>
-                    <option value="relative-deduction">% Deduction</option>
-                    <option value="absolute-bonus">ISK Bonus (millions)</option>
-                    <option value="absolute-deduction">ISK Deduction (millions)</option>
+                    <option value="{{ constant('EveSrp\\Service\\RequestService::MOD_REL_BONUS') }}">% Bonus</option>
+                    <option value="{{ constant('EveSrp\\Service\\RequestService::MOD_REL_DEDUCTION') }}">
+                        % Deduction
+                    </option>
+                    <option value="{{ constant('EveSrp\\Service\\RequestService::MOD_ABS_BONUS') }}">
+                        ISK Bonus (millions)
+                    </option>
+                    <option value="{{ constant('EveSrp\\Service\\RequestService::MOD_ABS_DEDUCTION') }}">
+                        ISK Deduction (millions)
+                    </option>
                 </select>
             </div>
 

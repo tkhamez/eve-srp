@@ -63,7 +63,7 @@ class RequestController
         // Need to distinguish between null and empty string in save() for base payout.
         $newBasePayout = $this->paramPost($request, 'payout');
         if ($newBasePayout !== '' && $newBasePayout !== null) { // allow '0'
-            $newBasePayout = $this->sanitizeNumberInput($newBasePayout);
+            $newBasePayout = $this->sanitizeNumberInput($newBasePayout) * Util::ONE_MILLION;
         }
         $newComment = trim((string)$this->paramPost($request, 'comment'));
 
@@ -134,26 +134,39 @@ class RequestController
         $reason = trim((string)$this->paramPost($request, 'reason'));
 
         // Validate input
-        $validTypes = ['relative-bonus', 'relative-deduction', 'absolute-bonus', 'absolute-deduction'];
+        $validTypes = [
+            RequestService::MOD_REL_BONUS,
+            RequestService::MOD_REL_DEDUCTION,
+            RequestService::MOD_ABS_BONUS,
+            RequestService::MOD_ABS_DEDUCTION
+        ];
         if (
             $amount === 0 ||
             !in_array($type, $validTypes) ||
-            ($type == 'relative-deduction' && $amount > 100)
+            ($type == RequestService::MOD_REL_DEDUCTION && $amount > 100)
         ) {
             $this->flashMessage->addMessage('Invalid input.', FlashMessage::TYPE_WARNING);
             return $response->withHeader('Location', "/request/{$args['id']}");
         }
+
+        // Adjust amount based on type
+        $amount = in_array($type, [RequestService::MOD_ABS_BONUS, RequestService::MOD_ABS_DEDUCTION])
+            ? $amount * Util::ONE_MILLION
+            : $amount;
+        $amount = in_array($type, [RequestService::MOD_REL_DEDUCTION, RequestService::MOD_ABS_DEDUCTION])
+            ? $amount * -1
+            : $amount;
 
         // Add modifier
         $modifier = new Modifier();
         $modifier->setCreated(new \DateTime());
         $modifier->setUser($this->userService->getAuthenticatedUser());
         $modifier->setModType(
-            in_array($type, ['relative-bonus', 'relative-deduction']) ?
-                Modifier::TYPE_RELATIVE :
-                Modifier::TYPE_ABSOLUTE
+            in_array($type, [RequestService::MOD_REL_BONUS, RequestService::MOD_REL_DEDUCTION])
+                ? Modifier::TYPE_RELATIVE
+                : Modifier::TYPE_ABSOLUTE
         );
-        $modifier->setModValue(in_array($type, ['relative-deduction', 'absolute-deduction']) ? $amount * -1 : $amount);
+        $modifier->setModValue($amount);
         $modifier->setNote($reason);
         $modifier->setRequest($srpRequest);
 
@@ -170,8 +183,7 @@ class RequestController
         ServerRequestInterface $request,
         ResponseInterface $response,
         array $args
-    ): ResponseInterface
-    {
+    ): ResponseInterface {
         $check = $this->modifierGetRequestCheckPermission($response, (int)$args['id']);
         if ($check instanceof ResponseInterface) {
             return $check;
@@ -315,6 +327,6 @@ class RequestController
 
     private function sanitizeNumberInput(string $input): int
     {
-        return (int)abs(((float)preg_replace('/[^0-9.]+/', '', $input)) * Util::ONE_MILLION);
+        return (int)abs((float)preg_replace('/[^0-9.]+/', '', $input));
     }
 }

@@ -16,6 +16,14 @@ use EveSrp\Type;
 
 class RequestService
 {
+    public const MOD_REL_BONUS = 'relative-bonus';
+
+    public const MOD_REL_DEDUCTION = 'relative-deduction';
+
+    public const MOD_ABS_BONUS = 'absolute-bonus';
+
+    public const MOD_ABS_DEDUCTION = 'absolute-deduction';
+
     public function __construct(
         private UserService $userService,
         private DivisionRepository $divisionRepository,
