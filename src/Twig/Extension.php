@@ -131,7 +131,7 @@ class Extension extends AbstractExtension
 
     public function getPayoutReason(Request $request): string
     {
-        return "Loss {$request->getId()}, {$request->getShip()}, {$request->getKillTime()->format('Y-m-d H:i')}";
+        return "Loss {$request->getId()} {$request->getShip()}";
     }
 
     public function formatMillions(int $number, bool $includeM = true, int $decimals = 2): string
