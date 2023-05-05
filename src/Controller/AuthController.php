@@ -38,6 +38,10 @@ class AuthController
      */
     public function login(ServerRequestInterface $request, ResponseInterface $response): ResponseInterface
     {
+        if ($this->userService->getAuthenticatedUser()) {
+            return $response->withHeader('Location', '/');
+        }
+
         try {
             $state = $this->authenticationProvider->generateState();
         } catch (\Exception) {
