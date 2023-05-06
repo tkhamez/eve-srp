@@ -4,7 +4,7 @@ services:
   eve_srp_db:
     container_name: eve_srp_db
     image: mariadb:10.6
-    volumes: ["./.mariadb:/var/lib/mysql"]
+    volumes: ["./.db/mariadb:/var/lib/mysql"]
     environment:
       MYSQL_ROOT_PASSWORD: eve_srp
       MYSQL_USER: eve_srp
@@ -16,6 +16,7 @@ services:
   eve_srp_db_postgres:
     container_name: eve_srp_db_postgres
     image: postgres:13-alpine
+    volumes: ["./.db/postgresql:/var/lib/postgresql/data"]
     environment:
       POSTGRES_PASSWORD: eve_srp
     ports: ["55432:5432"]

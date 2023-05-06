@@ -20,7 +20,8 @@ with optional [zKillboard](https://github.com/zKillboard/zKillboard) integration
 
 To run the application you need a Linux OS (others may work but were not tested), a web server with support 
 for PHP >=8.0 and URL rewriting, and a database supported by 
-[Doctrine ORM](https://www.doctrine-project.org/projects/doctrine-orm/en/latest/index.html) (tested with MariaDB 10.6).
+[Doctrine ORM](https://www.doctrine-project.org/projects/doctrine-orm/en/latest/index.html) (tested with MariaDB 10.6
+and PostgreSQL 12).
 
 - Create an EVE application at https://developers.eveonline.com, no scopes required. Set the callback URL to
   `https://your.domain.tld/auth`.

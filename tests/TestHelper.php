@@ -38,14 +38,17 @@ class TestHelper
     /**
      * @throws \Throwable
      */
-    public static function bootstrap(array $config): void
+    public static function bootstrap(): void
     {
         // Create DI container
         self::$container = (new Bootstrap())->getContainer();
 
-        $configFile = require_once ROOT_DIR . '/config/config.php';
+        $config = array_merge(
+            require_once ROOT_DIR . '/config/config.php',
+            ['EVE_SRP_ENV' => 'dev', 'DB_URL' => $_ENV['EVE_SRP_DB_TEST_URL']]
+        );
         /** @noinspection PhpPossiblePolymorphicInvocationInspection */
-        self::$container->set(Settings::class, new Settings(array_merge($configFile, $config)));
+        self::$container->set(Settings::class, new Settings($config));
 
         // Create database schema
         self::$em = self::$container->get(EntityManagerInterface::class);
