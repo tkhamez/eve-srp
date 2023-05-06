@@ -2,10 +2,9 @@
 
 namespace Test;
 
-use DI\ContainerBuilder;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Tools\SchemaTool;
-use EveSrp\Container;
+use EveSrp\Bootstrap;
 use EveSrp\Model\Action;
 use EveSrp\Model\Character;
 use EveSrp\Model\Division;
@@ -25,30 +24,31 @@ class TestHelper
     private static EntityManagerInterface $em;
 
     private static array $classNames = [
-        Action::class,
-        Character::class,
-        Division::class,
         EsiType::class,
-        ExternalGroup::class,
+        Action::class,
         Modifier::class,
-        Permission::class,
         Request::class,
+        Permission::class,
+        Division::class,
+        Character::class,
         User::class,
+        ExternalGroup::class,
     ];
 
     /**
-     * @throws \Exception
+     * @throws \Throwable
      */
     public static function bootstrap(array $config): void
     {
         // Create DI container
-        $builder = new ContainerBuilder();
-        $builder->addDefinitions(Container::getDefinition());
-        self::$container = $builder->build();
-        self::$container->set(Settings::class, new Settings($config));
+        self::$container = (new Bootstrap())->getContainer();
+
+        $configFile = require_once ROOT_DIR . '/config/config.php';
+        /** @noinspection PhpPossiblePolymorphicInvocationInspection */
+        self::$container->set(Settings::class, new Settings(array_merge($configFile, $config)));
 
         // Create database schema
-        self::$em = Container::getDefinition()[EntityManagerInterface::class](self::$container);
+        self::$em = self::$container->get(EntityManagerInterface::class);
         $classes = array_map(function (string $className) {
             return self::$em->getClassMetadata($className);
         }, self::$classNames);

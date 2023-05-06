@@ -24,7 +24,6 @@ class Bootstrap
     private ContainerInterface $container;
 
     /**
-     * Bootstrap constructor
      * @throws \Exception
      */
     public function __construct()

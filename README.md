@@ -28,16 +28,11 @@ for PHP >=8.0 and URL rewriting, and a database supported by
 - Copy `config/.env.dist` to `config/.env` and adjust values or set the corresponding environment variables.
   At the very least set `EVE_SRP_SSO_CLIENT_ID`, `EVE_SRP_SSO_CLIENT_SECRET` and `EVE_SRP_SSO_REDIRECT_URI`, the rest 
   works as it is when using the Docker development environment.
-- Install dependencies and generate Doctrine proxy classes with `composer install`.
+- Install dependencies, generate Doctrine proxy classes and create or update the database schema with `composer install`.
 - Clear the template cache: `rm -R storage/compilation_cache`.
 - Make sure that the `storage` directory is writable by the webserver.
 - Set the document root to the `web` directory and configure URL rewriting to `index.php` (see
   [Slim framework - Web Servers](https://www.slimframework.com/docs/v4/start/web-servers.html) for details).
-- Sync database schema:
-  - **Backup the database first!**
-  - `bin/doctrine orm:schema-tool:update --complete --dump-sql`  
-    Review SQLs and if OK execute:  
-    `bin/doctrine orm:schema-tool:update --complete --force`
 - You can add your own JavaScript code to `web/static/custom.js`, for example for analytics software.
 
 ### Permissions
@@ -94,6 +89,10 @@ Useful commands:
 ```
 bin/doctrine orm:validate-schema
 bin/doctrine dbal:reserved-words
+
+vendor/bin/doctrine-migrations migrations:diff
+vendor/bin/doctrine-migrations migrations:migrate
+
 sudo rm -R ./storage/compilation_cache/*
 ```
 
