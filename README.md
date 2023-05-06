@@ -1,13 +1,13 @@
 # EVE-SRP
 
 A web application to manage a **Ship Replacement Program** for [EVE Online](https://www.eveonline.com) 
-with optional [zKillboard](https://github.com/zKillboard/zKillboard) integration. 
+with optional [zKillboard](https://github.com/zKillboard/zKillboard) integration.
 
 <!-- toc -->
 
 - [Install](#install)
+  * [Further Configurations](#further-configurations)
   * [Permissions](#permissions)
-  * [Error logging](#error-logging)
 - [Provider](#provider)
 - [Development Environment](#development-environment)
   * [Install Backend](#install-backend)
@@ -19,22 +19,30 @@ with optional [zKillboard](https://github.com/zKillboard/zKillboard) integration
 ## Install
 
 To run the application you need a Linux OS (others may work but were not tested), a web server with support 
-for PHP >=8.0 and URL rewriting, and a database supported by 
-[Doctrine ORM](https://www.doctrine-project.org/projects/doctrine-orm/en/latest/index.html) (tested with MariaDB 10.6
+for PHP >=8.0 and URL rewriting, a MySQL, MariaDB or PostgreSQL database (tested with MariaDB 10.6
 and PostgreSQL 12).
 
 - Create an EVE application at https://developers.eveonline.com, no scopes required. Set the callback URL to
   `https://your.domain.tld/auth`.
-- Clone the repository, build the frontend and backend (see below) - there will be pre-built releases later.
-- Copy `config/.env.dist` to `config/.env` and adjust values or set the corresponding environment variables.
-  At the very least set `EVE_SRP_SSO_CLIENT_ID`, `EVE_SRP_SSO_CLIENT_SECRET` and `EVE_SRP_SSO_REDIRECT_URI`, the rest 
-  works as it is when using the Docker development environment.
-- Install dependencies, generate Doctrine proxy classes and create or update the database schema with `composer install`.
-- Clear the template cache: `rm -R storage/compilation_cache`.
-- Make sure that the `storage` directory is writable by the webserver.
+- Create a database for the application.
+- Download the latest release from https://github.com/tkhamez/eve-srp/releases or build it yourself (see below) 
+  and extract it.
 - Set the document root to the `web` directory and configure URL rewriting to `index.php` (see
   [Slim framework - Web Servers](https://www.slimframework.com/docs/v4/start/web-servers.html) for details).
-- You can add your own JavaScript code to `web/static/custom.js`, for example for analytics software.
+- Make sure that the `storage` directory is writable by the webserver.
+- Copy `config/.env.dist` to `config/.env` and adjust values or set the corresponding environment variables. At
+  a minimum set:
+  - `EVE_SRP_DB_URL`
+  - `EVE_SRP_SSO_CLIENT_ID`, `EVE_SRP_SSO_CLIENT_SECRET` and `EVE_SRP_SSO_REDIRECT_URI`
+  - `EVE_SRP_ESI_GLOBAL_ADMIN_CHARACTERS` Add your character ID.
+
+Log messages are sent to `storage/error-*.log` files.
+
+### Further Configurations
+
+Various texts and the logo can be changed via environment variables.
+
+You can add your own JavaScript code to `web/static/custom.js`, for example for analytics software.
 
 ### Permissions
 
@@ -45,16 +53,11 @@ Depending on which provider is used, the corresponding environment variables mus
 `EVE_SRP_NEUCORE_*` or `EVE_SRP_ESI_*` for the included providers.
 
 There is only one fixed role, the global admin. It is mapped to groups with the environment variable
-`EVE_SRP_ROLE_GLOBAL_ADMIN`. If you use the default configuration with the ESI provider, add your own EVE character 
-ID to the `EVE_SRP_ESI_GLOBAL_ADMIN_CHARACTERS` environment variable to become a global admin.
+`EVE_SRP_ROLE_GLOBAL_ADMIN`.
 
 Global admins can create divisions and configure all other permissions for each of them separately.
 
 Only global admins can see SRP requests without a division, e.g. when a division was deleted.
-
-### Error logging
-
-Log messages are sent to `storage/error-*.log` files.
 
 ## Provider
 
@@ -80,6 +83,8 @@ docker-compose exec -u www-data eve_srp_php /bin/sh
 docker-compose exec -u node eve_srp_node /bin/sh
 ```
 
+The script `build.sh` can be used to create a release.
+
 ### Install Backend
 
 ```
@@ -104,14 +109,14 @@ Install dependencies:
 npm install
 ```
 
-Production build:
-```
-npm run build
-```
-
-During development:
+Automatically rebuild during development:
 ```
 npm run watch
+```
+
+Create production build:
+```
+npm run build
 ```
 
 ## Migration from paxswill/evesrp

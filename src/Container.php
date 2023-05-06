@@ -150,7 +150,7 @@ final class Container
                 $metaConfig = ORMSetup::createAnnotationMetadataConfiguration(
                     [ROOT_DIR . '/src/Model'],
                     $settings['APP_ENV'] === 'dev',
-                    ROOT_DIR . '/storage'
+                    ROOT_DIR . '/storage/doctrine'
                 );
                 $connection = DriverManager::getConnection(['url' => $settings['DB_URL']], $metaConfig);
                 return new EntityManager($connection, $metaConfig);
