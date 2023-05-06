@@ -68,7 +68,7 @@ class AdminController
             $this->flashMessage->addMessage('Please enter a name.', FlashMessage::TYPE_WARNING);
         }
 
-        return $response->withHeader('Location', '/admin/divisions');
+        return $response->withHeader('Location', '/admin/divisions')->withStatus(302);
     }
 
     public function renameDivision(ServerRequestInterface $request, ResponseInterface $response): ResponseInterface
@@ -89,7 +89,7 @@ class AdminController
             }
         }
 
-        return $response->withHeader('Location', '/admin/divisions');
+        return $response->withHeader('Location', '/admin/divisions')->withStatus(302);
     }
 
     public function deleteDivision(ServerRequestInterface $request, ResponseInterface $response): ResponseInterface
@@ -104,7 +104,7 @@ class AdminController
             }
         }
 
-        return $response->withHeader('Location', '/admin/divisions');
+        return $response->withHeader('Location', '/admin/divisions')->withStatus(302);
     }
 
     /**
@@ -127,7 +127,7 @@ class AdminController
         } catch (Exception $e) {
             error_log(__METHOD__ . ': ' . $e->getMessage());
             $this->flashMessage->addMessage('Failed to sync groups.', FlashMessage::TYPE_DANGER);
-            return $response->withHeader('Location', '/admin/groups');
+            return $response->withHeader('Location', '/admin/groups')->withStatus(302);
         }
 
         if (count($externalGroupNames) > 0) { // don't do anything if result is empty
@@ -153,7 +153,7 @@ class AdminController
         }
 
         $this->flashMessage->addMessage('Update done.', FlashMessage::TYPE_SUCCESS);
-        return $response->withHeader('Location', '/admin/groups');
+        return $response->withHeader('Location', '/admin/groups')->withStatus(302);
     }
 
     /**
@@ -214,7 +214,7 @@ class AdminController
             $this->flashMessage->addMessage('Failed to save permissions.', FlashMessage::TYPE_WARNING);
         }
 
-        return $response->withHeader('Location', '/admin/permissions');
+        return $response->withHeader('Location', '/admin/permissions')->withStatus(302);
     }
 
     private function updateDivision(Division $division, string $role, array $groupIds): bool

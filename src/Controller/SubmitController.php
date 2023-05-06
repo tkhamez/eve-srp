@@ -77,7 +77,7 @@ class SubmitController
         $this->inputDetails = (string) $this->paramPost($request, 'details');
 
         if (($srpRequest = $this->createSrpRequest()) !== null) {
-            return $response->withHeader('Location', "/request/{$srpRequest->getId()}");
+            return $response->withHeader('Location', "/request/{$srpRequest->getId()}")->withStatus(302);
         } else {
             return $this->showForm($request, $response);
         }

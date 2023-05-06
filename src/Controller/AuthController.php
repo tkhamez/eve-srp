@@ -40,7 +40,7 @@ class AuthController
     public function login(ServerRequestInterface $request, ResponseInterface $response): ResponseInterface
     {
         if ($this->userService->getAuthenticatedUser()) {
-            return $response->withHeader('Location', '/');
+            return $response->withHeader('Location', '/')->withStatus(302);
         }
 
         try {
@@ -70,7 +70,7 @@ class AuthController
         $state = (string) $this->paramGet($request, 'state', '');
         if (empty($code) || empty($state)) {
             $this->flashMessage->addMessage('Invalid SSO state.', FlashMessage::TYPE_DANGER);
-            return $response->withHeader('Location', '/login');
+            return $response->withHeader('Location', '/login')->withStatus(302);
         }
 
         try {
@@ -81,7 +81,7 @@ class AuthController
             );
         } catch (UnexpectedValueException $e) {
             $this->flashMessage->addMessage($e->getMessage(), FlashMessage::TYPE_DANGER);
-            return $response->withHeader('Location', '/login');
+            return $response->withHeader('Location', '/login')->withStatus(302);
         }
 
         $user = $this->userService->getUser($eveAuth);
@@ -90,20 +90,20 @@ class AuthController
         } catch (Exception $e) {
             error_log(__METHOD__ . ': ' . $e->getMessage());
             $this->flashMessage->addMessage('Failed to sync characters.', FlashMessage::TYPE_DANGER);
-            return $response->withHeader('Location', '/login');
+            return $response->withHeader('Location', '/login')->withStatus(302);
         }
         try {
             $this->userService->syncGroups($user);
         } catch (Exception $e) {
             error_log(__METHOD__ . ': ' . $e->getMessage());
             $this->flashMessage->addMessage('Failed to sync groups.', FlashMessage::TYPE_DANGER);
-            return $response->withHeader('Location', '/login');
+            return $response->withHeader('Location', '/login')->withStatus(302);
         }
 
         $this->session->set('userId', $user->getId());
         $this->session->set(CSRFTokenMiddleware::CSRF_KEY_NAME, bin2hex(random_bytes(32)));
 
-        return $response->withHeader('Location', '/');
+        return $response->withHeader('Location', '/')->withStatus(302);
     }
 
     /**
@@ -113,6 +113,6 @@ class AuthController
     {
         $this->session->set('userId', null);
 
-        return $response->withHeader('Location', '/');
+        return $response->withHeader('Location', '/')->withStatus(302);
     }
 }

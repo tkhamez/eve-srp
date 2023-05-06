@@ -51,7 +51,7 @@ class RequestController
     {
         $srpRequest = $this->requestRepository->find((int)$args['id']);
         if (!$srpRequest) {
-            return $response->withHeader('Location', "/request/{$args['id']}");
+            return $response->withHeader('Location', "/request/{$args['id']}")->withStatus(302);
         }
 
         // Read new data
@@ -81,7 +81,7 @@ class RequestController
             $newBasePayout = null;
         }
         if ($newDivision === null && $newStatus === null && $newBasePayout === null && $newComment === '') {
-            return $response->withHeader('Location', "/request/{$args['id']}");
+            return $response->withHeader('Location', "/request/{$args['id']}")->withStatus(302);
         }
 
         // Check if there is a base payout if status was changed to approved
@@ -94,7 +94,7 @@ class RequestController
                 'Please add a base payout if you want to approve the request',
                 FlashMessage::TYPE_WARNING
             );
-            return $response->withHeader('Location', "/request/{$args['id']}");
+            return $response->withHeader('Location', "/request/{$args['id']}")->withStatus(302);
         }
 
         // Validate and save
@@ -112,7 +112,7 @@ class RequestController
             $this->flashMessage->addMessage('Request updated.', FlashMessage::TYPE_SUCCESS);
         }
 
-        return $response->withHeader('Location', "/request/{$args['id']}");
+        return $response->withHeader('Location', "/request/{$args['id']}")->withStatus(302);
     }
 
     public function modifierAdd(
@@ -146,7 +146,7 @@ class RequestController
             ($type == RequestService::MOD_REL_DEDUCTION && $amount > 100)
         ) {
             $this->flashMessage->addMessage('Invalid input.', FlashMessage::TYPE_WARNING);
-            return $response->withHeader('Location', "/request/{$args['id']}");
+            return $response->withHeader('Location', "/request/{$args['id']}")->withStatus(302);
         }
 
         // Adjust amount based on type
@@ -176,7 +176,7 @@ class RequestController
         $this->setPayout($srpRequest);
         $this->flashMessage->addMessage('Modifier added.', FlashMessage::TYPE_SUCCESS);
 
-        return $response->withHeader('Location', "/request/{$args['id']}");
+        return $response->withHeader('Location', "/request/{$args['id']}")->withStatus(302);
     }
 
     public function modifierRemove(
@@ -213,7 +213,7 @@ class RequestController
             $this->flashMessage->addMessage('Modifier not found.', FlashMessage::TYPE_WARNING);
         }
 
-        return $response->withHeader('Location', "/request/{$args['id']}");
+        return $response->withHeader('Location', "/request/{$args['id']}")->withStatus(302);
     }
 
     private function showPage($response, $id): ResponseInterface
@@ -277,13 +277,13 @@ class RequestController
         // Get SRP request
         $srpRequest = $this->requestRepository->find($requestId);
         if (!$srpRequest) {
-            return $response->withHeader('Location', "/request/$requestId");
+            return $response->withHeader('Location', "/request/$requestId")->withStatus(302);
         }
 
         // Check permission
         if (!$this->requestService->mayChangePayout($srpRequest)) {
             $this->flashMessage->addMessage('Permission denied.', FlashMessage::TYPE_WARNING);
-            return $response->withHeader('Location', "/request/$requestId");
+            return $response->withHeader('Location', "/request/$requestId")->withStatus(302);
         }
 
         return $srpRequest;

@@ -74,12 +74,12 @@ class ListsController
 
         if (!$srpRequest) {
             $this->flashMessage->addMessage('Request not found.', FlashMessage::TYPE_WARNING);
-            return $response->withHeader('Location', '/approved');
+            return $response->withHeader('Location', '/approved')->withStatus(302);
         }
 
         if (!$this->requestService->validateInputAndPermission($srpRequest, newStatus: Type::PAID)) {
             $this->flashMessage->addMessage('You are not allowed to pay this request.', FlashMessage::TYPE_WARNING);
-            return $response->withHeader('Location', '/approved');
+            return $response->withHeader('Location', '/approved')->withStatus(302);
         }
 
         $this->requestService->save($srpRequest, newStatus: Type::PAID);
@@ -88,7 +88,7 @@ class ListsController
             FlashMessage::TYPE_SUCCESS
         );
 
-        return $response->withHeader('Location', '/approved');
+        return $response->withHeader('Location', '/approved')->withStatus(302);
     }
 
     private function showList($response, $status, $role, $page, $pageName): ResponseInterface
