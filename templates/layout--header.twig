@@ -1,0 +1,81 @@
+<header class="navbar navbar-dark border-bottom mb-3 navbar-expand-lg">
+    <div class="container-fluid">
+        <a class="nav-link navbar-brand" href="/">{{ data.appTitle }}</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                data-bs-target="#navBarToggle" aria-controls="navBarToggle"
+                aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navBarToggle">
+            <ul class="navbar-nav me-auto">
+                {% if hasRole(constant('EveSrp\\Model\\Permission::SUBMIT')) %}
+                    <li class="nav-item">
+                        <a class="nav-link {% if active_page == 'submit' %}active{% endif %}"
+                           href="/submit">Submit Request</a>
+                    </li>
+                {% endif %}
+                {% if hasRole(constant('EveSrp\\Model\\Permission::REVIEW')) %}
+                    <li class="nav-item">
+                        <a class="nav-link {% if active_page == 'open' %}active{% endif %}" href="/open">Open</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link {% if active_page == 'in-progress' %}active{% endif %}"
+                           href="/in-progress">In Progress</a>
+                    </li>
+                {% endif %}
+                {% if hasRole(constant('EveSrp\\Model\\Permission::PAY')) %}
+                    <li class="nav-item">
+                        <a class="nav-link {% if active_page == 'approved' %}active{% endif %}"
+                           href="/approved">Approved</a>
+                    </li>
+                {% endif %}
+                {% if hasAnyRole([constant('EveSrp\\Model\\Permission::REVIEW'),
+                                  constant('EveSrp\\Model\\Permission::PAY'),
+                                  constant('EveSrp\\Model\\Permission::ADMIN'),
+                                  constant('EveSrp\\Security::GLOBAL_ADMIN')]) %}
+                    <li class="nav-item">
+                        <a class="nav-link {% if active_page == 'all-requests' %}active{% endif %}"
+                           href="/all-requests">All Requests</a>
+                    </li>
+                {% endif %}
+                {% if hasAnyRole([constant('EveSrp\\Model\\Permission::ADMIN'),
+                                  constant('EveSrp\\Security::GLOBAL_ADMIN')]) %}
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle {% if active_page matches '/admin-*/' %}active{% endif %}"
+                           href="#" id="adminDropdown" role="button" data-bs-toggle="dropdown"
+                           aria-haspopup="true" aria-expanded="false">Admin</a>
+                        <div class="dropdown-menu dropdown-menu-dark" aria-labelledby="adminDropdown">
+                            {% if hasRole(constant('EveSrp\\Security::GLOBAL_ADMIN')) %}
+                                <a class="dropdown-item {% if active_page == 'admin-divisions' %}active{% endif %}"
+                                   href="/admin/divisions">Divisions</a>
+                            {% endif %}
+                            {% if hasRole(constant('EveSrp\\Security::GLOBAL_ADMIN')) %}
+                                <a class="dropdown-item {% if active_page == 'admin-groups' %}active{% endif %}"
+                                   href="/admin/groups">Groups</a>
+                            {% endif %}
+                            <a class="dropdown-item {% if active_page == 'admin-permissions' %}active{% endif %}"
+                               href="/admin/permissions">Permissions</a>
+                        </div>
+                    </li>
+                {% endif %}
+            </ul>
+            <ul class="navbar-nav">
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
+                       data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">{{ data.userName }}</a>
+                    <div class="dropdown-menu dropdown-menu-end dropdown-menu-dark"
+                         aria-labelledby="userDropdown">
+                        <a class="dropdown-item" href="/logout"><i class="bi bi-power"></i> Logout</a>
+                        <div class="dropdown-divider"></div>
+                        <span class="dropdown-item-text">
+                            Characters<br>
+                            {% for charName in data.characters %}
+                                <span class="small">{{ charName }}</span><br>
+                            {% endfor %}
+                        </span>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </div>
+</header>
