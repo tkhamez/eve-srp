@@ -13,6 +13,14 @@ services:
     ports: ["33061:3306"]
     networks: [eve-srp]
 
+  eve_srp_db_postgres:
+    container_name: eve_srp_db_postgres
+    image: postgres:13-alpine
+    environment:
+      POSTGRES_PASSWORD: eve_srp
+    ports: ["55432:5432"]
+    networks: [eve-srp]
+
   eve_srp_node:
     container_name: eve_srp_node
     image: node:18.12.1-alpine

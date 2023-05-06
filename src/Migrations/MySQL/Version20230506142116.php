@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace EveSrp\Migrations;
+namespace EveSrp\Migrations\MySQL;
 
 use Doctrine\DBAL\Platforms\MariaDBPlatform;
 use Doctrine\DBAL\Platforms\MySQL80Platform;
@@ -21,7 +21,6 @@ final class Version20230506142116 extends AbstractMigration
 
     public function up(Schema $schema): void
     {
-        // this up() migration is auto-generated, please modify it to your needs
         $this->abortIf(
             !$this->connection->getDatabasePlatform() instanceof MariaDBPlatform &&
             !$this->connection->getDatabasePlatform() instanceof MySQL80Platform,
