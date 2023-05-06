@@ -38,6 +38,7 @@ for PHP >=8.0 and URL rewriting, and a database supported by
   - `bin/doctrine orm:schema-tool:update --complete --dump-sql`  
     Review SQLs and if OK execute:  
     `bin/doctrine orm:schema-tool:update --complete --force`
+- You can add your own JavaScript code to `web/static/custom.js`, for example for analytics software.
 
 ### Permissions
 

@@ -5,7 +5,10 @@
     <meta content="initial-scale=1, shrink-to-fit=no, width=device-width" name="viewport">
     <link rel="shortcut icon" href="/favicon.ico">
     <title>{{ data.appTitle }}</title>
+    <meta name="description" content="A ship replacement program for EVE Online">
+    {{ include('js.html') }}
     {{ include('css.html') }}
+    <script src="/static/custom.js"></script>
 </head>
 <body class="container-fluid bg-dark text-light">
     {% if data.userName %}
@@ -29,7 +32,5 @@
             </a>
         </span>
     </footer>
-
-    {{ include('js.html') }}
 </body>
 </html>
