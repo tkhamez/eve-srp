@@ -5,7 +5,10 @@ with optional [zKillboard](https://github.com/zKillboard/zKillboard) integration
 
 <!-- toc -->
 
-- [Install](#install)
+- [Run the Application](#run-the-application)
+  * [Prerequisites](#prerequisites)
+  * [Run with Docker](#run-with-docker)
+  * [Manual Installation](#manual-installation)
   * [Further Configurations](#further-configurations)
   * [Initial Setup](#initial-setup)
 - [Provider](#provider)
@@ -14,19 +17,52 @@ with optional [zKillboard](https://github.com/zKillboard/zKillboard) integration
 - [Development Environment](#development-environment)
   * [Install Backend](#install-backend)
   * [Build Frontend](#build-frontend)
+  * [Build Docker Container](#build-docker-container)
 - [Migration from paxswill/evesrp](#migration-from-paxswillevesrp)
 
 <!-- tocstop -->
 
-## Install
+## Run the Application
 
-To run the application you need a Linux OS (others may work but were not tested), a web server with support 
-for PHP >=8.0 and URL rewriting, a MySQL, MariaDB or PostgreSQL database (tested with MariaDB 10.6
-and PostgreSQL 12).
+### Prerequisites
+
+The application needs a MySQL, MariaDB or PostgreSQL database (tested with MariaDB 10.6 and PostgreSQL 12).
 
 - Create an EVE application at https://developers.eveonline.com, no scopes required. Set the callback URL to
   `https://your.domain.tld/auth`.
 - Create a database for the application.
+
+### Run with Docker
+
+The Docker image is available at https://hub.docker.com/r/tkhamez/eve-srp.
+
+Run with the following command, replace the environment variable values with your values. Example with minimum 
+configuration using the EsiProvider:
+
+```
+docker run \
+  --env=EVE_SRP_DB_URL=mysql://user:password@host/database_name \
+  --env=EVE_SRP_SSO_CLIENT_ID=123 \
+  --env=EVE_SRP_SSO_CLIENT_SECRET=abc \
+  --env=EVE_SRP_SSO_REDIRECT_URI=https://your.domain.tld/auth \
+  --env=EVE_SRP_PROVIDER_ESI_GLOBAL_ADMIN_CHARACTERS=96061222 \
+  --publish=127.0.0.1:8080:80 \
+  --name=eve_srp_prod \
+  --restart=always \
+  --detach=true \
+  tkhamez/eve-srp
+```
+
+View logs:
+```
+docker exec eve_srp_prod sh -c "tail -f ../storage/*.log"
+```
+
+### Manual Installation
+
+To run the application you need a Linux OS (others may work but were not tested) and a web server with support
+for PHP >=8.0 and URL rewriting.
+
 - Download the latest release from https://github.com/tkhamez/eve-srp/releases or build it yourself (see below) 
   and extract it.
 - Set the document root to the `web` directory and configure URL rewriting to `index.php` (see
@@ -42,7 +78,7 @@ Log messages are sent to `storage/error-*.log` files.
 
 ### Further Configurations
 
-Various texts and the logo can be changed via environment variables.
+Various texts and the logo can be changed via environment variables, they are documented in `config/.env.dist`.
 
 You can add your own JavaScript code to `web/static/custom.js`, for example for analytics software.
 
@@ -136,6 +172,12 @@ npm run watch
 Create production build:
 ```
 npm run build
+```
+
+### Build Docker Container
+
+```
+docker build -f config/Dockerfile --no-cache -t eve-srp build
 ```
 
 ## Migration from paxswill/evesrp
