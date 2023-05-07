@@ -31,6 +31,7 @@ rm "${DIR}"/build/eve-srp/docker-compose.yml
 rm "${DIR}"/build/eve-srp/package.json
 rm "${DIR}"/build/eve-srp/package-lock.json
 rm "${DIR}"/build/eve-srp/phpunit.xml
+rm "${DIR}"/build/eve-srp/Screenshot-Edit-Request.png
 rm "${DIR}"/build/eve-srp/webpack.config.js
 rm "${DIR}"/build/eve-srp/config/.env
 rm "${DIR}"/build/eve-srp/config/docker-nginx.conf

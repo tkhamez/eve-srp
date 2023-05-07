@@ -49,6 +49,7 @@ jobs:
           rm build/eve-srp/package.json
           rm build/eve-srp/package-lock.json
           rm build/eve-srp/phpunit.xml
+          rm build/eve-srp/Screenshot-Edit-Request.png
           rm build/eve-srp/webpack.config.js
           rm build/eve-srp/config/docker-nginx.conf
           rm build/eve-srp/config/Dockerfile

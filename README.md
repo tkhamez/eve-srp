@@ -1,7 +1,8 @@
 # EVE-SRP
 
-A web application to manage a **Ship Replacement Program** for [EVE Online](https://www.eveonline.com) 
-with optional [zKillboard](https://github.com/zKillboard/zKillboard) integration.
+A web application to manage a **Ship Replacement Program** for [EVE Online](https://www.eveonline.com).
+
+![Screenshot-Edit-Request.png](Screenshot-Edit-Request.png)
 
 <!-- toc -->
 
@@ -9,7 +10,7 @@ with optional [zKillboard](https://github.com/zKillboard/zKillboard) integration
   * [Prerequisites](#prerequisites)
   * [Run with Docker](#run-with-docker)
   * [Manual Installation](#manual-installation)
-  * [Further Configurations](#further-configurations)
+  * [Further Configuration](#further-configuration)
   * [Initial Setup](#initial-setup)
 - [Provider](#provider)
   * [ESI Provider](#esi-provider)
@@ -18,6 +19,7 @@ with optional [zKillboard](https://github.com/zKillboard/zKillboard) integration
   * [Install Backend](#install-backend)
   * [Build Frontend](#build-frontend)
   * [Build Docker Container](#build-docker-container)
+- [Contact and Support](#contact-and-support)
 - [Migration from paxswill/evesrp](#migration-from-paxswillevesrp)
 
 <!-- tocstop -->
@@ -76,7 +78,7 @@ for PHP >=8.0 and URL rewriting.
 
 Log messages are sent to `storage/error-*.log` files.
 
-### Further Configurations
+### Further Configuration
 
 Various texts and the logo can be changed via environment variables, they are documented in `config/.env.dist`.
 
@@ -179,6 +181,11 @@ npm run build
 ```
 docker build -f config/Dockerfile --no-cache -t eve-srp build
 ```
+
+## Contact and Support
+
+You can find me (Tian Khamez) on the [Neucore Discord](https://discord.gg/memUh56u8z). There's also a 
+separate channel for EVE-SRP.
 
 ## Migration from paxswill/evesrp
 
