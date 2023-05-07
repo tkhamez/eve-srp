@@ -2,7 +2,7 @@
 
 A web application to manage a **Ship Replacement Program** for [EVE Online](https://www.eveonline.com).
 
-![Screenshot-Edit-Request.png](Screenshot-Edit-Request.png)
+Demo: https://eve-srp.tian-space.net
 
 <!-- toc -->
 
@@ -21,6 +21,8 @@ A web application to manage a **Ship Replacement Program** for [EVE Online](http
   * [Build Docker Container](#build-docker-container)
 - [Contact and Support](#contact-and-support)
 - [Migration from paxswill/evesrp](#migration-from-paxswillevesrp)
+
+![Screenshot-Edit-Request.png](Screenshot-Edit-Request.png)
 
 <!-- tocstop -->
 
@@ -48,11 +50,17 @@ docker run \
   --env=EVE_SRP_SSO_CLIENT_SECRET=abc \
   --env=EVE_SRP_SSO_REDIRECT_URI=https://your.domain.tld/auth \
   --env=EVE_SRP_PROVIDER_ESI_GLOBAL_ADMIN_CHARACTERS=96061222 \
+  --workdir=/var/www \
   --publish=127.0.0.1:8080:80 \
   --name=eve_srp_prod \
   --restart=always \
   --detach=true \
   tkhamez/eve-srp
+```
+
+Run database migrations:
+```
+docker exec -u www-data eve-srp vendor/bin/doctrine-migrations migrations:migrate --no-interaction
 ```
 
 View logs:
@@ -75,6 +83,7 @@ for PHP >=8.0 and URL rewriting.
   - `EVE_SRP_DB_URL`
   - `EVE_SRP_SSO_CLIENT_ID`, `EVE_SRP_SSO_CLIENT_SECRET` and `EVE_SRP_SSO_REDIRECT_URI`
   - If you keep the default provider add your EVE character ID to `EVE_SRP_PROVIDER_ESI_GLOBAL_ADMIN_CHARACTERS`.
+- Run database migrations: `vendor/bin/doctrine-migrations migrations:migrate --no-interaction`
 
 Log messages are sent to `storage/error-*.log` files.
 
