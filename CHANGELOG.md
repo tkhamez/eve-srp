@@ -2,7 +2,7 @@
 
 ## 1.0.0
 
-yyy-mm-dd
+2023-05-07
 
 Initial release with the following features:
 
