@@ -1,0 +1,86 @@
+name: Release
+
+on:
+  push:
+    tags: ['*']
+
+jobs:
+  release:
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          path: build/eve-srp
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18.12
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: 8.2
+          extensions: gmp
+          tools: composer:v2
+      - name: Build
+        run: |
+          cd build/eve-srp
+          composer install --no-dev --optimize-autoloader --no-interaction
+          bin/doctrine orm:generate-proxies
+          npm install
+          npm run build
+        env:
+          EVE_SRP_DB_URL: 'sqlite:///:memory:'
+          EVE_SRP_SSO_CLIENT_ID:
+          EVE_SRP_SSO_CLIENT_SECRET:
+          EVE_SRP_SSO_REDIRECT_URI:
+      - name: Get the version
+        run: echo "RELEASE_VERSION=${GITHUB_REF#refs/tags/}" >> $GITHUB_ENV
+      - name: Create archive
+        run: |
+          cp build/eve-srp/config/Dockerfile build/Dockerfile
+          rm build/eve-srp/.editorconfig
+          rm build/eve-srp/.gitattributes
+          rm build/eve-srp/.gitignore
+          rm build/eve-srp/build.sh
+          rm build/eve-srp/composer.json
+          rm build/eve-srp/composer.lock
+          rm build/eve-srp/docker-compose.yml
+          rm build/eve-srp/package.json
+          rm build/eve-srp/package-lock.json
+          rm build/eve-srp/phpunit.xml
+          rm build/eve-srp/webpack.config.js
+          rm build/eve-srp/config/docker-nginx.conf
+          rm build/eve-srp/config/Dockerfile
+          rm build/eve-srp/config/dockerfile-php80-fpm
+          rm build/eve-srp/config/dockerfile-php81-fpm
+          rm build/eve-srp/config/dockerfile-php82-fpm
+          rm build/eve-srp/storage/.gitkeep
+          rm -r build/eve-srp/.git
+          rm -r build/eve-srp/.github
+          rm -r build/eve-srp/node_modules
+          rm -r build/eve-srp/resources
+          rm -r build/eve-srp/tests
+          cd build
+          tar -czf eve-srp-${{ env.RELEASE_VERSION }}.tar.gz eve-srp
+          sha256sum eve-srp-${{ env.RELEASE_VERSION }}.tar.gz > eve-srp-${{ env.RELEASE_VERSION }}.sha256
+      - name: GitHub Release
+        uses: softprops/action-gh-release@v1
+        with:
+          files: |
+            build/eve-srp-${{ env.RELEASE_VERSION }}.tar.gz
+            build/eve-srp-${{ env.RELEASE_VERSION }}.sha256
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Build Docker image
+        if: ${{ github.repository_owner == 'tkhamez' }}
+        run: |
+          docker build -f build/Dockerfile --no-cache -t tkhamez/eve-srp:${{ env.RELEASE_VERSION }} build
+          docker tag tkhamez/eve-srp:${{ env.RELEASE_VERSION }} tkhamez/eve-srp:latest
+      - name: Publish Docker image
+        if: ${{ github.repository_owner == 'tkhamez' }}
+        run: |
+          echo ${{ secrets.DOCKERHUB_PASSWORD }} | docker login -u tkhamez --password-stdin
+          docker push tkhamez/eve-srp:${{ env.RELEASE_VERSION }}
+          docker push tkhamez/eve-srp:latest
+          docker logout
