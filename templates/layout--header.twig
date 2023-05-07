@@ -46,12 +46,12 @@
                            aria-haspopup="true" aria-expanded="false">Admin</a>
                         <div class="dropdown-menu dropdown-menu-dark" aria-labelledby="adminDropdown">
                             {% if hasRole(constant('EveSrp\\Security::GLOBAL_ADMIN')) %}
-                                <a class="dropdown-item {% if active_page == 'admin-divisions' %}active{% endif %}"
-                                   href="/admin/divisions">Divisions</a>
-                            {% endif %}
-                            {% if hasRole(constant('EveSrp\\Security::GLOBAL_ADMIN')) %}
                                 <a class="dropdown-item {% if active_page == 'admin-groups' %}active{% endif %}"
                                    href="/admin/groups">Groups</a>
+                            {% endif %}
+                            {% if hasRole(constant('EveSrp\\Security::GLOBAL_ADMIN')) %}
+                                <a class="dropdown-item {% if active_page == 'admin-divisions' %}active{% endif %}"
+                                   href="/admin/divisions">Divisions</a>
                             {% endif %}
                             <a class="dropdown-item {% if active_page == 'admin-permissions' %}active{% endif %}"
                                href="/admin/permissions">Permissions</a>

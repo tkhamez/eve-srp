@@ -7,8 +7,10 @@ with optional [zKillboard](https://github.com/zKillboard/zKillboard) integration
 
 - [Install](#install)
   * [Further Configurations](#further-configurations)
-  * [Permissions](#permissions)
+  * [Initial Setup](#initial-setup)
 - [Provider](#provider)
+  * [ESI Provider](#esi-provider)
+  * [Neucore Provider](#neucore-provider)
 - [Development Environment](#development-environment)
   * [Install Backend](#install-backend)
   * [Build Frontend](#build-frontend)
@@ -34,7 +36,7 @@ and PostgreSQL 12).
   a minimum set:
   - `EVE_SRP_DB_URL`
   - `EVE_SRP_SSO_CLIENT_ID`, `EVE_SRP_SSO_CLIENT_SECRET` and `EVE_SRP_SSO_REDIRECT_URI`
-  - `EVE_SRP_ESI_GLOBAL_ADMIN_CHARACTERS` Add your character ID.
+  - If you keep the default provider add your EVE character ID to `EVE_SRP_ESI_GLOBAL_ADMIN_CHARACTERS`.
 
 Log messages are sent to `storage/error-*.log` files.
 
@@ -44,25 +46,39 @@ Various texts and the logo can be changed via environment variables.
 
 You can add your own JavaScript code to `web/static/custom.js`, for example for analytics software.
 
-### Permissions
+### Initial Setup
 
-Permissions are based on groups which are provided by a provider which is configured by the
-`EVE_SRP_PROVIDER` environment variable.
+After you log in go to _Admin -> Groups_ and sync them. Then add divisions and configure permissions for them.
 
-Depending on which provider is used, the corresponding environment variables must be adapted, currently 
-`EVE_SRP_NEUCORE_*` or `EVE_SRP_ESI_*` for the included providers.
+Permissions for each division are based on groups which are provided by a provider, see below.
 
-There is only one fixed role, the global admin. It is mapped to groups with the environment variable
-`EVE_SRP_ROLE_GLOBAL_ADMIN`.
+Besides that there is only one fixed role, the _global admin_. It is given to members of the groups from the 
+environment variable `EVE_SRP_ROLE_GLOBAL_ADMIN`.
 
-Global admins can create divisions and configure all other permissions for each of them separately.
-
-Only global admins can see SRP requests without a division, e.g. when a division was deleted.
+Global admins can create divisions and configure permissions for each of them separately. Only global 
+admins can see SRP requests without a division, e.g. when a division was deleted.
 
 ## Provider
 
 Providers implement the `ProviderInterface` interface and provide groups for the logged-in character and 
 optionally additional alternative characters for which the user can submit requests.
+
+Only one provider can be used at once. It is determined by the environment variable `EVE_SRP_PROVIDER`.
+
+### ESI Provider
+
+This is a simple provider that assigns groups based on EVE characters, their corporation and alliance.
+
+There are 5 groups: `member`, `review`, `pay`, `admin` and `global-admin`. For each of them there are one or more 
+environment variables `EVE_SRP_ESI_*` that accept list of character, corporation or alliance IDs.
+
+### Neucore Provider
+
+This provider needs a [Neucore](https://github.com/tkhamez/neucore) installation. It will provide groups and
+alternative characters from it.
+
+To use it add an app to Neucore and give it the `app-chars` and `app-groups` roles and add any group to it that you 
+want to use. Then set the `EVE_SRP_NEUCORE_*` environment variables.
 
 ## Development Environment
 

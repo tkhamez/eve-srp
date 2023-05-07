@@ -36,7 +36,7 @@ interface ProviderInterface
     /**
      * Returns all groups that a character can have.
      *
-     * This is called when a global admin syncs the groups.
+     * This is called when a global admin synchronizes the groups.
      *
      * @return string[]
      * @throws Exception
