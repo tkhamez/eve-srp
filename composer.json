@@ -29,12 +29,6 @@
     "require-dev": {
         "phpunit/phpunit": "^9.6"
     },
-    "scripts": {
-        "post-install-cmd": [
-            "bin/doctrine orm:generate-proxies",
-            "doctrine-migrations migrations:migrate --no-interaction"
-        ]
-    },
     "config": {
         "platform": {
             "php": "8.0.0"

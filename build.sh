@@ -19,7 +19,7 @@ git checkout-index -a -f --prefix="${DIR}"/build/eve-srp/
 
 # Build
 export UID
-docker-compose exec -u $UID eve_srp_php sh -c "cd build/eve-srp && composer install --no-dev --optimize-autoloader --no-interaction --no-scripts"
+docker-compose exec -u $UID eve_srp_php sh -c "cd build/eve-srp && composer install --no-dev --optimize-autoloader --no-interaction"
 docker-compose exec -u $UID eve_srp_php sh -c "cd build/eve-srp && bin/doctrine orm:generate-proxies"
 docker-compose exec -u $UID eve_srp_node sh -c "cd build/eve-srp && npm run build"
 

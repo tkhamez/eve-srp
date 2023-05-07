@@ -87,17 +87,20 @@ The script `build.sh` can be used to create a release.
 
 ### Install Backend
 
+Copy `config/.env.dist` to `config/.env`, set `EVE_SRP_ENV` to `dev` and add your values for
+`EVE_SRP_SSO_CLIENT_ID` and `EVE_SRP_SSO_CLIENT_SECRET`.
+
 ```
 composer install
+vendor/bin/doctrine-migrations migrations:migrate --no-interaction
 ```
 
 Useful commands:
 ```
 bin/doctrine orm:validate-schema
 bin/doctrine dbal:reserved-words
-
+bin/doctrine orm:generate-proxies
 vendor/bin/doctrine-migrations migrations:diff
-vendor/bin/doctrine-migrations migrations:migrate
 
 sudo rm -R ./storage/compilation_cache/*
 ```
