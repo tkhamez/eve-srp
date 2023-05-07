@@ -36,7 +36,7 @@ and PostgreSQL 12).
   a minimum set:
   - `EVE_SRP_DB_URL`
   - `EVE_SRP_SSO_CLIENT_ID`, `EVE_SRP_SSO_CLIENT_SECRET` and `EVE_SRP_SSO_REDIRECT_URI`
-  - If you keep the default provider add your EVE character ID to `EVE_SRP_ESI_GLOBAL_ADMIN_CHARACTERS`.
+  - If you keep the default provider add your EVE character ID to `EVE_SRP_PROVIDER_ESI_GLOBAL_ADMIN_CHARACTERS`.
 
 Log messages are sent to `storage/error-*.log` files.
 
@@ -70,7 +70,7 @@ Only one provider can be used at once. It is determined by the environment varia
 This is a simple provider that assigns groups based on EVE characters, their corporation and alliance.
 
 There are 5 groups: `member`, `review`, `pay`, `admin` and `global-admin`. For each of them there are one or more 
-environment variables `EVE_SRP_ESI_*` that accept list of character, corporation or alliance IDs.
+environment variables `EVE_SRP_PROVIDER_ESI_*` that accept list of character, corporation or alliance IDs.
 
 ### Neucore Provider
 
@@ -78,7 +78,7 @@ This provider needs a [Neucore](https://github.com/tkhamez/neucore) installation
 alternative characters from it.
 
 To use it add an app to Neucore and give it the `app-chars` and `app-groups` roles and add any group to it that you 
-want to use. Then set the `EVE_SRP_NEUCORE_*` environment variables.
+want to use. Then set the `EVE_SRP_PROVIDER_NEUCORE_*` environment variables.
 
 ## Development Environment
 

@@ -27,9 +27,9 @@ return [
     'SSO_URL_ACCESS_TOKEN' => 'https://login.eveonline.com/v2/oauth/token',
     'SSO_URL_JWT_KEY_SET'  => 'https://login.eveonline.com/oauth/jwks',
 
-    'NEUCORE_DOMAIN'     => $_ENV['EVE_SRP_NEUCORE_DOMAIN'] ?? '',
-    'NEUCORE_APP_ID'     => $_ENV['EVE_SRP_NEUCORE_APP_ID'] ?? '',
-    'NEUCORE_APP_SECRET' => $_ENV['EVE_SRP_NEUCORE_APP_SECRET'] ?? '',
+    'NEUCORE_DOMAIN'     => $_ENV['EVE_SRP_PROVIDER_NEUCORE_DOMAIN'] ?? '',
+    'NEUCORE_APP_ID'     => $_ENV['EVE_SRP_PROVIDER_NEUCORE_APP_ID'] ?? '',
+    'NEUCORE_APP_SECRET' => $_ENV['EVE_SRP_PROVIDER_NEUCORE_APP_SECRET'] ?? '',
 
     // Other
     'HTTP_USER_AGENT' => $_ENV['EVE_SRP_HTTP_USER_AGENT'] ?? 'EVE-SRP (https://github.com/tkhamez/eve-srp)',
