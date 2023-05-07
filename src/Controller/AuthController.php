@@ -89,14 +89,14 @@ class AuthController
             $user = $this->userService->syncCharacters($user, $eveAuth->getCharacterId());
         } catch (Exception $e) {
             error_log(__METHOD__ . ': ' . $e->getMessage());
-            $this->flashMessage->addMessage('Failed to sync characters.', FlashMessage::TYPE_DANGER);
+            $this->flashMessage->addMessage('Failed to synchronize characters.', FlashMessage::TYPE_DANGER);
             return $response->withHeader('Location', '/login')->withStatus(302);
         }
         try {
             $this->userService->syncGroups($user);
         } catch (Exception $e) {
             error_log(__METHOD__ . ': ' . $e->getMessage());
-            $this->flashMessage->addMessage('Failed to sync groups.', FlashMessage::TYPE_DANGER);
+            $this->flashMessage->addMessage('Failed to synchronize groups.', FlashMessage::TYPE_DANGER);
             return $response->withHeader('Location', '/login')->withStatus(302);
         }
 

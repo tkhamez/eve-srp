@@ -17,7 +17,7 @@ class Security
     public const ROLE_AUTHENTICATED = 'authenticated';
 
     /**
-     * Can add/delete divisions, sync groups, edit all permissions.
+     * Can add/delete divisions, synchronize groups, edit all permissions.
      */
     public const GLOBAL_ADMIN = 'global-admin';
 }

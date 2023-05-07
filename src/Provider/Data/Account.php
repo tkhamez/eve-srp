@@ -15,7 +15,7 @@ class Account
         /**
          * The account identifier of the external account to which all the characters belong.
          *
-         * Must be set or characters cannot be synced.
+         * Must be set or characters cannot be synchronized.
          * Must not be longer than 255 characters.
          */
         private string $id

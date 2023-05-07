@@ -48,7 +48,7 @@ You can add your own JavaScript code to `web/static/custom.js`, for example for 
 
 ### Initial Setup
 
-After you log in go to _Admin -> Groups_ and sync them. Then add divisions and configure permissions for them.
+After you log in go to _Admin -> Groups_ and synchronize them. Then add divisions and configure permissions for them.
 
 Permissions for each division are based on groups which are provided by a provider, see below.
 
