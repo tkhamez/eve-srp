@@ -38,8 +38,16 @@ body {
     max-height: var(--srp-footer-height);
     overflow-y: auto;
 
+    .eve {
+        position: relative;
+        z-index: 2;
+        background-color: var(--srp-bg-color);
+    }
+
     .github {
-        float: right;
+        position: absolute;
+        z-index: 1;
+        right: 0;
         a {
             text-decoration: none;
         }
