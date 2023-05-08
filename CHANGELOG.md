@@ -9,7 +9,7 @@ Initial release with the following features:
 - Submit requests.
 - Add comments to requests.
 - Base payout with modifiers.
-- List with open, in progress and approved requests.
+- Lists with open, in progress and approved requests.
 - Search function for all requests.
 - Admin UI to manage divisions and set their permissions.
 - Various options to customize the installation (texts, logo).

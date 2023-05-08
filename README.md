@@ -1,11 +1,8 @@
 # EVE-SRP
 
-A web application to manage a **Ship Replacement Program** for [EVE Online](https://www.eveonline.com).
-
-Demo: https://eve-srp.tian-space.net
-
 <!-- toc -->
 
+- [About](#about)
 - [Run the Application](#run-the-application)
   * [Prerequisites](#prerequisites)
   * [Run with Docker](#run-with-docker)
@@ -22,9 +19,30 @@ Demo: https://eve-srp.tian-space.net
 - [Contact and Support](#contact-and-support)
 - [Migration from paxswill/evesrp](#migration-from-paxswillevesrp)
 
-![Screenshot-Edit-Request.png](Screenshot-Edit-Request.png)
-
 <!-- tocstop -->
+
+## About
+
+A web application to manage a **Ship Replacement Program** for [EVE Online](https://www.eveonline.com).
+
+**Demo**: https://eve-srp.tian-space.net
+
+Features:
+
+- EVE SSO login.
+- Multiple divisions.
+- Permissions based on groups.
+- Custom providers for groups and alternative characters.
+- SRP requests with comments.
+- Base payout with modifiers.
+- Workflow with multiple status.
+- Lists with open, in progress and approved requests.
+- Search function for all requests.
+- Admin UI to manage divisions and set their permissions.
+- Various options to customize the installation (texts, logo).
+- Optional [zKillboard](https://github.com/zKillboard/zKillboard) integration.
+
+![Screenshot-Edit-Request.png](Screenshot-Edit-Request.png)
 
 ## Run the Application
 
@@ -38,7 +56,7 @@ The application needs a MySQL, MariaDB or PostgreSQL database (tested with Maria
 
 ### Run with Docker
 
-The Docker image is available at https://hub.docker.com/r/tkhamez/eve-srp.
+The Docker image is available at https://hub.docker.com/r/tkhamez/eve-srp. You can also build it yourself, see below.
 
 Run with the following command, replace the environment variable values with your values. Example with minimum 
 configuration using the EsiProvider:
@@ -117,7 +135,7 @@ Only one provider can be used at once. It is determined by the environment varia
 This is a simple provider that assigns groups based on EVE characters, their corporation and alliance.
 
 There are 5 groups: `member`, `review`, `pay`, `admin` and `global-admin`. For each of them there are one or more 
-environment variables `EVE_SRP_PROVIDER_ESI_*` that accept list of character, corporation or alliance IDs.
+environment variables `EVE_SRP_PROVIDER_ESI_*` that accept a list of character, corporation or alliance IDs.
 
 ### Neucore Provider
 
@@ -197,6 +215,8 @@ You can find me (Tian Khamez) on the [Neucore Discord](https://discord.gg/memUh5
 separate channel for EVE-SRP.
 
 ## Migration from paxswill/evesrp
+
+https://github.com/paxswill/evesrp
 
 MySQL/MariaDB databases: evesrp => eve_srp
 
