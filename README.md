@@ -107,7 +107,8 @@ Log messages are sent to `storage/logs/error-*.log` files.
 
 ### Further Configuration
 
-Various texts and the logo can be changed via environment variables, they are documented in `config/.env.dist`.
+Various texts, the logo and other settings can be changed via environment variables, they are documented in 
+`config/.env.dist`.
 
 You can add your own JavaScript code to `web/static/custom.js`, for example for analytics software.
 

@@ -104,6 +104,8 @@ class Bootstrap
      */
     private function addMiddleware(App $app): void
     {
+        $setting = $this->container->get(Settings::class);
+
         $app->add(new SecureRouteMiddleware(
             $this->container->get(ResponseFactoryInterface::class),
             include ROOT_DIR . '/config/security.php',
@@ -119,6 +121,7 @@ class Bootstrap
         $app->add(new Session([
             'name' => 'eve_srp_session',
             'httponly' => true,
+            'secure' => $setting['SESSION_SECURE'] === '1',
             'autorefresh' => true,
         ]));
 

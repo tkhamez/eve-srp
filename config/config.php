@@ -4,8 +4,9 @@ declare(strict_types=1);
 
 return [
     // General
-    'APP_ENV' => $_ENV['EVE_SRP_ENV'] ?? 'prod',
-    'DB_URL'  => $_ENV['EVE_SRP_DB_URL'],
+    'APP_ENV'        => $_ENV['EVE_SRP_ENV'] ?? 'prod',
+    'DB_URL'         => $_ENV['EVE_SRP_DB_URL'],
+    'SESSION_SECURE' => $_ENV['EVE_SRP_SESSION_SECURE'] ?? '0',
 
     // Customizing
     'APP_TITLE'                  => $_ENV['EVE_SRP_APP_TITLE']    ?? 'Ship Replacement Program',
