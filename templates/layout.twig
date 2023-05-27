@@ -12,7 +12,7 @@
 </head>
 <body class="container-fluid bg-dark text-light">
     {% if data.userName %}
-        {% include 'layout--header.twig' with {} only %}
+        {% include 'layout--header.twig' with { active_page: active_page } only %}
     {% endif %}
 
     <main>{% block content %}{% endblock %}</main>
