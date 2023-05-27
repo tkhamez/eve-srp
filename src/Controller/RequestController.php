@@ -63,7 +63,7 @@ class RequestController
         // Need to distinguish between null and empty string in save() for base payout.
         $newBasePayout = $this->paramPost($request, 'payout');
         if ($newBasePayout !== '' && $newBasePayout !== null) { // allow '0'
-            $newBasePayout = $this->sanitizeNumberInput($newBasePayout) * Util::ONE_MILLION;
+            $newBasePayout = (int)round($this->sanitizeNumberInput($newBasePayout) * Util::ONE_MILLION);
         }
         $newComment = trim((string)$this->paramPost($request, 'comment'));
 
@@ -141,7 +141,7 @@ class RequestController
             RequestService::MOD_ABS_DEDUCTION
         ];
         if (
-            $amount === 0 ||
+            $amount === 0.0 ||
             !in_array($type, $validTypes) ||
             ($type == RequestService::MOD_REL_DEDUCTION && $amount > 100)
         ) {
@@ -166,7 +166,7 @@ class RequestController
                 ? Modifier::TYPE_RELATIVE
                 : Modifier::TYPE_ABSOLUTE
         );
-        $modifier->setModValue($amount);
+        $modifier->setModValue((int)round($amount));
         $modifier->setNote($reason);
         $modifier->setRequest($srpRequest);
 
@@ -325,8 +325,8 @@ class RequestController
         }
     }
 
-    private function sanitizeNumberInput(string $input): int
+    private function sanitizeNumberInput(string $input): float
     {
-        return (int)abs((float)preg_replace('/[^0-9.]+/', '', $input));
+        return (float)preg_replace('/[^0-9.]+/', '', $input);
     }
 }

@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.0.1
+
+yyyy-mm-dd
+
+- Fix: It is now possible to use decimal values for the base payout and absolute modifiers.
+
 ## 1.0.0
 
 2023-05-07
