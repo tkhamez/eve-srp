@@ -83,7 +83,7 @@ docker exec -u www-data eve-srp vendor/bin/doctrine-migrations migrations:migrat
 
 View logs:
 ```
-docker exec eve_srp_prod sh -c "tail -f ../storage/*.log"
+docker exec eve_srp_prod sh -c "tail -f ../storage/logs/*.log"
 ```
 
 ### Manual Installation
@@ -103,7 +103,7 @@ for PHP >=8.0 and URL rewriting.
   - If you keep the default provider add your EVE character ID to `EVE_SRP_PROVIDER_ESI_GLOBAL_ADMIN_CHARACTERS`.
 - Run database migrations: `vendor/bin/doctrine-migrations migrations:migrate --no-interaction`
 
-Log messages are sent to `storage/error-*.log` files.
+Log messages are sent to `storage/logs/error-*.log` files.
 
 ### Further Configuration
 

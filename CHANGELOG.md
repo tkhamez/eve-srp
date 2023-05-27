@@ -4,6 +4,7 @@
 
 yyyy-mm-dd
 
+- Change: Moved log directory to `storage/logs`.
 - Fix: It is now possible to use decimal values for the base payout and absolute modifiers.
 - Fix: Some ESI URLs did not work.
 

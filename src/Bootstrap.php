@@ -31,7 +31,12 @@ class Bootstrap
         date_default_timezone_set('UTC');
         ini_set('display_errors', '0');
         ini_set('log_errors', '1');
-        ini_set('error_log', ROOT_DIR . '/storage/error-' . date('Ym') . '.log');
+
+        $logDir = ROOT_DIR . '/storage/logs';
+        if (!is_dir($logDir)) {
+            mkdir($logDir);
+        }
+        ini_set('error_log', $logDir . '/error-' . date('Ym') . '.log');
         error_reporting(E_ALL);
 
         if (is_readable(ROOT_DIR . '/config/.env')) {
