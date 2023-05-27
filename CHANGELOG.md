@@ -1,8 +1,8 @@
 # Changelog
 
-## 1.0.1
+## 1.1.0
 
-yyyy-mm-dd
+2023-05-27
 
 - New: Added `EVE_SRP_SESSION_SECURE` environment variable to configure the secure flag for the session cookie.
 - Change: Moved log directory to `storage/logs`.
