@@ -120,8 +120,8 @@ Permissions for each division are based on groups which are provided by a provid
 Besides that there is only one fixed role, the _global admin_. It is given to members of the groups from the 
 environment variable `EVE_SRP_ROLE_GLOBAL_ADMIN`.
 
-Global admins can create divisions and configure permissions for each of them separately. Only global 
-admins can see SRP requests without a division, e.g. when a division was deleted.
+Global admins can create divisions and configure permissions for each of them separately. They 
+can see all SRP requests and change their division.
 
 ## Provider
 
