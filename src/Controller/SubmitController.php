@@ -119,10 +119,22 @@ class SubmitController
             return null;
         }
 
+        $id = $this->apiService->getKillIdFromEsiUrl($esiUrl);
+        if ($id === 0) {
+            $this->flashMessage->addMessage('Invalid link.', FlashMessage::TYPE_WARNING);
+            return null;
+        }
+
+        // Check if request exists already.
+        if ($this->requestRepository->find($id)) {
+            $this->flashMessage->addMessage('This request already exists.', FlashMessage::TYPE_WARNING);
+            return null;
+        }
+
         // Create request
         $request = new Request();
         $request
-            ->setId($this->apiService->getKillIdFromEsiUrl($esiUrl))
+            ->setId($id)
             ->setCreated(new \DateTime())
             ->setStatus(Type::OPEN)
             ->setUser($user)
@@ -130,12 +142,6 @@ class SubmitController
             ->setDetails($this->inputDetails)
             ->setEsiHash($this->apiService->getHashFromEsiUrl($esiUrl));
         if (!$this->setDataFromEsi($request, $esiUrl)) {
-            return null;
-        }
-
-        // Check if request exists already.
-        if ($this->requestRepository->find($request->getId())) {
-            $this->flashMessage->addMessage('This request already exists.', FlashMessage::TYPE_WARNING);
             return null;
         }
 
