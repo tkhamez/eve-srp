@@ -69,9 +69,9 @@ class ApiService
 
     public function getHashFromEsiUrl(string $esiUrl): ?string
     {
-        $temp = str_replace($this->getEsiKillUrlBase(), '', $esiUrl);
+        $temp = str_replace($this->esiBaseUrl, '', $esiUrl);
         $parts = explode('/', $temp);
-        return !empty($parts[1]) ? $parts[1] : null;
+        return !empty($parts[4]) ? $parts[4] : null;
     }
 
     public function getEsiHashFromZKillboard(int $killId): ?string
@@ -89,9 +89,9 @@ class ApiService
 
     public function getKillIdFromEsiUrl(string $esiUrl): int
     {
-        $temp = str_replace($this->getEsiKillUrlBase(), '', $esiUrl);
+        $temp = str_replace($this->esiBaseUrl, '', $esiUrl);
         $parts = explode('/', $temp);
-        return !empty($parts[0]) ? (int)$parts[0] : 0;
+        return !empty($parts[3]) ? (int)$parts[3] : 0;
     }
 
     public function getEsiKillUrl(int $killId, string $hash): string
@@ -117,6 +117,6 @@ class ApiService
 
     private function getEsiKillUrlBase(): string
     {
-        return "$this->esiBaseUrl/latest/killmails/";
+        return "$this->esiBaseUrl/v1/killmails/";
     }
 }
