@@ -190,6 +190,8 @@ class UserService
     /**
      * Syncs EVE alts of logged-in user.
      *
+     * @param User $user The logged-in user
+     * @param int $characterId EVE ID of the logged-in character.
      * @throws Exception
      */
     public function syncCharacters(User $user, int $characterId): User
@@ -206,12 +208,13 @@ class UserService
             // First sync for this user, set external ID.
             $user->setExternalAccountId($account->getId());
         } elseif (!$externalUser) {
-            // Character was moved from a known to an unknown account
+            // Character was moved to an unknown account
             $newUser = new User();
             $newUser->setName($user->getName());
             $this->entityManager->persist($newUser);
             $user = $newUser;
         } elseif ($externalUser->getId() !== $user->getId()) {
+            // Character was moved to a known account
             $user = $externalUser;
         }
 
@@ -219,7 +222,7 @@ class UserService
         $allKnownCharacterIds = [];
         $mainCharacterId = null;
 
-        // add alts
+        // Add alts (create or move if necessary), set name of alts
         foreach ($account->getCharacters() as $character) {
             $allKnownCharacterIds[] = $character->getId();
             $alt = $this->characterRepository->find($character->getId());
@@ -243,7 +246,7 @@ class UserService
             }
         }
 
-        // remove alts, set name of player
+        // Remove alts, set main, set name of player
         foreach ($user->getCharacters() as $existingCharacter) {
             if (
                 $existingCharacter->getId() !== $characterId &&

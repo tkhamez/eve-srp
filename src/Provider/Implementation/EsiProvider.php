@@ -14,12 +14,9 @@ use GuzzleHttp\Exception\GuzzleException;
 /**
  * A very simple group and character provider.
  *
- * Groups are assigned based on alliance and/or corporation membership for submitter
- * and character IDs for other groups.
+ * Groups are assigned based on alliance and/or corporation membership or character IDs.
  *
  * This does not support alternative characters.
- *
- * @noinspection PhpUnused
  */
 class EsiProvider implements ProviderInterface
 {
@@ -40,7 +37,7 @@ class EsiProvider implements ProviderInterface
         try {
             $result = $this->httpClient->request(
                 'GET',
-                "$this->esiBaseUrl/latest/characters/$eveCharacterId/?datasource=tranquility"
+                "$this->esiBaseUrl/latest/characters/$eveCharacterId/"
             );
         } catch (GuzzleException $e) {
             throw new Exception('EsiProvider::getGroups: ' . $e->getMessage());

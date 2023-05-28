@@ -119,10 +119,8 @@ After you log in go to _Admin -> Groups_ and synchronize them. Then add division
 Permissions for each division are based on groups which are provided by a provider, see below.
 
 Besides that there is only one fixed role, the _global admin_. It is given to members of the groups from the 
-environment variable `EVE_SRP_ROLE_GLOBAL_ADMIN`.
-
-Global admins can create divisions and configure permissions for each of them separately. They 
-can see all SRP requests and change their division.
+environment variable `EVE_SRP_ROLE_GLOBAL_ADMIN`. In addition to administrative tasks, global admins can view all 
+SRP requests and change their division.
 
 ## Provider
 

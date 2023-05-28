@@ -80,7 +80,7 @@ class GlobalData
     public function csrfFormInput(): string
     {
         $name = CSRFTokenMiddleware::CSRF_KEY_NAME;
-        $token = $this->session->get(CSRFTokenMiddleware::CSRF_KEY_NAME);
+        $token = $this->session->get($name);
         return "<input type='hidden' name='$name' value='$token'>";
     }
 

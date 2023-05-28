@@ -117,6 +117,6 @@ class ApiService
 
     private function getEsiKillUrlBase(): string
     {
-        return "$this->esiBaseUrl/v1/killmails/";
+        return "$this->esiBaseUrl/latest/killmails/";
     }
 }

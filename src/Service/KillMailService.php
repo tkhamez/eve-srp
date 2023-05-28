@@ -180,7 +180,7 @@ class KillMailService
     }
 
     /**
-     * Add missing URLs to zKillboard or ESI
+     * Get missing ESI hash from zKillboard.
      */
     public function addMissingEsiHash(Request $srpRequest): void
     {

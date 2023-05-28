@@ -56,11 +56,10 @@ class NeucoreProvider implements ProviderInterface
 
     public function getGroups(int $eveCharacterId): array
     {
-        // get groups from Core
         try {
             $groups = $this->groupApi->groupsV2($eveCharacterId);
         } catch (ApiException | InvalidArgumentException $e) {
-            throw new Exception('NeucoreGroupProvider::getGroups: ' . $e->getMessage());
+            throw new Exception(__METHOD__ . ': ' . $e->getMessage());
         }
 
         return array_map(function (Group $group) {
@@ -68,17 +67,12 @@ class NeucoreProvider implements ProviderInterface
         }, $groups);
     }
 
-    /**
-     * Returns all groups that a character can have.
-     *
-     * @throws Exception
-     */
     public function getAvailableGroups(): array
     {
         try {
             $app = $this->applicationApi->showV1();
         } catch (ApiException | InvalidArgumentException $e) {
-            throw new Exception('NeucoreGroupProvider::getAvailableGroups: ' . $e->getMessage());
+            throw new Exception(__METHOD__ . ': ' . $e->getMessage());
         }
 
         return array_map(function (Group $group) {
