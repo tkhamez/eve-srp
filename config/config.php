@@ -27,9 +27,6 @@ return [
     'SSO_CLIENT_ID'        => $_ENV['EVE_SRP_SSO_CLIENT_ID'],
     'SSO_CLIENT_SECRET'    => $_ENV['EVE_SRP_SSO_CLIENT_SECRET'],
     'SSO_REDIRECT_URI'     => $_ENV['EVE_SRP_SSO_REDIRECT_URI'],
-    'SSO_URL_AUTHORIZE'    => 'https://login.eveonline.com/v2/oauth/authorize',
-    'SSO_URL_ACCESS_TOKEN' => 'https://login.eveonline.com/v2/oauth/token',
-    'SSO_URL_JWT_KEY_SET'  => 'https://login.eveonline.com/oauth/jwks',
 
     'NEUCORE_DOMAIN'     => $_ENV['EVE_SRP_PROVIDER_NEUCORE_DOMAIN'] ?? '',
     'NEUCORE_APP_ID'     => $_ENV['EVE_SRP_PROVIDER_NEUCORE_APP_ID'] ?? '',

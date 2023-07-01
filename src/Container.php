@@ -82,18 +82,14 @@ final class Container
             // SSO
             AuthenticationProvider::class => function (ContainerInterface $container) {
                 $settings = $container->get(Settings::class);
-                $provider = new AuthenticationProvider([
-                    'clientId' => $settings['SSO_CLIENT_ID'],
-                    'clientSecret' => $settings['SSO_CLIENT_SECRET'],
-                    'redirectUri' => $settings['SSO_REDIRECT_URI'],
-                    'urlAuthorize' => $settings['SSO_URL_AUTHORIZE'],
-                    'urlAccessToken' => $settings['SSO_URL_ACCESS_TOKEN'],
-                    'urlResourceOwnerDetails' => '',
-                    'urlKeySet' => $settings['SSO_URL_JWT_KEY_SET'],
-                    'urlRevoke' => 'https://login.eveonline.com/v2/oauth/revoke',
-                ]);
-                $provider->getProvider()->setHttpClient($container->get(ClientInterface::class));
-                return $provider;
+                return new AuthenticationProvider(
+                    [
+                        'clientId'     => $settings['SSO_CLIENT_ID'],
+                        'clientSecret' => $settings['SSO_CLIENT_SECRET'],
+                        'redirectUri'  => $settings['SSO_REDIRECT_URI'],
+                    ],
+                    httpClient: $container->get(ClientInterface::class)
+                );
             },
 
             // Neucore API
