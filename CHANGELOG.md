@@ -6,6 +6,7 @@ yyyy-mm-dd
 
 - It is now configurable how modifiers are applied, see 
   [README.md - Further Configuration](README.md#further-configuration). The default configuration uses the old method.
+- Updated libraries.
 
 ## 1.1.0
 

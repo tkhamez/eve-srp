@@ -12,7 +12,7 @@
     "require": {
         "php": "^8.0",
         "ext-json": "*",
-        "bravecollective/neucore-api": "^1.4",
+        "bravecollective/neucore-api": "^2.1",
         "bryanjhv/slim-session": "^4.0",
         "doctrine/annotations": "^2.0",
         "doctrine/migrations": "^3.5",
@@ -21,7 +21,7 @@
         "slim/psr7": "^1.0",
         "slim/slim": "^4.2",
         "symfony/cache": "^5.3",
-        "tkhamez/eve-sso": "^3.0",
+        "tkhamez/eve-sso": "^4.0",
         "tkhamez/slim-role-auth": "^4.0",
         "twig/twig": "^3.1",
         "vlucas/phpdotenv": "^5.2"
