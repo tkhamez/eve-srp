@@ -14,14 +14,14 @@
     {% if request %}
         <div class="page-request row mb-3">
             <div class="col-12 col-lg-7">
-                <div class="card bg-dark mb-3 border-light">
+                <div class="card bg-dark text-light mb-3 border-light">
                     <div class="card-body">
                         {% include 'pages/request--data.twig' with { 'request': request } only %}
                     </div>
                 </div>
             </div>
             <div class="col-12 col-lg-5">
-                <div class="card bg-dark border-light">
+                <div class="card bg-dark text-light border-light">
                     <div class="card-body">
                         {% include 'pages/request--ship.twig' with {
                             'shipName': request.ship,

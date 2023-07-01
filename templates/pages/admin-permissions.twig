@@ -12,7 +12,7 @@
     {{ flashMessages()|raw }}
 
     {% for division in divisions %}
-        <form class="page-admin-permissions card bg-dark mb-3 border-light"
+        <form class="page-admin-permissions card bg-dark text-light mb-3 border-light"
               action="/admin/permissions/save"
               method="post" id="division{{ division.id }}">
             {{ data.csrfFormInput|raw }}

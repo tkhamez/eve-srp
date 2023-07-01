@@ -4,6 +4,7 @@
 
 :root {
     --srp-text-color: #f8f9fa; // color of .text-light
+    --srp-text-color2: #6c757d;
 
     --srp-bg-color: #212529; // color of .bg-dark
     --srp-bg-color-2: #2c3034; // lighter, color of odd table rows
@@ -109,6 +110,10 @@ a {
 .form-select {
     // $form-select-indicator
     background-image: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'><path fill='none' stroke='lightgrey' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='m2 5 6 6 6-6'/></svg>");
+}
+.form-text,
+.form-control::placeholder {
+    color: var(--srp-text-color2);
 }
 
 .popover {

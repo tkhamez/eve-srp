@@ -46,7 +46,7 @@
                         <input type="text" class="form-control" name="payout" id="editPayout" autocomplete="off"
                                value="{{ request.basePayout is not null ?
                                          formatMillions(request.basePayout, false, 6) : '' }}">
-                        <span class="input-group-text text-light bg-dark" title="million ISK">m ISK</span>
+                        <span class="input-group-text bg-dark text-light" title="million ISK">m ISK</span>
                     </div>
                 {% elseif request.basePayout is not null %}
                     {{ formatMillions(request.basePayout) }} ISK
