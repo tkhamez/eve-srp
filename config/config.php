@@ -2,6 +2,8 @@
 
 declare(strict_types=1);
 
+use EveSrp\Controller\RequestController;
+
 return [
     // General
     'APP_ENV'        => $_ENV['EVE_SRP_ENV'] ?? 'prod',
@@ -16,6 +18,7 @@ return [
     'FOOTER_TEXT'                => $_ENV['EVE_SRP_FOOTER_TEXT']  ?? '',
     'SUBMIT_DETAILS_PLACEHOLDER' => $_ENV['EVE_SRP_SUBMIT_DETAILS_PLACEHOLDER'] ?? '',
     'SUBMIT_DETAILS_HELP'        => $_ENV['EVE_SRP_SUBMIT_DETAILS_HELP'] ?? '',
+    'MODIFIER_CALCULATION'       => $_ENV['EVE_SRP_MODIFIER_CALCULATION'] ?? RequestController::MODIFIER_SEQUENTIALLY,
 
     // Global admin role, group and character provider
     'ROLE_GLOBAL_ADMIN' => $_ENV['EVE_SRP_ROLE_GLOBAL_ADMIN'] ?? 'global-admin',

@@ -7,6 +7,7 @@ namespace EveSrp\Controller;
 use Doctrine\ORM\EntityManagerInterface;
 use EveSrp\Controller\Traits\RequestParameter;
 use EveSrp\Controller\Traits\TwigResponse;
+use EveSrp\Exception;
 use EveSrp\FlashMessage;
 use EveSrp\Misc\Util;
 use EveSrp\Model\Modifier;
@@ -16,6 +17,7 @@ use EveSrp\Repository\RequestRepository;
 use EveSrp\Service\KillMailService;
 use EveSrp\Service\RequestService;
 use EveSrp\Service\UserService;
+use EveSrp\Settings;
 use EveSrp\Type;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
@@ -26,6 +28,10 @@ class RequestController
     use RequestParameter;
     use TwigResponse;
 
+    const MODIFIER_SEQUENTIALLY = 'sequentially';
+    const MODIFIER_ABSOLUTE_FIRST = 'absolute_first';
+    const MODIFIER_RELATIVE_FIRST = 'relative_first';
+
     public function __construct(
         private UserService $userService,
         private KillMailService $killMailService,
@@ -34,6 +40,7 @@ class RequestController
         private DivisionRepository $divisionRepository,
         private EntityManagerInterface  $entityManager,
         private FlashMessage $flashMessage,
+        private Settings $settings,
         Environment $environment
     ) {
         $this->twigResponse($environment);
@@ -47,6 +54,9 @@ class RequestController
         return $this->showPage($response, $args['id']);
     }
 
+    /**
+     * @throws Exception
+     */
     public function update(ServerRequestInterface $request, ResponseInterface $response, array $args): ResponseInterface
     {
         $srpRequest = $this->requestRepository->find((int)$args['id']);
@@ -115,6 +125,9 @@ class RequestController
         return $response->withHeader('Location', "/request/{$args['id']}")->withStatus(302);
     }
 
+    /**
+     * @throws Exception
+     */
     public function modifierAdd(
         ServerRequestInterface $request,
         ResponseInterface $response,
@@ -179,6 +192,9 @@ class RequestController
         return $response->withHeader('Location', "/request/{$args['id']}")->withStatus(302);
     }
 
+    /**
+     * @throws Exception
+     */
     public function modifierRemove(
         ServerRequestInterface $request,
         ResponseInterface $response,
@@ -289,6 +305,9 @@ class RequestController
         return $srpRequest;
     }
 
+    /**
+     * @throws Exception
+     */
     private function setPayout(Request $request): void
     {
         $basePayout = $request->getBasePayout();
@@ -299,6 +318,23 @@ class RequestController
         $payout = $basePayout;
         $modifiers = $request->getModifiers();
 
+        if ($this->settings['MODIFIER_CALCULATION'] === self::MODIFIER_SEQUENTIALLY) {
+            $newPayout = $this->applyModifierSequentially($payout, $modifiers);
+        } else {
+            $newPayout = $this->applyModifierGrouped($payout, $modifiers);
+        }
+
+        if ($newPayout !== $request->getPayout()) {
+            $request->setPayout($newPayout);
+            $this->entityManager->flush();
+        }
+    }
+
+    /**
+     * @param Modifier[] $modifiers
+     */
+    private function applyModifierSequentially(int $payout, array $modifiers): int
+    {
         // Sort modifiers by date created ascending
         usort($modifiers, function (Modifier $a, Modifier $b) {
             return $a->getCreated()->getTimestamp() < $b->getCreated()->getTimestamp() ? -1 : 1;
@@ -319,10 +355,38 @@ class RequestController
             }
         }
 
-        if ($payout !== $request->getPayout()) {
-            $request->setPayout((int)round($payout));
-            $this->entityManager->flush();
+        return (int)round($payout);
+    }
+
+    /**
+     * @param Modifier[] $modifiers
+     * @throws Exception
+     */
+    private function applyModifierGrouped(int $payout, array $modifiers): int
+    {
+        $absolute = 0;
+        $relative = 1;
+
+        foreach ($modifiers as $modifier) {
+            if ($modifier->getVoidedTime()) {
+                continue;
+            }
+            if ($modifier->getModType() === Modifier::TYPE_RELATIVE) {
+                $relative += $modifier->getModValue() / 100;
+            } elseif ($modifier->getModType() === Modifier::TYPE_ABSOLUTE) {
+                $absolute += $modifier->getModValue();
+            }
         }
+
+        if ($this->settings['MODIFIER_CALCULATION'] === self::MODIFIER_ABSOLUTE_FIRST) {
+            $payout = ($payout + $absolute) * $relative;
+        } elseif ($this->settings['MODIFIER_CALCULATION'] === self::MODIFIER_RELATIVE_FIRST) {
+            $payout = ($payout * $relative) + $absolute;
+        } else {
+            throw new Exception('EVE_SRP_MODIFIER_CALCULATION configuration value is invalid.');
+        }
+
+        return (int)round($payout);
     }
 
     private function sanitizeNumberInput(string $input): float

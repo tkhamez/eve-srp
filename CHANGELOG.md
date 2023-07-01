@@ -1,5 +1,12 @@
 # Changelog
 
+## 1.2.0
+
+yyyy-mm-dd
+
+- It is now configurable how modifiers are applied, see 
+  [README.md - Further Configuration](README.md#further-configuration). The default configuration uses the old method.
+
 ## 1.1.0
 
 2023-05-27

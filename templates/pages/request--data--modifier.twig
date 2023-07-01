@@ -1,4 +1,10 @@
-<h6 class="mt-1 mb-2">Modifiers</h6>
+<h6 class="mt-1 mb-2">
+    Modifiers
+    <span class="ms-1" data-bs-toggle="popover" data-bs-trigger="hover"
+          data-bs-content="{{ data.requestModifierHelp }}">
+        <i class="bi bi-info-circle"></i>
+    </span>
+</h6>
 
 {% if mayChangePayout(request) %}
     <div class="data-modifier row mb-3 pb-2 table-dark border-bottom">

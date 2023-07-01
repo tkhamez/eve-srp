@@ -108,9 +108,24 @@ Log messages are sent to `storage/logs/error-*.log` files.
 ### Further Configuration
 
 Various texts, the logo and other settings can be changed via environment variables, they are documented in 
-`config/.env.dist`.
+`config/.env.dist` or below.
 
 You can add your own JavaScript code to `web/static/custom.js`, for example for analytics software.
+
+**Modifiers**
+
+There are 3 different ways how modifiers can be applied to the base payout, which is configured by the 
+environment variable `EVE_SRP_MODIFIER_CALCULATION`:
+
+- **sequentially** (default): They are applied in the order in which they were added.  
+  E.g. 100m base payout, minus 10%, plus 20m, plus 30% = `((100 * 0.9) + 20) * 1.3 = 143`.
+- **absolute_first**: Absolute modifiers are applied first, then the sum of all relative modifiers.  
+  E.g. 100m base payout, minus 10%, plus 20m, plus 30% = `(100 + 20) * (1 - 0.1 + 0.3)) = 144`.
+- **relative_first**: The sum of all relative modifiers is applied first, then the absolute modifiers.  
+  E.g. 100m base payout, minus 10%, plus 20m, plus 30% = `(100 * (1 - 0.1 + 0.3)) + 20 = 140`.
+
+The configuration can be changed without changing existing payouts. However, the new calculation is used when a 
+payout is recalculated by changing the base payout or a modifier.
 
 ### Initial Setup
 

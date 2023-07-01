@@ -5,6 +5,7 @@ declare(strict_types=1);
 
 namespace EveSrp\Twig;
 
+use EveSrp\Controller\RequestController;
 use EveSrp\Misc\CSRFTokenMiddleware;
 use EveSrp\Misc\Util;
 use EveSrp\Model\Character;
@@ -58,6 +59,18 @@ class GlobalData
     public function submitDetailsHelp(): string
     {
         return Util::replaceMarkdownLink(htmlspecialchars($this->settings['SUBMIT_DETAILS_HELP']));
+    }
+
+    public function requestModifierHelp(): string
+    {
+        return match ($this->settings['MODIFIER_CALCULATION']) {
+            RequestController::MODIFIER_SEQUENTIALLY => 'Modifiers are applied in the order in which they were added',
+            RequestController::MODIFIER_ABSOLUTE_FIRST =>
+                'Absolute modifiers are applied first, then the sum of all relative modifiers.',
+            RequestController::MODIFIER_RELATIVE_FIRST =>
+                'The sum of all relative modifiers is applied first, then the absolute modifiers.',
+            default => 'Error: The modifier calculation configuration is invalid.',
+        };
     }
 
     public function userName(): string
