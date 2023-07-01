@@ -2,7 +2,7 @@
 
 ## 1.2.0
 
-yyyy-mm-dd
+2023-07-01
 
 - It is now configurable how modifiers are applied, see 
   [README.md - Further Configuration](README.md#further-configuration). The default configuration uses the old method.
