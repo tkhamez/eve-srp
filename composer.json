@@ -10,7 +10,7 @@
         "files": ["src/functions.php"]
     },
     "require": {
-        "php": "^8.0",
+        "php": ">=8.0.2",
         "ext-json": "*",
         "bravecollective/neucore-api": "^2.1",
         "bryanjhv/slim-session": "^4.0",
@@ -20,7 +20,7 @@
         "php-di/php-di": "^7.0",
         "slim/psr7": "^1.0",
         "slim/slim": "^4.2",
-        "symfony/cache": "^5.3",
+        "symfony/cache": "^6.0",
         "tkhamez/eve-sso": "^4.0",
         "tkhamez/slim-role-auth": "^4.0",
         "twig/twig": "^3.1",
@@ -31,7 +31,7 @@
     },
     "config": {
         "platform": {
-            "php": "8.0.0"
+            "php": "8.0.2"
         },
         "sort-packages": true
     }

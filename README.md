@@ -88,8 +88,8 @@ docker exec eve_srp_prod sh -c "tail -f ../storage/logs/*.log"
 
 ### Manual Installation
 
-To run the application you need a Linux OS (others may work but were not tested) and a web server with support
-for PHP >=8.0 and URL rewriting.
+To run the application you need a Linux OS (others may work but were not tested), PHP >=8.0.2 and a web server 
+with support PHP and URL rewriting.
 
 - Download the latest release from https://github.com/tkhamez/eve-srp/releases or build it yourself (see below) 
   and extract it.
