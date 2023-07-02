@@ -1,5 +1,10 @@
 # Changelog
 
+## next
+
+- Fix: MySQL database column for a kill mail was sometimes too small.  
+  (manually fix until there's a release: `ALTER TABLE requests CHANGE killMail killMail MEDIUMTEXT DEFAULT NULL`)
+
 ## 1.2.0
 
 2023-07-01
