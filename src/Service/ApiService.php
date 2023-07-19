@@ -64,7 +64,7 @@ class ApiService
 
         $hash = $this->getEsiHashFromZKillboard((int)$killId);
 
-        return $this->getEsiKillUrlBase() . "$killId/$hash/";
+        return $this->getEsiKillUrl($killId, $hash);
     }
 
     public function getHashFromEsiUrl(string $esiUrl): ?string
