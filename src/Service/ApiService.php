@@ -97,7 +97,7 @@ class ApiService
     public function getEsiKillUrl(int $killId, string $hash): string
     {
         if ($hash) {
-            return "{$this->getEsiKillUrlBase()}$killId/$hash";
+            return "{$this->getEsiKillUrlBase()}$killId/$hash/";
         }
         return '';
     }
