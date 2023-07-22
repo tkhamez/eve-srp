@@ -2,9 +2,10 @@
 
 ## next
 
+- Increased minimum required PHP version to 8.0.2 (from 8.0.0).
 - Fix: MySQL database column for a kill mail was sometimes too small.  
   (manually fix until there's a release: `ALTER TABLE requests CHANGE killMail killMail MEDIUMTEXT DEFAULT NULL`)
-- Increased minimum required PHP version to 8.0.2 (from 8.0.0).
+- Fix: Added missing trailing slash to ESI killmail URL.
 
 ## 1.2.0
 
