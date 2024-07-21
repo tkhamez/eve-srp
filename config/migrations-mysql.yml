@@ -1,0 +1,4 @@
+migrations_paths:
+  EveSrp\Migrations\MySQL: src/Migrations/MySQL/
+table_storage:
+  table_name: doctrine_migration_versions

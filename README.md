@@ -194,7 +194,6 @@ vendor/bin/doctrine-migrations migrations:migrate --no-interaction
 Useful commands:
 ```
 bin/doctrine orm:validate-schema
-bin/doctrine dbal:reserved-words
 bin/doctrine orm:generate-proxies
 vendor/bin/doctrine-migrations migrations:diff
 

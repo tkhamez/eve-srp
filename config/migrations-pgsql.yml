@@ -1,0 +1,4 @@
+migrations_paths:
+  EveSrp\Migrations\PostgreSQL: src/Migrations/PostgreSQL/
+table_storage:
+  table_name: doctrine_migration_versions
