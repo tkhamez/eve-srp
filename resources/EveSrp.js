@@ -1,9 +1,7 @@
 import {Popover} from 'bootstrap';
-import Choices from "choices.js";
 
 window.addEventListener('load', () => {
     EveSrp.initPopover();
-    EveSrp.initMultiselect();
     EveSrp.initCopyText();
     EveSrp.initPageAdminDivisions();
     EveSrp.initPageSubmit();
@@ -16,15 +14,6 @@ window.EveSrp = {
     initPopover: () => {
         [...document.querySelectorAll('[data-bs-toggle="popover"]')]
             .map(popoverTriggerEl => new Popover(popoverTriggerEl, null));
-    },
-
-    initMultiselect: () => {
-        document.querySelectorAll('.srp-multiselect').forEach((select) => {
-            new Choices(select, {
-                removeItemButton: true,
-                allowHTML: false,
-            });
-        });
     },
 
     initCopyText: () => {

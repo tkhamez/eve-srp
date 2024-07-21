@@ -33,8 +33,8 @@
                                 <td>
                                     <input type="hidden" name="groups[{{ role }}]" value="">
                                     <!--suppress HtmlFormInputWithoutLabel -->
-                                    <select multiple name="groups[{{ role }}][]" size="1"
-                                            class="form-select srp-multiselect invisible">
+                                    <select multiple name="groups[{{ role }}][]" size="5"
+                                            class="form-select">
                                         {% for group in groups %}
                                             {% set selected = '' %}
                                             {% if division.hasPermission(role, group.id) %}

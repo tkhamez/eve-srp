@@ -1,6 +1,5 @@
 @import "~bootstrap-icons/font/bootstrap-icons.css";
 @import "~bootstrap/dist/css/bootstrap.css";
-@import "~choices.js/public/assets/styles/choices.min.css";
 
 :root {
     --srp-text-color: #f8f9fa; // color of .text-light
@@ -125,22 +124,6 @@ a {
     .popover-header {
         background-color: var(--srp-bg-color-2);
         color: var(--srp-text-color);
-    }
-}
-
-.choices {
-    .choices__list--dropdown {
-        background-color: var(--srp-bg-color-2);
-        .choices__item--selectable.is-highlighted {
-            background-color: var(--srp-bg-color);
-        }
-    }
-    .choices__inner {
-        background-color: var(--srp-bg-color-2);
-        input {
-            color: inherit;
-            background-color: inherit;
-        }
     }
 }
 
