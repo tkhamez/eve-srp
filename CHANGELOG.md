@@ -1,6 +1,8 @@
 # Changelog
 
-## next
+## 1.3.0
+
+2024-07-21
 
 - Increased minimum required PHP version to 8.1.0 (from 8.0.0).
 - Updated screenshot of kill report.
