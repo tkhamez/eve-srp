@@ -9,17 +9,17 @@ jobs:
     runs-on: ubuntu-22.04
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           path: build/eve-srp
       - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: 18.12
+          node-version: '20.14'
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: 8.2
+          php-version: '8.2'
           extensions: gmp
           tools: composer:v2
       - name: Build
@@ -30,7 +30,7 @@ jobs:
           npm install
           npm run build
         env:
-          EVE_SRP_DB_URL: 'sqlite:///:memory:'
+          EVE_SRP_DB_URL: 'mysql://user:@127.0.0.1/db?serverVersion=10.5.22-MariaDB-1:10.5.22+maria~ubu2004'
           EVE_SRP_SSO_CLIENT_ID:
           EVE_SRP_SSO_CLIENT_SECRET:
           EVE_SRP_SSO_REDIRECT_URI:
@@ -53,9 +53,9 @@ jobs:
           rm build/eve-srp/webpack.config.js
           rm build/eve-srp/config/docker-nginx.conf
           rm build/eve-srp/config/Dockerfile
-          rm build/eve-srp/config/dockerfile-php80-fpm
           rm build/eve-srp/config/dockerfile-php81-fpm
           rm build/eve-srp/config/dockerfile-php82-fpm
+          rm build/eve-srp/config/dockerfile-php83-fpm
           rm build/eve-srp/storage/.gitkeep
           rm -r build/eve-srp/.git
           rm -r build/eve-srp/.github
