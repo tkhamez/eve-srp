@@ -88,8 +88,8 @@ docker exec eve_srp_prod sh -c "tail -f ../storage/logs/*.log"
 
 ### Manual Installation
 
-To run the application you need a Linux OS (others may work but were not tested), PHP >=8.0.2
-with the extension `gmp` and one of `pdo_mysql` or `pdo_pgsql`, and a web server with support for 
+To run the application you need a Linux OS (others may work but were not tested), PHP >=8.1.0
+with the extension `json`, `gmp` and one of `pdo_mysql` or `pdo_pgsql`, and a web server with support for 
 PHP and URL rewriting.
 
 - Download the latest release from https://github.com/tkhamez/eve-srp/releases or build it yourself (see below) 
@@ -154,7 +154,7 @@ environment variables `EVE_SRP_PROVIDER_ESI_*` that accept a list of character, 
 
 ### Neucore Provider
 
-This provider needs a [Neucore](https://github.com/tkhamez/neucore) installation. It will provide groups and
+This provider needs a [Neucore](https://github.com/tkhamez/neucore) installation. It provides groups and
 alternative characters from it.
 
 To use it add an app to Neucore and give it the `app-chars` and `app-groups` roles and add any group to it that you 
