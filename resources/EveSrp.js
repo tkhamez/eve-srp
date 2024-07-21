@@ -1,7 +1,10 @@
 import {Popover} from 'bootstrap';
+import $ from "jquery";
+import '@selectize/selectize';
 
 window.addEventListener('load', () => {
     EveSrp.initPopover();
+    EveSrp.initMultiselect();
     EveSrp.initCopyText();
     EveSrp.initPageAdminDivisions();
     EveSrp.initPageSubmit();
@@ -14,6 +17,10 @@ window.EveSrp = {
     initPopover: () => {
         [...document.querySelectorAll('[data-bs-toggle="popover"]')]
             .map(popoverTriggerEl => new Popover(popoverTriggerEl, null));
+    },
+
+    initMultiselect: () => {
+        $('.srp-multiselect').selectize({});
     },
 
     initCopyText: () => {

@@ -1,3 +1,4 @@
+@import '~@selectize/selectize/dist/css/selectize.bootstrap5.css';
 @import "~bootstrap-icons/font/bootstrap-icons.css";
 @import "~bootstrap/dist/css/bootstrap.css";
 
@@ -124,6 +125,15 @@ a {
     .popover-header {
         background-color: var(--srp-bg-color-2);
         color: var(--srp-text-color);
+    }
+}
+
+.selectize-control {
+    .selectize-input {
+        background-color: var(--srp-bg-color-2);
+        input {
+            color: var(--srp-text-color);
+        }
     }
 }
 
