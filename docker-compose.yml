@@ -24,7 +24,7 @@ services:
 
   eve_srp_node:
     container_name: eve_srp_node
-    image: node:18.12.1-alpine
+    image: node:20.14.0-alpine
     tty: true
     volumes: [".:/app"]
     working_dir: /app

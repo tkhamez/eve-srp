@@ -26,6 +26,6 @@
     "watch": "webpack --mode development --watch"
   },
   "engines": {
-    "node": ">= 18.12.1"
+    "node": ">= 20.14.0"
   }
 }
