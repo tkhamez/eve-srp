@@ -11,9 +11,10 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\Entity]
 #[ORM\Table(
     name: "users",
-    indexes: [new ORM\Index(name: "users_name_idx", columns: ["name"])],
     options: ["charset" => "utf8mb4", "collate" => "utf8mb4_unicode_520_ci"]
-)] class User
+)]
+#[ORM\Index(columns: ["name"], name: "users_name_idx")]
+class User
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]

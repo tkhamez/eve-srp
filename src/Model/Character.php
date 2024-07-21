@@ -9,9 +9,9 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\Entity]
 #[ORM\Table(
     name: "characters",
-    indexes: [new ORM\Index(name: "characters_name_idx", columns: ["name"])],
     options: ["charset" => "utf8mb4", "collate" => "utf8mb4_unicode_520_ci"],
 )]
+#[ORM\Index(columns: ["name"], name: "characters_name_idx")]
 class Character
 {
     /**

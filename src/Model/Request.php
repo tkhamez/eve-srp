@@ -13,13 +13,12 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\Entity]
 #[ORM\Table(
     name: "requests",
-    indexes: [
-        new ORM\Index(name: "requests_status_idx", columns: ["status"]),
-        new ORM\Index(name: "requests_corporation_name_idx", columns: ["corporation_name"]),
-        new ORM\Index(name: "requests_ship_idx", columns: ["ship"])
-    ],
     options: ["charset" => "utf8mb4", "collate" => "utf8mb4_unicode_520_ci"]
-)] class Request
+)]
+#[ORM\Index(columns: ["status"], name: "requests_status_idx")]
+#[ORM\Index(columns: ["corporation_name"], name: "requests_corporation_name_idx")]
+#[ORM\Index(columns: ["ship"], name: "requests_ship_idx")]
+class Request
 {
     #[ORM\Id]
     #[ORM\GeneratedValue(strategy: "NONE")]
