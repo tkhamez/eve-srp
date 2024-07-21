@@ -8,54 +8,34 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
-/**
- * @ORM\Entity
- * @ORM\Table(
- *     name="users",
- *     options={"charset"="utf8mb4", "collate"="utf8mb4_unicode_520_ci"},
- *     indexes={
- *         @ORM\Index(name="users_name_idx", columns={"name"})
- *     }
- * )
- */
-class User
+#[ORM\Entity]
+#[ORM\Table(
+    name: "users",
+    indexes: [new ORM\Index(name: "users_name_idx", columns: ["name"])],
+    options: ["charset" => "utf8mb4", "collate" => "utf8mb4_unicode_520_ci"]
+)] class User
 {
-    /**
-     * @ORM\Id
-     * @ORM\Column(type="integer")
-     * @ORM\GeneratedValue
-     */
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column(type: "integer")]
     private ?int $id = null;
 
-    /**
-     * @ORM\Column(type="string", unique=true, nullable=true, name="external_account_id", length=255)
-     */
+    #[ORM\Column(name: "external_account_id", type: "string", length: 255, unique: true, nullable: true)]
     private ?string $externalAccountId = null;
 
-    /**
-     * @ORM\Column(type="string", length=255, nullable=true)
-     */
+    #[ORM\Column(type: "string", length: 255, nullable: true)]
     private ?string $name = null;
 
-    /**
-     * @ORM\ManyToMany(targetEntity="ExternalGroup", inversedBy="users")
-     * @ORM\JoinTable(
-     *     name="user_external_group",
-     *     inverseJoinColumns={@ORM\JoinColumn(name="external_group_id")}
-     * )
-     * @ORM\OrderBy({"name" = "ASC"})
-     */
+    #[ORM\ManyToMany(targetEntity: "ExternalGroup", inversedBy: "users")]
+    #[ORM\JoinTable(name: "user_external_group", inverseJoinColumns: [new ORM\JoinColumn(name: "external_group_id")])]
+    #[ORM\OrderBy(["name" => "ASC"])]
     private Collection $externalGroups;
 
-    /**
-     * @ORM\OneToMany(targetEntity="Character", mappedBy="user")
-     */
+    #[ORM\OneToMany(targetEntity: "Character", mappedBy: "user")]
     private Collection $characters;
 
-    /**
-     * @ORM\OneToMany(targetEntity="Request", mappedBy="user")
-     * @ORM\OrderBy({"created" = "DESC"})
-     */
+    #[ORM\OneToMany(targetEntity: "Request", mappedBy: "user")]
+    #[ORM\OrderBy(["created" => "DESC"])]
     private Collection $requests;
 
     public function __construct()

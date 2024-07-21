@@ -6,22 +6,16 @@ namespace EveSrp\Model;
 
 use Doctrine\ORM\Mapping as ORM;
 
-/**
- * @ORM\Entity
- * @ORM\Table(name="esi_types", options={"charset"="utf8mb4", "collate"="utf8mb4_unicode_520_ci"})
- */
+#[ORM\Entity]
+#[ORM\Table(name: "esi_types", options: ["charset" => "utf8mb4", "collate" => "utf8mb4_unicode_520_ci"])]
 class EsiType
 {
-    /**
-     * @ORM\Id
-     * @ORM\Column(type="bigint")
-     * @ORM\GeneratedValue(strategy="NONE")
-     */
+    #[ORM\Id]
+    #[ORM\GeneratedValue(strategy: "NONE")]
+    #[ORM\Column(type: "bigint")]
     private ?int $id = null;
 
-    /**
-     * @ORM\Column(type="string", length=255, nullable=true)
-     */
+    #[ORM\Column(type: "string", length: 255, nullable: true)]
     private ?string $name = null;
 
     public function setId(int $id): self

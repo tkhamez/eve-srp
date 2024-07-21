@@ -14,7 +14,6 @@
         "ext-json": "*",
         "bravecollective/neucore-api": "^2.1",
         "bryanjhv/slim-session": "^4.0",
-        "doctrine/annotations": "^2.0",
         "doctrine/migrations": "^3.5",
         "doctrine/orm": "^2.7",
         "php-di/php-di": "^7.0",

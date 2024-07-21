@@ -6,10 +6,8 @@ namespace EveSrp\Model;
 
 use Doctrine\ORM\Mapping as ORM;
 
-/**
- * @ORM\Entity
- * @ORM\Table(name="permissions", options={"charset"="utf8mb4", "collate"="utf8mb4_unicode_520_ci"})
- */
+#[ORM\Entity]
+#[ORM\Table(name: "permissions", options: ["charset" => "utf8mb4", "collate" => "utf8mb4_unicode_520_ci"])]
 class Permission
 {
     /**
@@ -31,29 +29,21 @@ class Permission
      * Can change division permission.
      */
     public const ADMIN = 'admin';
-    
-    /**
-     * @ORM\Id
-     * @ORM\Column(type="integer")
-     * @ORM\GeneratedValue
-     */
+
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column(type: "integer")]
     private ?int $id = null;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="Division", inversedBy="permissions")
-     * @ORM\JoinColumn(nullable=false)
-     */
+    #[ORM\ManyToOne(targetEntity: "Division", inversedBy: "permissions")]
+    #[ORM\JoinColumn(nullable: false)]
     private ?Division $division = null;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="ExternalGroup", inversedBy="permissions")
-     * @ORM\JoinColumn(name="external_group_id", nullable=false)
-     */
+    #[ORM\ManyToOne(targetEntity: "ExternalGroup", inversedBy: "permissions")]
+    #[ORM\JoinColumn(name: "external_group_id", nullable: false)]
     private ?ExternalGroup $externalGroup = null;
 
-    /**
-     * @ORM\Column(type="string", length=8, name="role_name")
-     */
+    #[ORM\Column(name: "role_name", type: "string", length: 8)]
     private ?string $role = null;
 
     public function getId(): ?int

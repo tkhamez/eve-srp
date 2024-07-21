@@ -9,6 +9,7 @@ use Brave\NeucoreApi\Api\ApplicationCharactersApi;
 use Brave\NeucoreApi\Api\ApplicationGroupsApi;
 use Brave\NeucoreApi\Configuration;
 use Doctrine\DBAL\DriverManager;
+use Doctrine\DBAL\Tools\DsnParser;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\EntityRepository;
@@ -143,12 +144,16 @@ final class Container
             // Doctrine ORM
             EntityManagerInterface::class => function (ContainerInterface $container) {
                 $settings = $container->get(Settings::class);
-                $metaConfig = ORMSetup::createAnnotationMetadataConfiguration(
+                $metaConfig = ORMSetup::createAttributeMetadataConfiguration(
                     [ROOT_DIR . '/src/Model'],
                     $settings['APP_ENV'] === 'dev',
                     ROOT_DIR . '/storage/doctrine'
                 );
-                $connection = DriverManager::getConnection(['url' => $settings['DB_URL']], $metaConfig);
+                $dsnParser = new DsnParser(['mysql' => 'pdo_mysql', 'postgres' => 'pdo_pgsql']);
+                $connection = DriverManager::getConnection(
+                    $dsnParser->parse($settings['DB_URL']),
+                    $metaConfig,
+                );
                 return new EntityManager($connection, $metaConfig);
             },
             ActionRepository::class => function (ContainerInterface $container) {

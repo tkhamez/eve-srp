@@ -10,136 +10,95 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
-/**
- * @ORM\Entity
- * @ORM\Table(
- *     name="requests",
- *     options={"charset"="utf8mb4", "collate"="utf8mb4_unicode_520_ci"},
- *     indexes={
- *         @ORM\Index(name="requests_status_idx", columns={"status"}),
- *         @ORM\Index(name="requests_corporation_name_idx", columns={"corporation_name"}),
- *         @ORM\Index(name="requests_ship_idx", columns={"ship"})
- *     }
- * )
- */
-class Request
+#[ORM\Entity]
+#[ORM\Table(
+    name: "requests",
+    indexes: [
+        new ORM\Index(name: "requests_status_idx", columns: ["status"]),
+        new ORM\Index(name: "requests_corporation_name_idx", columns: ["corporation_name"]),
+        new ORM\Index(name: "requests_ship_idx", columns: ["ship"])
+    ],
+    options: ["charset" => "utf8mb4", "collate" => "utf8mb4_unicode_520_ci"]
+)] class Request
 {
-    /**
-     * @ORM\Id
-     * @ORM\Column(type="bigint")
-     * @ORM\GeneratedValue(strategy="NONE")
-     */
+    #[ORM\Id]
+    #[ORM\GeneratedValue(strategy: "NONE")]
+    #[ORM\Column(type: "bigint")]
     private ?int $id = null;
 
-    /**
-     * @ORM\Column(type="datetime")
-     */
+    #[ORM\Column(type: "datetime")]
     private ?DateTime $created = null;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="Division")
-     * @ORM\JoinColumn(nullable=true, onDelete="SET NULL")
-     */
+    #[ORM\ManyToOne(targetEntity: "Division")]
+    #[ORM\JoinColumn(nullable: true, onDelete: "SET NULL")]
     private ?Division $division = null;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="User", inversedBy="requests")
-     * @ORM\JoinColumn(nullable=false)
-     */
+    #[ORM\ManyToOne(targetEntity: "User", inversedBy: "requests")]
+    #[ORM\JoinColumn(nullable: false)]
     private ?User $user = null;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="User")
-     * @ORM\JoinColumn(name="last_editor")
-     */
+    #[ORM\ManyToOne(targetEntity: "User")]
+    #[ORM\JoinColumn(name: "last_editor")]
     private ?User $lastEditor = null;
 
-    /**
-     * @ORM\OneToMany(targetEntity="Action", mappedBy="request")
-     * @ORM\OrderBy({"created" = "DESC"})
-     */
+    #[ORM\OneToMany(targetEntity: "Action", mappedBy: "request")]
+    #[ORM\OrderBy(["created" => "DESC"])]
     private Collection $actions;
 
-    /**
-     * @ORM\OneToMany(targetEntity="Modifier", mappedBy="request")
-     * @ORM\OrderBy({"created" = "DESC"})
-     */
+    #[ORM\OneToMany(targetEntity: "Modifier", mappedBy: "request")]
+    #[ORM\OrderBy(["created" => "DESC"])]
     private Collection $modifiers;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="Character")
-     * @ORM\JoinColumn(nullable=false)
-     */
+    #[ORM\ManyToOne(targetEntity: "Character")]
+    #[ORM\JoinColumn(nullable: false)]
     private ?Character $character = null;
 
-    /**
-     * @ORM\Column(type="bigint", nullable=true, name="corporation_id")
-     */
+    #[ORM\Column(name: "corporation_id", type: "bigint", nullable: true)]
     private ?int $corporationId = null;
 
-    /**
-     * @ORM\Column(type="string", length=255, nullable=true, name="corporation_name")
-     */
+    #[ORM\Column(name: "corporation_name", type: "string", length: 255, nullable: true)]
     private ?string $corporationName = null;
 
-    /**
-     * @ORM\Column(type="bigint", nullable=true, name="alliance_id")
-     */
+    #[ORM\Column(name: "alliance_id", type: "bigint", nullable: true)]
     private ?int $allianceId = null;
 
-    /**
-     * @ORM\Column(type="string", length=255, nullable=true, name="alliance_name")
-     */
+    #[ORM\Column(name: "alliance_name", type: "string", length: 255, nullable: true)]
     private ?string $allianceName = null;
 
-    /**
-     * @ORM\Column(type="string", length=128)
-     */
+    #[ORM\Column(type: "string", length: 128)]
     private string $ship = '';
 
-    /**
-     * @ORM\Column(type="datetime", name="kill_time")
-     */
+    #[ORM\Column(name: "kill_time", type: "datetime")]
     private ?DateTime $killTime = null;
 
-    /**
-     * @ORM\Column(type="string", name="solar_system", length=32)
-     */
+    #[ORM\Column(name: "solar_system", type: "string", length: 32)]
     private string $solarSystem = '';
 
     /**
      * The "External Kill Link" from the in-game menu.
-     * 
-     * @ORM\Column(type="string", name="esi_hash", length=512, nullable=true)
+     *
      */
+    #[ORM\Column(name: "esi_hash", type: "string", length: 512, nullable: true)]
     private ?string $esiHash = null;
-    
-    /**
-     * @ORM\Column(type="text", length=16777215, nullable=true)
-     */
+
+    #[ORM\Column(type: "text", length: 16777215, nullable: true)]
     private ?string $details = null;
 
-    /**
-     * @ORM\Column(type="text", length=16777215, nullable=true)
-     */
+    #[ORM\Column(type: "text", length: 16777215, nullable: true)]
     private ?string $killMail = null;
 
-    /**
-     * @ORM\Column(type="bigint", name="base_payout", nullable=true)
-     */
+    #[ORM\Column(name: "base_payout", type: "bigint", nullable: true)]
     private ?int $basePayout = null;
 
-    /**
-     * @ORM\Column(type="bigint", nullable=true)
-     */
+    #[ORM\Column(type: "bigint", nullable: true)]
     private ?int $payout = null;
 
     /**
      * Request status: one of the EveSrp\Type constants.
      *
-     * @ORM\Column(type="string", length=16)
      * @see Type
      */
+    #[ORM\Column(type: "string", length: 16)]
     private string $status = '';
     
     public function __construct()

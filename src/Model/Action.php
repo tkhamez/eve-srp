@@ -8,47 +8,35 @@ use EveSrp\Type;
 use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 
-/**
- * @ORM\Entity
- * @ORM\Table(name="actions", options={"charset"="utf8mb4", "collate"="utf8mb4_unicode_520_ci"})
- */
+#[ORM\Entity]
+#[ORM\Table(name: "actions", options: ["charset" => "utf8mb4", "collate" => "utf8mb4_unicode_520_ci"])]
 class Action
 {
-    /**
-     * @ORM\Id
-     * @ORM\Column(type="integer")
-     * @ORM\GeneratedValue
-     */
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column(type: "integer")]
     private ?int $id = null;
 
-    /**
-     * @ORM\Column(type="datetime")
-     */
+    #[ORM\Column(type: "datetime")]
     private ?DateTime $created = null;
 
     /**
      * Action category/type: one of the EveSrp\Type constants.
-     * 
-     * @ORM\Column(type="string", length=16)
+     *
      * @see Type
      */
+    #[ORM\Column(type: "string", length: 16)]
     private ?string $category = null;
-    
-    /**
-     * @ORM\ManyToOne(targetEntity="User")
-     * @ORM\JoinColumn(nullable=false)
-     */
+
+    #[ORM\ManyToOne(targetEntity: "User")]
+    #[ORM\JoinColumn(nullable: false)]
     private ?User $user = null;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="Request", inversedBy="actions")
-     * @ORM\JoinColumn(nullable=false)
-     */
+    #[ORM\ManyToOne(targetEntity: "Request", inversedBy: "actions")]
+    #[ORM\JoinColumn(nullable: false)]
     private ?Request $request = null;
 
-    /**
-     * @ORM\Column(type="text", length=16777215, nullable=true)
-     */
+    #[ORM\Column(type: "text", length: 16777215, nullable: true)]
     private ?string $note = null;
 
     public function getId(): ?int
