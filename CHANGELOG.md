@@ -8,10 +8,9 @@
 - Updated screenshot of kill report.
 - Replaced choices.js with selectize.
 - Fix: MySQL database column for a kill mail was sometimes too small.  
-  (manually fix until there's a release: `ALTER TABLE requests CHANGE killMail killMail MEDIUMTEXT DEFAULT NULL`)
 - Fix: Added missing trailing slash to ESI killmail URL.
 - Updated dependencies.
-- Updated Node.js für development environment.
+- Updated Node.js for development environment.
 
 ## 1.2.0
 
