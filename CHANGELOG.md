@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.3.2
+
+2024-08-15
+
+- Added arm64 Docker image.
+
 ## 1.3.1
 
 2024-08-15
