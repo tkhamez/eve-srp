@@ -165,7 +165,7 @@ want to use. Then set the `EVE_SRP_PROVIDER_NEUCORE_*` environment variables.
 Only tested on Linux.
 
 ```
-docker-compose up
+docker compose up
 ```
 
 The database connection string is: `mysql://root:eve_srp@eve_srp_db/eve_srp`. To run the unit tests add a
@@ -175,8 +175,8 @@ The application is available at: http://localhost:8000.
 
 Consoles for PHP and Node.js:
 ```
-docker-compose exec -u www-data eve_srp_php /bin/sh
-docker-compose exec -u node eve_srp_node /bin/sh
+docker compose exec -u www-data eve_srp_php /bin/sh
+docker compose exec -u node eve_srp_node /bin/sh
 ```
 
 The script `build.sh` can be used to create a release.
