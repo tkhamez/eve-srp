@@ -1,5 +1,3 @@
-version: '3'
-
 services:
   eve_srp_db:
     container_name: eve_srp_db
@@ -52,6 +50,6 @@ services:
 
 networks:
   eve-srp:
-    #external:
-      #name: neucore_dev
-      #name: neucore_prod
+    #external: true
+    #name: neucore_dev
+    #name: neucore_prod
