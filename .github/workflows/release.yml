@@ -12,6 +12,7 @@ jobs:
         uses: actions/checkout@v4
         with:
           path: build/eve-srp
+
       - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
@@ -65,6 +66,7 @@ jobs:
           cd build
           tar -czf eve-srp-${{ env.RELEASE_VERSION }}.tar.gz eve-srp
           sha256sum eve-srp-${{ env.RELEASE_VERSION }}.tar.gz > eve-srp-${{ env.RELEASE_VERSION }}.sha256
+
       - name: GitHub Release
         uses: softprops/action-gh-release@v1
         with:
@@ -73,15 +75,16 @@ jobs:
             build/eve-srp-${{ env.RELEASE_VERSION }}.sha256
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      - name: Build Docker image
+
+      - name: Set up QEMU
         if: ${{ github.repository_owner == 'tkhamez' }}
-        run: |
-          docker build -f build/Dockerfile --no-cache -t tkhamez/eve-srp:${{ env.RELEASE_VERSION }} build
-          docker tag tkhamez/eve-srp:${{ env.RELEASE_VERSION }} tkhamez/eve-srp:latest
-      - name: Publish Docker image
+        uses: docker/setup-qemu-action@v3
+      - name: Set up Docker Buildx
+        if: ${{ github.repository_owner == 'tkhamez' }}
+        uses: docker/setup-buildx-action@v3
+      - name: Build and publish Docker image
         if: ${{ github.repository_owner == 'tkhamez' }}
         run: |
           echo ${{ secrets.DOCKERHUB_PASSWORD }} | docker login -u tkhamez --password-stdin
-          docker push tkhamez/eve-srp:${{ env.RELEASE_VERSION }}
-          docker push tkhamez/eve-srp:latest
+          docker buildx build --platform linux/amd64,linux/arm64 -f build/Dockerfile --no-cache -t tkhamez/eve-srp:${{ env.RELEASE_VERSION }} -t tkhamez/eve-srp:latest --push build
           docker logout
