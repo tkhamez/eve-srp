@@ -199,7 +199,7 @@ class KillMailService
             return 'Missing ESI link.';
         }
 
-        $esiLink = $this->apiService->getEsiKillUrl($request->getId(), $request->getEsiHash());
+        $esiLink = $this->apiService->getEsiKillUrl($request->getId(), (string)$request->getEsiHash());
         $result = $this->apiService->getJsonData($esiLink);
 
         return $result ?: $this->apiService->getLastError();
