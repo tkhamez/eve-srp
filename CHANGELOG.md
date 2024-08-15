@@ -1,5 +1,13 @@
 # Changelog
 
+## 1.3.1
+
+2024-08-15
+
+- Added robots.txt.
+- Improved error logging.
+- Fixed a fatal error.
+
 ## 1.3.0
 
 2024-07-21
