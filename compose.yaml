@@ -33,7 +33,8 @@ services:
       context: config
       #dockerfile: dockerfile-php81-fpm
       #dockerfile: dockerfile-php82-fpm
-      dockerfile: dockerfile-php83-fpm
+      #dockerfile: dockerfile-php83-fpm
+      dockerfile: dockerfile-php84-fpm
     depends_on: [eve_srp_db]
     volumes: [".:/app"]
     working_dir: /app

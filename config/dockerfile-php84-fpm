@@ -1,0 +1,5 @@
+FROM php:8.4-fpm-alpine
+RUN apk update && apk add gmp-dev libpq-dev
+RUN docker-php-ext-install pdo_mysql pdo_pgsql gmp
+COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
+ENV COMPOSER_HOME /app/.composer
