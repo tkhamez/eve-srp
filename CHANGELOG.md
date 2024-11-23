@@ -1,5 +1,9 @@
 # Changelog
 
+## next
+
+- PHP 8.4 compatibility.
+
 ## 1.3.2
 
 2024-08-15
@@ -23,7 +27,6 @@
 - Replaced choices.js with selectize.
 - Fix: MySQL database column for a kill mail was sometimes too small.  
 - Fix: Added missing trailing slash to ESI killmail URL.
-- Updated dependencies.
 - Updated Node.js for development environment.
 
 ## 1.2.0
