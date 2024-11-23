@@ -20,7 +20,7 @@ class RequestRepository extends EntityRepository
      */
     public function findByCriteria(
         array $criteria,
-        int $limit = null,
+        ?int $limit = null,
         int $offset = 0,
         string $sort = 'created',
         string $order = 'ASC',

@@ -35,7 +35,7 @@ class RoleProvider implements RoleProviderInterface
         }
     }
 
-    public function getRoles(ServerRequestInterface $request = null): array
+    public function getRoles(?ServerRequestInterface $request = null): array
     {
         if (count($this->roles) > 0) {
             return $this->roles;

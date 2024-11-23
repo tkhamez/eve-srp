@@ -37,13 +37,19 @@ class Bootstrap
             mkdir($logDir);
         }
         ini_set('error_log', $logDir . '/error-' . date('Ym') . '.log');
-        error_reporting(E_ALL);
 
         if (is_readable(ROOT_DIR . '/config/.env')) {
             $dotEnv = Dotenv::createImmutable(ROOT_DIR . '/config');
             $dotEnv->load();
         } elseif (empty($_ENV)) {
             $_ENV = getenv();
+        }
+
+        if ($_ENV['EVE_SRP_ENV'] === 'dev') {
+            error_reporting(E_ALL);
+            #error_reporting(E_ALL & ~E_DEPRECATED);
+        } else {
+            error_reporting(E_ALL & ~E_DEPRECATED);
         }
 
         $builder = new ContainerBuilder();

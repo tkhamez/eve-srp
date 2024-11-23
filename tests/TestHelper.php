@@ -62,7 +62,7 @@ class TestHelper
     {
         $qb = self::$em->createQueryBuilder();
         foreach (self::$classNames as $className) {
-            $qb->delete($className)->getQuery()->execute();
+            $qb->delete($className, 'c')->getQuery()->execute();
         }
         self::$em->clear();
     }

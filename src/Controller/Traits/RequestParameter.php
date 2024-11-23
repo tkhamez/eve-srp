@@ -11,12 +11,16 @@ trait RequestParameter
     protected function paramGet(
         ServerRequestInterface $request,
         string $key,
-        array|string $default = null
+        array|string|null $default = null
     ): array|string|null {
         return $request->getQueryParams()[$key] ?? $default;
     }
 
-    protected function paramPost(ServerRequestInterface $request, string $key, array|string $default = null): mixed
+    protected function paramPost(
+        ServerRequestInterface $request,
+        string $key,
+        array|string|null $default = null
+    ): mixed
     {
         $postParams = $request->getParsedBody();
         if (is_array($postParams) && isset($postParams[$key])) {
