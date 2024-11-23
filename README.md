@@ -204,7 +204,7 @@ sudo rm -R ./storage/compilation_cache/*
 
 Install dependencies:
 ```
-npm install
+npm ci
 ```
 
 Automatically rebuild during development:

@@ -28,7 +28,7 @@ jobs:
           cd build/eve-srp
           composer install --no-dev --optimize-autoloader --no-interaction
           bin/doctrine orm:generate-proxies
-          npm install
+          npm ci
           npm run build
         env:
           EVE_SRP_DB_URL: 'mysql://user:@127.0.0.1/db?serverVersion=10.5.22-MariaDB-1:10.5.22+maria~ubu2004'
