@@ -25,8 +25,6 @@
 
 A web application to manage a **Ship Replacement Program** for [EVE Online](https://www.eveonline.com).
 
-**Demo**: https://eve-srp.tian-space.net
-
 Features:
 
 - EVE SSO login.
