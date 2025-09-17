@@ -17,9 +17,9 @@
     "license-webpack-plugin": "^4.0.2",
     "mini-css-extract-plugin": "^2.1.0",
     "sass": "^1.35.2",
-    "sass-loader": "^14.2.1",
+    "sass-loader": "^16.0.5",
     "webpack": "^5.46.0",
-    "webpack-cli": "^5.0.1"
+    "webpack-cli": "^6.0.1"
   },
   "scripts": {
     "build": "webpack --mode production",
