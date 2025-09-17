@@ -18,7 +18,6 @@ use EveSrp\Service\ApiService;
 use EveSrp\Service\UserService;
 use EveSrp\Settings;
 use EveSrp\Type;
-use GuzzleHttp\ClientInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Twig\Environment;
@@ -39,16 +38,15 @@ class SubmitController
     private ?string $inputDetails = null;
 
     public function __construct(
-        private UserService $userService,
-        private ApiService $apiService,
-        private EntityManagerInterface $entityManager,
-        private DivisionRepository $divisionRepository,
-        private CharacterRepository $characterRepository,
-        private RequestRepository $requestRepository,
-        private FlashMessage $flashMessage,
-        private ClientInterface $httpClient,
-        Settings $settings,
-        Environment $environment,
+        private readonly UserService            $userService,
+        private readonly ApiService             $apiService,
+        private readonly EntityManagerInterface $entityManager,
+        private readonly DivisionRepository     $divisionRepository,
+        private readonly CharacterRepository    $characterRepository,
+        private readonly RequestRepository      $requestRepository,
+        private readonly FlashMessage           $flashMessage,
+        Settings                                $settings,
+        Environment                             $environment,
     ) {
         $this->esiBaseUrl = $settings['URLs']['esi'];
         $this->killboardBaseUrl = $settings['URLs']['zkillboard'];
