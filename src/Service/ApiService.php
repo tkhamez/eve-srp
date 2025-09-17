@@ -10,6 +10,8 @@ use GuzzleHttp\Exception\GuzzleException;
 
 class ApiService
 {
+    private const URL_PART_KILL_MAILS = 'killmails';
+
     private string $esiBaseUrl;
 
     private string $killboardBaseUrl;
@@ -71,7 +73,10 @@ class ApiService
     {
         $temp = str_replace($this->esiBaseUrl, '', $esiUrl);
         $parts = explode('/', $temp);
-        return !empty($parts[4]) ? $parts[4] : null;
+        if (($parts[1] ?? null) === self::URL_PART_KILL_MAILS) {
+            return $parts[3] ?? null;
+        }
+        return null;
     }
 
     public function getEsiHashFromZKillboard(int $killId): ?string
@@ -87,11 +92,25 @@ class ApiService
         return $killboardData[0]->zkb->hash;
     }
 
+    public function getKillMailEsiUrlWithoutVersion(string $esiUrl): string
+    {
+        $temp = str_replace($this->esiBaseUrl, '', $esiUrl);
+        $parts = explode('/', $temp);
+        if (($parts[2] ?? null) === self::URL_PART_KILL_MAILS) {
+            // Old URL with a version, remove it.
+            unset($parts[1]);
+        }
+        return $this->esiBaseUrl . implode('/', $parts);
+    }
+
     public function getKillIdFromEsiUrl(string $esiUrl): int
     {
         $temp = str_replace($this->esiBaseUrl, '', $esiUrl);
         $parts = explode('/', $temp);
-        return !empty($parts[3]) ? (int)$parts[3] : 0;
+        if (($parts[1] ?? null) === self::URL_PART_KILL_MAILS) {
+            return (int) ($parts[2] ?? 0);
+        }
+        return 0;
     }
 
     public function getEsiKillUrl(int $killId, string $hash): string
@@ -117,6 +136,6 @@ class ApiService
 
     private function getEsiKillUrlBase(): string
     {
-        return "$this->esiBaseUrl/latest/killmails/";
+        return "$this->esiBaseUrl/" . self::URL_PART_KILL_MAILS . "/";
     }
 }

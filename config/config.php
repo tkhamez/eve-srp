@@ -37,7 +37,7 @@ return [
 
     'URLs' => [
         'zkillboard' => $_ENV['EVE_SRP_ZKILLBOARD_URL'] ?? 'https://zkillboard.com',
-        'esi'        => 'https://esi.evetech.net',
+        'esi'        => 'https://esi.evetech.net', // No slash at the end or things will break!
         'dotlan'     => 'https://evemaps.dotlan.net',
         'nakamura'   => 'https://time.nakamura-labs.com',
         'evewho'     => 'https://evewho.com',

@@ -104,7 +104,7 @@ class SubmitController
 
         // Get ESI URL
         if (str_starts_with($this->inputUrl, $this->esiBaseUrl)) {
-            $esiUrl = $this->inputUrl;
+            $esiUrl = $this->apiService->getKillMailEsiUrlWithoutVersion($this->inputUrl);
         } elseif (!empty($this->killboardBaseUrl) && str_starts_with($this->inputUrl, $this->killboardBaseUrl)) {
             $esiUrl = $this->apiService->getEsiUrlFromZKillboardUrl($this->inputUrl);
             if (!$esiUrl) {
@@ -176,7 +176,7 @@ class SubmitController
         }
 
         $shipData = $this->apiService->getJsonData(
-            "latest/universe/types/{$killMailData->victim->ship_type_id}/?language=en-us"
+            "universe/types/{$killMailData->victim->ship_type_id}/?language=en-us"
         );
         if ($shipData === null) {
             $this->flashMessage->addMessage("API error (ESI ship type).", FlashMessage::TYPE_WARNING);
@@ -184,7 +184,7 @@ class SubmitController
         }
 
         $systemData = $this->apiService->getJsonData(
-            "latest/universe/systems/$killMailData->solar_system_id/?language=en-us"
+            "universe/systems/$killMailData->solar_system_id/?language=en-us"
         );
         if ($systemData === null) {
             $this->flashMessage->addMessage("API error (ESI solar system).", FlashMessage::TYPE_WARNING);
@@ -192,7 +192,7 @@ class SubmitController
         }
 
         $corporationData = $this->apiService->getJsonData(
-            "latest/corporations/{$killMailData->victim->corporation_id}/"
+            "corporations/{$killMailData->victim->corporation_id}/"
         );
         if ($corporationData === null) {
             $this->flashMessage->addMessage("API error (ESI corporation).", FlashMessage::TYPE_WARNING);
@@ -201,7 +201,7 @@ class SubmitController
 
         $allianceData = null;
         if (isset($corporationData->alliance_id)) {
-            $allianceData = $this->apiService->getJsonData("latest/alliances/$corporationData->alliance_id/");
+            $allianceData = $this->apiService->getJsonData("alliances/$corporationData->alliance_id/");
             if ($allianceData === null) {
                 $this->flashMessage->addMessage("API error (ESI alliances).", FlashMessage::TYPE_WARNING);
                 return false;
