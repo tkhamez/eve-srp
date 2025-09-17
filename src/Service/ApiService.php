@@ -18,10 +18,16 @@ class ApiService
 
     private string $lastError = '';
 
-    public function __construct(private ClientInterface $httpClient, Settings $settings)
+    private mixed $esiUserAgent;
+
+    private $esiCompatibilityDate;
+
+    public function __construct(private readonly ClientInterface $httpClient, Settings $settings)
     {
         $this->esiBaseUrl = $settings['URLs']['esi'];
         $this->killboardBaseUrl = $settings['URLs']['zkillboard'];
+        $this->esiUserAgent = $settings['HTTP_USER_AGENT'];
+        $this->esiCompatibilityDate = $settings['ESI']['compatibility_date'];
     }
 
     public function getLastError(): string
@@ -29,13 +35,26 @@ class ApiService
         return $this->lastError;
     }
 
+    /**
+     * Makes an HTTP request and returns the decoded JSON response.
+     *
+     * All ESI requests are made with this method.
+     *
+     * @param string $url Full URL or path only for ESI requests.
+     */
     public function getJsonData(string $url): array|\stdClass|null
     {
         $this->lastError = '';
 
-        $url = str_starts_with($url, 'http') ? $url : "$this->esiBaseUrl/$url";
+        $options = ['headers' => []];
+        if (!str_starts_with($url, 'http')) {
+            $url = "$this->esiBaseUrl/$url";
+            $options['headers']['X-Compatibility-Date'] = $this->esiCompatibilityDate;
+            $options['headers']['User-Agent'] = $this->esiUserAgent;
+        }
+
         try {
-            $apiResponse = $this->httpClient->request('GET', $url);
+            $apiResponse = $this->httpClient->request('GET', $url, $options);
         } catch (GuzzleException $e) {
             $this->lastError = $e->getMessage();
             error_log(__METHOD__ . " request: $this->lastError");

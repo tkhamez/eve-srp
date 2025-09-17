@@ -41,5 +41,9 @@ return [
         'dotlan'     => 'https://evemaps.dotlan.net',
         'nakamura'   => 'https://time.nakamura-labs.com',
         'evewho'     => 'https://evewho.com',
-    ]
+    ],
+
+    'ESI' => [
+        'compatibility_date' => '2025-08-26',
+    ],
 ];

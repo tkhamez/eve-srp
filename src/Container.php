@@ -74,10 +74,8 @@ final class Container
             },
 
             // Guzzle HTTP client
-            ClientInterface::class => function (ContainerInterface $container) {
-                return new Client([
-                    'headers' => ['User-Agent' => $container->get(Settings::class)['HTTP_USER_AGENT']]
-                ]);
+            ClientInterface::class => function () {
+                return new Client();
             },
 
             // SSO
