@@ -46,7 +46,7 @@ jobs:
           rm build/eve-srp/build.sh
           rm build/eve-srp/composer.json
           rm build/eve-srp/composer.lock
-          rm build/eve-srp/docker-compose.yml
+          rm build/eve-srp/compose.yaml
           rm build/eve-srp/package.json
           rm build/eve-srp/package-lock.json
           rm build/eve-srp/phpunit.xml
