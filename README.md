@@ -33,11 +33,11 @@ Features:
 - Custom providers for groups and alternative characters.
 - SRP requests with comments.
 - Base payout with modifiers.
-- Workflow with multiple status.
+- Workflow with multiple statuses.
 - Lists with open, in progress and approved requests.
 - Search function for all requests.
 - Admin UI to manage divisions and set their permissions.
-- Various options to customize the installation (texts, logo).
+- Various options to customise the installation (texts, logo).
 - Optional [zKillboard](https://github.com/zKillboard/zKillboard) integration.
 
 ![Screenshot-Edit-Request.png](Screenshot-Edit-Request.png)
@@ -86,7 +86,7 @@ docker exec eve_srp_prod sh -c "tail -f ../storage/logs/*.log"
 
 ### Manual Installation
 
-To run the application you need a Linux OS (others may work but were not tested), PHP >=8.1.0
+To run the application, you need a Linux OS (others may work but were not tested), PHP >=8.1.0
 with the extension `json`, `gmp` and one of `pdo_mysql` or `pdo_pgsql`, and a web server with support for 
 PHP and URL rewriting.
 
@@ -106,33 +106,33 @@ Log messages are sent to `storage/logs/error-*.log` files.
 
 ### Further Configuration
 
-Various texts, the logo and other settings can be changed via environment variables, they are documented in 
+Various texts, the logo and other settings can be changed via environment variables. They are documented in
 `config/.env.dist` or below.
 
-You can add your own JavaScript code to `web/static/custom.js`, for example for analytics software.
+You can add your own JavaScript code to `web/static/custom.js`, for example, for analytics software.
 
 **Modifiers**
 
-There are 3 different ways how modifiers can be applied to the base payout, which is configured by the 
+There are three different ways how modifiers can be applied to the base payout, which is configured by the 
 environment variable `EVE_SRP_MODIFIER_CALCULATION`:
 
 - **sequentially** (default): They are applied in the order in which they were added.  
-  E.g. 100m base payout, minus 10%, plus 20m, plus 30% = `((100 * 0.9) + 20) * 1.3 = 143`.
+  E.g. 100 m base payout, minus 10%, plus 20 m, plus 30% = `((100 * 0.9) + 20) * 1.3 = 143`.
 - **absolute_first**: Absolute modifiers are applied first, then the sum of all relative modifiers.  
-  E.g. 100m base payout, minus 10%, plus 20m, plus 30% = `(100 + 20) * (1 - 0.1 + 0.3)) = 144`.
+  E.g. 100 m base payout, minus 10%, plus 20 m, plus 30% = `(100 + 20) * (1 - 0.1 + 0.3)) = 144`.
 - **relative_first**: The sum of all relative modifiers is applied first, then the absolute modifiers.  
-  E.g. 100m base payout, minus 10%, plus 20m, plus 30% = `(100 * (1 - 0.1 + 0.3)) + 20 = 140`.
+  E.g. 100 m base payout, minus 10%, plus 20 m, plus 30% = `(100 * (1 - 0.1 + 0.3)) + 20 = 140`.
 
 The configuration can be changed without changing existing payouts. However, the new calculation is used when a 
 payout is recalculated by changing the base payout or a modifier.
 
 ### Initial Setup
 
-After you log in go to _Admin -> Groups_ and synchronize them. Then add divisions and configure permissions for them.
+After you log in, go to _Admin → Groups_ and synchronise them. Then add divisions and configure permissions for them.
 
 Permissions for each division are based on groups which are provided by a provider, see below.
 
-Besides that there is only one fixed role, the _global admin_. It is given to members of the groups from the 
+Besides that, there is only one fixed role, the _global admin_. It is given to members of the groups from the 
 environment variable `EVE_SRP_ROLE_GLOBAL_ADMIN`. In addition to administrative tasks, global admins can view all 
 SRP requests and change their division.
 
