@@ -46,7 +46,7 @@ Features:
 
 ### Prerequisites
 
-The application needs a MySQL, MariaDB or PostgreSQL database (tested with MariaDB 10.6 and PostgreSQL 12).
+The application needs a MySQL, MariaDB or PostgreSQL database (tested with MariaDB 10.11 and PostgreSQL 13).
 
 - Create an EVE application at https://developers.eveonline.com, no scopes required. Set the callback URL to
   `https://your.domain.tld/auth`.

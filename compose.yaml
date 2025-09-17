@@ -1,7 +1,7 @@
 services:
   eve_srp_db:
     container_name: eve_srp_db
-    image: mariadb:10.6
+    image: mariadb:10.11
     volumes: ["./.db/mariadb:/var/lib/mysql"]
     environment:
       MYSQL_ROOT_PASSWORD: eve_srp
