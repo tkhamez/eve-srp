@@ -4,12 +4,10 @@ declare(strict_types=1);
 
 namespace EveSrp\Provider\Implementation;
 
-use EveSrp\Exception;
 use EveSrp\Provider\ProviderInterface;
 use EveSrp\Provider\Data\Account;
+use EveSrp\Service\ApiService;
 use EveSrp\Settings;
-use GuzzleHttp\ClientInterface;
-use GuzzleHttp\Exception\GuzzleException;
 
 /**
  * A very simple group and character provider.
@@ -22,7 +20,7 @@ class EsiProvider implements ProviderInterface
 {
     private string $esiBaseUrl;
 
-    public function __construct(private ClientInterface $httpClient, Settings $settings)
+    public function __construct(private readonly ApiService $apiService, Settings $settings)
     {
         $this->esiBaseUrl = $settings['URLs']['esi'];
     }
@@ -34,16 +32,7 @@ class EsiProvider implements ProviderInterface
 
     public function getGroups(int $eveCharacterId): array
     {
-        try {
-            $result = $this->httpClient->request(
-                'GET',
-                "$this->esiBaseUrl/characters/$eveCharacterId/"
-            );
-        } catch (GuzzleException $e) {
-            throw new Exception('EsiProvider::getGroups: ' . $e->getMessage());
-        }
-
-        $userData = \json_decode($result->getBody()->getContents());
+        $userData = $this->apiService->getJsonData("$this->esiBaseUrl/characters/$eveCharacterId/");
 
         $submitterAlliances = explode(',', (string)($_ENV['EVE_SRP_PROVIDER_ESI_SUBMITTER_ALLIANCES'] ?? ''));
         $submitterCorporations = explode(',', (string)($_ENV['EVE_SRP_PROVIDER_ESI_SUBMITTER_CORPORATIONS'] ?? ''));
