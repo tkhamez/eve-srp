@@ -1,8 +1,12 @@
 # Changelog
 
-## next
+## 1.4.0
+
+2025-09-17
 
 - PHP 8.4 compatibility.
+- Compatibility with the new ESI API versioning system (compatibility date).
+- Updated libraries.
 
 ## 1.3.2
 
