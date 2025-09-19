@@ -27,7 +27,7 @@ rm "${DIR}"/build/eve-srp/.gitignore
 rm "${DIR}"/build/eve-srp/build.sh
 rm "${DIR}"/build/eve-srp/composer.json
 rm "${DIR}"/build/eve-srp/composer.lock
-rm "${DIR}"/build/eve-srp/compose.yml
+rm "${DIR}"/build/eve-srp/compose.yaml
 rm "${DIR}"/build/eve-srp/package.json
 rm "${DIR}"/build/eve-srp/package-lock.json
 rm "${DIR}"/build/eve-srp/phpunit.xml
