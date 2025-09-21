@@ -23,7 +23,7 @@
 
 ## About
 
-A web application to manage a **Ship Replacement Program** for [EVE Online](https://www.eveonline.com).
+A web application to manage a **S**hip **R**eplacement **P**rogram for [EVE Online](https://www.eveonline.com).
 
 Features:
 
