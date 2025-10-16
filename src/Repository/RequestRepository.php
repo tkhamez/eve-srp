@@ -58,6 +58,30 @@ class RequestRepository extends EntityRepository
         return isset($r[0]) ? (int)$r[0][1] : null;
     }
 
+    public function getCurrentMonthPayoutsByDivisionForReviewer(int $requestOwnerId, int $divisionId): array
+    {
+        //This can definately be done properly, but i have no clue how to do it using doctrine and not raw sql
+        $conn = $this->getEntityManager()->getConnection();
+
+        $qb = $conn->createQueryBuilder();
+        $qb->select('d.name AS name', 'SUM(r.payout) AS payout')
+            ->from('requests', 'r')
+            ->join('r', 'divisions', 'd', 'd.id = r.division_id')
+            ->where('r.user_id = :requestOwnerId')
+            ->andWhere('r.division_id = :divisionId')
+            ->andWhere($qb->expr()->in('r.status', [':statusPaid', ':statusApproved']))
+            ->andWhere('EXTRACT(MONTH FROM r.kill_time) = EXTRACT(MONTH FROM CURRENT_DATE)')
+            ->andWhere('EXTRACT(YEAR FROM r.kill_time) = EXTRACT(YEAR FROM CURRENT_DATE)')
+            ->groupBy('d.name')
+            ->setParameter('requestOwnerId', $requestOwnerId)
+            ->setParameter('divisionId', $divisionId)
+            ->setParameter('statusPaid', 'paid')
+            ->setParameter('statusApproved', 'approved');
+
+        return $qb->executeQuery()->fetchAllAssociative();
+    }
+
+
     private function addCriteria(QueryBuilder $qb, array $criteria): void
     {
         foreach ($criteria as $field => $value) {
