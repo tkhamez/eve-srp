@@ -60,25 +60,25 @@ class RequestRepository extends EntityRepository
 
     public function getCurrentMonthPayoutsByDivisionForReviewer(int $requestOwnerId, int $divisionId): array
     {
-        //This can definately be done properly, but i have no clue how to do it using doctrine and not raw sql
-        $conn = $this->getEntityManager()->getConnection();
+        $monthStart = new \DateTimeImmutable('first day of this month 00:00:00');
+        $monthEnd   = new \DateTimeImmutable('last day of this month 23:59:59');
 
-        $qb = $conn->createQueryBuilder();
+
+        $qb = $this->createQueryBuilder('r');
         $qb->select('d.name AS name', 'SUM(r.payout) AS payout')
-            ->from('requests', 'r')
-            ->join('r', 'divisions', 'd', 'd.id = r.division_id')
-            ->where('r.user_id = :requestOwnerId')
-            ->andWhere('r.division_id = :divisionId')
-            ->andWhere($qb->expr()->in('r.status', [':statusPaid', ':statusApproved']))
-            ->andWhere('EXTRACT(MONTH FROM r.kill_time) = EXTRACT(MONTH FROM CURRENT_DATE)')
-            ->andWhere('EXTRACT(YEAR FROM r.kill_time) = EXTRACT(YEAR FROM CURRENT_DATE)')
-            ->groupBy('d.name')
+            ->join('r.division', 'd')
+            ->where('r.user = :requestOwnerId')
+            ->andWhere('r.division = :divisionId')
+            ->andWhere('r.status IN (:statuses)')
+            ->andWhere('r.killTime BETWEEN :monthStart AND :monthEnd')
+            ->groupBy('d.id')
             ->setParameter('requestOwnerId', $requestOwnerId)
             ->setParameter('divisionId', $divisionId)
-            ->setParameter('statusPaid', 'paid')
-            ->setParameter('statusApproved', 'approved');
+            ->setParameter('statuses', ['paid', 'approved'])
+            ->setParameter('monthStart', $monthStart)
+            ->setParameter('monthEnd', $monthEnd);
 
-        return $qb->executeQuery()->fetchAllAssociative();
+        return $qb->getQuery()->getArrayResult();
     }
 
 

@@ -21,30 +21,7 @@
                 </div>
                 <div class="card bg-dark text-light border-light mt-3 " style="width:60%; margin-left:auto;">
                     <div class="card-body">
-                        <h5 class="card-title mb-3">Current payout (this month)</h5>
-
-                        {% if currentPayouts is defined and currentPayouts %}
-                            <div class="table-responsive">
-                                <table class="table table-sm table-dark table-striped mb-0">
-                                    <thead>
-                                    <tr>
-                                        <th>Division</th>
-                                        <th class="text-end">Payout</th>
-                                    </tr>
-                                    </thead>
-                                    <tbody>
-                                    {% for row in currentPayouts %}
-                                        <tr>
-                                            <td>{{ row.name }}</td>
-                                            <td class="text-end">{{ row.payout | number_format(0, '.', ',') }}</td>
-                                        </tr>
-                                    {% endfor %}
-                                    </tbody>
-                                </table>
-                            </div>
-                        {% else %}
-                            <div class="text-muted">No payouts this month.</div>
-                        {% endif %}
+                        {% include 'pages/request--payouts.twig' with { 'currentPayouts': currentPayouts} only %}
                     </div>
                 </div>
             </div>
