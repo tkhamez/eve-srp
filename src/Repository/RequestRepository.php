@@ -58,6 +58,30 @@ class RequestRepository extends EntityRepository
         return isset($r[0]) ? (int)$r[0][1] : null;
     }
 
+    public function getCurrentMonthPayoutsByDivisionForReviewer(int $requestOwnerId, int $divisionId): array
+    {
+        $monthStart = new \DateTimeImmutable('first day of this month 00:00:00');
+        $monthEnd   = new \DateTimeImmutable('last day of this month 23:59:59');
+
+
+        $qb = $this->createQueryBuilder('r');
+        $qb->select('d.name AS name', 'SUM(r.payout) AS payout')
+            ->join('r.division', 'd')
+            ->where('r.user = :requestOwnerId')
+            ->andWhere('r.division = :divisionId')
+            ->andWhere('r.status IN (:statuses)')
+            ->andWhere('r.killTime BETWEEN :monthStart AND :monthEnd')
+            ->groupBy('d.id')
+            ->setParameter('requestOwnerId', $requestOwnerId)
+            ->setParameter('divisionId', $divisionId)
+            ->setParameter('statuses', ['paid', 'approved'])
+            ->setParameter('monthStart', $monthStart)
+            ->setParameter('monthEnd', $monthEnd);
+
+        return $qb->getQuery()->getArrayResult();
+    }
+
+
     private function addCriteria(QueryBuilder $qb, array $criteria): void
     {
         foreach ($criteria as $field => $value) {

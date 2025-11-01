@@ -238,6 +238,7 @@ class RequestController
         $shipTypeId = null;
         $killItems = null;
         $killError = null;
+        $currentPayouts = null;
 
         if (!$srpRequest || !$this->userService->maySeeRequest($srpRequest)) {
             $srpRequest = null;
@@ -264,6 +265,11 @@ class RequestController
                 $shipTypeId = $killMail->victim->ship_type_id;
                 $killItems = $this->killMailService->sortItems($killMail->victim->items, $killMail->killmail_id);
             }
+            $currentPayouts = $this->requestRepository->getCurrentMonthPayoutsByDivisionForReviewer(
+                (int)$srpRequest->getUser()->getId(),
+                (int)$srpRequest->getDivision()->getId()
+            );
+
         }
 
         return $this->render($response, 'pages/request.twig', [
@@ -271,6 +277,7 @@ class RequestController
             'shipTypeId' => $shipTypeId,
             'items' => $killItems,
             'killError' => $killError,
+            'currentPayouts' => $currentPayouts,
         ]);
     }
 
