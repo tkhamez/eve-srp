@@ -1,5 +1,12 @@
 # Changelog
 
+## 1.5.0
+
+2025-11-01
+
+- Display the total payouts for the current month of the division on the request details page.
+- Updated libraries.
+
 ## 1.4.0
 
 2025-09-17
