@@ -13,7 +13,7 @@
             {% for row in currentPayouts %}
                 <tr>
                     <td>{{ row.name }}</td>
-                    <td class="text-end">{{ row.payout | number_format(0, '.', ',') }}</td>
+                    <td class="text-end">{{ formatMillions(row.payout) }}</td>
                 </tr>
             {% endfor %}
             </tbody>
