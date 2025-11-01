@@ -33,14 +33,14 @@ class RequestController
     const MODIFIER_RELATIVE_FIRST = 'relative_first';
 
     public function __construct(
-        private UserService $userService,
-        private KillMailService $killMailService,
-        private RequestService $requestService,
-        private RequestRepository $requestRepository,
-        private DivisionRepository $divisionRepository,
-        private EntityManagerInterface  $entityManager,
-        private FlashMessage $flashMessage,
-        private Settings $settings,
+        private readonly UserService $userService,
+        private readonly KillMailService $killMailService,
+        private readonly RequestService $requestService,
+        private readonly RequestRepository $requestRepository,
+        private readonly DivisionRepository $divisionRepository,
+        private readonly EntityManagerInterface  $entityManager,
+        private readonly FlashMessage $flashMessage,
+        private readonly Settings $settings,
         Environment $environment
     ) {
         $this->twigResponse($environment);
@@ -49,17 +49,23 @@ class RequestController
     /**
      * @noinspection PhpUnusedParameterInspection
      */
-    public function show(ServerRequestInterface $request, ResponseInterface $response, array $args): ResponseInterface
-    {
+    public function show(
+        ServerRequestInterface $request,
+        ResponseInterface $response,
+        array $args,
+    ): ResponseInterface {
         return $this->showPage($response, $args['id']);
     }
 
     /**
      * @throws Exception
      */
-    public function update(ServerRequestInterface $request, ResponseInterface $response, array $args): ResponseInterface
-    {
-        $srpRequest = $this->requestRepository->find((int)$args['id']);
+    public function update(
+        ServerRequestInterface $request,
+        ResponseInterface $response,
+        array $args,
+    ): ResponseInterface {
+        $srpRequest = $this->requestRepository->find((int) $args['id']);
         if (!$srpRequest) {
             return $response->withHeader('Location', "/request/{$args['id']}")->withStatus(302);
         }
@@ -67,15 +73,15 @@ class RequestController
         // Read new data
         $newDivision = null;
         if ($this->paramPost($request, 'division') !== null) {
-            $newDivision = (int)$this->paramPost($request, 'division');
+            $newDivision = (int) $this->paramPost($request, 'division');
         }
         $newStatus = $this->paramPost($request, 'status');
         // Need to distinguish between null and empty string in save() for base payout.
         $newBasePayout = $this->paramPost($request, 'payout');
         if ($newBasePayout !== '' && $newBasePayout !== null) { // allow '0'
-            $newBasePayout = (int)round($this->sanitizeNumberInput($newBasePayout) * Util::ONE_MILLION);
+            $newBasePayout = (int) round($this->sanitizeNumberInput($newBasePayout) * Util::ONE_MILLION);
         }
-        $newComment = trim((string)$this->paramPost($request, 'comment'));
+        $newComment = trim((string) $this->paramPost($request, 'comment'));
 
         // Check if changed
         if ($srpRequest->getDivision()?->getId() === $newDivision) {
@@ -134,7 +140,7 @@ class RequestController
         array $args
     ): ResponseInterface
     {
-        $check = $this->modifierGetRequestCheckPermission($response, (int)$args['id']);
+        $check = $this->modifierGetRequestCheckPermission($response, (int) $args['id']);
         if ($check instanceof ResponseInterface) {
             return $check;
         } else {
@@ -142,9 +148,9 @@ class RequestController
         }
 
         // Get input
-        $amount = $this->sanitizeNumberInput((string)$this->paramPost($request, 'amount'));
-        $type = (string)$this->paramPost($request, 'type');
-        $reason = trim((string)$this->paramPost($request, 'reason'));
+        $amount = $this->sanitizeNumberInput((string) $this->paramPost($request, 'amount'));
+        $type = (string) $this->paramPost($request, 'type');
+        $reason = trim((string) $this->paramPost($request, 'reason'));
 
         // Validate input
         $validTypes = [
@@ -200,7 +206,7 @@ class RequestController
         ResponseInterface $response,
         array $args
     ): ResponseInterface {
-        $check = $this->modifierGetRequestCheckPermission($response, (int)$args['id']);
+        $check = $this->modifierGetRequestCheckPermission($response, (int) $args['id']);
         if ($check instanceof ResponseInterface) {
             return $check;
         } else {
@@ -208,7 +214,7 @@ class RequestController
         }
 
         // Find existing modifier
-        $modifierId = (int)$this->paramPost($request, 'id');
+        $modifierId = (int) $this->paramPost($request, 'id');
         $modifierToRemove = null;
         foreach ($srpRequest->getModifiers() as $modifier) {
             if ($modifier->getId() === $modifierId) {
@@ -265,9 +271,9 @@ class RequestController
                 $shipTypeId = $killMail->victim->ship_type_id;
                 $killItems = $this->killMailService->sortItems($killMail->victim->items, $killMail->killmail_id);
             }
-            $currentPayouts = $this->requestRepository->getCurrentMonthPayoutsByDivisionForReviewer(
-                (int)$srpRequest->getUser()->getId(),
-                (int)$srpRequest->getDivision()->getId()
+            $currentPayouts = $this->requestRepository->getCurrentMonthPayoutsForRequesterAndDivision(
+                (int) $srpRequest->getUser()->getId(),
+                (int) $srpRequest->getDivision()->getId()
             );
 
         }
