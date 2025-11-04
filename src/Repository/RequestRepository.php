@@ -7,6 +7,7 @@ namespace EveSrp\Repository;
 use Doctrine\ORM\QueryBuilder;
 use EveSrp\Model\Request;
 use Doctrine\ORM\EntityRepository;
+use EveSrp\Type;
 
 /**
  * @method Request|null find($id, $lockMode = null, $lockVersion = null)
@@ -70,10 +71,10 @@ class RequestRepository extends EntityRepository
             ->andWhere('r.division = :divisionId')
             ->andWhere('r.status IN (:statuses)')
             ->andWhere('r.killTime BETWEEN :monthStart AND :monthEnd')
-            ->groupBy('d.id')
+            #->groupBy('d.id')
             ->setParameter('requesterId', $requesterId)
             ->setParameter('divisionId', $divisionId)
-            ->setParameter('statuses', ['paid', 'approved'])
+            ->setParameter('statuses', [Type::PAID, Type::APPROVED])
             ->setParameter('monthStart', $monthStart)
             ->setParameter('monthEnd', $monthEnd);
 
