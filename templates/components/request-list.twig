@@ -14,7 +14,7 @@
 {% set colPayed = pageActive == 'approved' %}
 {% set colReason = pageActive == 'approved' %}
 {% set colStatus = pageActive not in ['open', 'in-progress', 'approved'] %}
-{% set colLastEditor = pageActive == 'in-progress' %}
+{% set colLastEditor = pageActive in ['in-progress', 'approved'] %}
 {% set colKillboard = pageActive in ['my-requests', 'open', 'in-progress', 'all-requests'] and hasKillboardUrl() %}
 
 <div class="table-responsive">
