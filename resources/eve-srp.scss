@@ -93,6 +93,11 @@ a {
     white-space: nowrap;
 }
 
+.srp-text-muted {
+    --bs-text-opacity: 1;
+    color: var(--srp-text-color2) !important;
+}
+
 // Components
 
 .srp-copy-text:hover {

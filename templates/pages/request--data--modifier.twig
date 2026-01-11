@@ -43,7 +43,8 @@
 
 {% for modifier in request.modifiers %}
     <div class="row">
-        <div class="data-modifier col table-dark border-bottom pb-3 mb-3 {{ modifier.voidedTime ? 'text-muted' : '' }}">
+        <div class="data-modifier col table-dark border-bottom pb-3 mb-3 {{
+                    modifier.voidedTime ? 'srp-text-muted' : '' }}">
             <span class="{{ modifier.voidedTime ? 'text-decoration-line-through' : '' }}">
                 {% if modifier.modType == 'relative' %}
                     {{ modifier.modValue|abs|number_format }}%
