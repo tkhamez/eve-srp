@@ -44,6 +44,6 @@ return [
     ],
 
     'ESI' => [
-        'compatibility_date' => '2025-08-26',
+        'compatibility_date' => '2025-12-16',
     ],
 ];
