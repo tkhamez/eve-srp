@@ -39,7 +39,7 @@ services:
     volumes: [".:/app"]
     working_dir: /app
     networks: [eve-srp]
-    dns: [8.8.8.8]
+    #dns: [8.8.8.8]
 
   eve_srp_http:
     container_name: eve_srp_http
