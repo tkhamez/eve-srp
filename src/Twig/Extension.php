@@ -134,7 +134,7 @@ class Extension extends AbstractExtension
         return "Loss {$request->getId()} {$request->getShip()}";
     }
 
-    public function formatMillions(int $number, bool $includeM = true, int $decimals = 2): string
+    public function formatMillions(?int $number, bool $includeM = true, int $decimals = 2): string
     {
         return Util::formatMillions($number, $includeM, $decimals);
     }
