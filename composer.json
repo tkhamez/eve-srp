@@ -22,7 +22,7 @@
         "symfony/cache": "^6.4",
         "symfony/yaml": "^6.4",
         "tkhamez/eve-sso": "^6.0",
-        "tkhamez/slim-role-auth": "^5.0",
+        "tkhamez/slim-role-auth": "^6.0",
         "twig/twig": "^3.1",
         "vlucas/phpdotenv": "^5.2"
     },
