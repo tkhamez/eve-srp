@@ -1,5 +1,16 @@
 # Changelog
 
+## 1.6.0
+
+2026-01-11
+
+- New: Compatibility with PHP 8.5.
+- Change: Changed ESI compatibility date to 2025-12-16.
+- Change: Merge pull request #2: Show Last Editor column on Approved page
+- Fix: Moved inline styles to CSS.
+- Fix: Fixed the text colour of deleted modifiers and other places.
+- Updated libraries.
+
 ## 1.5.0
 
 2025-11-01
