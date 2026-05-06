@@ -41,13 +41,14 @@ body {
 
     .eve {
         position: relative;
-        z-index: 2;
+        padding-right: 29px;
+        z-index: 1;
         background-color: var(--srp-bg-color);
     }
 
     .github {
         position: absolute;
-        z-index: 1;
+        z-index: 2;
         right: 0;
         a {
             text-decoration: none;
