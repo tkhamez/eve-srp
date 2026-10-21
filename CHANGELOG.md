@@ -1,5 +1,12 @@
 # Changelog
 
+## 1.6.1
+
+2026-10-21
+
+- Important PHP security update for the Docker image
+- Change CCP -> Fenris Creations
+
 ## 1.6.0
 
 2026-01-11
