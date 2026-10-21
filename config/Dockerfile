@@ -1,13 +1,13 @@
 # Creates an image for production
 
 
-FROM php:8.2-apache-bullseye AS build
+FROM php:8.2-apache-trixie AS build
 
 COPY eve-srp-*.tar.gz /var/www/eve-srp.tar.gz
 RUN tar -xf /var/www/eve-srp.tar.gz -C /var/www
 
 
-FROM php:8.2-apache-bullseye
+FROM php:8.2-apache-trixie
 
 ARG DEBIAN_FRONTEND=noninteractive
 

@@ -36,9 +36,11 @@ rm "${DIR}"/build/eve-srp/webpack.config.js
 rm "${DIR}"/build/eve-srp/config/.env
 rm "${DIR}"/build/eve-srp/config/docker-nginx.conf
 rm "${DIR}"/build/eve-srp/config/Dockerfile
-rm "${DIR}"/build/eve-srp/config/dockerfile-php80-fpm
 rm "${DIR}"/build/eve-srp/config/dockerfile-php81-fpm
 rm "${DIR}"/build/eve-srp/config/dockerfile-php82-fpm
+rm "${DIR}"/build/eve-srp/config/dockerfile-php83-fpm
+rm "${DIR}"/build/eve-srp/config/dockerfile-php84-fpm
+rm "${DIR}"/build/eve-srp/config/dockerfile-php85-fpm
 rm "${DIR}"/build/eve-srp/storage/.gitkeep
 rm -r "${DIR}"/build/eve-srp/.github
 rm -r "${DIR}"/build/eve-srp/node_modules
