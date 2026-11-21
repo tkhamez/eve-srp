@@ -11,6 +11,7 @@ yyyy-mm-dd
 2026-11-21
 
 - "Current payout this month" has been changed to "Payouts in request month"
+- Updated libraries
 
 ## 1.6.1
 
