@@ -271,9 +271,10 @@ class RequestController
                 $shipTypeId = $killMail->victim->ship_type_id;
                 $killItems = $this->killMailService->sortItems($killMail->victim->items, $killMail->killmail_id);
             }
-            $currentPayouts = $this->requestRepository->getCurrentMonthPayoutsForRequesterAndDivision(
+            $currentPayouts = $this->requestRepository->getMonthPayoutsForRequesterAndDivision(
                 (int) $srpRequest->getUser()->getId(),
-                (int) $srpRequest->getDivision()->getId()
+                (int) $srpRequest->getDivision()->getId(),
+                $srpRequest->getKillTime()
             );
 
         }
