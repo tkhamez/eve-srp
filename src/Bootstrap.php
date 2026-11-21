@@ -45,7 +45,7 @@ class Bootstrap
             $_ENV = getenv();
         }
 
-        if ($_ENV['EVE_SRP_ENV'] === 'dev') {
+        if (($_ENV['EVE_SRP_ENV'] ?? null) === 'dev') {
             error_reporting(E_ALL);
             #error_reporting(E_ALL & ~E_DEPRECATED);
         } else {
