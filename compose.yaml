@@ -22,7 +22,7 @@ services:
 
   eve_srp_node:
     container_name: eve_srp_node
-    image: node:20.14.0-alpine
+    image: node:24-alpine
     tty: true
     volumes: [".:/app"]
     working_dir: /app
@@ -31,11 +31,11 @@ services:
     container_name: eve_srp_php
     build:
       context: config
-      #dockerfile: dockerfile-php81-fpm
-      #dockerfile: dockerfile-php82-fpm
-      #dockerfile: dockerfile-php83-fpm
-      #dockerfile: dockerfile-php84-fpm
-      dockerfile: dockerfile-php85-fpm
+      dockerfile: dockerfile-php-fpm
+      args:
+        # PHP version 8.1 ... 8.5
+        PHP_MAJOR_VERSION: "8.5"
+      network: host
     depends_on: [eve_srp_db]
     volumes: [".:/app"]
     working_dir: /app
