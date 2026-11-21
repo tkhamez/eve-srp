@@ -1,5 +1,11 @@
 # Changelog
 
+## next
+
+yyyy-mm-dd
+
+- Updated the Docker image: from PHP 8.2 to 8.5, adjusted security related headers
+
 ## 1.7.0
 
 2026-11-21

@@ -65,8 +65,8 @@ jobs:
           tar -czf eve-srp-${{ env.RELEASE_VERSION }}.tar.gz eve-srp
           sha256sum eve-srp-${{ env.RELEASE_VERSION }}.tar.gz > eve-srp-${{ env.RELEASE_VERSION }}.sha256
 
-      - name: GitHub Release
-        uses: softprops/action-gh-release@v1
+      - name: GitHub Release # https://github.com/softprops/action-gh-release
+        uses: softprops/action-gh-release@efb35369e0ad2afab669f228072c1b0d510eae64 # v3.0.3
         with:
           files: |
             build/eve-srp-${{ env.RELEASE_VERSION }}.tar.gz
@@ -74,12 +74,12 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Set up QEMU
+      - name: Set up QEMU # https://github.com/docker/setup-qemu-action
         if: ${{ github.repository_owner == 'tkhamez' }}
-        uses: docker/setup-qemu-action@v3
-      - name: Set up Docker Buildx
+        uses: docker/setup-qemu-action@1f40c72289eff860ee54a304f1438e3cff362e0a # v4.3.0
+      - name: Set up Docker Buildx # https://github.com/docker/setup-buildx-action
         if: ${{ github.repository_owner == 'tkhamez' }}
-        uses: docker/setup-buildx-action@v3
+        uses: docker/setup-buildx-action@37fe631027851001ddb9b187196cc803df7f5f0e # v4.3.0
       - name: Build and publish Docker image
         if: ${{ github.repository_owner == 'tkhamez' }}
         run: |

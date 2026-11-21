@@ -218,7 +218,7 @@ npm run build
 ### Build Docker Container
 
 ```
-docker build -f config/Dockerfile --no-cache -t eve-srp build
+docker buildx build -f config/Dockerfile --no-cache -t eve-srp build
 ```
 
 ## Contact and Support
