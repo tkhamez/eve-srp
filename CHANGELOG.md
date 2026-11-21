@@ -1,6 +1,8 @@
 # Changelog
 
-## next
+## 1.7.0
+
+2026-11-21
 
 - "Current payout this month" has been changed to "Payouts in request month"
 
