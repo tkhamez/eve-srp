@@ -107,7 +107,8 @@ class SubmitController
             $esiUrl = $this->apiService->getEsiUrlFromZKillboardUrl($this->inputUrl);
             if (!$esiUrl) {
                 $this->flashMessage->addMessage(
-                    'Could not get ESI URL from zKillboard URL.',
+                    'Could not get ESI URL from zKillboard URL. '
+                    . 'Consider submitting the in-game external kill link.',
                     FlashMessage::TYPE_WARNING
                 );
                 return null;
