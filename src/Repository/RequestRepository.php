@@ -59,10 +59,12 @@ class RequestRepository extends EntityRepository
         return isset($r[0]) ? (int)$r[0][1] : null;
     }
 
-    public function getCurrentMonthPayoutsForRequesterAndDivision(int $requesterId, int $divisionId): array
+    public function getMonthPayoutsForRequesterAndDivision(int $requesterId, int $divisionId, \DateTimeInterface $date): array
     {
-        $monthStart = new \DateTimeImmutable('first day of this month 00:00:00');
-        $monthEnd   = new \DateTimeImmutable('last day of this month 23:59:59');
+        $monthStart = \DateTimeImmutable::createFromInterface($date)
+            ->modify('first day of this month 00:00:00');
+        $monthEnd = \DateTimeImmutable::createFromInterface($date)
+            ->modify('last day of this month 23:59:59');
 
         $qb = $this->createQueryBuilder('r');
         $qb->select('d.name AS name', 'SUM(r.payout) AS payout')
@@ -71,7 +73,6 @@ class RequestRepository extends EntityRepository
             ->andWhere('r.division = :divisionId')
             ->andWhere('r.status IN (:statuses)')
             ->andWhere('r.killTime BETWEEN :monthStart AND :monthEnd')
-            #->groupBy('d.id')
             ->setParameter('requesterId', $requesterId)
             ->setParameter('divisionId', $divisionId)
             ->setParameter('statuses', [Type::PAID, Type::APPROVED])
